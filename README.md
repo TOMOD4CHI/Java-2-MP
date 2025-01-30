@@ -1,7 +1,7 @@
 # Auto-Ecole Management System
 Feel free to edit this file and/or modify it with new features
 **Ideas**:
-
+- **Use Icons instead of buttons** (kinda cool tbh)
 ## Emphasis on Threads and Parallel Programming
 The application could leverages **multithreading and parallel programming** to enhance performance and responsiveness:
 - **Background Tasks**: Real-time notifications for document expiration and session reminders
