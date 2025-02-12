@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.web.WebView?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.Usecase2"
+            stylesheets="@/css/style3.css">
+
+
+    <!-- Form Section on the Left -->
+    <left>
+        <VBox spacing="10" >
+            <Label text="User Details" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <Label text="Field 1:"/>
+            <TextField fx:id="field1"/>
+
+            <Label text="Field 2:"/>
+            <TextField fx:id="field2"/>
+
+            <Label text="Field 3:"/>
+            <TextField fx:id="field3"/>
+
+            <Label text="Field 4:"/>
+            <TextField fx:id="field4"/>
+
+            <Label text="Latitude:"/>
+            <TextField fx:id="latitudeField" editable="false"/>
+
+            <Label text="Longitude:"/>
+            <TextField fx:id="longitudeField" editable="false"/>
+
+            <Button text="Submit" fx:id="submitButton" onAction="#handleSubmit"/>
+        </VBox>
+    </left>
+
+    <!-- Map Section on the Right -->
+    <center>
+        <WebView fx:id="mapView"/>
+    </center>
+
+</BorderPane>
