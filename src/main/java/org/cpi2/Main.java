@@ -1,9 +1,26 @@
 package org.cpi2;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.Parent;
+import javafx.stage.Stage;
 
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainWindow.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Main");
+        primaryStage.setWidth(1024);
+        primaryStage.setHeight(768);
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

@@ -1,0 +1,53 @@
+.sidebar {
+    -fx-font-family: 'Poppins', 'FontAwesome', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -fx-background-color: linear-gradient(to bottom, #2C3E50, #63849f);  /* Modern gradient background */
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(156, 194, 245, 0.2), 10, 0, 0, 2);  /* Subtle shadow */
+
+}
+
+/* Menu Labels (Main Options) */
+.menu-label {
+    -fx-font-family: 'Poppins', 'FontAwesome', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -fx-background-color: transparent;
+    -fx-text-fill: #ECF0F1;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 16;
+    -fx-background-radius: 8;
+    -fx-transition: all 0.3s ease;  /* Smooth transition for hover effects */
+}
+
+.menu-label:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: #ffffff;
+    -fx-translate-x: 5;  /* Slight shift on hover */
+}
+
+/* Submenu */
+.submenu {
+    -fx-padding: 0 0 0 24;
+    -fx-opacity: 1;
+
+    -fx-transition: opacity 0.3s ease;  /* Smooth fade in/out */
+}
+
+.submenu:showing {
+    -fx-opacity: 1;
+}
+
+/* Submenu Labels */
+.submenu-label {
+    -fx-text-fill: #BDC3C7;
+    -fx-font-size: 16px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-transition: all 0.2s ease;
+    -fx-font-family: 'Poppins', 'FontAwesome', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.submenu-label:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-text-fill: #ffffff;
+    -fx-translate-x: 3;  /* Subtle shift on hover */
+}
