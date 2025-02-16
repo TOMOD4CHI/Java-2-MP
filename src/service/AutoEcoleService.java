@@ -5,7 +5,9 @@ import repository.AutoEcoleRepository;
 
 public class AutoEcoleService {
     private final AutoEcoleRepository autoEcoleRepo = new AutoEcoleRepository();
-
+    public boolean saveAutoEcole(AutoEcole autoEcole) {
+        return autoEcoleRepo.save(autoEcole);
+    }
     public AutoEcole viewautoEcole() {
         return autoEcoleRepo.findById(0).orElse(null);
     }
