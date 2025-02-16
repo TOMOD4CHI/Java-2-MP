@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 // Database configuration class
 class DatabaseConfig {
-    private static final String URL = "jdbc:mysql://localhost:3306/auto_ecole";
+    private static final String URL = "jdbc:mysql://localhost:3306/autoecole";
     private static final String USER = "root";
     private static final String PASSWORD = "";
     private static final Logger LOGGER = Logger.getLogger(DatabaseConfig.class.getName());
