@@ -1,6 +1,4 @@
--- Structure de la base de données pour auto-école
 
--- Table des types énumérés
 CREATE TABLE type_permis (
     id INT PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL
@@ -10,13 +8,12 @@ CREATE TABLE type_document (
     id INT PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL
 );
--- Fs5t status table useless ig
 CREATE TABLE type_examen (
     id INT PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL
 );
 
--- Table pour l'auto-école
+
 CREATE TABLE auto_ecole (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(100) NOT NULL,
@@ -27,7 +24,7 @@ CREATE TABLE auto_ecole (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table pour les moniteurs
+
 CREATE TABLE moniteur (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(50) NOT NULL,
@@ -40,7 +37,7 @@ CREATE TABLE moniteur (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table de spécialités des moniteurs
+
 CREATE TABLE moniteur_specialite (
     moniteur_id INT,
     type_permis_id INT,
@@ -49,7 +46,6 @@ CREATE TABLE moniteur_specialite (
     FOREIGN KEY (type_permis_id) REFERENCES type_permis(id)
 );
 
--- Table pour les candidats
 CREATE TABLE candidat (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(50) NOT NULL,
@@ -58,14 +54,9 @@ CREATE TABLE candidat (
     adresse TEXT,
     telephone VARCHAR(20) NOT NULL,
     email VARCHAR(100) UNIQUE,
-    --idk ig zeyda hedhi lena fl inscription tnjm tjibha + kol candidate 3andou akther mn type 
-    --type_permis_id INT NOT NULL,
-    --date_inscription DATE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (type_permis_id) REFERENCES type_permis(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table pour les dossiers
 CREATE TABLE dossier (
     id INT PRIMARY KEY AUTO_INCREMENT,
     candidat_id INT UNIQUE NOT NULL,
@@ -73,7 +64,6 @@ CREATE TABLE dossier (
     FOREIGN KEY (candidat_id) REFERENCES candidat(id)
 );
 
--- Table pour les documents
 CREATE TABLE document (
     id INT PRIMARY KEY AUTO_INCREMENT,
     dossier_id INT NOT NULL,
@@ -85,7 +75,6 @@ CREATE TABLE document (
     FOREIGN KEY (type_document_id) REFERENCES type_document(id)
 );
 
--- Table pour les véhicules
 CREATE TABLE vehicule (
     id INT PRIMARY KEY AUTO_INCREMENT,
     immatriculation VARCHAR(20) UNIQUE NOT NULL,
@@ -102,7 +91,7 @@ CREATE TABLE vehicule (
     FOREIGN KEY (type_permis_id) REFERENCES type_permis(id)
 );
 
--- Table pour l'entretien des véhicules
+
 CREATE TABLE entretien (
     id INT PRIMARY KEY AUTO_INCREMENT,
     vehicule_id INT NOT NULL,
@@ -116,7 +105,6 @@ CREATE TABLE entretien (
     FOREIGN KEY (vehicule_id) REFERENCES vehicule(id)
 );
 
--- Table pour les sessions de code
 CREATE TABLE session_code (
     id INT PRIMARY KEY AUTO_INCREMENT,
     date_session DATE NOT NULL,
@@ -126,10 +114,9 @@ CREATE TABLE session_code (
     prix DECIMAL(10,2) NOT NULL,
     statut_id VARCHAR(10) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (moniteur_id) REFERENCES moniteur(id),
+    FOREIGN KEY (moniteur_id) REFERENCES moniteur(id)
 );
 
--- Table pour les sessions de conduite
 CREATE TABLE session_conduite (
     id INT PRIMARY KEY AUTO_INCREMENT,
     date_session DATE NOT NULL,
@@ -144,25 +131,22 @@ CREATE TABLE session_conduite (
     statut_id   VARCHAR(10) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (moniteur_id) REFERENCES moniteur(id),
-    FOREIGN KEY (vehicule_id) REFERENCES vehicule(id),
-    FOREIGN KEY (statut_id) REFERENCES statut_session(id)
+    FOREIGN KEY (vehicule_id) REFERENCES vehicule(id)
 );
 
--- Table pour les rendez-vous
 CREATE TABLE rendez_vous (
     id INT PRIMARY KEY AUTO_INCREMENT,
     candidat_id INT NOT NULL,
-    --session_code_id INT,
+    session_code_id INT,
     session_conduite_id INT,
     confirme BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (candidat_id) REFERENCES candidat(id),
-    --FOREIGN KEY (session_code_id) REFERENCES session_code(id),
+    FOREIGN KEY (session_code_id) REFERENCES session_code(id),
     FOREIGN KEY (session_conduite_id) REFERENCES session_conduite(id),
     CHECK (session_code_id IS NOT NULL OR session_conduite_id IS NOT NULL)
 );
 
--- Table pour les examens
 CREATE TABLE examen (
     id INT PRIMARY KEY AUTO_INCREMENT,
     candidat_id INT NOT NULL,
@@ -175,20 +159,17 @@ CREATE TABLE examen (
     FOREIGN KEY (type_examen_id) REFERENCES type_examen(id)
 );
 
--- Table pour les paiements
 CREATE TABLE paiement (
     id INT PRIMARY KEY AUTO_INCREMENT,
     candidat_id INT NOT NULL,
     montant DECIMAL(10,2) NOT NULL,
     date_paiement DATE NOT NULL,
-    type_paiement VARCHAR(50) NOT NULL, -- 'HEURES' ou 'EXAMEN'
+    type_paiement VARCHAR(50) NOT NULL, 
     statut_id Varchar(20) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (candidat_id) REFERENCES candidat(id),
-    FOREIGN KEY (statut_id) REFERENCES statut_paiement(id)
+    FOREIGN KEY (candidat_id) REFERENCES candidat(id)
 );
 
--- Insertion des données de base
 INSERT INTO type_permis (id, libelle) VALUES
 (1, 'A - Moto'),
 (2, 'B - Voiture'),
