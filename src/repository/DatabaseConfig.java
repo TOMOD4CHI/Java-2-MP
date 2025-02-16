@@ -11,13 +11,17 @@ class DatabaseConfig {
     private static final String USER = "root";
     private static final String PASSWORD = "";
     private static final Logger LOGGER = Logger.getLogger(DatabaseConfig.class.getName());
+    private static Connection connection = null;
 
-    public static Connection getConnection() throws SQLException {
-        try {
-            return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (SQLException e) {
-            LOGGER.severe("Failed to connect to database: " + e.getMessage());
-            throw e;
+    public static synchronized Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            try {
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            } catch (SQLException e) {
+                LOGGER.severe("Failed to connect to database: " + e.getMessage());
+                throw e;
+            }
         }
+        return connection;
     }
 }

@@ -9,7 +9,7 @@ import java.util.logging.Level;
 // Auto École Repository
 public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
 
-    public Optional<AutoEcole> findById(Long id) {
+    public Optional<AutoEcole> findById(long id) {
         String sql = "SELECT * FROM auto_ecole WHERE id = ?";
 
         try (Connection conn = getConnection();
@@ -84,7 +84,7 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
         }
     }
 
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         String sql = "DELETE FROM auto_ecole WHERE id = ?";
 
         try (Connection conn = getConnection();
