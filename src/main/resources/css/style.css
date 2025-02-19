@@ -1,53 +1,65 @@
-.sidebar {
-    -fx-font-family: 'Poppins', 'FontAwesome', 'Segoe UI', system-ui, -apple-system, sans-serif;
-    -fx-background-color: linear-gradient(to bottom, #2C3E50, #63849f);  /* Modern gradient background */
-    -fx-padding: 20;
-    -fx-effect: dropshadow(gaussian, rgba(156, 194, 245, 0.2), 10, 0, 0, 2);  /* Subtle shadow */
 
+
+.root {
+    -fx-background-color: linear-gradient(to bottom, #DEDCDC, #C5BAC4);
+    -fx-font-weight: medium;
+    -fx-font-family: "Merriweather", sans-serif,"Segoe UI Semibold";
+}
+.context-menu {
+    -fx-background-color: #57707A;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 3);
 }
 
-/* Menu Labels (Main Options) */
-.menu-label {
-    -fx-font-family: 'Poppins', 'FontAwesome', 'Segoe UI', system-ui, -apple-system, sans-serif;
+.menu-bar {
+    -fx-background-color: linear-gradient( to left , rgba(114, 145, 157, 0.82), #57707A);
+    -fx-font-size: 50px;
+
+    -fx-padding: 4px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 3);
+}
+
+.menu {
+
+    -fx-font-size: 14px;
+    -fx-padding: 5px 10px;
     -fx-background-color: transparent;
-    -fx-text-fill: #ECF0F1;
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-padding: 12 16;
-    -fx-background-radius: 8;
-    -fx-transition: all 0.3s ease;  /* Smooth transition for hover effects */
 }
 
-.menu-label:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-text-fill: #ffffff;
-    -fx-translate-x: 5;  /* Slight shift on hover */
+.menu:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 5px;
 }
 
-/* Submenu */
-.submenu {
-    -fx-padding: 0 0 0 24;
-    -fx-opacity: 1;
-
-    -fx-transition: opacity 0.3s ease;  /* Smooth fade in/out */
+.menu-item {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-padding: 6px 12px;
+    -fx-background-color: #57707A;
+    -fx-background-radius: 5px;
 }
 
-.submenu:showing {
-    -fx-opacity: 1;
+.menu-item:hover {
+    -fx-background-color: #979DAB;
+    -fx-text-fill: #191D23;
 }
 
-/* Submenu Labels */
-.submenu-label {
-    -fx-text-fill: #BDC3C7;
+
+.button {
+
+    -fx-background-color: #57707A;
+    -fx-text-fill: white;
     -fx-font-size: 16px;
-    -fx-padding: 8 16;
-    -fx-background-radius: 6;
-    -fx-transition: all 0.2s ease;
-    -fx-font-family: 'Poppins', 'FontAwesome', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 3);
+    -fx-transition: all 0.3s ease-in-out;
 }
 
-.submenu-label:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-text-fill: #ffffff;
-    -fx-translate-x: 3;  /* Subtle shift on hover */
+.button:hover {
+    -fx-background-color: #66818d;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
 }
