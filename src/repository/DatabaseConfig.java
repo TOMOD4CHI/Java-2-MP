@@ -5,13 +5,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-// Database configuration class
 class DatabaseConfig {
+    //Make sure that the db have this name "autoecole"
     private static final String URL = "jdbc:mysql://localhost:3306/autoecole";
     private static final String USER = "root";
     private static final String PASSWORD = "";
     private static final Logger LOGGER = Logger.getLogger(DatabaseConfig.class.getName());
     private static Connection connection = null;
+
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            LOGGER.severe("MySQL JDBC Driver not found: " + e.getMessage());
+        }
+    }
 
     public static synchronized Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {

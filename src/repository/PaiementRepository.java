@@ -3,6 +3,7 @@ package repository;
 import entitties.Paiement;
 
 import entitties.StatutPaiement;
+import entitties.Tranche;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.logging.Level;
 
 // Payment Repository
 public class PaiementRepository extends BaseRepository<Paiement> {
-
+    /*
     public Optional<Paiement> findById(Long id) {
         String sql = "SELECT * FROM paiement WHERE id = ?";
 
@@ -24,7 +25,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
 
             if (rs.next()) {
                 Paiement paiement = mapResultSetToPaiement(rs);
-                loadTranches(conn, paiement);
+                //loadTranches(conn, paiement);
                 return Optional.of(paiement);
             }
         } catch (SQLException e) {
@@ -45,7 +46,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
 
             while (rs.next()) {
                 Paiement paiement = mapResultSetToPaiement(rs);
-                loadTranches(conn, paiement);
+                //loadTranches(conn, paiement);
                 paiements.add(paiement);
             }
         } catch (SQLException e) {
@@ -73,7 +74,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                TranchePaiement tranche = new TranchePaiement(
+                Tranche tranche = new Tranche(
                         rs.getInt("numero_tranche"),
                         rs.getDouble("montant"),
                         rs.getDate("date_echeance").toLocalDate(),
@@ -170,4 +171,5 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             return false;
         }
     }
+    */
 }

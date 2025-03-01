@@ -137,7 +137,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setString(3, entretien.getTypeEntretien());
             stmt.setString(4, entretien.getDescription());
             stmt.setDouble(5, entretien.getCout());
-            stmt.setString(6, entretien.getFacturePath());
+            stmt.setString(6, entretien.getFacture().getCheminFichier());
 
             if (stmt.executeUpdate() > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {

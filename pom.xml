@@ -34,10 +34,8 @@
             <artifactId>javafx-web</artifactId>
             <version>21</version>
         </dependency>
+        
     </dependencies>
-
-
-
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

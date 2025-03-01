@@ -1,6 +1,7 @@
 package repository;
 
 import entitties.Candidat;
+import entitties.TypePermis;
 
 import java.sql.*;
 import java.util.ArrayList;

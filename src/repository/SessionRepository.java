@@ -1,9 +1,6 @@
 package repository;
 
-import entitties.Session;
-import entitties.SessionCode;
-import entitties.SessionConduite;
-import entitties.TypeSession;
+import entitties.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -117,7 +114,7 @@ public class SessionRepository extends BaseRepository<Session> {
                 stmt.setLong(3, session.getMoniteur().getId());
                 stmt.setDouble(4, session.getPrix());
                 stmt.setString(5, session.getStatut().name());
-                stmt.setString(6, session.getType().name());
+                stmt.setString(6, session.getTypeSession().name());
 
                 if (stmt.executeUpdate() > 0) {
                     try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -196,7 +193,7 @@ public class SessionRepository extends BaseRepository<Session> {
                 stmt.setLong(3, session.getMoniteur().getId());
                 stmt.setDouble(4, session.getPrix());
                 stmt.setString(5, session.getStatut().name());
-                stmt.setString(6, session.getType().name());
+                stmt.setString(6, session.getTypeSession().name());
                 stmt.setLong(7, session.getId());
 
                 if (stmt.executeUpdate() > 0) {
