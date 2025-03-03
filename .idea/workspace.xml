@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/entitties/Inscription.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/entitties/Plan.java" afterDir="false" />
-    </list>
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="ramadan kareem bro (added inscritpion class and plan enum)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -118,11 +115,24 @@
       <workItem from="1739126863664" duration="3518000" />
       <workItem from="1739183980540" duration="2712000" />
       <workItem from="1739199963513" duration="272000" />
-      <workItem from="1741031867498" duration="427000" />
+      <workItem from="1741031867498" duration="1160000" />
     </task>
+    <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
+      <option name="closed" value="true" />
+      <created>1741032573458</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1741032573458</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="ramadan kareem bro (added inscritpion class and plan enum)" />
+    <option name="LAST_COMMIT_MESSAGE" value="ramadan kareem bro (added inscritpion class and plan enum)" />
   </component>
 </project>
