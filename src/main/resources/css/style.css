@@ -1,10 +1,10 @@
-
-
+/* Root Style */
 .root {
-    -fx-background-color: linear-gradient(to bottom, #DEDCDC, #C5BAC4);
-    -fx-font-weight: medium;
-    -fx-font-family: "Merriweather", sans-serif,"Segoe UI Semibold";
+    -fx-background-color: linear-gradient(to bottom, #DEDCDC, #ffffff);
+    -fx-font-family: "Merriweather", sans-serif, "Segoe UI Semibold";
 }
+
+/* Context Menu */
 .context-menu {
     -fx-background-color: #57707A;
     -fx-border-color: transparent;
@@ -13,17 +13,17 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 3);
 }
 
+/* Menu Bar */
 .menu-bar {
-    -fx-background-color: linear-gradient( to left , rgba(114, 145, 157, 0.82), #57707A);
+    -fx-background-color: linear-gradient(to left, rgba(114, 145, 157, 0.82), #57707A);
     -fx-font-size: 50px;
-
     -fx-padding: 4px;
     -fx-background-radius: 8px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 3);
 }
 
+/* Menu */
 .menu {
-
     -fx-font-size: 14px;
     -fx-padding: 5px 10px;
     -fx-background-color: transparent;
@@ -47,9 +47,8 @@
     -fx-text-fill: #191D23;
 }
 
-
+/* Buttons */
 .button {
-
     -fx-background-color: #57707A;
     -fx-text-fill: white;
     -fx-font-size: 16px;
@@ -62,4 +61,41 @@
 .button:hover {
     -fx-background-color: #66818d;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
+}
+
+/* Form Title */
+.form-title {
+    -fx-font-size: 25px;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 5px 0;
+}
+
+/* Form Fields */
+.form-field {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 8px;
+    -fx-padding: 12px 15px;
+    -fx-font-size: 16px;
+    -fx-min-height: 40px;
+    -fx-pref-width: 250px;
+}
+
+.form-field:focused {
+    -fx-border-color: #7698a6;
+    -fx-background-color: #ffffff;
+}
+
+/* Form Labels */
+.form-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 5px 0;
+}
+
+/* Image View */
+.logo-image {
+    -fx-border-radius: 5px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
 }

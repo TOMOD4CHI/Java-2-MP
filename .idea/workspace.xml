@@ -4,12 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="">
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="yyyyy">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Usecase1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterCandidat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Usecase2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceConduite.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style2.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style2.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style3.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style3.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/Usecase1.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/AjouterCandidat.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/Usecase2.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceConduite.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,18 +26,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="CSS File" />
         <option value="FxmlFile" />
         <option value="Class" />
-        <option value="CSS File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="PUSH_TAGS">
-      <GitPushTagMode>
-        <option name="argument" value="--follow-tags" />
-        <option name="title" value="Current Branch" />
-      </GitPushTagMode>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -127,10 +133,9 @@
       <workItem from="1739126863664" duration="3518000" />
       <workItem from="1739183980540" duration="2712000" />
       <workItem from="1739199963513" duration="272000" />
-      <workItem from="1739388704988" duration="1586000" />
-      <workItem from="1739786589678" duration="4949000" />
-      <workItem from="1739881637025" duration="2930000" />
-      <workItem from="1739959855288" duration="1826000" />
+      <workItem from="1740322801092" duration="1951000" />
+      <workItem from="1740994277358" duration="3681000" />
+      <workItem from="1741026481085" duration="10169000" />
     </task>
     <servers />
   </component>

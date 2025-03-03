@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.Progression"
+            fitToWidth="true" stylesheets="@/css/style2.css">
+    <VBox spacing="15" styleClass="root">
+        <Label text="Suivi de Progression" styleClass="page-title"/>
+
+        <!-- Search Candidate -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="ID Candidat:" styleClass="form-label"/>
+            <TextField fx:id="candidatIdField" prefWidth="150" styleClass="form-field"/>
+            <Button text="Rechercher" onAction="#rechercheCandidatAction" styleClass="button"/>
+        </HBox>
+
+        <!-- Candidate Info -->
+        <TitledPane text="Informations Candidat" expanded="true" styleClass="form-title">
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
+                <Label text="Prénom:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextField fx:id="prenomField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
+            </GridPane>
+        </TitledPane>
+
+        <!-- Progression Summary -->
+        <TitledPane text="Résumé de Progression" expanded="true" styleClass="form-title">
+            <VBox spacing="10">
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Total séances code:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <Label fx:id="totalSeancesCodeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label text="Séances code complètes:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <Label fx:id="seancesCodeCompletesLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    <Label text="Progression totale:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="3">
+                        <ProgressBar fx:id="progressionTotaleBar" progress="0.6" prefWidth="400" />
+                        <Label fx:id="progressionPourcentageLabel" text="60.0%" styleClass="form-label"/>
+                    </HBox>
+                </GridPane>
+            </VBox>
+        </TitledPane>
+
+        <!-- Charts -->
+        <TitledPane text="Visualisation de la Progression" expanded="true" styleClass="form-title">
+            <VBox spacing="10">
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Label text="Période:" styleClass="form-label"/>
+                    <ComboBox fx:id="periodeComboBox" onAction="#refreshChartsAction" styleClass="form-field"/>
+                    <Button text="Exporter PDF" onAction="#exportPdfAction" styleClass="button"/>
+                </HBox>
+
+                <HBox spacing="20">
+                    <PieChart fx:id="progressionPieChart" title="Répartition des Séances" legendVisible="true" prefWidth="400" prefHeight="300"/>
+                    <BarChart fx:id="progressionBarChart" title="Séances Planifiées vs Complétées" prefWidth="400" prefHeight="300">
+                        <xAxis>
+                            <CategoryAxis label="Type"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Nombre de séances"/>
+                        </yAxis>
+                    </BarChart>
+                </HBox>
+            </VBox>
+        </TitledPane>
+    </VBox>
+</ScrollPane>

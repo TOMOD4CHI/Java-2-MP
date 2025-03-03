@@ -4,14 +4,11 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class MainWindow {
 
@@ -19,14 +16,17 @@ public class MainWindow {
     @FXML private ImageView backgroundImage;
 
 
+    @FXML public void loadAjouterEcole(){loadViewWithTransition("/fxmls/AjouterEcole.fxml"); };
+    @FXML public void loadModifierEcole(){loadViewWithTransition("/fxmls/ModifierEcole.fxml"); }
 
-    @FXML public void loadInscription() { loadViewWithTransition("/fxmls/Inscription.fxml"); }
-    @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/Documents.fxml"); }
-    @FXML public void loadProgression() { loadViewWithTransition("/fxmls/Progression.fxml"); }
-    @FXML public void loadExamRegistration() { loadViewWithTransition("/fxmls/ExamRegistration.fxml"); }
+
+    @FXML public void loadAjouterCandidat() { loadViewWithTransition("/fxmls/AjouterCandidat.fxml"); }
+    @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/documents.fxml"); }
+    @FXML public void loadProgression() { loadViewWithTransition("/fxmls/progression.fxml"); }
+    @FXML public void loadExamRegistration() { loadViewWithTransition("/fxmls/examRegistration.fxml"); }
     @FXML public void loadExam() { loadViewWithTransition("/fxmls/Exam.fxml"); }
 
-    @FXML public void loadSessionConduite() { loadViewWithTransition("/fxmls/Usecase2.fxml"); }
+    @FXML public void loadSessionConduite() { loadViewWithTransition("/fxmls/SeanceConduite.fxml"); }
     @FXML public void loadSessionCode() { loadViewWithTransition("/fxmls/SessionCode.fxml"); }
     @FXML public void loadMoniteurDispo() { loadViewWithTransition("/fxmls/MoniteurDispo.fxml"); }
     @FXML public void loadConfirmPresence() { loadViewWithTransition("/fxmls/ConfirmPresence.fxml"); }

@@ -8,15 +8,19 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
-public class Usecase2{
+public class SeanceConduite {
 
     @FXML private WebView mapView;
     @FXML private TextField latitudeField;
     @FXML private TextField longitudeField;
-    @FXML private TextField field1;
-    @FXML private TextField field2;
-    @FXML private TextField field3;
-    @FXML private TextField field4;
+    @FXML private TextField idVoiture;
+    @FXML private TextField idMoniteur;
+    @FXML private TextField kilometrage;
+    @FXML private TextField date;
+    @FXML private TextField temps;
+    @FXML private TextField idCandidat;
+
+
 
 
 
@@ -26,7 +30,7 @@ public class Usecase2{
             WebEngine webEngine = mapView.getEngine();
             webEngine.loadContent(getMapHtml());
 
-            // Connect Java with JavaScript
+
             webEngine.documentProperty().addListener((obs, oldDoc, newDoc) -> {
                 if (newDoc != null) {
                     JSObject window = (JSObject) webEngine.executeScript("window");
@@ -35,7 +39,7 @@ public class Usecase2{
             });
         }
 
-        /** Called from JavaScript */
+
         public void updateCoordinates(String lat, String lng) {
             latitudeField.setText(lat);
             longitudeField.setText(lng);
@@ -62,12 +66,25 @@ public class Usecase2{
                     "</body>" +
                     "</html>";
         }
+    @FXML
+    private void cancelAction() {
+        // Clear all fields (reset form)
+        idMoniteur.clear();
+        idCandidat.clear();
+        idVoiture.clear();
+        kilometrage.clear();
+        date.clear();
+        temps.clear();
+        latitudeField.clear();
+        longitudeField.clear();
+
+    }
 
     @FXML
     private void handleSubmit(ActionEvent event) {
-        // Ensure all fields are filled
-        if (field1.getText().isEmpty() || field2.getText().isEmpty() ||
-                field3.getText().isEmpty() || field4.getText().isEmpty() ||
+
+        if (idMoniteur.getText().isEmpty() || idVoiture.getText().isEmpty() ||
+                idCandidat.getText().isEmpty() || date.getText().isEmpty() || temps.getText().isEmpty()|| kilometrage.getText().isEmpty()||
                 latitudeField.getText().isEmpty() || longitudeField.getText().isEmpty()) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -76,7 +93,7 @@ public class Usecase2{
             alert.setContentText("Please fill out all fields before submitting!");
             alert.showAndWait();
         } else {
-            // Process the form data (store or send it)
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Form Submitted");
             alert.setHeaderText(null);
