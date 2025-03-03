@@ -2,72 +2,57 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.cpi2.controllers.MainWindow"
-            stylesheets="@/css/style.css">
-
-
-    <left>
-        <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="false">
-        <content>
-        <VBox spacing="20" fx:id="sidebarContainer" styleClass="sidebar" >
-
-
-        <Label text="AUTO-ECOLE" style="-fx-font-size: 22px; -fx-text-fill: #ffffff; -fx-font-weight: bold;"/>
-
-
-            <HBox fx:id="profileMenu">
-                <Label text="👤--▶" fx:id="profileArrow" style="-fx-text-fill: #2C3E50; -fx-font-size: 32px;"/>
-                <Label text="Profile" fx:id="profileLabel" styleClass="menu-label"/>
-            </HBox>
-            <VBox fx:id="profileSubmenu" visible="false" managed="false" styleClass="submenu">
-                <Label text="View Profile"  styleClass="submenu-label"/>
-                <Label text="Edit Profile" styleClass="submenu-label"/>
-            </VBox>
-
-            <HBox fx:id="coursesMenu">
-                <Label text="▶" fx:id="coursesArrow" style="-fx-text-fill: #2C3E50; -fx-font-size: 12px;"/>
-                <Label text="Courses" fx:id="coursesLabel" styleClass="menu-label"/>
-            </HBox>
-            <VBox fx:id="coursesSubmenu" visible="false" managed="false" styleClass="submenu">
-                <Label text="All Courses" styleClass="submenu-label"/>
-                <Label text="Current Courses" styleClass="submenu-label"/>
-                <Label text="Completed Courses" styleClass="submenu-label"/>
-            </VBox>
-
-
-            <HBox fx:id="paymentsMenu">
-                <Label text="▶" fx:id="paymentsArrow" style="-fx-text-fill: #2C3E50; -fx-font-size: 12px;"/>
-                <Label text="Payments" fx:id="paymentsLabel" styleClass="menu-label"/>
-            </HBox>
-            <VBox fx:id="paymentsSubmenu" visible="false" managed="false" styleClass="submenu">
-                <Label text="Payment History" styleClass="submenu-label"/>
-                <Label text="Subscription" styleClass="submenu-label"/>
-            </VBox>
-            <HBox fx:id="example">
-                <Label text="▶" fx:id="exampleArrow" style="-fx-text-fill: #2C3E50; -fx-font-size: 12px;"/>
-                <Label text="Example" fx:id="exampleLabel" styleClass="menu-label"/>
-            </HBox>
-            <VBox fx:id="exampleSubmenu" visible="false" managed="false" styleClass="submenu">
-                <Label text="usecase1" onMouseClicked="#loadUsecase1" styleClass="submenu-label"/>
-                <Label text="usecase2" onMouseClicked="#loadUsecase2" styleClass="submenu-label"/>
-                <Label text="usecase3" styleClass="submenu-label"/>
-                <Label text="usecase4" styleClass="submenu-label"/>
-                <Label text="usecase5" styleClass="submenu-label"/>
-                <Label text="usecase6" styleClass="submenu-label"/>
-            </VBox>
-
-        </VBox>
-        </content>
-        </ScrollPane>
-    </left>
-
-
+<?import javafx.scene.image.ImageView?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.MainWindow" stylesheets="@/css/style.css">
+    <top>
+        <MenuBar>
+            <Menu text="🚗Auto-ecole">
+                <MenuItem text="📝 ajouter une ecole " onAction="#loadAjouterEcole" />
+                <MenuItem text="📑 modifier les informations " onAction="#loadModifierEcole" />
+            </Menu>
+            <Menu text="👤Candidats">
+                <MenuItem text="📝 Inscription" onAction="#loadAjouterCandidat" />
+                <MenuItem text="📑 Fournir des documents" onAction="#loadDocuments" />
+                <MenuItem text="📊 Suivre progression" onAction="#loadProgression"/>
+                <MenuItem text="📝 Inscription à un examen" onAction="#loadExamRegistration" />
+                <MenuItem text="🛑 Passer un examen" />
+            </Menu>
+            <Menu text="📚Séances (Code et Conduite)">
+                <MenuItem text="✅ Vérifier dispo. moniteur" />
+                <MenuItem text="🚗 Planifier une séance de conduite"  onAction="#loadSessionConduite" />
+                <MenuItem text="📖 Planifier une séance de code" />
+                <MenuItem text="📝 Confirmer présence" />
+                <MenuItem text="📆 Gérer plannings" />
+            </Menu>
+            <Menu text="🚘Véhicules et Entretiens">
+                <MenuItem text="🚗 Gérer véhicules" />
+                <MenuItem text="🔧 Suivi des entretiens" />
+                <MenuItem text="📊 Mettre à jour kilométrage" />
+                <MenuItem text="⏳ Notifications (vignette, assurance)" />
+            </Menu>
+            <Menu text="💰Paiements">
+                <MenuItem text="💳 Enregistrer un paiement" />
+                <MenuItem text="📜 Générer une facture" />
+                <MenuItem text="📜 Historique paiements" />
+            </Menu>
+            <Menu text="🏫 Ressources">
+                <MenuItem text="📚 Gérer salles de code" />
+                <MenuItem text="👨‍🏫 Affecter moniteurs" />
+            </Menu>
+            <Menu text="📊 Tableau de Bord">
+                <MenuItem text="📈 Financier" />
+                <MenuItem text="📊 Candidats" />
+                <MenuItem text="🚗 Véhicules" />
+            </Menu>
+        </MenuBar>
+    </top>
     <center>
-        <StackPane fx:id="contentArea" style="-fx-background-color: #F4F4F4; -fx-padding: 20;">
-            <Label text="APP INFO HERE:" fx:id="defaultLabel"
-                   style="-fx-font-size: 30px; -fx-text-fill: #2C3E50;"/>
+        <StackPane fx:id="contentArea">
+
+
         </StackPane>
     </center>
+    <bottom>
+        <Button text="🔙 Retour" onAction="#loadMain" fx:id="mainbttn" />
+    </bottom>
 </BorderPane>

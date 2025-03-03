@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.web.WebView?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.SeanceConduite"
+            stylesheets="@/css/style3.css">
+
+    <left>
+        <VBox spacing="1.5" minWidth="300" prefWidth="300" >
+            <HBox alignment="center" styleClass="form-title-container">
+                <Label text="Seance Conduite" fx:id="titre" styleClass="form-title"/>
+            </HBox>
+
+            <Label text="Id de candidat:" styleClass="form-label"/>
+            <TextField fx:id="idCandidat" styleClass="form-field"/>
+
+            <Label text="Id de Moniteur:" styleClass="form-label"/>
+            <TextField fx:id="idMoniteur" styleClass="form-field"/>
+
+            <Label text="Id voiture:" styleClass="form-label"/>
+            <TextField fx:id="idVoiture" styleClass="form-field"/>
+
+            <Label text="Kilometrage" styleClass="form-label"/>
+            <TextField fx:id="kilometrage" styleClass="form-field"/>
+
+            <Label text="Date:" styleClass="form-label"/>
+            <TextField fx:id="date" promptText="JJ/MM/AAAA" styleClass="form-field"/>
+
+            <Label text="Temps" styleClass="form-label"/>
+            <TextField fx:id="temps" promptText="HH:MM" styleClass="form-field"/>
+
+            <Label text="Latitude:" styleClass="form-label"/>
+            <TextField fx:id="latitudeField" editable="false" styleClass="form-field"/>
+
+            <Label text="Longitude:" styleClass="form-label"/>
+            <TextField fx:id="longitudeField" editable="false" styleClass="form-field"/>
+
+            <HBox spacing="10" alignment="center" styleClass="button-container">
+                <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="button"/>
+                <Button text="Submit" fx:id="submitButton" onAction="#handleSubmit" styleClass="button"/>
+            </HBox>
+        </VBox>
+    </left>
+
+    <center>
+        <WebView fx:id="mapView"/>
+    </center>
+
+</BorderPane>

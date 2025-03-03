@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
+<?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.cpi2.controllers.AjouterEcole" stylesheets="@/css/style.css" spacing="20" alignment="CENTER" styleClass="form-container">
+    <Label text="Ajouter une Ecole" styleClass="form-title"/>
+
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
+            <ColumnConstraints halignment="LEFT" minWidth="200" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Nom de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="nomField" promptText="Nom de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Adresse de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="adresseField" promptText="Adresse de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Numéro de téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="telephoneField" promptText="Numéro de téléphone" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="emailField" promptText="Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Ajouter" onAction="#handleSave" styleClass="button"/>
+        <Button text="Annuler" onAction="#handleCancel" styleClass="button"/>
+    </HBox>
+</VBox>
