@@ -77,32 +77,6 @@ public class Verification {
             }
         }
     }
-    public static String getValidDateOfBirth(String dateInput) {
-        while (true) {
-            dateInput=dateInput.trim();
-            if (!dateInput.matches("\\d{2}/\\d{2}/\\d{4}")) {
-                System.out.println("Invalid date format. Use DD/MM/YYYY.");
-                continue;
-            }String[] parts = dateInput.split("/");
-            int d = Integer.parseInt(parts[0]);
-            int m = Integer.parseInt(parts[1]);
-            int y = Integer.parseInt(parts[2]);
-            if (m < 1 || m > 12) {
-                System.out.println("Invalid month  must be between 1 and 12.");
-                continue;
-            }
-            int[] dsInm = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-            if (y % 4 == 0 && (y % 100 != 0 || y % 400 == 0)) {
-                dsInm[1] = 29;
-            }
-            if (d < 1 || d > dsInm[m - 1]) {
-                System.out.println("Invalid day for the given month.");
-                continue;
-            }
-            return dateInput;
-        }
-    }
 }
 
 
