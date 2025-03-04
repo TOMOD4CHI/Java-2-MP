@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="ramadan kareem bro (added inscritpion class and plan enum)">
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="BF4">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Dossier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entitties/Dossier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/repository/MoniteurRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/MoniteurRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,12 +31,12 @@
     &quot;assignee&quot;: &quot;ranimx&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/TOMOD4CHI/Java-2-MP.git",
-    "accountId": "f8925d38-388a-4958-8fcb-723f1b35dbb4"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/TOMOD4CHI/Java-2-MP.git&quot;,
+    &quot;accountId&quot;: &quot;f8925d38-388a-4958-8fcb-723f1b35dbb4&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -48,27 +48,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "Application.Unnamed.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/user/Downloads/jxmaps-1.3.2.zip",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.JavaFX",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/user/Downloads/jxmaps-1.3.2.zip&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.JavaFX&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\user\Documents\GitHub\Java-2-MP\src\main\java\org.cpi2\controllers" />
@@ -119,6 +119,8 @@
       <workItem from="1739183980540" duration="2712000" />
       <workItem from="1739199963513" duration="272000" />
       <workItem from="1741031867498" duration="2050000" />
+      <workItem from="1741034269883" duration="542000" />
+      <workItem from="1741120991815" duration="2912000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />
@@ -136,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741033092193</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="BF4">
+      <option name="closed" value="true" />
+      <created>1741034399078</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1741034399078</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,6 +165,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ramadan kareem bro (added inscritpion class and plan enum)" />
-    <option name="LAST_COMMIT_MESSAGE" value="ramadan kareem bro (added inscritpion class and plan enum)" />
+    <MESSAGE value="BF4" />
+    <option name="LAST_COMMIT_MESSAGE" value="BF4" />
   </component>
 </project>

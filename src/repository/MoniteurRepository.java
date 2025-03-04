@@ -14,10 +14,8 @@ public class MoniteurRepository extends BaseRepository<Moniteur> {
 
     public Optional<Moniteur> findById(Long id) {
         String sql = """
-            SELECT p.*, m.date_embauche 
-            FROM moniteur m 
-            JOIN personne p ON m.id_personne = p.id 
-            WHERE p.id = ?
+            SELECT * FROM moniteur 
+            WHERE id = ?
         """;
 
         try (Connection conn = getConnection();
@@ -39,11 +37,7 @@ public class MoniteurRepository extends BaseRepository<Moniteur> {
 
     public List<Moniteur> findAll() {
         List<Moniteur> moniteurs = new ArrayList<>();
-        String sql = """
-            SELECT p.*, m.date_embauche 
-            FROM moniteur m 
-            JOIN personne p ON m.id_personne = p.id
-        """;
+        String sql = "SELECT * FROM moniteur";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -98,50 +92,41 @@ public class MoniteurRepository extends BaseRepository<Moniteur> {
             conn = getConnection();
             conn.setAutoCommit(false);
 
-            // Insert into personne
-            String personSql = """
-                INSERT INTO personne (nom, prenom, cin, adresse, telephone, email)
-                VALUES (?, ?, ?, ?, ?, ?)
+            // Insert moniteur directly
+            String moniteurSql = """
+                INSERT INTO moniteur (nom, prenom, cin, adresse, telephone, email, date_embauche)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
 
-            try (PreparedStatement stmt = conn.prepareStatement(personSql, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement stmt = conn.prepareStatement(moniteurSql, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, moniteur.getNom());
                 stmt.setString(2, moniteur.getPrenom());
                 stmt.setString(3, moniteur.getCin());
                 stmt.setString(4, moniteur.getAdresse());
                 stmt.setString(5, moniteur.getTelephone());
                 stmt.setString(6, moniteur.getEmail());
+                stmt.setDate(7, Date.valueOf(moniteur.getDateEmbauche()));
 
                 if (stmt.executeUpdate() > 0) {
                     try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
-                            Long personId = generatedKeys.getLong(1);
+                            Long moniteurId = generatedKeys.getLong(1);
 
-                            // Insert into moniteur
-                            String moniteurSql = "INSERT INTO moniteur (id_personne, date_embauche) VALUES (?, ?)";
+                            // Insert specialities
+                            String specialitySql = "INSERT INTO moniteur_specialite (id_moniteur, id_type_permis) VALUES (?, ?)";
 
-                            try (PreparedStatement moniteurStmt = conn.prepareStatement(moniteurSql)) {
-                                moniteurStmt.setLong(1, personId);
-                                moniteurStmt.setDate(2, Date.valueOf(moniteur.getDateEmbauche()));
-
-                                if (moniteurStmt.executeUpdate() > 0) {
-                                    // Insert specialities
-                                    String specialitySql = "INSERT INTO moniteur_specialite (id_moniteur, id_type_permis) VALUES (?, ?)";
-
-                                    try (PreparedStatement specStmt = conn.prepareStatement(specialitySql)) {
-                                        for (TypePermis specialite : moniteur.getSpecialites()) {
-                                            specStmt.setLong(1, personId);
-                                            specStmt.setInt(2, specialite.ordinal() + 1);
-                                            specStmt.addBatch();
-                                        }
-                                        specStmt.executeBatch();
-                                    }
-
-                                    conn.commit();
-                                    moniteur.setId(personId);
-                                    return true;
+                            try (PreparedStatement specStmt = conn.prepareStatement(specialitySql)) {
+                                for (TypePermis specialite : moniteur.getSpecialites()) {
+                                    specStmt.setLong(1, moniteurId);
+                                    specStmt.setInt(2, specialite.ordinal() + 1);
+                                    specStmt.addBatch();
                                 }
+                                specStmt.executeBatch();
                             }
+
+                            conn.commit();
+                            moniteur.setId(moniteurId);
+                            return true;
                         }
                     }
                 }
@@ -171,54 +156,45 @@ public class MoniteurRepository extends BaseRepository<Moniteur> {
             conn = getConnection();
             conn.setAutoCommit(false);
 
-            // Update personne
-            String personSql = """
-                UPDATE personne 
-                SET nom = ?, prenom = ?, cin = ?, adresse = ?, telephone = ?, email = ?
+            // Update moniteur directly
+            String moniteurSql = """
+                UPDATE moniteur 
+                SET nom = ?, prenom = ?, cin = ?, adresse = ?, telephone = ?, email = ?, date_embauche = ?
                 WHERE id = ?
             """;
 
-            try (PreparedStatement stmt = conn.prepareStatement(personSql)) {
+            try (PreparedStatement stmt = conn.prepareStatement(moniteurSql)) {
                 stmt.setString(1, moniteur.getNom());
                 stmt.setString(2, moniteur.getPrenom());
                 stmt.setString(3, moniteur.getCin());
                 stmt.setString(4, moniteur.getAdresse());
                 stmt.setString(5, moniteur.getTelephone());
                 stmt.setString(6, moniteur.getEmail());
-                stmt.setLong(7, moniteur.getId());
+                stmt.setDate(7, Date.valueOf(moniteur.getDateEmbauche()));
+                stmt.setLong(8, moniteur.getId());
 
                 if (stmt.executeUpdate() > 0) {
-                    // Update moniteur
-                    String moniteurSql = "UPDATE moniteur SET date_embauche = ? WHERE id_personne = ?";
-
-                    try (PreparedStatement moniteurStmt = conn.prepareStatement(moniteurSql)) {
-                        moniteurStmt.setDate(1, Date.valueOf(moniteur.getDateEmbauche()));
-                        moniteurStmt.setLong(2, moniteur.getId());
-
-                        if (moniteurStmt.executeUpdate() > 0) {
-                            // Update specialities
-                            // First delete existing
-                            String deleteSpecSql = "DELETE FROM moniteur_specialite WHERE id_moniteur = ?";
-                            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSpecSql)) {
-                                deleteStmt.setLong(1, moniteur.getId());
-                                deleteStmt.executeUpdate();
-                            }
-
-                            // Then insert new ones
-                            String specialitySql = "INSERT INTO moniteur_specialite (id_moniteur, id_type_permis) VALUES (?, ?)";
-                            try (PreparedStatement specStmt = conn.prepareStatement(specialitySql)) {
-                                for (TypePermis specialite : moniteur.getSpecialites()) {
-                                    specStmt.setLong(1, moniteur.getId());
-                                    specStmt.setInt(2, specialite.ordinal() + 1);
-                                    specStmt.addBatch();
-                                }
-                                specStmt.executeBatch();
-                            }
-
-                            conn.commit();
-                            return true;
-                        }
+                    // Update specialities
+                    // First delete existing
+                    String deleteSpecSql = "DELETE FROM moniteur_specialite WHERE id_moniteur = ?";
+                    try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSpecSql)) {
+                        deleteStmt.setLong(1, moniteur.getId());
+                        deleteStmt.executeUpdate();
                     }
+
+                    // Then insert new ones
+                    String specialitySql = "INSERT INTO moniteur_specialite (id_moniteur, id_type_permis) VALUES (?, ?)";
+                    try (PreparedStatement specStmt = conn.prepareStatement(specialitySql)) {
+                        for (TypePermis specialite : moniteur.getSpecialites()) {
+                            specStmt.setLong(1, moniteur.getId());
+                            specStmt.setInt(2, specialite.ordinal() + 1);
+                            specStmt.addBatch();
+                        }
+                        specStmt.executeBatch();
+                    }
+
+                    conn.commit();
+                    return true;
                 }
             }
 
