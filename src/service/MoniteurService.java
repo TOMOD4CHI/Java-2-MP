@@ -102,10 +102,10 @@ public class MoniteurService {
                 .filter(moniteur -> moniteur.getDateEmbauche().isAfter(date))
                 .collect(Collectors.toList());
     }
-
-    public long countMoniteursBySpeciality(TypePermis typePermis) {
+    //at the moment we don't have a speciality field in the Moniteur db table
+    /*public long countMoniteursBySpeciality(TypePermis typePermis) {
         return moniteurRepository.findAll().stream()
                 .filter(moniteur -> moniteur.getSpecialites().contains(typePermis))
                 .count();
-    }
+    }*/
 }
