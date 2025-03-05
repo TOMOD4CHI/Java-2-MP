@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.collections.FXCollections?>
+
+<?import java.lang.String?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cpi2.controllers.AjouterMoniteur"
+      stylesheets="@/css/style.css"
+      alignment="CENTER" spacing="15" styleClass="form-container">
+
+    <Label text="Ajouter un Moniteur" styleClass="form-title"/>
+
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
+            <ColumnConstraints halignment="LEFT" minWidth="200" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label"/>
+        <TextField fx:id="nomField" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-field"/>
+
+        <Label text="Prénom:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label"/>
+        <TextField fx:id="prenomField" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
+
+        <Label text="CIN:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label"/>
+        <TextField fx:id="cinField" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field"/>
+
+        <Label text="Adresse:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="form-label"/>
+        <TextField fx:id="adresseField" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="form-field"/>
+
+        <Label text="Téléphone:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="form-label"/>
+        <TextField fx:id="telephoneField" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="form-field"/>
+
+        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="form-label"/>
+        <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="form-field"/>
+
+        <Label text="Date d'embauche:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="form-label"/>
+        <DatePicker fx:id="dateEmbaucheField" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="form-field"/>
+
+
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Annuler" onAction="#cancelAction" styleClass="button"/>
+        <Button text="Ajouter" onAction="#ajouterAction" styleClass="button"/>
+    </HBox>
+
+</VBox>

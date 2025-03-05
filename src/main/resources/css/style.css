@@ -1,4 +1,5 @@
 /* Root Style */
+
 .root {
     -fx-background-color: linear-gradient(to bottom, #DEDCDC, #ffffff);
     -fx-font-family: "Merriweather", sans-serif, "Segoe UI Semibold";
@@ -75,10 +76,11 @@
     -fx-background-color: #f5f5f5;
     -fx-border-color: #bdc3c7;
     -fx-border-radius: 8px;
-    -fx-padding: 12px 15px;
-    -fx-font-size: 16px;
-    -fx-min-height: 40px;
-    -fx-pref-width: 250px;
+    -fx-padding: 8px 10px;  /* Reduced padding */
+    -fx-font-size: 14px;  /* Reduced font size */
+    -fx-min-height: 30px;  /* Reduced height */
+    -fx-pref-width: 750px;  /* Reduced width */
+    -fx-max-width: 750px;
 }
 
 .form-field:focused {
@@ -90,7 +92,7 @@
 .form-label {
     -fx-font-size: 16px;
     -fx-text-fill: #2C3E50;
-    -fx-padding: 5px 0;
+    -fx-padding: 10px 10px;
 }
 
 /* Image View */

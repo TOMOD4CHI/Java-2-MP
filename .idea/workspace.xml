@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="BF4">
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="yyyyy">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterMoniteur.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierCandidat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierMoniteur.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ModifierCandidat.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ajouterMoniteur.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/modifierMoniteur.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/MoniteurRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/MoniteurRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,13 +24,18 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="CSS File" />
+        <option value="FxmlFile" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -34,7 +47,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/TOMOD4CHI/Java-2-MP.git&quot;,
-    &quot;accountId&quot;: &quot;f8925d38-388a-4958-8fcb-723f1b35dbb4&quot;
+    &quot;accountId&quot;: &quot;93bd8dc2-d676-4594-a1ba-6aeac9d94f82&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -44,6 +57,9 @@
   &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="2ro47J0e2wnCp03otVqJlyKnhsI" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -53,7 +69,7 @@
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Ranim&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/user/Downloads/jxmaps-1.3.2.zip&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
@@ -90,8 +106,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
       </set>
     </attachedChunks>
   </component>
@@ -118,54 +134,15 @@
       <workItem from="1739126863664" duration="3518000" />
       <workItem from="1739183980540" duration="2712000" />
       <workItem from="1739199963513" duration="272000" />
-      <workItem from="1741031867498" duration="2050000" />
-      <workItem from="1741034269883" duration="542000" />
-      <workItem from="1741120991815" duration="2912000" />
+      <workItem from="1740322801092" duration="1951000" />
+      <workItem from="1740994277358" duration="3681000" />
+      <workItem from="1741026481085" duration="10169000" />
+      <workItem from="1741116145294" duration="1573000" />
+      <workItem from="1741201671595" duration="1060000" />
     </task>
-    <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
-      <option name="closed" value="true" />
-      <created>1741032573458</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1741032573458</updated>
-    </task>
-    <task id="LOCAL-00002" summary="ramadan kareem bro (added inscritpion class and plan enum)">
-      <option name="closed" value="true" />
-      <created>1741033092193</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1741033092193</updated>
-    </task>
-    <task id="LOCAL-00003" summary="BF4">
-      <option name="closed" value="true" />
-      <created>1741034399078</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1741034399078</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="ramadan kareem bro (added inscritpion class and plan enum)" />
-    <MESSAGE value="BF4" />
-    <option name="LAST_COMMIT_MESSAGE" value="BF4" />
   </component>
 </project>

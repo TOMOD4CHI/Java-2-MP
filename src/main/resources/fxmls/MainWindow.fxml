@@ -12,6 +12,7 @@
             </Menu>
             <Menu text="👤Candidats">
                 <MenuItem text="📝 Inscription" onAction="#loadAjouterCandidat" />
+                <MenuItem text="📝 Modifier" onAction="#loadModifierCandidat" />
                 <MenuItem text="📑 Fournir des documents" onAction="#loadDocuments" />
                 <MenuItem text="📊 Suivre progression" onAction="#loadProgression"/>
                 <MenuItem text="📝 Inscription à un examen" onAction="#loadExamRegistration" />
@@ -36,8 +37,10 @@
                 <MenuItem text="📜 Historique paiements" />
             </Menu>
             <Menu text="🏫 Ressources">
-                <MenuItem text="📚 Gérer salles de code" />
-                <MenuItem text="👨‍🏫 Affecter moniteurs" />
+                <MenuItem text="📚 Ajouter salle de code" onAction="#loadAjouterSalle" />
+                <MenuItem text="📚 Modifier salle de code" onAction="#loadModifierSalle" />
+                <MenuItem text="👨‍🏫 Ajouter moniteur" onAction="#loadAjouterMoniteur" />
+                <MenuItem text="📚 Modifier Moniteur " onAction="#loadModifierMoniteur" />
             </Menu>
             <Menu text="📊 Tableau de Bord">
                 <MenuItem text="📈 Financier" />
