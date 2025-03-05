@@ -1,5 +1,0 @@
-package entitties;
-
-enum Plan {
-
-}
