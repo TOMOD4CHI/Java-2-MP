@@ -1,6 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.animation.FadeTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,6 +22,7 @@ public class MainWindow {
 
 
     @FXML public void loadAjouterCandidat() { loadViewWithTransition("/fxmls/AjouterCandidat.fxml"); }
+    @FXML public void loadModifierCandidat() { loadViewWithTransition("/fxmls/ModifierCandidat.fxml"); }
     @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/documents.fxml"); }
     @FXML public void loadProgression() { loadViewWithTransition("/fxmls/progression.fxml"); }
     @FXML public void loadExamRegistration() { loadViewWithTransition("/fxmls/examRegistration.fxml"); }
@@ -70,5 +72,17 @@ public class MainWindow {
     public void loadMain() {
         contentArea.getChildren().clear();
          // Restore background when returning to main
+    }
+
+    public void loadAjouterSalle(ActionEvent actionEvent) {
+    }
+
+    public void loadModifierSalle(ActionEvent actionEvent) {
+    }
+
+    public void loadAjouterMoniteur() {loadViewWithTransition("/fxmls/ajouterMoniteur.fxml");
+    }
+
+    public void loadModifierMoniteur() {loadViewWithTransition("/fxmls/ModifierMoniteur.fxml");
     }
 }
