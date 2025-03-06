@@ -2,9 +2,9 @@ package entitties;
 
 import java.time.LocalDateTime;
 
-public class Document {
+public class Document implements Comparable<Document> {
     private Long id;
-    private TypeDocument typeDocument;
+    private String typeDocument;
     private String nomFichier;
     private String cheminFichier;
     private LocalDateTime dateUpload;
@@ -13,7 +13,7 @@ public class Document {
         this.dateUpload = LocalDateTime.now();
     }
 
-    public Document(TypeDocument typeDocument, String nomFichier, String cheminFichier) {
+    public Document(String typeDocument, String nomFichier, String cheminFichier) {
         this();
         this.typeDocument = typeDocument;
         this.nomFichier = nomFichier;
@@ -52,11 +52,15 @@ public class Document {
         this.nomFichier = nomFichier;
     }
 
-    public TypeDocument getTypeDocument() {
+    public String getTypeDocument() {
         return typeDocument;
     }
 
-    public void setTypeDocument(TypeDocument typeDocument) {
+    public void setTypeDocument(String typeDocument) {
         this.typeDocument = typeDocument;
+    }
+    @Override
+    public int compareTo(Document o) {
+        return this.dateUpload.compareTo(o.dateUpload);
     }
 }

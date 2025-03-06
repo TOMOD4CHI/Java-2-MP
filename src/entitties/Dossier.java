@@ -1,21 +1,25 @@
 package entitties;
 
+import com.sun.source.tree.Tree;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 public class Dossier {
     private Long id;
-    private Map<TypeDocument, Document> documents;
+    private Map<String, TreeSet<Document>> documents;
 
     public Dossier() {
         this.documents = new HashMap<>();
     }
 
-    public Map<TypeDocument, Document> getDocuments() {
+    public Map<String, TreeSet<Document>> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Map<TypeDocument, Document> documents) {
+    public void setDocuments(Map<String, TreeSet<Document>> documents) {
         this.documents = documents;
     }
 
