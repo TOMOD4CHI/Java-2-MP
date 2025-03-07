@@ -1,17 +1,20 @@
 .form-container {
     -fx-spacing: 1;
 }
-.center-container{
+
+.center-container {
     -fx-alignment: center;
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
 }
 
-.form-title{
-    -fx-alignment: center;
+.form-title {
     -fx-font-size: 45px;
-
-
-
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-alignment: center;
 }
+
 .form-label {
     -fx-font-size: 25px;
     -fx-text-fill: #2C3E50;
@@ -28,20 +31,18 @@
     -fx-pref-width: 250px;
 }
 
-
 .button {
     -fx-background-color: #57707A;
     -fx-text-fill: white;
-    -fx-font-size: 25px; /* Reduced font size */
-    -fx-padding: 8px 16px; /* Reduced padding to make buttons more compact */
+    -fx-font-size: 25px;
+    -fx-padding: 8px 16px;
     -fx-background-radius: 8px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 3);
     -fx-transition: all 0.3s ease-in-out;
+    -fx-hgrow: always;
 }
 
 .button:hover {
     -fx-background-color: #66818d;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
 }
-
-/* Cancel and Submit buttons styling */

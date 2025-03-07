@@ -1,4 +1,4 @@
-package entitties;
+package org.cpi2.entitties;
 
 public enum TypePermis {
     A("A", "Permis Moto", "Permis pour conduire une moto"),

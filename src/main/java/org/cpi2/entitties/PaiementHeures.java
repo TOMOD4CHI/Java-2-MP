@@ -1,4 +1,4 @@
-package entitties;
+package org.cpi2.entitties;
 
 import java.util.ArrayList;
 import java.util.List;

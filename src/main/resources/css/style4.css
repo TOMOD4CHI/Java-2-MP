@@ -1,19 +1,16 @@
 .form-container {
     -fx-spacing: 1;
 }
-.center-container{
-    -fx-alignment: center;
-}
 
 .form-title{
     -fx-alignment: center;
-    -fx-font-size: 45px;
+    -fx-font-size: 25px;
 
 
 
 }
 .form-label {
-    -fx-font-size: 25px;
+    -fx-font-size: 15px;
     -fx-text-fill: #2C3E50;
     -fx-padding: 5px 10px;
 }
@@ -23,8 +20,8 @@
     -fx-border-color: #bdc3c7;
     -fx-border-radius: 8px;
     -fx-padding: 8px 12px;
-    -fx-font-size: 25px;
-    -fx-pref-height: 35px;
+    -fx-font-size: 15px;
+    -fx-pref-height: 25px;
     -fx-pref-width: 250px;
 }
 
@@ -32,7 +29,7 @@
 .button {
     -fx-background-color: #57707A;
     -fx-text-fill: white;
-    -fx-font-size: 25px; /* Reduced font size */
+    -fx-font-size: 20px; /* Reduced font size */
     -fx-padding: 8px 16px; /* Reduced padding to make buttons more compact */
     -fx-background-radius: 8px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 3);

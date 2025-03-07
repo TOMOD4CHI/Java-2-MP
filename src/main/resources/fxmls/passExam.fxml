@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="org.cpi2.controllers.PassExam"
+           stylesheets="@/css/style3.css">
+
+    <VBox spacing="15" alignment="CENTER" >
+
+        <Label text="Passer un Examen" styleClass="form-title"/>
+        <Separator/>
+
+        <GridPane hgap="10" vgap="10" alignment="CENTER">
+
+            <Label text="ID Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+            <TextField fx:id="idCandidatField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field"/>
+
+            <Label text="ID Examen:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+            <TextField fx:id="idExamenField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field"/>
+
+            <Label text="Résultat:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+            <ComboBox fx:id="resultatComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Réussi"/>
+                        <String fx:value="Échoué"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+
+            <Label text="Commentaires:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+            <TextArea fx:id="commentaireArea" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field" prefRowCount="3"/>
+
+        </GridPane>
+
+        <Separator/>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="button"/>
+            <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" styleClass="button"/>
+        </HBox>
+
+    </VBox>
+
+</StackPane>

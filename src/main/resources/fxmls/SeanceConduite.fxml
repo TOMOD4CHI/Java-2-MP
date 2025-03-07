@@ -7,7 +7,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cpi2.controllers.SeanceConduite"
-            stylesheets="@/css/style3.css">
+            stylesheets="@/css/style4.css">
 
     <left>
         <VBox spacing="1.5" minWidth="300" prefWidth="300" >

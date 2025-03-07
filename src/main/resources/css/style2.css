@@ -10,7 +10,10 @@
     -fx-text-fill: #2C3E50;
     -fx-padding: 10px 20px;
 }
+.datepick{
 
+
+}
 /* Form label styling */
 .form-label {
     -fx-font-size: 14px;
@@ -24,8 +27,9 @@
     -fx-border-color: #bdc3c7;
     -fx-border-radius: 8px;
     -fx-padding: 8px 12px;
-    -fx-font-size: 13px;
-    -fx-pref-height: 18px;
+    -fx-font-size: 15px;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
     -fx-pref-width: 250px;
 }
 

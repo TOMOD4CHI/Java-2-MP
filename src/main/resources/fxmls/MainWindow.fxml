@@ -16,14 +16,13 @@
                 <MenuItem text="📑 Fournir des documents" onAction="#loadDocuments" />
                 <MenuItem text="📊 Suivre progression" onAction="#loadProgression"/>
                 <MenuItem text="📝 Inscription à un examen" onAction="#loadExamRegistration" />
-                <MenuItem text="🛑 Passer un examen" />
+                <MenuItem text="🛑 Passer un examen"  onAction="#loadExam"/>
             </Menu>
             <Menu text="📚Séances (Code et Conduite)">
-                <MenuItem text="✅ Vérifier dispo. moniteur" />
                 <MenuItem text="🚗 Planifier une séance de conduite"  onAction="#loadSessionConduite" />
-                <MenuItem text="📖 Planifier une séance de code" />
+                <MenuItem text="📖 Planifier une séance de code" onAction="#loadSessionCode" />
                 <MenuItem text="📝 Confirmer présence" />
-                <MenuItem text="📆 Gérer plannings" />
+                <MenuItem text="📆 Afficher tout les seances" />
             </Menu>
             <Menu text="🚘Véhicules et Entretiens">
                 <MenuItem text="🚗 Gérer véhicules" />
@@ -36,9 +35,7 @@
                 <MenuItem text="📜 Générer une facture" />
                 <MenuItem text="📜 Historique paiements" />
             </Menu>
-            <Menu text="🏫 Ressources">
-                <MenuItem text="📚 Ajouter salle de code" onAction="#loadAjouterSalle" />
-                <MenuItem text="📚 Modifier salle de code" onAction="#loadModifierSalle" />
+            <Menu text="👨‍🏫 Moniteur">
                 <MenuItem text="👨‍🏫 Ajouter moniteur" onAction="#loadAjouterMoniteur" />
                 <MenuItem text="📚 Modifier Moniteur " onAction="#loadModifierMoniteur" />
             </Menu>

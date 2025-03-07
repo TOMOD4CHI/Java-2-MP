@@ -1,4 +1,4 @@
-package entitties;
+package org.cpi2.entitties;
 
 public class PaiementExamen extends Paiement {
     private TypeExamen typeExamen;

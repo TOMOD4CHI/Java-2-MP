@@ -26,10 +26,10 @@ public class MainWindow {
     @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/documents.fxml"); }
     @FXML public void loadProgression() { loadViewWithTransition("/fxmls/progression.fxml"); }
     @FXML public void loadExamRegistration() { loadViewWithTransition("/fxmls/examRegistration.fxml"); }
-    @FXML public void loadExam() { loadViewWithTransition("/fxmls/Exam.fxml"); }
+    @FXML public void loadExam() { loadViewWithTransition("/fxmls/passExam.fxml"); }
 
     @FXML public void loadSessionConduite() { loadViewWithTransition("/fxmls/SeanceConduite.fxml"); }
-    @FXML public void loadSessionCode() { loadViewWithTransition("/fxmls/SessionCode.fxml"); }
+    @FXML public void loadSessionCode() { loadViewWithTransition("/fxmls/SeanceCode.fxml"); }
     @FXML public void loadMoniteurDispo() { loadViewWithTransition("/fxmls/MoniteurDispo.fxml"); }
     @FXML public void loadConfirmPresence() { loadViewWithTransition("/fxmls/ConfirmPresence.fxml"); }
     @FXML public void loadManageSchedules() { loadViewWithTransition("/fxmls/ManageSchedules.fxml"); }
@@ -43,8 +43,6 @@ public class MainWindow {
     @FXML public void loadInvoice() { loadViewWithTransition("/fxmls/Invoice.fxml"); }
     @FXML public void loadPaymentHistory() { loadViewWithTransition("/fxmls/PaymentHistory.fxml"); }
 
-    @FXML public void loadClassrooms() { loadViewWithTransition("/fxmls/Classrooms.fxml"); }
-    @FXML public void loadInstructors() { loadViewWithTransition("/fxmls/Instructors.fxml"); }
 
     @FXML public void loadDashboardFinance() { loadViewWithTransition("/fxmls/DashboardFinance.fxml"); }
     @FXML public void loadDashboardCandidates() { loadViewWithTransition("/fxmls/DashboardCandidates.fxml"); }

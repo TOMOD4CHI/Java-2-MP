@@ -1,4 +1,4 @@
-package entitties;
+package org.cpi2.entitties;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="org.cpi2.controllers.SeanceCode"
+           stylesheets="@/css/style5.css"
+           prefWidth="400" prefHeight="300">
+
+    <!-- Wrapper to center everything -->
+    <VBox spacing="15" alignment="center">
+        <Label text="Planifier une Séance de Code" styleClass="form-title"/>
+
+        <!-- Form Fields -->
+        <HBox spacing="10" alignment="center">
+            <Label text="ID Candidat :" styleClass="form-label"/>
+            <TextField fx:id="candidatfield" prefWidth="200" styleClass="form-field"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="center">
+            <Label text="ID Séance :" styleClass="form-label"/>
+            <TextField fx:id="sessionfield" prefWidth="200" styleClass="form-field"/>
+        </HBox>
+
+        <!-- Buttons Section -->
+        <HBox spacing="15" alignment="center">
+            <Button text="Annuler" fx:id="cancelButton" onAction="#handleCancel"/>
+            <Button text="Planifier" fx:id="planifierButton" onAction="#handlePlanifier"/>
+        </HBox>
+    </VBox>
+</StackPane>
