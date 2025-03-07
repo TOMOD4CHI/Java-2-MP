@@ -14,10 +14,9 @@ public class CandidatRepository extends BaseRepository<Candidat> {
 
     public Optional<Candidat> findById(Long id) {
         String sql = """
-            SELECT p.*, c.date_inscription, c.id_type_permis 
-            FROM candidat c 
-            JOIN personne p ON c.id_personne = p.id 
-            WHERE p.id = ?
+            SELECT * 
+            FROM candidat
+            WHERE id = ?
         """;
 
         try (Connection conn = getConnection();
@@ -34,13 +33,33 @@ public class CandidatRepository extends BaseRepository<Candidat> {
         }
         return Optional.empty();
     }
+    public Optional<Candidat> findByCin(String cin) {
+        String sql = """
+            SELECT * 
+            FROM candidat
+            WHERE cin = ?
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, cin);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(mapResultSetToCandidat(rs));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error finding candidat by ID", e);
+        }
+        return Optional.empty();
+    }
 
     public List<Candidat> findAll() {
         List<Candidat> candidats = new ArrayList<>();
         String sql = """
-            SELECT p.*, c.date_inscription, c.id_type_permis 
-            FROM candidat c 
-            JOIN personne p ON c.id_personne = p.id
+            SELECT *
+            FROM candidat 
         """;
 
         try (Connection conn = getConnection();
@@ -62,10 +81,7 @@ public class CandidatRepository extends BaseRepository<Candidat> {
                 rs.getString("prenom"),
                 rs.getString("cin"),
                 rs.getString("adresse"),
-                rs.getString("telephone"),
-                rs.getDate("date_inscription").toLocalDate(),
-                TypePermis.valueOf(rs.getString("id_type_permis"))
-        );
+                rs.getString("telephone"));
         candidat.setId(rs.getLong("id"));
         candidat.setEmail(rs.getString("email"));
         return candidat;
@@ -79,7 +95,7 @@ public class CandidatRepository extends BaseRepository<Candidat> {
 
             // Insert into personne first
             String personSql = """
-                INSERT INTO personne (nom, prenom, cin, adresse, telephone, email)
+                INSERT INTO candidat (nom, prenom, cin, adresse, telephone, email)
                 VALUES (?, ?, ?, ?, ?, ?)
             """;
 
@@ -90,37 +106,8 @@ public class CandidatRepository extends BaseRepository<Candidat> {
                 stmt.setString(4, candidat.getAdresse());
                 stmt.setString(5, candidat.getTelephone());
                 stmt.setString(6, candidat.getEmail());
-
-                if (stmt.executeUpdate() > 0) {
-                    try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            Long personId = generatedKeys.getLong(1);
-
-                            // Insert into candidat
-                            String candidatSql = """
-                                INSERT INTO candidat (id_personne, date_inscription, id_type_permis)
-                                VALUES (?, ?, ?)
-                            """;
-
-                            try (PreparedStatement candidatStmt = conn.prepareStatement(candidatSql)) {
-                                candidatStmt.setLong(1, personId);
-                                candidatStmt.setDate(2, Date.valueOf(candidat.getDateInscription()));
-                                candidatStmt.setInt(3, candidat.getTypePermis().ordinal() + 1);
-
-                                if (candidatStmt.executeUpdate() > 0) {
-                                    conn.commit();
-                                    candidat.setId(personId);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
             }
-
             conn.rollback();
-            return false;
-
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error saving candidat", e);
             if (conn != null) {
@@ -134,6 +121,7 @@ public class CandidatRepository extends BaseRepository<Candidat> {
         } finally {
             closeQuietly(conn);
         }
+        return true;
     }
 
     public boolean update(Candidat candidat) {
@@ -144,7 +132,7 @@ public class CandidatRepository extends BaseRepository<Candidat> {
 
             // Update personne
             String personSql = """
-                UPDATE personne 
+                UPDATE candidat 
                 SET nom = ?, prenom = ?, cin = ?, adresse = ?, telephone = ?, email = ?
                 WHERE id = ?
             """;
@@ -157,31 +145,12 @@ public class CandidatRepository extends BaseRepository<Candidat> {
                 stmt.setString(5, candidat.getTelephone());
                 stmt.setString(6, candidat.getEmail());
                 stmt.setLong(7, candidat.getId());
-
                 if (stmt.executeUpdate() > 0) {
-                    // Update candidat
-                    String candidatSql = """
-                        UPDATE candidat 
-                        SET date_inscription = ?, id_type_permis = ?
-                        WHERE id_personne = ?
-                    """;
-
-                    try (PreparedStatement candidatStmt = conn.prepareStatement(candidatSql)) {
-                        candidatStmt.setDate(1, Date.valueOf(candidat.getDateInscription()));
-                        candidatStmt.setInt(2, candidat.getTypePermis().ordinal() + 1);
-                        candidatStmt.setLong(3, candidat.getId());
-
-                        if (candidatStmt.executeUpdate() > 0) {
-                            conn.commit();
-                            return true;
-                        }
-                    }
+                    conn.commit();
+                    return true;
                 }
             }
-
             conn.rollback();
-            return false;
-
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating candidat", e);
             if (conn != null) {
@@ -195,5 +164,7 @@ public class CandidatRepository extends BaseRepository<Candidat> {
         } finally {
             closeQuietly(conn);
         }
+        return true;
     }
+
 }

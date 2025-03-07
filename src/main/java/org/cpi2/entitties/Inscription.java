@@ -1,25 +1,38 @@
 package org.cpi2.entitties;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Inscription {
     private int id;
+    private Date inscriptioDate;
     private String cin;
-    private Plan plan;
+    private CoursePlan plan;
     private boolean paymentStatus;
     private String status;
-    private Date netPaymentDate;
+    private Date nextPaymentDate;
+    private String paymentCycle;
 
     public Inscription() {
     }
 
-    public Inscription(int id, String cin, Plan plan, boolean paymentStatus, String status, java.util.Date netPaymentDate) {
+    public Inscription(int id, String cin, CoursePlan plan, boolean paymentStatus, String status, Date nextPaymentDate, String paymentCycle,Date inscriptioDate) {
         this.id = id;
         this.cin = cin;
         this.plan = plan;
         this.paymentStatus = paymentStatus;
         this.status = status;
-        this.netPaymentDate = netPaymentDate;
+        this.nextPaymentDate = nextPaymentDate;
+        this.paymentCycle=paymentCycle;
+        this.inscriptioDate=inscriptioDate;
+    }
+
+    public String getPaymentCycle() {
+        return paymentCycle;
+    }
+
+    public void setPaymentCycle(String paymentCycle) {
+        this.paymentCycle = paymentCycle;
     }
 
     public int getId() {
@@ -38,11 +51,11 @@ public class Inscription {
         this.cin = cin;
     }
 
-    public Plan getPlan() {
+    public CoursePlan getPlan() {
         return plan;
     }
 
-    public void setPlan(Plan plan) {
+    public void setPlan(CoursePlan plan) {
         this.plan = plan;
     }
 
@@ -62,13 +75,22 @@ public class Inscription {
         this.status = status;
     }
 
-    public java.util.Date getNetPaymentDate() {
-        return netPaymentDate;
+    public java.util.Date getnextPaymentDate() {
+        return nextPaymentDate;
     }
 
-    public void setNetPaymentDate(java.util.Date netPaymentDate) {
-        this.netPaymentDate = netPaymentDate;
+    public void setnextPaymentDate(java.util.Date nextPaymentDate) {
+        this.nextPaymentDate = nextPaymentDate;
     }
+
+    public Date getInscriptioDate() {
+        return inscriptioDate;
+    }
+
+    public void setInscriptioDate(Date inscriptioDate) {
+        this.inscriptioDate = inscriptioDate;
+    }
+
 
     @Override
     public String toString() {
@@ -78,7 +100,7 @@ public class Inscription {
                 ", plan=" + plan +
                 ", paymentStatus=" + paymentStatus +
                 ", status='" + status + '\'' +
-                ", netPaymentDate=" + netPaymentDate +
+                ", nextPaymentDate=" + nextPaymentDate +
                 '}';
     }
 }

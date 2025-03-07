@@ -44,8 +44,7 @@ public enum CoursePlan {
         return description;
     }
 
-    public int getNbreSeanceConduite() {
-        return nbreSeanceConduite;
+    public int getNbreSeanceConduite() {        return nbreSeanceConduite;
     }
 
     public int getGetNbreSeanceCode() {
@@ -70,4 +69,5 @@ public enum CoursePlan {
             return "Truck";
         }
     }
+
 }
