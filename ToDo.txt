@@ -6,4 +6,7 @@ Set up the session repository and service .
 Set up the exam inscriptions.
 Note in the "Passer Examen Interface" :
 *   maybe make the Frais d'examen read only (fills automatically after selecting the exam type).
- After finishing these the Candidat Usecases are all done.  
+ After finishing these the Candidat Usecases are all done.
+
+
+ In the interface Session planification, ig it should add candidats automatically to the session when they are created. (based on the inscription (date and status) and max capacite)
