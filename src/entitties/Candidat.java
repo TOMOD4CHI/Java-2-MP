@@ -1,0 +1,32 @@
+package entitties;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class Candidat extends Personne {
+    private Dossier dossier;
+
+    public Candidat() {
+        super();
+        this.dossier = new Dossier();
+    }
+
+    public Candidat(String nom, String prenom, String cin, String adresse, String telephone) {
+        super(nom, prenom, cin, adresse, telephone);
+        this.dossier = new Dossier();
+    }
+
+
+
+    public Dossier getDossier() {
+        return dossier;
+    }
+
+    public void setDossier(Dossier dossier) {
+        this.dossier = dossier;
+    }
+
+}
