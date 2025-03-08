@@ -1,8 +1,3 @@
-3/6/2025
-Setup the documents and dossier repository for the Candidat's service.
-Test the Completed Services
-3/7/2025
-Set up the session repository and service .
 Set up the exam inscriptions.
 Note in the "Passer Examen Interface" :
 *   maybe make the Frais d'examen read only (fills automatically after selecting the exam type).
