@@ -103,4 +103,6 @@ public class Inscription {
                 ", nextPaymentDate=" + nextPaymentDate +
                 '}';
     }
+
+
 }
