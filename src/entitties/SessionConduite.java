@@ -5,16 +5,16 @@ import java.time.LocalTime;
 
 public class SessionConduite extends Session {
     private Vehicule vehicule;
-    private String pointRencontre;
+    private Location pointRencontre;
     private Integer kilometresParcourus;
 
     public SessionConduite() {
         super();
     }
 
-    public SessionConduite(LocalDate dateSession, LocalTime heureSession, Moniteur moniteur,
-                           Double prix, Vehicule vehicule, String pointRencontre) {
-        super(dateSession, heureSession, moniteur, prix, TypeSession.CONDUITE);
+    public SessionConduite(long planId,LocalDate dateSession, LocalTime heureSession,long duree, Moniteur moniteur
+                           , Vehicule vehicule, Location pointRencontre) {
+        super(planId,dateSession,heureSession,duree, moniteur);
         this.vehicule = vehicule;
         this.pointRencontre = pointRencontre;
         this.kilometresParcourus = 0;
@@ -28,11 +28,11 @@ public class SessionConduite extends Session {
         this.kilometresParcourus = kilometresParcourus;
     }
 
-    public String getPointRencontre() {
+    public Location getPointRencontre() {
         return pointRencontre;
     }
 
-    public void setPointRencontre(String pointRencontre) {
+    public void setPointRencontre(Location pointRencontre) {
         this.pointRencontre = pointRencontre;
     }
 

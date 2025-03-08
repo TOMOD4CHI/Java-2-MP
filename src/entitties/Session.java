@@ -5,24 +5,24 @@ import java.time.LocalTime;
 
 public abstract class Session {
     protected Long id;
+    protected long planId;
     protected LocalDate dateSession;
     protected LocalTime heureSession;
+    protected long duree;
     protected Moniteur moniteur;
-    protected Double prix;
     protected StatutSession statut;
-    protected TypeSession typeSession;
 
     protected Session() {
         this.statut = StatutSession.PLANIFIEE;
     }
 
-    protected Session(LocalDate dateSession, LocalTime heureSession, Moniteur moniteur, Double prix, TypeSession typeSession) {
+    protected Session(long planId,LocalDate dateSession, LocalTime heureSession,long duree, Moniteur moniteur) {
         this();
+        this.planId=planId;
         this.dateSession = dateSession;
         this.heureSession = heureSession;
         this.moniteur = moniteur;
-        this.prix = prix;
-        this.typeSession = typeSession;
+        this.duree = duree;
     }
 
     public LocalDate getDateSession() {
@@ -57,12 +57,20 @@ public abstract class Session {
         this.moniteur = moniteur;
     }
 
-    public Double getPrix() {
-        return prix;
+    public long getPlanId() {
+        return planId;
     }
 
-    public void setPrix(Double prix) {
-        this.prix = prix;
+    public void setPlanId(long planId) {
+        this.planId = planId;
+    }
+
+    public long getDuree() {
+        return duree;
+    }
+
+    public void setDuree(long duree) {
+        this.duree = duree;
     }
 
     public StatutSession getStatut() {
@@ -73,11 +81,4 @@ public abstract class Session {
         this.statut = statut;
     }
 
-    public TypeSession getTypeSession() {
-        return typeSession;
-    }
-
-    public void setTypeSession(TypeSession typeSession) {
-        this.typeSession = typeSession;
-    }
 }

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SessionCode extends Session {
-    private String salle;
     private Integer capaciteMax;
     private List<Candidat> participants;
 
@@ -15,10 +14,9 @@ public class SessionCode extends Session {
         this.participants = new ArrayList<>();
     }
 
-    public SessionCode(LocalDate dateSession, LocalTime heureSession, Moniteur moniteur,
-                       Double prix, String salle, Integer capaciteMax) {
-        super(dateSession, heureSession, moniteur, prix, TypeSession.CODE);
-        this.salle = salle;
+    public SessionCode(LocalDate dateSession, LocalTime heureSession, long duree,Moniteur moniteur,
+                       long  planId, Integer capaciteMax) {
+        super(planId,dateSession, heureSession,duree, moniteur);
         this.capaciteMax = capaciteMax;
         this.participants = new ArrayList<>();
     }
@@ -39,11 +37,4 @@ public class SessionCode extends Session {
         this.participants = participants;
     }
 
-    public String getSalle() {
-        return salle;
-    }
-
-    public void setSalle(String salle) {
-        this.salle = salle;
-    }
 }
