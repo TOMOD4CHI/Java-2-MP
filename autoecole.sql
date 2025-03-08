@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 06, 2025 at 08:20 PM
+-- Generation Time: Mar 08, 2025 at 01:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -219,11 +219,11 @@ CREATE TABLE `rendez_vous` (
 
 CREATE TABLE `session_code` (
   `id` int(11) NOT NULL,
+  `plan_id` int(10) NOT NULL,
   `date_session` date NOT NULL,
   `heure_debut` time NOT NULL,
   `heure_fin` time NOT NULL,
   `moniteur_id` int(11) NOT NULL,
-  `prix` decimal(10,2) NOT NULL,
   `statut_id` varchar(10) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -236,6 +236,7 @@ CREATE TABLE `session_code` (
 
 CREATE TABLE `session_conduite` (
   `id` int(11) NOT NULL,
+  `plan_id` int(10) NOT NULL,
   `date_session` date NOT NULL,
   `heure_debut` time NOT NULL,
   `heure_fin` time NOT NULL,
@@ -244,7 +245,6 @@ CREATE TABLE `session_conduite` (
   `point_rencontre_lat` decimal(10,8) DEFAULT NULL,
   `point_rencontre_lon` decimal(11,8) DEFAULT NULL,
   `kilometres_parcourus` int(11) DEFAULT NULL,
-  `prix` decimal(10,2) NOT NULL,
   `statut_id` varchar(10) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -436,7 +436,8 @@ ALTER TABLE `rendez_vous`
 --
 ALTER TABLE `session_code`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `moniteur_id` (`moniteur_id`);
+  ADD KEY `moniteur_id` (`moniteur_id`),
+  ADD KEY `plan_id` (`plan_id`);
 
 --
 -- Indexes for table `session_conduite`
@@ -444,7 +445,8 @@ ALTER TABLE `session_code`
 ALTER TABLE `session_conduite`
   ADD PRIMARY KEY (`id`),
   ADD KEY `moniteur_id` (`moniteur_id`),
-  ADD KEY `vehicule_id` (`vehicule_id`);
+  ADD KEY `vehicule_id` (`vehicule_id`),
+  ADD KEY `plan_id` (`plan_id`);
 
 --
 -- Indexes for table `type_document`
@@ -622,14 +624,16 @@ ALTER TABLE `rendez_vous`
 -- Constraints for table `session_code`
 --
 ALTER TABLE `session_code`
-  ADD CONSTRAINT `session_code_ibfk_1` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`);
+  ADD CONSTRAINT `session_code_ibfk_1` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`),
+  ADD CONSTRAINT `session_code_ibfk_2` FOREIGN KEY (`plan_id`) REFERENCES `plan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `session_conduite`
 --
 ALTER TABLE `session_conduite`
   ADD CONSTRAINT `session_conduite_ibfk_1` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`),
-  ADD CONSTRAINT `session_conduite_ibfk_2` FOREIGN KEY (`vehicule_id`) REFERENCES `vehicule` (`id`);
+  ADD CONSTRAINT `session_conduite_ibfk_2` FOREIGN KEY (`vehicule_id`) REFERENCES `vehicule` (`id`),
+  ADD CONSTRAINT `session_conduite_ibfk_3` FOREIGN KEY (`plan_id`) REFERENCES `plan` (`id`);
 
 --
 -- Constraints for table `vehicule`
