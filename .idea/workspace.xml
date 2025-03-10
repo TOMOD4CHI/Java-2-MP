@@ -5,45 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="yyyyy">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/PassExam.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceCode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/style4.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/style5.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceCode.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/passExam.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/AutoEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/AutoEcole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Candidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Candidat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/CoursePlan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/CoursePlan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Document.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Document.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Dossier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Dossier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Entretien.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Entretien.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Examen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Examen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Inscription.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Inscription.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Moniteur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Moniteur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Paiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Paiement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/PaiementExamen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/PaiementExamen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/PaiementHeures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/PaiementHeures.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Personne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Personne.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Plan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/RendezVous.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/RendezVous.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/SessionCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/SessionCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/SessionConduite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/SessionConduite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/StatutPaiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/StatutPaiement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/StatutSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/StatutSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Tranche.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Tranche.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/TypeDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypeDocument.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/TypeExamen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypeExamen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/TypePermis.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypePermis.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/TypeSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypeSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entitties/Vehicule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Vehicule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterEcole.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Progression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Progression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/css/style2.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style2.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/css/style3.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style4.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style4.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style5.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style5.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceConduite.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceConduite.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/examRegistration.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/examRegistration.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/documents.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/documents.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/progression.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/progression.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,10 +145,23 @@
       <workItem from="1741201671595" duration="1060000" />
       <workItem from="1741253072561" duration="3745000" />
       <workItem from="1741363215554" duration="4263000" />
+      <workItem from="1741467661721" duration="5471000" />
+      <workItem from="1741540041727" duration="2097000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Progression.java</url>
+          <line>86</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

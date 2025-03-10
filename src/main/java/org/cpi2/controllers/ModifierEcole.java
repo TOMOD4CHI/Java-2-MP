@@ -63,7 +63,7 @@ public class ModifierEcole {
         adresseField.clear();
         telephoneField.clear();
         emailField.clear();
-        logoImageView.setImage(null);
+
     }
 
     private void showAlert(String title, String message) {

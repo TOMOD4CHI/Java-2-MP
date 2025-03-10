@@ -52,11 +52,7 @@
         <!-- Charts -->
         <TitledPane text="Visualisation de la Progression" expanded="true" styleClass="form-title">
             <VBox spacing="10">
-                <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Label text="Période:" styleClass="form-label"/>
-                    <ComboBox fx:id="periodeComboBox" onAction="#refreshChartsAction" styleClass="form-field"/>
-                    <Button text="Exporter PDF" onAction="#exportPdfAction" styleClass="button"/>
-                </HBox>
+
 
                 <HBox spacing="20">
                     <PieChart fx:id="progressionPieChart" title="Répartition des Séances" legendVisible="true" prefWidth="400" prefHeight="300"/>

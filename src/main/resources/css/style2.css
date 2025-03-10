@@ -1,74 +1,94 @@
-/* Form container styling */
+
 .form-container {
     -fx-spacing: 1;
 }
 
-/* Form title styling */
+
 .form-title,.page-title {
     -fx-alignment: center;
-    -fx-font-size: 15px; /* Increased font size for title */
-    -fx-text-fill: #2C3E50;
+    -fx-font-size: 15px;
+    -fx-text-fill: #2d3748;
     -fx-padding: 10px 20px;
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
 }
-.datepick{
 
 
-}
-/* Form label styling */
+
+
 .form-label {
     -fx-font-size: 14px;
-    -fx-text-fill: #2C3E50;
+    -fx-text-fill: #4a5568;
     -fx-padding: 5px 10px;
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
-/* Form field styling */
+
 .form-field {
-    -fx-background-color: #f5f5f5;
-    -fx-border-color: #bdc3c7;
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
     -fx-border-radius: 8px;
     -fx-padding: 8px 12px;
     -fx-font-size: 15px;
     -fx-min-height: 35px;
     -fx-pref-height: 35px;
     -fx-pref-width: 250px;
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
-/* Focused form field styling */
+
 .form-field:focused {
-    -fx-border-color: #7698a6;
+    -fx-border-color: #1ab5a9;
     -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(26, 181, 169, 0.2), 4, 0, 0, 0);
 }
 
-/* Button styling */
+
 .button {
-    -fx-background-color: #57707A;
+    -fx-background-color: #4b77d4;
     -fx-text-fill: white;
-    -fx-font-size: 14px; /* Smaller font size */
-    -fx-padding: 8px 16px; /* Reduced padding to make buttons more compact */
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
     -fx-background-radius: 8px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
     -fx-transition: all 0.3s ease-in-out;
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
+    -fx-font-weight: 600;
 }
 
-/* Button hover styling */
+
 .button:hover {
-    -fx-background-color: #66818d;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
+    -fx-background-color: rgba(74, 180, 239, 0.73);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6, 0, 0, 2);
 }
 
-/* Cancel and Submit buttons styling */
+.button:pressed {
+    -fx-background-color: #00a2ff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0, 0, 0);
+}
+
+
 #cancelButton, #submitButton {
     -fx-font-family: 'Poppins', 'FontAwesome', 'Segoe UI', system-ui, -apple-system, sans-serif;
     -fx-background-color: transparent;
-    -fx-text-fill: #3f4e6c;
-    -fx-font-size: 14px; /* Smaller font size */
+    -fx-text-fill: #4b77d4;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-padding: 8px 14px; /* Reduced padding */
+    -fx-padding: 8px 14px;
     -fx-background-radius: 8;
     -fx-transition: all 0.3s ease;
 }
-
-/* Cancel and Submit buttons hover styling */
 #cancelButton:hover, #submitButton:hover {
-    -fx-background-color: rgba(156, 194, 245, 0.2);
+    -fx-background-color: rgba(74, 180, 239, 0.2);
+}
+.datepick{
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 15px;
+    -fx-min-height: 45px;
+    -fx-pref-height: 45px;
+    -fx-pref-width: 250px;
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
+
 }

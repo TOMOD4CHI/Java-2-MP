@@ -31,7 +31,7 @@
 
         <!-- Updated DatePicker with the correct styling -->
         <Label text="Date d'ajout:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-        <DatePicker fx:id="dateAjoutPicker" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity" styleClass="form-field"/>
+        <DatePicker fx:id="dateAjoutPicker" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity" styleClass="datepick"/>
 
         <Label text="Fichier:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
         <HBox spacing="8" GridPane.rowIndex="4" GridPane.columnIndex="1">

@@ -5,11 +5,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class MainWindow {
 
@@ -66,11 +68,17 @@ public class MainWindow {
         }
     }
 
+    @FXML private ImageView monImageView;
+
     @FXML
     public void loadMain() {
-        contentArea.getChildren().clear();
-         // Restore background when returning to main
+        if (!contentArea.getChildren().contains(monImageView)) {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(monImageView);
+        }
     }
+
+
 
     public void loadAjouterSalle(ActionEvent actionEvent) {
     }

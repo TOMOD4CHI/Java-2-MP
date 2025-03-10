@@ -1,4 +1,4 @@
-package repository;
+package org.cpi2.repository;
 
 import Exceptions.DataNotFound;
 import entitties.Document;
