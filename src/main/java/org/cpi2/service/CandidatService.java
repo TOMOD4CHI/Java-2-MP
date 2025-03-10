@@ -1,4 +1,4 @@
-package service;
+package org.cpi2.service;
 
 import entitties.*;
 import repository.CandidatRepository;

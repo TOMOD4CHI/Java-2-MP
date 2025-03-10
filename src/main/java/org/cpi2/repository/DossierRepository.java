@@ -1,4 +1,4 @@
-package repository;
+package org.cpi2.repository;
 
 import entitties.Document;
 import entitties.Dossier;

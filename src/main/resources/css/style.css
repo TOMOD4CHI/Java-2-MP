@@ -1,103 +1,119 @@
-/* Root Style */
-
 .root {
-    -fx-background-color: linear-gradient(to bottom, #DEDCDC, #ffffff);
-    -fx-font-family: "Merriweather", sans-serif, "Segoe UI Semibold";
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
-/* Context Menu */
 .context-menu {
-    -fx-background-color: #57707A;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-background-radius: 8px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 3);
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e9ec;
+    -fx-border-width: 1px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 10, 0, 0, 4);
 }
 
-/* Menu Bar */
 .menu-bar {
-    -fx-background-color: linear-gradient(to left, rgba(114, 145, 157, 0.82), #57707A);
+    -fx-background-color: linear-gradient(to right, #4ab4ef,#84d3e7);
     -fx-font-size: 50px;
     -fx-padding: 4px;
-    -fx-background-radius: 8px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 3);
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
 }
 
-/* Menu */
 .menu {
     -fx-font-size: 14px;
     -fx-padding: 5px 10px;
     -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
 }
 
 .menu:hover {
     -fx-background-color: rgba(255, 255, 255, 0.2);
-    -fx-background-radius: 5px;
+    -fx-background-radius: 8px;
 }
 
 .menu-item {
-    -fx-text-fill: white;
+    -fx-text-fill: #2d3748;
     -fx-font-size: 15px;
     -fx-padding: 6px 12px;
-    -fx-background-color: #57707A;
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+}
+.menu-item:focused, .menu-item:hover {
+    -fx-background-color: rgb(119, 204, 250);
     -fx-background-radius: 5px;
 }
 
-.menu-item:hover {
-    -fx-background-color: #979DAB;
-    -fx-text-fill: #191D23;
+.menu-item:focused .label, .menu-item:hover .label {
+    -fx-text-fill: #ffffff;
 }
 
-/* Buttons */
+
+
 .button {
-    -fx-background-color: #57707A;
+    -fx-background-color: #4b77d4;
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-padding: 10px 20px;
-    -fx-background-radius: 8px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 3);
-    -fx-transition: all 0.3s ease-in-out;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
+    -fx-font-weight: 600;
 }
 
 .button:hover {
-    -fx-background-color: #66818d;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
+    -fx-background-color: rgba(74, 180, 239, 0.73);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6, 0, 0, 2);
 }
 
-/* Form Title */
+.button:pressed {
+    -fx-background-color: #00a2ff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 2, 0, 0, 0);
+}
+
 .form-title {
+    -fx-font-weight: bold;
+    -fx-alignment: center;
     -fx-font-size: 25px;
-    -fx-text-fill: #2C3E50;
+    -fx-text-fill: #2d3748; /* Dark gray */
     -fx-padding: 5px 0;
 }
 
-/* Form Fields */
+
 .form-field {
-    -fx-background-color: #f5f5f5;
-    -fx-border-color: #bdc3c7;
-    -fx-border-radius: 8px;
-    -fx-padding: 8px 10px;  /* Reduced padding */
-    -fx-font-size: 14px;  /* Reduced font size */
-    -fx-min-height: 30px;  /* Reduced height */
-    -fx-pref-width: 750px;  /* Reduced width */
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 8px 10px;
+    -fx-font-size: 14px;
+    -fx-min-height: 30px;
+    -fx-pref-width: 750px;
     -fx-max-width: 750px;
 }
 
 .form-field:focused {
-    -fx-border-color: #7698a6;
+    -fx-border-color: #1ab5a9;
     -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(26, 181, 169, 0.2), 4, 0, 0, 0);
 }
 
-/* Form Labels */
+
 .form-label {
     -fx-font-size: 16px;
-    -fx-text-fill: #2C3E50;
+    -fx-text-fill: #4a5568;
     -fx-padding: 10px 10px;
+    -fx-font-weight: 600;
 }
 
-/* Image View */
 .logo-image {
-    -fx-border-radius: 5px;
-    -fx-border-color: #ccc;
-    -fx-border-width: 1px;
+    -fx-opacity: 0.3;
+    -fx-fit-width: 100%;
+    -fx-fit-height: 100%;
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, 0, 2);
 }
+
+
