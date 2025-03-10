@@ -4,4 +4,4 @@ Note in the "Passer Examen Interface" :
  After finishing these the Candidat Usecases are all done.
 
 
- In the interface Session planification, ig it should add candidats automatically to the session when they are created. (based on the inscription (date and status) and max capacite)
+ In the interface Session planification, ig it should add candidats automatically to the session when they are created. (based on the inscription (date and status) and max capacite)(only code sessions)
