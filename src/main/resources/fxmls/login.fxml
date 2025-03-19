@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.login"
+            fx:id="loginScreenRoot"
+            styleClass="login-screen-root"
+            stylesheets="@/css/stylel.css" >
+
+    <center>
+        <StackPane styleClass="login-stack-pane">
+            <BorderPane styleClass="login-border-pane">
+                <left>
+                    <VBox alignment="CENTER" spacing="20" styleClass="login-logo-container">
+                        <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                        <Pane fx:id="logoContainer" styleClass="login-logo-pane">
+                            <ImageView styleClass="login-logo-image" fx:id="logoImageView" fitWidth="250" fitHeight="250" >
+                                <Image url="@/images/logo1.png"/>
+                            </ImageView>
+                        </Pane>
+                    </VBox>
+                </left>
+
+                <center>
+                    <GridPane alignment="center" hgap="10" vgap="10" styleClass="login-form-grid">
+                        <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+
+                        <Text text="LOGIN"
+                              GridPane.columnIndex="0" GridPane.rowIndex="0"
+                              GridPane.columnSpan="2"
+                              styleClass="login-welcome-text"/>
+
+                        <Label text="Username:"
+                               GridPane.columnIndex="0" GridPane.rowIndex="1"
+                               styleClass="login-label"/>
+
+                        <TextField fx:id="usernameField"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                   styleClass="login-text-field"/>
+
+                        <Label text="Password:"
+                               GridPane.columnIndex="0" GridPane.rowIndex="2"
+                               styleClass="login-label"/>
+
+                        <PasswordField fx:id="passwordField"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                       styleClass="login-password-field"/>
+
+                        <HBox spacing="10" alignment="BOTTOM_RIGHT"
+                              GridPane.columnIndex="1" GridPane.rowIndex="4">
+                            <Button text="Sign in"
+                                    styleClass="login-button"
+                                    onAction="#handleLoginButtonAction"/>
+                        </HBox>
+
+
+
+                        <Text fx:id="actionTarget"
+                              GridPane.columnIndex="0" GridPane.rowIndex="7"
+                              GridPane.columnSpan="2"
+                              styleClass="login-error-message"/>
+                    </GridPane>
+                </center>
+            </BorderPane>
+        </StackPane>
+    </center>
+</BorderPane>

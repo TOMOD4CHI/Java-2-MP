@@ -6,7 +6,7 @@
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.cpi2.controllers.SeanceCode"
            stylesheets="@/css/style5.css"
-           prefWidth="400" prefHeight="300">
+           prefWidth="400" prefHeight="350">
 
     <!-- Wrapper to center everything -->
     <VBox spacing="15" alignment="center">
@@ -14,14 +14,24 @@
 
         <!-- Form Fields -->
         <HBox spacing="10" alignment="center">
+            <Label text="ID Séance :" styleClass="form-label"/>
+            <TextField fx:id="sessionfield" prefWidth="200" styleClass="form-field"/>
+        </HBox>
+
+        <HBox spacing="10" alignment="center">
             <Label text="ID Candidat :" styleClass="form-label"/>
             <TextField fx:id="candidatfield" prefWidth="200" styleClass="form-field"/>
         </HBox>
 
+        <!-- Auto-assign option -->
         <HBox spacing="10" alignment="center">
-            <Label text="ID Séance :" styleClass="form-label"/>
-            <TextField fx:id="sessionfield" prefWidth="200" styleClass="form-field"/>
+            <CheckBox fx:id="autoAssignCheckBox" text="Assignation automatique des candidats" />
         </HBox>
+
+        <Label text="L'assignation automatique ajoute les candidats selon leur date d'inscription"
+               styleClass="form-hint"
+               wrapText="true"
+               maxWidth="300"/>
 
         <!-- Buttons Section -->
         <HBox spacing="15" alignment="center">

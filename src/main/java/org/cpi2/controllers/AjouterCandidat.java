@@ -18,10 +18,13 @@ public class AjouterCandidat {
     @FXML private Button cancelButton;
     @FXML private Button confirmButton;
 
-    // Action for the Cancel button
+    @FXML
+    private void initialize() {
+        typeComboBox.setPrefWidth(200);
+    }
     @FXML
     private void cancelAction() {
-        // Clear all fields (reset form)
+
         nomField.clear();
         prenomField.clear();
         cinField.clear();

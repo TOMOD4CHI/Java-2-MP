@@ -5,8 +5,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.MainWindow" stylesheets="@/css/style.css">
-    <top>
-        <MenuBar>
+    <top >
+        <MenuBar >
             <Menu text="🚗 Auto-ecole">
                 <MenuItem text="📝 ajouter une ecole " onAction="#loadAjouterEcole" />
                 <MenuItem text="📑 modifier les informations " onAction="#loadModifierEcole" />
@@ -53,10 +53,8 @@
     </top>
     <center>
         <StackPane fx:id="contentArea">
-            <ImageView fx:id="monImageView" fitWidth="600" fitHeight="600" styleClass="logo-image">
-                <image >
-                    <Image url="@/images/logo4.png" />
-                </image>
+            <ImageView fx:id="logoImageView" fitWidth="600" fitHeight="600" styleClass="logo-image"  opacity="0.6">
+                <Image url="@/images/logo4.png"/>
             </ImageView>
 
         </StackPane>

@@ -38,9 +38,9 @@ public class ExamRegistration {
         typeExamenComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 if (newVal.equals("CODE")) {
-                    fraisField.setText("150.00");
+                    fraisField.setText("80.00");
                 } else if (newVal.equals("CONDUITE")) {
-                    fraisField.setText("300.00");
+                    fraisField.setText("120.00");
                 }
             }
         });

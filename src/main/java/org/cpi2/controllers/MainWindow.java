@@ -1,10 +1,16 @@
 package org.cpi2.controllers;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.ParallelTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -12,12 +18,43 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainWindow {
+public class MainWindow implements Initializable {
 
     @FXML private StackPane contentArea;
     @FXML private ImageView backgroundImage;
+    @FXML private ImageView logoImageView;
 
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        createLogoAnimation();
+    }
+
+    private void createLogoAnimation() {
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1.5), logoImageView);
+        rotateTransition.setFromAngle(-180);
+        rotateTransition.setToAngle(0);
+        rotateTransition.setInterpolator(Interpolator.EASE_OUT);
+
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1.5), logoImageView);
+        scaleTransition.setFromX(0.8);
+        scaleTransition.setFromY(0.8);
+        scaleTransition.setToX(1.0);
+        scaleTransition.setToY(1.0);
+        scaleTransition.setInterpolator(Interpolator.EASE_OUT);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.5), logoImageView);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(0.6);
+        fadeTransition.setInterpolator(Interpolator.EASE_OUT);
+
+        ParallelTransition parallelTransition = new ParallelTransition();
+        parallelTransition.getChildren().addAll(rotateTransition, scaleTransition, fadeTransition);
+        parallelTransition.play();
+    }
 
     @FXML public void loadAjouterEcole(){loadViewWithTransition("/fxmls/AjouterEcole.fxml"); };
     @FXML public void loadModifierEcole(){loadViewWithTransition("/fxmls/ModifierEcole.fxml"); }
@@ -70,16 +107,17 @@ public class MainWindow {
 
     @FXML private ImageView monImageView;
 
+
     @FXML
     public void loadMain() {
-        if (!contentArea.getChildren().contains(monImageView)) {
-            contentArea.getChildren().clear();
-            contentArea.getChildren().add(monImageView);
+        contentArea.getChildren().clear();
+
+        if (!contentArea.getChildren().contains(logoImageView)) {
+            contentArea.getChildren().add(logoImageView);
         }
+
+        createLogoAnimation();
     }
-
-
-
     public void loadAjouterSalle(ActionEvent actionEvent) {
     }
 

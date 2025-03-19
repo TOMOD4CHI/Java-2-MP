@@ -57,7 +57,7 @@
                 <DatePicker fx:id="dateExamenPicker" GridPane.rowIndex="1" GridPane.columnIndex="1" minHeight="40" maxWidth="Infinity" styleClass="datepick"/>
 
                 <Label text="Frais d'examen (DT):" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
-                <TextField fx:id="fraisField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field"/>
+                <TextField fx:id="fraisField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" editable="false"/>
 
                 <Label text="Frais payés:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
                 <CheckBox fx:id="fraisPaiementCheckBox" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field"/>

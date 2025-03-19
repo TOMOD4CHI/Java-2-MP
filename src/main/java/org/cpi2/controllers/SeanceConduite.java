@@ -3,6 +3,7 @@ package org.cpi2.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -16,7 +17,7 @@ public class SeanceConduite {
     @FXML private TextField idVoiture;
     @FXML private TextField idMoniteur;
     @FXML private TextField kilometrage;
-    @FXML private TextField date;
+    @FXML private DatePicker date;
     @FXML private TextField temps;
     @FXML private TextField idCandidat;
 
@@ -73,7 +74,7 @@ public class SeanceConduite {
         idCandidat.clear();
         idVoiture.clear();
         kilometrage.clear();
-        date.clear();
+
         temps.clear();
         latitudeField.clear();
         longitudeField.clear();
@@ -84,7 +85,7 @@ public class SeanceConduite {
     private void handleSubmit(ActionEvent event) {
 
         if (idMoniteur.getText().isEmpty() || idVoiture.getText().isEmpty() ||
-                idCandidat.getText().isEmpty() || date.getText().isEmpty() || temps.getText().isEmpty()|| kilometrage.getText().isEmpty()||
+                idCandidat.getText().isEmpty()  || temps.getText().isEmpty()|| kilometrage.getText().isEmpty()||
                 latitudeField.getText().isEmpty() || longitudeField.getText().isEmpty()) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);

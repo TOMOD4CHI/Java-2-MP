@@ -1,0 +1,173 @@
+.login-screen-root {
+    -fx-background-color: linear-gradient(to right, #365da2, #5982ce, #4A9BF1);
+    -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+}
+
+.login-screen-root .login-floating-square {
+    -fx-fill: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 0);
+}
+
+.login-screen-root .login-floating-circle {
+    -fx-fill: rgba(173, 216, 230, 0.15);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 0);
+}
+
+.login-screen-root .login-floating-triangle {
+    -fx-fill: rgba(65, 105, 225, 0.1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 0);
+}
+
+.login-screen-root .login-logo-container {
+    -fx-opacity: 1;
+    -fx-background-color: transparent;
+    -fx-padding: 25;
+    -fx-alignment: center;
+    -fx-min-width: 300;
+}
+
+.login-screen-root  {
+    -fx-background-color: linear-gradient(to right, #365da2, #5982ce, #4A9BF1);
+    -fx-effect: null;
+    -fx-background-radius: 0;
+    -fx-rotate: 0;
+    -fx-animation: loginLogoRotate 1.5s ease-out;
+}
+
+@keyframes loginLogoRotate {
+    0% {
+        -fx-rotate: -180;
+        -fx-opacity: 0;
+        -fx-scale-x: 0.8;
+        -fx-scale-y: 0.8;
+    }
+    70% {
+        -fx-rotate: 10;
+        -fx-opacity: 0.9;
+        -fx-scale-x: 1.05;
+        -fx-scale-y: 1.05;
+    }
+    100% {
+        -fx-rotate: 0;
+        -fx-opacity: 1;
+        -fx-scale-x: 1;
+        -fx-scale-y: 1;
+    }
+}
+
+.login-screen-root .login-form-grid {
+    -fx-background-color: linear-gradient(to right, #365da2, #5982ce, #4A9BF1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 5);
+    -fx-border-width: 0;
+    -fx-padding: 25;
+}
+
+.login-screen-root .login-welcome-text {
+    -fx-alignment: center;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+    -fx-padding: 0 0 25 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-letter-spacing: 1;
+}
+
+.login-screen-root .login-forgot-password {
+    -fx-fill: rgba(173, 216, 230, 0.9);
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-text-alignment: center;
+}
+
+.login-screen-root .login-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-padding: 0 0 5 0;
+}
+
+.login-screen-root .login-text-field,
+.login-screen-root .login-password-field {
+    -fx-background-color: rgba(135, 206, 250, 0.3);
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-border-width: 0;
+    -fx-padding: 12;
+    -fx-font-size: 15px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.login-screen-root .login-text-field:focused,
+.login-screen-root .login-password-field:focused {
+    -fx-background-color: rgba(135, 206, 250, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(173,216,230,0.4), 3, 0, 0, 0);
+}
+
+.login-screen-root .login-button {
+    -fx-background-color: rgba(124, 191, 255, 0.7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12 30;
+    -fx-cursor: hand;
+    -fx-background-radius: 25;
+    -fx-min-width: 120;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-font-size: 15px;
+}
+
+.login-screen-root .login-button:hover {
+    -fx-background-color: rgba(30, 144, 255, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 2);
+    -fx-translate-y: -1;
+}
+
+.login-screen-root .login-button:pressed {
+    -fx-background-color: rgba(65, 105, 225, 1);
+    -fx-translate-y: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 3, 0, 0, 1);
+}
+
+.login-screen-root .login-error-message {
+    -fx-fill: #ADD8E6;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 3, 0, 0, 0);
+}
+
+.login-screen-root .login-wave-shape {
+    -fx-fill: rgba(100, 149, 237, 0.1);
+    -fx-stroke: rgba(135, 206, 250, 0.2);
+    -fx-stroke-width: 1;
+    -fx-animation: loginWaveFloat 10s infinite alternate ease-in-out;
+}
+
+@keyframes loginWaveFloat {
+    0% {
+        -fx-translate-y: 0;
+        -fx-opacity: 0.1;
+    }
+    100% {
+        -fx-translate-y: -15;
+        -fx-opacity: 0.3;
+    }
+}
+
+.login-screen-root .login-diamond {
+    -fx-fill: rgba(0, 105, 148, 0.1);
+    -fx-rotate: 45;
+    -fx-animation: loginDiamondPulse 8s infinite alternate ease-in-out;
+}
+
+@keyframes loginDiamondPulse {
+    0% {
+        -fx-scale-x: 1;
+        -fx-scale-y: 1;
+        -fx-opacity: 0.1;
+    }
+    100% {
+        -fx-scale-x: 1.2;
+        -fx-scale-y: 1.2;
+        -fx-opacity: 0.25;
+    }
+}
