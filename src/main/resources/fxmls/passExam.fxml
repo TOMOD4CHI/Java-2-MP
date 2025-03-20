@@ -12,7 +12,7 @@
            fx:controller="org.cpi2.controllers.PassExam"
            stylesheets="@/css/style3.css">
 
-    <VBox spacing="15" alignment="CENTER" >
+    <VBox spacing="15" alignment="CENTER" styleClass="form-container">
 
         <Label text="Passer un Examen" styleClass="form-title"/>
         <Separator/>
@@ -36,7 +36,7 @@
             </ComboBox>
 
             <Label text="Commentaires:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextArea fx:id="commentaireArea" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field" prefRowCount="3"/>
+            <TextArea fx:id="commentaireArea" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="comment" prefRowCount="3"/>
 
         </GridPane>
 

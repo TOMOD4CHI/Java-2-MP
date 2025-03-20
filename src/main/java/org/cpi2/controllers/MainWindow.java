@@ -129,4 +129,17 @@ public class MainWindow implements Initializable {
 
     public void loadModifierMoniteur() {loadViewWithTransition("/fxmls/ModifierMoniteur.fxml");
     }
+
+    public void loadAfficherCandidat() {
+        loadViewWithTransition("/fxmls/afficherCandidat.fxml");
+    }
+
+    public void loadAfficherSeance() {
+        loadViewWithTransition("/fxmls/afficherSeance.fxml");
+
+    }
+
+    public void loadAfficherMoniteur() {
+        loadViewWithTransition("/fxmls/afficherMoniteur.fxml");
+    }
 }
