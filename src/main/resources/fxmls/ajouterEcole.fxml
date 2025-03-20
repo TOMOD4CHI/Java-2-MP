@@ -4,6 +4,7 @@
 <?import javafx.geometry.Pos?>
 <?import javafx.geometry.Insets?>
 <?import javafx.collections.FXCollections?>
+<?import javafx.scene.image.ImageView?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.cpi2.controllers.AjouterEcole" stylesheets="@/css/style.css" spacing="20" alignment="CENTER" styleClass="form-container">
     <Label text="Ajouter une Ecole" styleClass="form-title"/>
@@ -25,10 +26,16 @@
 
         <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <TextField fx:id="emailField" promptText="Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <Label text="Logo:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <ImageView fx:id="logoImageView" fitWidth="100" fitHeight="100" preserveRatio="true"/>
+            <Button text="Choisir Logo" onAction="#handleLogoUpload" styleClass="button"/>
+        </HBox>
     </GridPane>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Ajouter" onAction="#handleSave" styleClass="button"/>
+        <Button text="Ajouter" onAction="#handleAjouterEcole" styleClass="button"/>
         <Button text="Annuler" onAction="#handleCancel" styleClass="button"/>
     </HBox>
 </VBox>
