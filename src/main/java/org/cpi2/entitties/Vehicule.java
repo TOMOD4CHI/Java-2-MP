@@ -1,5 +1,8 @@
 package org.cpi2.entitties;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -14,14 +17,17 @@ public class Vehicule {
     private Integer kilometrageAvantEntretien;
     private Map<LocalDate, Entretien> historique;
 
-    public Vehicule() {
+    public Vehicule(String immatriculation, String voiture, String renault, String clio, int i, LocalDate localDate) {
         this.kilometrageTotal = 0;
         this.historique = new TreeMap<>();
+    }
+    public StringProperty marqueModeleProperty() {
+        return new SimpleStringProperty(marque + " " + modele); // Concatenates marque and modele
     }
 
     public Vehicule(String immatriculation, String marque, String modele, TypePermis typePermis,
                     LocalDate dateMiseEnService, Integer kilometrageAvantEntretien) {
-        this();
+        this("AB-123-CD", "Voiture", "Renault", "Clio", 45000, LocalDate.now().plusMonths(3));
         this.immatriculation = immatriculation;
         this.marque = marque;
         this.modele = modele;

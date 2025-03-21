@@ -73,9 +73,9 @@ public class MainWindow implements Initializable {
     @FXML public void loadConfirmPresence() { loadViewWithTransition("/fxmls/ConfirmPresence.fxml"); }
     @FXML public void loadManageSchedules() { loadViewWithTransition("/fxmls/ManageSchedules.fxml"); }
 
-    @FXML public void loadVehicles() { loadViewWithTransition("/fxmls/Vehicles.fxml"); }
-    @FXML public void loadMaintenance() { loadViewWithTransition("/fxmls/Maintenance.fxml"); }
-    @FXML public void loadKilometrage() { loadViewWithTransition("/fxmls/Kilometrage.fxml"); }
+    @FXML public void loadGestionVehicules() { loadViewWithTransition("/fxmls/GestionVehicules.fxml"); }
+    @FXML public void loadSuiviEntretiens() { loadViewWithTransition("/fxmls/SuiviEntretiens.fxml"); }
+    @FXML public void loadMiseAJourKilometrage() { loadViewWithTransition("/fxmls/MiseAJourKilometrage.fxml"); }
     @FXML public void loadNotifications() { loadViewWithTransition("/fxmls/Notifications.fxml"); }
 
     @FXML public void loadPayment() { loadViewWithTransition("/fxmls/Payment.fxml"); }
@@ -141,5 +141,9 @@ public class MainWindow implements Initializable {
 
     public void loadAfficherMoniteur() {
         loadViewWithTransition("/fxmls/afficherMoniteur.fxml");
+    }
+
+    public void loadRemplirSeance() {
+        loadViewWithTransition("/fxmls/RemplirSeance.fxml");
     }
 }

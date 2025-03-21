@@ -5,21 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="BF4">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherCandidat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherMoniteur.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherSeance.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/styletab.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/afficherCandidat.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/afficherMoniteur.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/afficherSeance.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/GestionVehicule.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MiseAJourKilometrage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Notifications.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/RemplirSeance.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SuiviEntretiens.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/style6.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/stylee.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/GestionVehicules.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MiseAJourKilometrage.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/Notifications.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/RemplirSeance.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SuiviEntretiens.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style3.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style3.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style4.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style4.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Vehicule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Vehicule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/stylel.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/stylel.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceCode.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceCode.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/passExam.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/passExam.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/login.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,9 +32,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="FxmlFile" />
         <option value="Class" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -69,7 +72,7 @@
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Ranim&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/user/Documents/GitHub/Java-2-MP/src&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
@@ -157,6 +160,8 @@
       <workItem from="1742476668598" duration="204000" />
       <workItem from="1742480483582" duration="220000" />
       <workItem from="1742501968368" duration="4551000" />
+      <workItem from="1742513923527" duration="1062000" />
+      <workItem from="1742583140111" duration="4353000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />

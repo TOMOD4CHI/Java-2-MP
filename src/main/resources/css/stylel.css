@@ -2,6 +2,20 @@
     -fx-background-color: linear-gradient(to right, #365da2, #5982ce, #4A9BF1);
     -fx-font-family: "Segoe UI", "Roboto", sans-serif;
 }
+.title-text
+
+{
+
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
+    -fx-font-size: 76px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #abc3da, #ffffff);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-letter-spacing: 3px;
+
+    -fx-background-radius: 8px;}
 
 .login-screen-root .login-floating-square {
     -fx-fill: rgba(255, 255, 255, 0.2);
@@ -23,7 +37,7 @@
     -fx-background-color: transparent;
     -fx-padding: 25;
     -fx-alignment: center;
-    -fx-min-width: 300;
+    -fx-min-width: 400;
 }
 
 .login-screen-root  {
@@ -64,7 +78,7 @@
 
 .login-screen-root .login-welcome-text {
     -fx-alignment: center;
-    -fx-font-size: 28px;
+    -fx-font-size: 38px;
     -fx-font-weight: bold;
     -fx-fill: white;
     -fx-padding: 0 0 25 0;
