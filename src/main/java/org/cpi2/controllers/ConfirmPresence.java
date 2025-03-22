@@ -64,7 +64,7 @@ public class ConfirmPresence {
             
             // Filter for sessions that haven't been marked for attendance yet
             List<Seance> pendingSessions = sessions.stream()
-                    .filter(seance -> seance.getStatus() == null || seance.getStatus().isEmpty())
+                    .filter(seance -> seance.getStatut() == null || seance.getStatut().isEmpty())
                     .toList();
             
             seanceList.clear();
