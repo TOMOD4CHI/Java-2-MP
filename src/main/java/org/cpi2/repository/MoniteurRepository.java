@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 // Monitor Repository
-public class MoniteurRepository {
+public class MoniteurRepository{
     private static final Logger LOGGER = Logger.getLogger(MoniteurRepository.class.getName());
 
     private Connection getConnection() throws SQLException {
