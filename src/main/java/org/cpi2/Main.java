@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -17,7 +16,6 @@ public class Main extends Application {
         primaryStage.setResizable(true);
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(600);
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
         primaryStage.show();
     }
 

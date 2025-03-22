@@ -30,7 +30,8 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
                 autoEcole.setAdresse(rs.getString("adresse"));
                 autoEcole.setTelephone(rs.getString("telephone"));
                 autoEcole.setEmail(rs.getString("email"));
-                autoEcole.setDirecteur(rs.getString("directeur"));
+                autoEcole.setUsername(rs.getString("username"));
+                autoEcole.setPassword(rs.getString("password"));
                 autoEcole.setLogo(rs.getString("logo_path"));
                 return Optional.of(autoEcole);
             }
@@ -60,7 +61,8 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
                 autoEcole.setAdresse(rs.getString("adresse"));
                 autoEcole.setTelephone(rs.getString("telephone"));
                 autoEcole.setEmail(rs.getString("email"));
-                autoEcole.setDirecteur(rs.getString("directeur"));
+                autoEcole.setUsername(rs.getString("username"));
+                autoEcole.setPassword(rs.getString("password"));
                 autoEcole.setLogo(rs.getString("logo_path"));
                 return autoEcole;
             }
@@ -87,7 +89,8 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
                 autoEcole.setAdresse(rs.getString("adresse"));
                 autoEcole.setTelephone(rs.getString("telephone"));
                 autoEcole.setEmail(rs.getString("email"));
-                autoEcole.setDirecteur(rs.getString("directeur"));
+                autoEcole.setUsername(rs.getString("username"));
+                autoEcole.setPassword(rs.getString("password"));
                 autoEcole.setLogo(rs.getString("logo_path"));
                 ecoles.add(autoEcole);
             }
@@ -99,7 +102,19 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
     }
 
     public boolean save(AutoEcole autoEcole) {
-        String sql = "INSERT INTO auto_ecole (nom, adresse, telephone, email, directeur, logo_path) VALUES (?, ?, ?, ?, ?, ?)";
+        // Check if an auto-école already exists
+        try {
+            AutoEcole existingAutoEcole = findFirst();
+            if (existingAutoEcole != null) {
+                // An auto-école already exists, update it instead
+                autoEcole.setId(existingAutoEcole.getId());
+                return update(autoEcole);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error checking for existing auto-école", e);
+        }
+        
+        String sql = "INSERT INTO auto_ecole (nom, adresse, telephone, email, username, password, logo_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -108,8 +123,9 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
             stmt.setString(2, autoEcole.getAdresse());
             stmt.setString(3, autoEcole.getTelephone());
             stmt.setString(4, autoEcole.getEmail());
-            stmt.setString(5, autoEcole.getDirecteur());
-            stmt.setString(6, autoEcole.getLogo());
+            stmt.setString(5, autoEcole.getUsername());
+            stmt.setString(6, autoEcole.getPassword());
+            stmt.setString(7, autoEcole.getLogo());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -128,7 +144,7 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
     }
 
     public boolean update(AutoEcole autoEcole) {
-        String sql = "UPDATE auto_ecole SET nom = ?, adresse = ?, telephone = ?, email = ?, directeur = ?, logo_path = ? WHERE id = ?";
+        String sql = "UPDATE auto_ecole SET nom = ?, adresse = ?, telephone = ?, email = ?, username = ?, password = ?, logo_path = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -137,9 +153,10 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
             stmt.setString(2, autoEcole.getAdresse());
             stmt.setString(3, autoEcole.getTelephone());
             stmt.setString(4, autoEcole.getEmail());
-            stmt.setString(5, autoEcole.getDirecteur());
-            stmt.setString(6, autoEcole.getLogo());
-            stmt.setInt(7, autoEcole.getId());
+            stmt.setString(5, autoEcole.getUsername());
+            stmt.setString(6, autoEcole.getPassword());
+            stmt.setString(7, autoEcole.getLogo());
+            stmt.setInt(8, autoEcole.getId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

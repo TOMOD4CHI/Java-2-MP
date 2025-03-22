@@ -3,21 +3,22 @@ package org.cpi2.controllers;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
-import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.cpi2.entitties.AutoEcole;
+import org.cpi2.service.AutoEcoleService;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -27,13 +28,19 @@ public class MainWindow implements Initializable {
     @FXML private StackPane contentArea;
     @FXML private ImageView backgroundImage;
     @FXML private ImageView logoImageView;
+    @FXML private Label ecoleNameLabel;
+    @FXML private Label ecoleAddressLabel;
+    @FXML private Label ecoleTelLabel;
+    @FXML private Label ecoleEmailLabel;
     // Fullscreen button removed as requested
 
     private Stage stage;
+    private final AutoEcoleService autoEcoleService = new AutoEcoleService();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createLogoAnimation();
+        loadAutoEcoleInfo();
         
         // We'll set up the stage properties after the scene is fully loaded
         // using Platform.runLater to ensure the scene is ready
@@ -48,6 +55,9 @@ public class MainWindow implements Initializable {
                 // Set default size - wider as requested
                 stage.setWidth(1280);
                 stage.setHeight(800);
+                
+                // Set application icon
+                setApplicationIcon(stage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -76,9 +86,7 @@ public class MainWindow implements Initializable {
 
     // Fullscreen toggle functionality removed as requested
 
-    @FXML public void loadAjouterEcole() {loadViewWithTransition("/fxmls/ajouterEcole.fxml"); }
-    @FXML public void loadModifierEcole() {loadViewWithTransition("/fxmls/modifierEcole.fxml"); }
-    @FXML public void loadManageEcole() {loadViewWithTransition("/fxmls/manageEcole.fxml"); }
+    @FXML public void loadAutoEcoleManagement() {loadViewWithTransition("/fxmls/AutoEcoleManagement.fxml"); }
 
 
     @FXML public void loadAjouterCandidat() { loadViewWithTransition("/fxmls/AjouterCandidat.fxml"); }
@@ -173,5 +181,80 @@ public class MainWindow implements Initializable {
     }
     
     public void loadModifierSalle(ActionEvent actionEvent) {
+    }
+    
+    /**
+     * Loads auto-école information and displays it in the footer
+     */
+    private void loadAutoEcoleInfo() {
+        try {
+            // Get the auto-école information from the database
+            AutoEcole autoEcole = autoEcoleService.getAutoEcole();
+            
+            if (autoEcole != null) {
+                // Set the footer labels with auto-école information
+                ecoleNameLabel.setText(autoEcole.getNom());
+                ecoleAddressLabel.setText(autoEcole.getAdresse());
+                ecoleTelLabel.setText("Tél: " + autoEcole.getTelephone());
+                ecoleEmailLabel.setText("Email: " + autoEcole.getEmail());
+                
+                // Load the logo if it exists
+                if (autoEcole.getLogo() != null && !autoEcole.getLogo().isEmpty()) {
+                    try {
+                        File logoFile = new File(autoEcole.getLogo());
+                        if (logoFile.exists()) {
+                            Image logoImage = new Image(logoFile.toURI().toString());
+                            logoImageView.setImage(logoImage);
+                        } else {
+                            // Use default logo if file doesn't exist
+                            logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+                        }
+                    } catch (Exception e) {
+                        // Use default logo if there's an error loading the custom logo
+                        logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+                        e.printStackTrace();
+                    }
+                } else {
+                    // Use default logo if no logo path is specified
+                    logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+                }
+            } else {
+                // Set default values if no auto-école is found
+                ecoleNameLabel.setText("Auto-École");
+                ecoleAddressLabel.setText("Adresse non définie");
+                ecoleTelLabel.setText("Tél: Non défini");
+                ecoleEmailLabel.setText("Email: Non défini");
+                logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Sets the application icon based on the auto-école logo or default icon
+     */
+    private void setApplicationIcon(Stage stage) {
+        try {
+            // Get the auto-école information from the database
+            AutoEcole autoEcole = autoEcoleService.getAutoEcole();
+            
+            if (autoEcole != null && autoEcole.getLogo() != null && !autoEcole.getLogo().isEmpty()) {
+                File logoFile = new File(autoEcole.getLogo());
+                if (logoFile.exists()) {
+                    stage.getIcons().clear();
+                    stage.getIcons().add(new Image(logoFile.toURI().toString()));
+                    return;
+                }
+            }
+            
+            // Use default app icon if no auto-école logo is available
+            stage.getIcons().clear();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Use default app icon if there's an error
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+        }
     }
 }

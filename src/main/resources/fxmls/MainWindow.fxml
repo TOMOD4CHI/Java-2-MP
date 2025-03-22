@@ -6,66 +6,65 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.effect.DropShadow?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
-            fx:controller="org.cpi2.controllers.MainWindow" 
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.MainWindow"
             stylesheets="@/css/style.css">
     <top>
         <VBox alignment="CENTER" spacing="15">
             <padding>
                 <Insets top="15" bottom="10"/>
             </padding>
-            
+
             <!-- Fullscreen button removed as requested -->
-            
+
             <MenuBar styleClass="main-menu-bar">
                 <effect>
                     <DropShadow color="#00000044" radius="5" spread="0.05"/>
                 </effect>
-                <Menu text="Auto-école" styleClass="menu-item-with-icon">
-                    <MenuItem text="Ajouter une auto-école" onAction="#loadAjouterEcole" />
-                    <MenuItem text="Modifier mon auto-école" onAction="#loadModifierEcole" />
+                <Menu text="🏫 Auto-école" styleClass="menu-item-with-icon">
+                    <MenuItem text="⚙️ Gérer mon auto-école" onAction="#loadAutoEcoleManagement" />
                 </Menu>
-                <Menu text="Candidats" styleClass="menu-item-with-icon">
-                    <MenuItem text="Inscription" onAction="#loadAjouterCandidat" />
-                    <MenuItem text="Modifier" onAction="#loadModifierCandidat" />
-                    <MenuItem text="Fournir des documents" onAction="#loadDocuments" />
-                    <MenuItem text="Suivre progression" onAction="#loadProgression"/>
-                    <MenuItem text="Inscription à un examen" onAction="#loadExamRegistration" />
-                    <MenuItem text="Passer un examen" onAction="#loadExam"/>
-                    <MenuItem text="Afficher tous les candidats" onAction="#loadAfficherCandidat"/>
+                <Menu text="👥 Candidats" styleClass="menu-item-with-icon">
+                    <MenuItem text="📝 Inscription" onAction="#loadAjouterCandidat" />
+                    <MenuItem text="🔄 Modifier" onAction="#loadModifierCandidat" />
+                    <MenuItem text="📄 Fournir des documents" onAction="#loadDocuments" />
+                    <MenuItem text="📈 Suivre progression" onAction="#loadProgression"/>
+                    <MenuItem text="📅 Inscription à un examen" onAction="#loadExamRegistration" />
+                    <MenuItem text="✓ Passer un examen" onAction="#loadExam"/>
+                    <MenuItem text="👀 Afficher tous les candidats" onAction="#loadAfficherCandidat"/>
                 </Menu>
-                <Menu text="Séances" styleClass="menu-item-with-icon">
-                    <MenuItem text="Planifier une séance de conduite" onAction="#loadSessionConduite" />
-                    <MenuItem text="Planifier une séance de code" onAction="#loadSessionCode" />
-                    <MenuItem text="Confirmer présence" onAction="#loadConfirmPresence" />
-                    <MenuItem text="Affecter candidat à une séance" onAction="#loadRemplirSeance" />
-                    <MenuItem text="Afficher toutes les séances" onAction="#loadAfficherSeance"/>
+                <Menu text="🕒 Séances" styleClass="menu-item-with-icon">
+                    <MenuItem text="🚗 Planifier une séance de conduite" onAction="#loadSessionConduite" />
+                    <MenuItem text="📚 Planifier une séance de code" onAction="#loadSessionCode" />
+                    <MenuItem text="✓ Confirmer présence" onAction="#loadConfirmPresence" />
+                    <MenuItem text="👤 Affecter candidat à une séance" onAction="#loadRemplirSeance" />
+                    <MenuItem text="📋 Afficher toutes les séances" onAction="#loadAfficherSeance"/>
                 </Menu>
-                <Menu text="Véhicules" styleClass="menu-item-with-icon">
-                    <MenuItem text="Gérer véhicules" onAction="#loadGestionVehicules"/>
-                    <MenuItem text="Suivi des entretiens" onAction="#loadSuiviEntretiens" />
-                    <MenuItem text="Mettre à jour kilométrage" onAction="#loadMiseAJourKilometrage" />
-                    <MenuItem text="Notifications" onAction="#loadNotifications"/>
+                <Menu text="🚗 Véhicules" styleClass="menu-item-with-icon">
+                    <MenuItem text="🔧 Gérer véhicules" onAction="#loadGestionVehicules"/>
+                    <MenuItem text="🔎 Suivi des entretiens" onAction="#loadSuiviEntretiens" />
+                    <MenuItem text="📊 Mettre à jour kilométrage" onAction="#loadMiseAJourKilometrage" />
+                    <MenuItem text="🔔 Notifications" onAction="#loadNotifications"/>
                 </Menu>
-                <Menu text="Paiements" styleClass="menu-item-with-icon">
-                    <MenuItem text="Enregistrer un paiement" onAction="#loadPayment"/>
-                    <MenuItem text="Générer une facture" onAction="#loadInvoice"/>
-                    <MenuItem text="Historique paiements" onAction="#loadPaymentHistory"/>
+                <Menu text="💰 Paiements" styleClass="menu-item-with-icon">
+                    <MenuItem text="💳 Enregistrer un paiement" onAction="#loadPayment"/>
+                    <MenuItem text="📃 Générer une facture" onAction="#loadInvoice"/>
+                    <MenuItem text="📜 Historique paiements" onAction="#loadPaymentHistory"/>
                 </Menu>
-                <Menu text="Moniteurs" styleClass="menu-item-with-icon">
-                    <MenuItem text="Ajouter moniteur" onAction="#loadAjouterMoniteur" />
-                    <MenuItem text="Modifier moniteur" onAction="#loadModifierMoniteur" />
-                    <MenuItem text="Afficher tous les moniteurs" onAction="#loadAfficherMoniteur" />
+                <Menu text="👨‍🏫 Moniteurs" styleClass="menu-item-with-icon">
+                    <MenuItem text="➕ Ajouter moniteur" onAction="#loadAjouterMoniteur" />
+                    <MenuItem text="🔄 Modifier moniteur" onAction="#loadModifierMoniteur" />
+                    <MenuItem text="👀 Afficher tous les moniteurs" onAction="#loadAfficherMoniteur" />
                 </Menu>
-                <Menu text="Tableau de Bord" styleClass="menu-item-with-icon">
-                    <MenuItem text="Financier" onAction="#loadDashboardFinance"/>
-                    <MenuItem text="Candidats" onAction="#loadDashboardCandidates"/>
-                    <MenuItem text="Véhicules" onAction="#loadDashboardVehicles"/>
+                <Menu text="📊 Tableau de Bord" styleClass="menu-item-with-icon">
+                    <MenuItem text="💹 Financier" onAction="#loadDashboardFinance"/>
+                    <MenuItem text="👥 Candidats" onAction="#loadDashboardCandidates"/>
+                    <MenuItem text="🚙 Véhicules" onAction="#loadDashboardVehicles"/>
                 </Menu>
             </MenuBar>
         </VBox>
     </top>
-    
+
     <center>
         <StackPane fx:id="contentArea" styleClass="content-area">
             <ImageView fx:id="logoImageView" fitWidth="600" fitHeight="600" styleClass="logo-image" opacity="0.6">
@@ -76,13 +75,29 @@
             </ImageView>
         </StackPane>
     </center>
-    
+
     <bottom>
-        <HBox alignment="CENTER">
-            <padding>
-                <Insets bottom="15" top="5"/>
-            </padding>
-            <Button text="Retour à l'accueil" onAction="#loadMain" fx:id="mainbttn" styleClass="main-return-button"/>
-        </HBox>
+        <VBox spacing="5">
+            <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="20">
+                <padding>
+                    <Insets top="10" right="20" bottom="10" left="20"/>
+                </padding>
+
+                <!-- Left side: Auto-école info -->
+                <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="5">
+                    <Label fx:id="ecoleNameLabel" styleClass="footer-title" text="🏫 Auto-École"/>
+                    <Label fx:id="ecoleAddressLabel" styleClass="footer-text" text="📍 Adresse"/>
+                </VBox>
+
+                <!-- Center: Return button -->
+                <Button text="🏠 Retour à l'accueil" onAction="#loadMain" fx:id="mainbttn" styleClass="main-return-button"/>
+
+                <!-- Right side: Contact info -->
+                <VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" spacing="5">
+                    <Label fx:id="ecoleTelLabel" styleClass="footer-text" text="📞 Téléphone"/>
+                    <Label fx:id="ecoleEmailLabel" styleClass="footer-text" text="📧 Email"/>
+                </VBox>
+            </HBox>
+        </VBox>
     </bottom>
 </BorderPane>
