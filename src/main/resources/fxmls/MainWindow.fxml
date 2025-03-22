@@ -1,67 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.MainWindow" stylesheets="@/css/style.css">
-    <top >
-        <MenuBar >
-            <Menu text="🚗 Auto-ecole">
-                <MenuItem text="📝 ajouter une ecole " onAction="#loadAjouterEcole" />
-                <MenuItem text="📑 modifier les informations " onAction="#loadModifierEcole" />
-            </Menu>
-            <Menu text="👤 Candidats">
-                <MenuItem text="📝 Inscription" onAction="#loadAjouterCandidat" />
-                <MenuItem text="📝 Modifier" onAction="#loadModifierCandidat" />
-                <MenuItem text="📑 Fournir des documents" onAction="#loadDocuments" />
-                <MenuItem text="📊 Suivre progression" onAction="#loadProgression"/>
-                <MenuItem text="📝 Inscription à un examen" onAction="#loadExamRegistration" />
-                <MenuItem text="🛑 Passer un examen"  onAction="#loadExam"/>
-                <MenuItem text="📑 Afficher tout les Candidats " onAction="#loadAfficherCandidat"/>
-            </Menu>
-            <Menu text="📚 Séances (Code et Conduite)">
-                <MenuItem text="🚗 Planifier une séance de conduite"  onAction="#loadSessionConduite" />
-                <MenuItem text="📖 Planifier une séance de code" onAction="#loadSessionCode" />
-                <MenuItem text="📝 Confirmer présence" />
-                <MenuItem text="👨‍🏫 affecter candidat a une séance de code" onAction="#loadRemplirSeance" />
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.DropShadow?>
 
-                <MenuItem text="📆 Afficher tout les seances" onAction="#loadAfficherSeance"/>
-            </Menu>
-            <Menu text="🚘 Véhicules et Entretiens">
-                <MenuItem text="🚗 Gérer véhicules" onAction="#loadGestionVehicules"/>
-                <MenuItem text="🔧 Suivi des entretiens" onAction="#loadSuiviEntretiens" />
-                <MenuItem text="📊 Mettre à jour kilométrage" onAction="#loadMiseAJourKilometrage" />
-                <MenuItem text="⏳ Notifications (vignette, assurance)" onAction="#loadNotifications"/>
-            </Menu>
-            <Menu text="💰 Paiements">
-                <MenuItem text="💳 Enregistrer un paiement" />
-                <MenuItem text="📜 Générer une facture" />
-                <MenuItem text="📜 Historique paiements" />
-            </Menu>
-            <Menu text="👨‍🏫 Moniteur">
-                <MenuItem text="👨‍🏫 Ajouter moniteur" onAction="#loadAjouterMoniteur" />
-                <MenuItem text="📚 Modifier Moniteur " onAction="#loadModifierMoniteur" />
-                <MenuItem text="📑 Afficher tout les moniteurs " onAction="#loadAfficherMoniteur" />
-
-
-            </Menu>
-            <Menu text="📊 Tableau de Bord">
-                <MenuItem text="📈 Financier" />
-                <MenuItem text="📊 Candidats" />
-                <MenuItem text="🚗 Véhicules" />
-            </Menu>
-        </MenuBar>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+            fx:controller="org.cpi2.controllers.MainWindow" 
+            stylesheets="@/css/style.css">
+    <top>
+        <VBox alignment="CENTER" spacing="15">
+            <padding>
+                <Insets top="15" bottom="10"/>
+            </padding>
+            
+            <!-- Fullscreen button removed as requested -->
+            
+            <MenuBar styleClass="main-menu-bar">
+                <effect>
+                    <DropShadow color="#00000044" radius="5" spread="0.05"/>
+                </effect>
+                <Menu text="Auto-école" styleClass="menu-item-with-icon">
+                    <MenuItem text="Ajouter une auto-école" onAction="#loadAjouterEcole" />
+                    <MenuItem text="Modifier mon auto-école" onAction="#loadModifierEcole" />
+                </Menu>
+                <Menu text="Candidats" styleClass="menu-item-with-icon">
+                    <MenuItem text="Inscription" onAction="#loadAjouterCandidat" />
+                    <MenuItem text="Modifier" onAction="#loadModifierCandidat" />
+                    <MenuItem text="Fournir des documents" onAction="#loadDocuments" />
+                    <MenuItem text="Suivre progression" onAction="#loadProgression"/>
+                    <MenuItem text="Inscription à un examen" onAction="#loadExamRegistration" />
+                    <MenuItem text="Passer un examen" onAction="#loadExam"/>
+                    <MenuItem text="Afficher tous les candidats" onAction="#loadAfficherCandidat"/>
+                </Menu>
+                <Menu text="Séances" styleClass="menu-item-with-icon">
+                    <MenuItem text="Planifier une séance de conduite" onAction="#loadSessionConduite" />
+                    <MenuItem text="Planifier une séance de code" onAction="#loadSessionCode" />
+                    <MenuItem text="Confirmer présence" onAction="#loadConfirmPresence" />
+                    <MenuItem text="Affecter candidat à une séance" onAction="#loadRemplirSeance" />
+                    <MenuItem text="Afficher toutes les séances" onAction="#loadAfficherSeance"/>
+                </Menu>
+                <Menu text="Véhicules" styleClass="menu-item-with-icon">
+                    <MenuItem text="Gérer véhicules" onAction="#loadGestionVehicules"/>
+                    <MenuItem text="Suivi des entretiens" onAction="#loadSuiviEntretiens" />
+                    <MenuItem text="Mettre à jour kilométrage" onAction="#loadMiseAJourKilometrage" />
+                    <MenuItem text="Notifications" onAction="#loadNotifications"/>
+                </Menu>
+                <Menu text="Paiements" styleClass="menu-item-with-icon">
+                    <MenuItem text="Enregistrer un paiement" onAction="#loadPayment"/>
+                    <MenuItem text="Générer une facture" onAction="#loadInvoice"/>
+                    <MenuItem text="Historique paiements" onAction="#loadPaymentHistory"/>
+                </Menu>
+                <Menu text="Moniteurs" styleClass="menu-item-with-icon">
+                    <MenuItem text="Ajouter moniteur" onAction="#loadAjouterMoniteur" />
+                    <MenuItem text="Modifier moniteur" onAction="#loadModifierMoniteur" />
+                    <MenuItem text="Afficher tous les moniteurs" onAction="#loadAfficherMoniteur" />
+                </Menu>
+                <Menu text="Tableau de Bord" styleClass="menu-item-with-icon">
+                    <MenuItem text="Financier" onAction="#loadDashboardFinance"/>
+                    <MenuItem text="Candidats" onAction="#loadDashboardCandidates"/>
+                    <MenuItem text="Véhicules" onAction="#loadDashboardVehicles"/>
+                </Menu>
+            </MenuBar>
+        </VBox>
     </top>
+    
     <center>
-        <StackPane fx:id="contentArea">
-            <ImageView fx:id="logoImageView" fitWidth="600" fitHeight="600" styleClass="logo-image"  opacity="0.6">
+        <StackPane fx:id="contentArea" styleClass="content-area">
+            <ImageView fx:id="logoImageView" fitWidth="600" fitHeight="600" styleClass="logo-image" opacity="0.6">
                 <Image url="@/images/logo4.png"/>
+                <effect>
+                    <DropShadow color="#00000033" radius="15" spread="0.1"/>
+                </effect>
             </ImageView>
-
         </StackPane>
     </center>
+    
     <bottom>
-        <Button text="🔙 Retour" onAction="#loadMain" fx:id="mainbttn" />
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets bottom="15" top="5"/>
+            </padding>
+            <Button text="Retour à l'accueil" onAction="#loadMain" fx:id="mainbttn" styleClass="main-return-button"/>
+        </HBox>
     </bottom>
 </BorderPane>

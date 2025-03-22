@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.Invoice"
+            stylesheets="@/css/style.css"
+            styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <top>
+        <VBox alignment="CENTER" spacing="10">
+            <Label text="Génération de Facture" styleClass="page-title"/>
+            <Separator />
+        </VBox>
+    </top>
+
+    <center>
+        <VBox styleClass="form-container" spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="20" right="30" bottom="20" left="30"/>
+            </padding>
+            
+            <Label text="Générer une facture pour un candidat" styleClass="form-section-title"/>
+            
+            <GridPane hgap="15" vgap="15" alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" minWidth="150"/>
+                    <ColumnConstraints halignment="LEFT" minWidth="250" hgrow="ALWAYS"/>
+                </columnConstraints>
+                
+                <Label text="Candidat:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="candidatComboBox" promptText="Sélectionner un candidat" 
+                          GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field" 
+                          prefWidth="250"/>
+                
+                <Label text="Type de facture:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="typeFactureComboBox" promptText="Sélectionner un type" 
+                          GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field"
+                          prefWidth="250"/>
+                
+                <Label text="Période:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <HBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                    <DatePicker fx:id="dateDebutPicker" promptText="Date début" styleClass="form-field" prefWidth="120"/>
+                    <Label text="à" alignment="CENTER"/>
+                    <DatePicker fx:id="dateFinPicker" promptText="Date fin" styleClass="form-field" prefWidth="120"/>
+                </HBox>
+                
+                <Label text="Montant total:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="montantField" promptText="Montant (DT)" styleClass="form-field"
+                         GridPane.rowIndex="3" GridPane.columnIndex="1" editable="false"/>
+                
+                <Label text="Note additionnelle:" styleClass="form-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextArea fx:id="noteTextArea" promptText="Notes additionnelles à inclure sur la facture" 
+                          GridPane.rowIndex="4" GridPane.columnIndex="1" prefHeight="80" 
+                          styleClass="form-field" wrapText="true"/>
+            </GridPane>
+            
+            <HBox spacing="15" alignment="CENTER">
+                <VBox.margin>
+                    <Insets top="20"/>
+                </VBox.margin>
+                <Button text="Charger les paiements" onAction="#handleLoadPayments" styleClass="button, action-button"/>
+                <Button text="Prévisualiser" onAction="#handlePreview" styleClass="button, action-button"/>
+                <Button text="Générer PDF" onAction="#handleGeneratePDF" styleClass="button, submit-button"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane> 

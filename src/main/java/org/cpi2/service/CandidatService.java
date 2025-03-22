@@ -27,7 +27,7 @@ public class CandidatService {
     }
 
     public boolean addCandidat(Candidat candidat) {
-        if(candidatRepository.findByCin(candidat.getCin()).isEmpty()) {
+        if(!candidatRepository.findByCin(candidat.getCin()).isEmpty()) {
             LOGGER.info("Candidat already exists");
             return false;
         }

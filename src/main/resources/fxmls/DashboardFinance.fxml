@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.DashboardFinance"
+            stylesheets="@/css/style.css"
+            styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <top>
+        <VBox alignment="CENTER" spacing="10">
+            <Label text="Tableau de Bord Financier" styleClass="dashboard-title"/>
+            <HBox alignment="CENTER" spacing="15" styleClass="period-selector">
+                <Label text="Période:" styleClass="form-label"/>
+                <ComboBox fx:id="periodCombo" promptText="Sélectionner une période" styleClass="form-field"/>
+                <DatePicker fx:id="startDate" promptText="Date début" styleClass="form-field"/>
+                <DatePicker fx:id="endDate" promptText="Date fin" styleClass="form-field"/>
+                <Button text="Appliquer" onAction="#handleApplyFilter" styleClass="button, submit-button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
+            <VBox spacing="20">
+                <!-- KPI Cards Row -->
+                <HBox spacing="15" alignment="CENTER">
+                    <VBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </VBox.margin>
+                    
+                    <!-- Revenue Card -->
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <Label text="Revenus Totaux" styleClass="card-title"/>
+                        <Label fx:id="totalRevenueLabel" text="12,450 DT" styleClass="card-value"/>
+                        <Label fx:id="revenueChangeLabel" text="+15% vs période précédente" styleClass="change-positive"/>
+                    </VBox>
+                    
+                    <!-- Expenses Card -->
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <Label text="Dépenses Totales" styleClass="card-title"/>
+                        <Label fx:id="totalExpensesLabel" text="8,230 DT" styleClass="card-value"/>
+                        <Label fx:id="expensesChangeLabel" text="+5% vs période précédente" styleClass="change-negative"/>
+                    </VBox>
+                    
+                    <!-- Profit Card -->
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <Label text="Profit Net" styleClass="card-title"/>
+                        <Label fx:id="netProfitLabel" text="4,220 DT" styleClass="card-value"/>
+                        <Label fx:id="profitChangeLabel" text="+25% vs période précédente" styleClass="change-positive"/>
+                    </VBox>
+                    
+                    <!-- Students Card -->
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <Label text="Nouveaux Candidats" styleClass="card-title"/>
+                        <Label fx:id="newStudentsLabel" text="24" styleClass="card-value"/>
+                        <Label fx:id="studentsChangeLabel" text="+8% vs période précédente" styleClass="change-positive"/>
+                    </VBox>
+                </HBox>
+                
+                <!-- Charts Row 1 -->
+                <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <!-- Revenue Chart -->
+                    <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                        <Label text="Évolution des Revenus" styleClass="chart-title"/>
+                        <AreaChart fx:id="revenueChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
+                            <xAxis>
+                                <CategoryAxis fx:id="revenueDateAxis" label="Date"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="revenueValueAxis" label="Montant (DT)"/>
+                            </yAxis>
+                        </AreaChart>
+                    </VBox>
+                    
+                    <!-- Expense Breakdown -->
+                    <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                        <Label text="Répartition des Dépenses" styleClass="chart-title"/>
+                        <PieChart fx:id="expensesPieChart" animated="true" labelsVisible="true" VBox.vgrow="ALWAYS"/>
+                    </VBox>
+                </HBox>
+                
+                <!-- Charts Row 2 -->
+                <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <!-- Revenue by Service -->
+                    <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                        <Label text="Revenus par Service" styleClass="chart-title"/>
+                        <BarChart fx:id="revenueByServiceChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
+                            <xAxis>
+                                <CategoryAxis fx:id="serviceAxis" label="Service"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="serviceRevenueAxis" label="Montant (DT)"/>
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+                    
+                    <!-- Monthly Comparison -->
+                    <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                        <Label text="Comparaison Mensuelle" styleClass="chart-title"/>
+                        <BarChart fx:id="monthlyComparisonChart" animated="true" VBox.vgrow="ALWAYS">
+                            <xAxis>
+                                <CategoryAxis fx:id="monthAxis" label="Mois"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="monthlyValueAxis" label="Montant (DT)"/>
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+                </HBox>
+                
+                <!-- Recent Transactions Table -->
+                <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
+                    <Label text="Transactions Récentes" styleClass="table-title"/>
+                    <TableView fx:id="transactionsTable" VBox.vgrow="ALWAYS" styleClass="custom-table-view">
+                        <columns>
+                            <TableColumn fx:id="transactionDateColumn" text="Date" prefWidth="120"/>
+                            <TableColumn fx:id="transactionTypeColumn" text="Type" prefWidth="100"/>
+                            <TableColumn fx:id="transactionDescriptionColumn" text="Description" prefWidth="250"/>
+                            <TableColumn fx:id="transactionAmountColumn" text="Montant" prefWidth="120"/>
+                            <TableColumn fx:id="transactionStatusColumn" text="Status" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane> 

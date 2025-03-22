@@ -92,9 +92,13 @@ public class    AjouterEcole {
                 // Save the path for later use
                 logoPath = targetPath.toString();
 
-                // Display the image
+                // Display the image with proper styling
                 logoImage = new Image(file.toURI().toString());
                 logoImageView.setImage(logoImage);
+                logoImageView.getStyleClass().add("logo-image");
+                
+                // Apply dropshadow effect
+                logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
             } catch (Exception e) {
                 showAlert("Erreur", "Impossible de charger l'image: " + e.getMessage());
             }
@@ -145,7 +149,7 @@ public class    AjouterEcole {
         autoEcole.setAdresse(adresse);
         autoEcole.setTelephone(telephone);
         autoEcole.setEmail(email);
-        autoEcole.setLogoPath(logoPath);
+        autoEcole.setLogo(logoPath);
 
         // Save the auto école
         //autoEcoleService.deleteAutoEcole();

@@ -1,7 +1,5 @@
 package org.cpi2.controllers;
 
-import java.util.Scanner;
-
 public class Verification {
     public static String getValidName(String name) {
         while (true) {

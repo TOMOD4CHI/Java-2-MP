@@ -11,29 +11,55 @@ public class Vehicule {
     private String immatriculation;
     private String marque;
     private String modele;
+    private Integer annee;
     private TypePermis typePermis;
     private LocalDate dateMiseEnService;
     private Integer kilometrageTotal;
-    private Integer kilometrageAvantEntretien;
+    private Integer kilometrageProchainEntretien;
     private Map<LocalDate, Entretien> historique;
-
-    public Vehicule(String immatriculation, String voiture, String renault, String clio, int i, LocalDate localDate) {
+    private LocalDate dateProchainEntretien;
+    private LocalDate dateDerniereVisiteTechnique;
+    private LocalDate dateProchaineVisiteTechnique;
+    private LocalDate dateExpirationAssurance;
+    private String statut;
+    
+    /**
+     * No-argument constructor for Vehicule class
+     */
+    public Vehicule() {
         this.kilometrageTotal = 0;
         this.historique = new TreeMap<>();
-    }
-    public StringProperty marqueModeleProperty() {
-        return new SimpleStringProperty(marque + " " + modele); // Concatenates marque and modele
+        this.statut = "Disponible";
     }
 
-    public Vehicule(String immatriculation, String marque, String modele, TypePermis typePermis,
-                    LocalDate dateMiseEnService, Integer kilometrageAvantEntretien) {
-        this("AB-123-CD", "Voiture", "Renault", "Clio", 45000, LocalDate.now().plusMonths(3));
+    /**
+     * Full constructor for Vehicule class
+     */
+    public Vehicule(String immatriculation, String marque, String modele, Integer annee, TypePermis typePermis,
+                    LocalDate dateMiseEnService, Integer kilometrageProchainEntretien,
+                    LocalDate dateProchainEntretien, LocalDate dateDerniereVisiteTechnique,
+                    LocalDate dateProchaineVisiteTechnique, LocalDate dateExpirationAssurance) {
         this.immatriculation = immatriculation;
         this.marque = marque;
         this.modele = modele;
+        this.annee = annee;
         this.typePermis = typePermis;
         this.dateMiseEnService = dateMiseEnService;
-        this.kilometrageAvantEntretien = kilometrageAvantEntretien;
+        this.kilometrageProchainEntretien = kilometrageProchainEntretien;
+        this.kilometrageTotal = 0;
+        this.dateProchainEntretien = dateProchainEntretien;
+        this.dateDerniereVisiteTechnique = dateDerniereVisiteTechnique;
+        this.dateProchaineVisiteTechnique = dateProchaineVisiteTechnique;
+        this.dateExpirationAssurance = dateExpirationAssurance;
+        this.historique = new TreeMap<>();
+        this.statut = "Disponible";
+    }
+    
+    /**
+     * Property for JavaFX TableView to display marque + modele as a single column
+     */
+    public StringProperty marqueModeleProperty() {
+        return new SimpleStringProperty(marque + " " + modele);
     }
 
     @Override
@@ -47,6 +73,14 @@ public class Vehicule {
     @Override
     public int hashCode() {
         return Objects.hash(immatriculation);
+    }
+
+    public Integer getAnnee() {
+        return annee;
+    }
+
+    public void setAnnee(Integer annee) {
+        this.annee = annee;
     }
 
     public LocalDate getDateMiseEnService() {
@@ -81,12 +115,12 @@ public class Vehicule {
         this.immatriculation = immatriculation;
     }
 
-    public Integer getKilometrageAvantEntretien() {
-        return kilometrageAvantEntretien;
+    public Integer getKilometrageProchainEntretien() {
+        return kilometrageProchainEntretien;
     }
 
-    public void setKilometrageAvantEntretien(Integer kilometrageAvantEntretien) {
-        this.kilometrageAvantEntretien = kilometrageAvantEntretien;
+    public void setKilometrageProchainEntretien(Integer kilometrageProchainEntretien) {
+        this.kilometrageProchainEntretien = kilometrageProchainEntretien;
     }
 
     public Integer getKilometrageTotal() {
@@ -119,6 +153,61 @@ public class Vehicule {
 
     public void setTypePermis(TypePermis typePermis) {
         this.typePermis = typePermis;
+    }
+
+    public LocalDate getDateProchainEntretien() {
+        return dateProchainEntretien;
+    }
+
+    public void setDateProchainEntretien(LocalDate dateProchainEntretien) {
+        this.dateProchainEntretien = dateProchainEntretien;
+    }
+
+    public LocalDate getDateDerniereVisiteTechnique() {
+        return dateDerniereVisiteTechnique;
+    }
+
+    public void setDateDerniereVisiteTechnique(LocalDate dateDerniereVisiteTechnique) {
+        this.dateDerniereVisiteTechnique = dateDerniereVisiteTechnique;
+    }
+
+    public LocalDate getDateProchaineVisiteTechnique() {
+        return dateProchaineVisiteTechnique;
+    }
+
+    public void setDateProchaineVisiteTechnique(LocalDate dateProchaineVisiteTechnique) {
+        this.dateProchaineVisiteTechnique = dateProchaineVisiteTechnique;
+    }
+
+    public LocalDate getDateExpirationAssurance() {
+        return dateExpirationAssurance;
+    }
+
+    public void setDateExpirationAssurance(LocalDate dateExpirationAssurance) {
+        this.dateExpirationAssurance = dateExpirationAssurance;
+    }
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+    
+    /**
+     * Add a new entretien to the history
+     */
+    public void addEntretien(Entretien entretien) {
+        this.historique.put(entretien.getDateEntretien(), entretien);
+    }
+    
+    /**
+     * Returns a display string for the vehicle
+     */
+    @Override
+    public String toString() {
+        return marque + " " + modele + " (" + immatriculation + ")";
     }
 }
 

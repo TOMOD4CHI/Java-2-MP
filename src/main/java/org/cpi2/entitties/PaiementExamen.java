@@ -1,32 +1,21 @@
 package org.cpi2.entitties;
 
+import java.time.LocalDateTime;
+
 public class PaiementExamen extends Paiement {
-    private TypeExamen typeExamen;
-    private Boolean reussite;
+    private Examen examen;
 
-    public PaiementExamen() {
-        super();
+
+    public PaiementExamen(Long id,Double montant, LocalDateTime datePaiement, ModePaiement modePaiement,Examen examen) {
+        super(id,montant, datePaiement,modePaiement);
+        this.examen = examen;
     }
 
-    public PaiementExamen(Double montant, TypeExamen typeExamen) {
-        super(montant);
-        this.typeExamen = typeExamen;
-        this.reussite = false;
+    public Examen getTypeExamen() {
+        return examen;
     }
 
-    public Boolean getReussite() {
-        return reussite;
-    }
-
-    public void setReussite(Boolean reussite) {
-        this.reussite = reussite;
-    }
-
-    public TypeExamen getTypeExamen() {
-        return typeExamen;
-    }
-
-    public void setTypeExamen(TypeExamen typeExamen) {
-        this.typeExamen = typeExamen;
+    public void setTypeExamen(Examen examen) {
+        this.examen = examen;
     }
 }

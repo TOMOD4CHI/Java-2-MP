@@ -5,7 +5,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.cpi2.entitties.Moniteur;
 import org.cpi2.entitties.TypePermis;
 import org.cpi2.service.MoniteurService;
@@ -26,12 +25,12 @@ public class AjouterMoniteur {
     public ComboBox<TypePermis> typePermisComboBox;
 
     private final MoniteurService moniteurService = new MoniteurService();
-
+    
     // Validation patterns
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
-    private static final Pattern CIN_PATTERN = Pattern.compile("^[A-Z0-9]{6}$");
+    private static final Pattern CIN_PATTERN = Pattern.compile("^[0-9]{8,}$");
 
     // Validation methods
     private boolean isValidEmail(String email) {
@@ -48,6 +47,10 @@ public class AjouterMoniteur {
 
     private boolean isValidCIN(String cin) {
         return cin != null && CIN_PATTERN.matcher(cin).matches();
+    }
+    
+    private boolean isValidAddress(String address, int minLength) {
+        return address != null && address.length() >= minLength;
     }
 
     private void showAlert(String title, String message) {
@@ -96,7 +99,7 @@ public class AjouterMoniteur {
 
         // Validate CIN format
         if (!isValidCIN(cin)) {
-            showAlert("Erreur de validation", "Le CIN doit contenir 6 caractères (lettres majuscules et chiffres).");
+            showAlert("Erreur de validation", "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres.");
             return;
         }
 
@@ -113,7 +116,7 @@ public class AjouterMoniteur {
         }
 
         // Validate address (basic check for minimum length)
-        if (adresse.length() < 10) {
+        if (!isValidAddress(adresse, 10)) {
             showAlert("Erreur de validation", "L'adresse doit contenir au moins 10 caractères.");
             return;
         }

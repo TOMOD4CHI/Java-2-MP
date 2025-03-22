@@ -55,35 +55,52 @@ public class ModifierEcole {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    // Initialize the controller with existing data
-    public void initialize() {
-        // Load the existing auto ecole data
-        currentAutoEcole = autoEcoleService.viewAutoEcole();
-        if (currentAutoEcole != null) {
-            // Fill the fields with existing data
-            nomField.setText(currentAutoEcole.getNom());
-            adresseField.setText(currentAutoEcole.getAdresse());
-            telephoneField.setText(currentAutoEcole.getTelephone());
-            emailField.setText(currentAutoEcole.getEmail());
+    
+    private void showSuccessAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
+    // Method to set an auto-ecole to modify from the list view
+    public void setAutoEcoleToModify(AutoEcole autoEcole) {
+        if (autoEcole != null) {
+            this.currentAutoEcole = autoEcole;
+            
+            // Fill the fields with the selected auto-ecole data
+            nomField.setText(autoEcole.getNom());
+            adresseField.setText(autoEcole.getAdresse());
+            telephoneField.setText(autoEcole.getTelephone());
+            emailField.setText(autoEcole.getEmail());
 
             // Load the logo if it exists
-            logoPath = currentAutoEcole.getLogoPath();
+            logoPath = autoEcole.getLogo();
             if (logoPath != null && !logoPath.isEmpty()) {
                 try {
                     File logoFile = new File(logoPath);
                     if (logoFile.exists()) {
                         logoImage = new Image(logoFile.toURI().toString());
                         logoImageView.setImage(logoImage);
+                        logoImageView.getStyleClass().add("logo-image");
+                        // Apply dropshadow effect
+                        logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
                     }
                 } catch (Exception e) {
                     showAlert("Erreur", "Impossible de charger le logo: " + e.getMessage());
                 }
+            } else {
+                logoImageView.setImage(null);
             }
-        } else {
-            showAlert("Erreur", "Aucune école trouvée à modifier.");
-            //ig ken mfmch auto ecole ywali redirectih ll ajout mais m ynjmch y acceder ll ajout w7dou snn n7esh mch logic l7keya
         }
+    }
+
+    // Initialize the controller with existing data
+    public void initialize() {
+        // This method will be called by JavaFX when the FXML is loaded
+        // We will now rely on setAutoEcoleToModify to be called after initialization
+        // if the controller is being used to modify an existing auto-école
     }
 
     // Handle file upload for the logo
@@ -110,9 +127,13 @@ public class ModifierEcole {
                 // Save the path for later use
                 logoPath = targetPath.toString();
 
-                // Display the image
+                // Display the image with proper styling
                 logoImage = new Image(file.toURI().toString());
                 logoImageView.setImage(logoImage);
+                logoImageView.getStyleClass().add("logo-image");
+                
+                // Apply dropshadow effect
+                logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
             } catch (Exception e) {
                 showAlert("Erreur", "Impossible de charger l'image: " + e.getMessage());
             }
@@ -163,37 +184,22 @@ public class ModifierEcole {
         }
 
         // Update the auto ecole information
-        boolean success = true;
-
-        if (!nom.equals(currentAutoEcole.getNom())) {
-            success &= autoEcoleService.modifyNom(nom);
+        currentAutoEcole.setNom(nom);
+        currentAutoEcole.setAdresse(adresse);
+        currentAutoEcole.setTelephone(telephone);
+        currentAutoEcole.setEmail(email);
+        if (logoPath != null) {
+            currentAutoEcole.setLogo(logoPath);
         }
-
-        if (!adresse.equals(currentAutoEcole.getAdresse())) {
-            success &= autoEcoleService.modifyAddress(adresse);
-        }
-
-        if (!telephone.equals(currentAutoEcole.getTelephone())) {
-            success &= autoEcoleService.modifyTelephone(telephone);
-        }
-
-        if (!email.equals(currentAutoEcole.getEmail())) {
-            success &= autoEcoleService.modifyEmail(email);
-        }
-
-        if (logoPath != null && !logoPath.equals(currentAutoEcole.getLogoPath())) {
-            success &= autoEcoleService.modifyLogoPath(logoPath);
-        }
+        
+        boolean success = autoEcoleService.updateAutoEcole(currentAutoEcole);
 
         if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("Les informations de l'école ont été modifiées avec succès!");
-            alert.showAndWait();
+            showSuccessAlert("Succès", "Les informations de l'école ont été modifiées avec succès!");
             
-            // Reload the data
-            initialize();
+            // Close the window after successful update
+            Stage stage = (Stage) nomField.getScene().getWindow();
+            stage.close();
         } else {
             showAlert("Erreur", "Échec de la modification des informations de l'école.");
         }
@@ -201,7 +207,8 @@ public class ModifierEcole {
 
     // Handle cancelling the operation
     public void handleCancel(ActionEvent event) {
-        // Reload the existing data to reset the form
-        initialize();
+        // Close the window
+        Stage stage = (Stage) nomField.getScene().getWindow();
+        stage.close();
     }
 }

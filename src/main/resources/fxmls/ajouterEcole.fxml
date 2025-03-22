@@ -6,36 +6,61 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.image.ImageView?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.cpi2.controllers.AjouterEcole" stylesheets="@/css/style.css" spacing="20" alignment="CENTER" styleClass="form-container">
-    <Label text="Ajouter une Ecole" styleClass="form-title"/>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.cpi2.controllers.AjouterEcole" stylesheets="@/css/style.css">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
+            <VBox styleClass="form-container" spacing="20" alignment="CENTER">
+                <padding>
+                    <Insets top="15" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <StackPane styleClass="title-wrapper">
+                    <Label text="Ajouter une Ecole" styleClass="form-title"/>
+                </StackPane>
+                
+                <Separator styleClass="form-separator">
+                    <VBox.margin>
+                        <Insets top="5" bottom="15"/>
+                    </VBox.margin>
+                </Separator>
 
-    <GridPane hgap="10" vgap="10" alignment="CENTER">
-        <columnConstraints>
-            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
-            <ColumnConstraints halignment="LEFT" minWidth="200" hgrow="ALWAYS"/>
-        </columnConstraints>
+                <GridPane hgap="10" vgap="10" alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" minWidth="100"/>
+                        <ColumnConstraints halignment="LEFT" minWidth="200" hgrow="ALWAYS"/>
+                    </columnConstraints>
 
-        <Label text="Nom de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="nomField" promptText="Nom de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <Label text="Nom de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="nomField" promptText="Nom de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-        <Label text="Adresse de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="adresseField" promptText="Adresse de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="Adresse de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="adresseField" promptText="Adresse de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-        <Label text="Numéro de téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <TextField fx:id="telephoneField" promptText="Numéro de téléphone" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <Label text="Numéro de téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <TextField fx:id="telephoneField" promptText="Numéro de téléphone" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-        <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <TextField fx:id="emailField" promptText="Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="emailField" promptText="Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-        <Label text="Logo:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
-            <ImageView fx:id="logoImageView" fitWidth="100" fitHeight="100" preserveRatio="true"/>
-            <Button text="Choisir Logo" onAction="#handleLogoUpload" styleClass="button"/>
-        </HBox>
-    </GridPane>
+                    <Label text="Logo:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <ImageView fx:id="logoImageView" fitWidth="100" fitHeight="100" preserveRatio="true" styleClass="logo-image"/>
+                        <Button text="Choisir Logo" onAction="#handleLogoUpload" styleClass="button"/>
+                    </HBox>
+                </GridPane>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Ajouter" onAction="#handleAjouterEcole" styleClass="button"/>
-        <Button text="Annuler" onAction="#handleCancel" styleClass="button"/>
-    </HBox>
-</VBox>
+                <HBox spacing="15" alignment="CENTER" styleClass="button-container">
+                    <VBox.margin>
+                        <Insets top="20" bottom="10"/>
+                    </VBox.margin>
+                    <Button text="Annuler" onAction="#handleCancel" styleClass="button, cancel-button"/>
+                    <Button text="Ajouter" onAction="#handleAjouterEcole" styleClass="button, submit-button"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

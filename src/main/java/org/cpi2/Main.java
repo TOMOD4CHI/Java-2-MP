@@ -4,20 +4,20 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/login.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/login.fxml"));
+        Scene scene = new Scene(root, 1280, 800);
+        primaryStage.setTitle("System Auto-École");
         primaryStage.setScene(scene);
-        primaryStage.setTitle("log in");
-        primaryStage.setHeight(800);
-        primaryStage.setWidth(1100);
-
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
         primaryStage.show();
     }
 
