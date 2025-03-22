@@ -5,88 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Candidat {
-    private Long id;
-    private String nom;
-    private String prenom;
-    private LocalDate dateNaissance;
-    private String email;
-    private String telephone;
-    private String adresse;
+public class Candidat extends Personne {
     private TypePermis typePermis;
     private List<Document> documents;
     
     public Candidat() {
+        super();
         this.documents = new ArrayList<>();
     }
     
-    public Candidat(Long id, String nom, String prenom, LocalDate dateNaissance, String email, 
-                  String telephone, String adresse, TypePermis typePermis) {
-        this();
-        this.id = id;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.dateNaissance = dateNaissance;
+    public Candidat(String nom, String prenom, String cin, String adresse, String telephone, 
+                   String email, LocalDate dateNaissance, TypePermis typePermis) {
+        super(nom, prenom, cin, adresse, telephone);
         this.email = email;
-        this.telephone = telephone;
-        this.adresse = adresse;
+        this.dateNaissance = dateNaissance;
         this.typePermis = typePermis;
-    }
-    
-    public Long getId() {
-        return id;
-    }
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getNom() {
-        return nom;
-    }
-    
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-    
-    public String getPrenom() {
-        return prenom;
-    }
-    
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-    
-    public LocalDate getDateNaissance() {
-        return dateNaissance;
-    }
-    
-    public void setDateNaissance(LocalDate dateNaissance) {
-        this.dateNaissance = dateNaissance;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public String getTelephone() {
-        return telephone;
-    }
-    
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-    
-    public String getAdresse() {
-        return adresse;
-    }
-    
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
+        this.documents = new ArrayList<>();
     }
     
     public TypePermis getTypePermis() {
@@ -119,13 +53,12 @@ public class Candidat {
         if (o == null || getClass() != o.getClass()) return false;
         Candidat candidat = (Candidat) o;
         return Objects.equals(id, candidat.id) &&
-               Objects.equals(nom, candidat.nom) &&
-               Objects.equals(prenom, candidat.prenom);
+               Objects.equals(cin, candidat.cin);
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(id, nom, prenom);
+        return Objects.hash(id, cin);
     }
     
     @Override
