@@ -98,7 +98,7 @@ public class GestionVehicule implements Initializable {
         
         typeVehiculeCombo.getItems().clear();
         for (TypePermis type : TypePermis.values()) {
-            typeVehiculeCombo.getItems().add(type.getCode());
+            typeVehiculeCombo.getItems().add(type.name());
         }
 
         activerBoutons(false);
@@ -115,11 +115,11 @@ public class GestionVehicule implements Initializable {
         immatriculationCol.setCellValueFactory(new PropertyValueFactory<>("immatriculation"));
         typeVehiculeCol.setCellValueFactory(cellData -> {
             TypePermis typePermis = cellData.getValue().getTypePermis();
-            return new SimpleStringProperty(typePermis != null ? typePermis.getCode() : "");
+            return new SimpleStringProperty(typePermis != null ? typePermis.name() : "");
         });
         marqueModeleCol.setCellValueFactory(cellData -> cellData.getValue().marqueModeleProperty());
         kilometrageCol.setCellValueFactory(new PropertyValueFactory<>("kilometrageTotal"));
-        prochainEntretienCol.setCellValueFactory(new PropertyValueFactory<>("dateMiseEnService"));
+        prochainEntretienCol.setCellValueFactory(new PropertyValueFactory<>("dateProchainEntretien"));
     }
 
     private void loadVehicules() {
@@ -208,7 +208,7 @@ public class GestionVehicule implements Initializable {
         if (isEditMode && vehiculeSelected != null) {
             vehicule = vehiculeSelected;
             updateVehiculeFromForm(vehicule);
-            success = vehiculeService.mettreAJourVehicule(vehicule);
+            success = vehiculeService.modifierVehicule(vehicule);
             if (success) {
                 statusLabel.setText("Véhicule modifié avec succès");
                 int index = vehiculesList.indexOf(vehiculeSelected);
@@ -218,7 +218,7 @@ public class GestionVehicule implements Initializable {
             }
         } else {
             vehicule = createVehiculeFromForm();
-            success = vehiculeService.enregistrerVehicule(vehicule);
+            success = vehiculeService.ajouterVehicule(vehicule);
             if (success) {
                 vehiculesList.add(vehicule);
                 statusLabel.setText("Véhicule ajouté avec succès");
@@ -238,39 +238,56 @@ public class GestionVehicule implements Initializable {
     private Vehicule createVehiculeFromForm() {
         TypePermis typePermis = getTypePermisFromCombo();
         
-        return new Vehicule(
-            immatriculationField.getText(),
-            marqueField.getText(),
-            modeleField.getText(),
-            typePermis,
-            dateMiseServicePicker.getValue(),
-            Integer.parseInt(kilometrageField.getText())
-        );
+        Vehicule vehicule = new Vehicule();
+        vehicule.setImmatriculation(immatriculationField.getText().trim());
+        vehicule.setMarque(marqueField.getText().trim());
+        vehicule.setModele(modeleField.getText().trim());
+        vehicule.setTypePermis(typePermis);
+        vehicule.setDateMiseEnService(dateMiseServicePicker.getValue());
+        
+        try {
+            vehicule.setKilometrageTotal(Integer.parseInt(kilometrageField.getText()));
+        } catch (NumberFormatException e) {
+            vehicule.setKilometrageTotal(0);
+        }
+        
+        // Set default values for new vehicles
+        vehicule.setKilometrageProchainEntretien(vehicule.getKilometrageTotal() + 10000);
+        vehicule.setDateProchainEntretien(LocalDate.now().plusMonths(6));
+        vehicule.setStatut("Disponible");
+        
+        return vehicule;
     }
     
     private void updateVehiculeFromForm(Vehicule vehicule) {
-        vehicule.setImmatriculation(immatriculationField.getText());
+        vehicule.setImmatriculation(immatriculationField.getText().trim());
         vehicule.setTypePermis(getTypePermisFromCombo());
-        vehicule.setMarque(marqueField.getText());
-        vehicule.setModele(modeleField.getText());
-        vehicule.setKilometrageTotal(Integer.parseInt(kilometrageField.getText()));
+        vehicule.setMarque(marqueField.getText().trim());
+        vehicule.setModele(modeleField.getText().trim());
+        
+        try {
+            vehicule.setKilometrageTotal(Integer.parseInt(kilometrageField.getText()));
+        } catch (NumberFormatException e) {
+            // Keep existing value
+        }
+        
         vehicule.setDateMiseEnService(dateMiseServicePicker.getValue());
     }
     
     private TypePermis getTypePermisFromCombo() {
         String typeCode = typeVehiculeCombo.getValue();
-        for (TypePermis type : TypePermis.values()) {
-            if (type.getCode().equals(typeCode)) {
-                return type;
-            }
+        
+        try {
+            return TypePermis.valueOf(typeCode);
+        } catch (IllegalArgumentException e) {
+            return TypePermis.B; // Default to B if invalid
         }
-        return null;
     }
 
     private boolean validerFormulaire() {
         StringBuilder erreurs = new StringBuilder();
 
-        if (immatriculationField.getText().isEmpty()) {
+        if (immatriculationField.getText().trim().isEmpty()) {
             erreurs.append("L'immatriculation est obligatoire.\n");
         }
 
@@ -278,19 +295,19 @@ public class GestionVehicule implements Initializable {
             erreurs.append("Le type de véhicule est obligatoire.\n");
         }
 
-        if (marqueField.getText().isEmpty()) {
+        if (marqueField.getText().trim().isEmpty()) {
             erreurs.append("La marque est obligatoire.\n");
         }
 
-        if (modeleField.getText().isEmpty()) {
+        if (modeleField.getText().trim().isEmpty()) {
             erreurs.append("Le modèle est obligatoire.\n");
         }
 
-        if (kilometrageField.getText().isEmpty()) {
+        if (kilometrageField.getText().trim().isEmpty()) {
             erreurs.append("Le kilométrage est obligatoire.\n");
         } else {
             try {
-                int kilometrage = Integer.parseInt(kilometrageField.getText());
+                int kilometrage = Integer.parseInt(kilometrageField.getText().trim());
                 if (kilometrage < 0) {
                     erreurs.append("Le kilométrage doit être positif.\n");
                 }
@@ -326,7 +343,7 @@ public class GestionVehicule implements Initializable {
         
         TypePermis type = vehicule.getTypePermis();
         if (type != null) {
-            typeVehiculeCombo.setValue(type.getCode());
+            typeVehiculeCombo.setValue(type.name());
         }
         
         marqueField.setText(vehicule.getMarque());

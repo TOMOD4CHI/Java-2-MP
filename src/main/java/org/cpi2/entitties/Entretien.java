@@ -2,29 +2,52 @@ package org.cpi2.entitties;
 
 import java.time.LocalDate;
 
+/**
+ * Entity class representing a vehicle maintenance record
+ */
 public class Entretien {
-    private Long id;
+    private int id;
+    private int vehiculeId;
     private LocalDate dateEntretien;
     private String typeEntretien;
     private String description;
-    private Double cout;
-    private Document facture;
+    private int kilometrageActuel;
+    private double cout;
+    private String prestataire;
+    private LocalDate createdAt;
 
+    // Default constructor
     public Entretien() {
+        this.dateEntretien = LocalDate.now();
+        this.createdAt = LocalDate.now();
     }
 
-    public Entretien(LocalDate dateEntretien, String typeEntretien, Double cout) {
+    // Constructor with required fields
+    public Entretien(int vehiculeId, LocalDate dateEntretien, String typeEntretien, 
+                    int kilometrageActuel, double cout) {
+        this.vehiculeId = vehiculeId;
         this.dateEntretien = dateEntretien;
         this.typeEntretien = typeEntretien;
+        this.kilometrageActuel = kilometrageActuel;
         this.cout = cout;
+        this.createdAt = LocalDate.now();
     }
 
-    public Double getCout() {
-        return cout;
+    // Getters and Setters
+    public int getId() {
+        return id;
     }
 
-    public void setCout(Double cout) {
-        this.cout = cout;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getVehiculeId() {
+        return vehiculeId;
+    }
+
+    public void setVehiculeId(int vehiculeId) {
+        this.vehiculeId = vehiculeId;
     }
 
     public LocalDate getDateEntretien() {
@@ -35,6 +58,14 @@ public class Entretien {
         this.dateEntretien = dateEntretien;
     }
 
+    public String getTypeEntretien() {
+        return typeEntretien;
+    }
+
+    public void setTypeEntretien(String typeEntretien) {
+        this.typeEntretien = typeEntretien;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -43,27 +74,41 @@ public class Entretien {
         this.description = description;
     }
 
-    public Document getFacture() {
-        return facture;
+    public int getKilometrageActuel() {
+        return kilometrageActuel;
     }
 
-    public void setFacture(Document facture) {
-        this.facture = facture;
+    public void setKilometrageActuel(int kilometrageActuel) {
+        this.kilometrageActuel = kilometrageActuel;
     }
 
-    public Long getId() {
-        return id;
+    public double getCout() {
+        return cout;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCout(double cout) {
+        this.cout = cout;
     }
 
-    public String getTypeEntretien() {
-        return typeEntretien;
+    public String getPrestataire() {
+        return prestataire;
     }
 
-    public void setTypeEntretien(String typeEntretien) {
-        this.typeEntretien = typeEntretien;
+    public void setPrestataire(String prestataire) {
+        this.prestataire = prestataire;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Entretien du %s - %s (Kilométrage: %d km)", 
+                           dateEntretien, typeEntretien, kilometrageActuel);
     }
 }
