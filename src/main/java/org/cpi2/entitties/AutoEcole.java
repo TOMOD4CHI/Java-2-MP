@@ -8,7 +8,8 @@ public class AutoEcole {
     private String adresse;
     private String telephone;
     private String email;
-    private String directeur;
+    private String username;
+    private String password;
     private String logo;
     private List<Vehicule> flotte;
     private Map<Long, Moniteur> moniteurs;
@@ -20,17 +21,6 @@ public class AutoEcole {
         this.candidats = new TreeMap<>();
     }
 
-    public AutoEcole(int id, String nom, String adresse, String telephone, String email, String directeur, String logo) {
-        this();
-        this.id = id;
-        this.nom = nom;
-        this.adresse = adresse;
-        this.telephone = telephone;
-        this.email = email;
-        this.directeur = directeur;
-        this.logo = logo;
-    }
-
     public AutoEcole(int id, String nom, String adresse, String telephone, String email, String logo) {
         this();
         this.id = id;
@@ -38,6 +28,18 @@ public class AutoEcole {
         this.adresse = adresse;
         this.telephone = telephone;
         this.email = email;
+        this.logo = logo;
+    }
+    
+    public AutoEcole(int id, String nom, String adresse, String telephone, String email, String username, String password, String logo) {
+        this();
+        this.id = id;
+        this.nom = nom;
+        this.adresse = adresse;
+        this.telephone = telephone;
+        this.email = email;
+        this.username = username;
+        this.password = password;
         this.logo = logo;
     }
 
@@ -81,12 +83,20 @@ public class AutoEcole {
         this.email = email;
     }
 
-    public String getDirecteur() {
-        return directeur;
+    public String getUsername() {
+        return username;
     }
 
-    public void setDirecteur(String directeur) {
-        this.directeur = directeur;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getLogo() {
@@ -129,7 +139,6 @@ public class AutoEcole {
                 ", adresse='" + adresse + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email + '\'' +
-                ", directeur='" + directeur + '\'' +
                 ", logo='" + logo + '\'' +
                 '}';
     }

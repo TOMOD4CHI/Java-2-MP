@@ -85,7 +85,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
                 rs.getDouble("montant"),
                 rs.getTimestamp("date_paiement").toLocalDateTime(),
                 null,
-                new ExamenRepository().findById(rs.getInt("id_examen")).orElseThrow()
+                new ExamenRepository().findById((long) rs.getInt("id_examen")).orElseThrow()
         );
         }
     }

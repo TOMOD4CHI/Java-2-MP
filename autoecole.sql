@@ -34,8 +34,10 @@ CREATE TABLE `auto_ecole` (
   `logo_path` varchar(255) DEFAULT NULL,
   `telephone` varchar(20) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `directeur` varchar(100) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `username` varchar(50) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  UNIQUE KEY `unique_auto_ecole` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

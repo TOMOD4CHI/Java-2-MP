@@ -18,6 +18,7 @@ import org.cpi2.service.AutoEcoleService;
 import java.io.*;
 import java.net.URL;
 import java.security.cert.Extension;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -69,6 +70,9 @@ public class ManageEcole implements Initializable {
         buttonContainer.setAlignment(Pos.CENTER);
         editButtonsContainer.setAlignment(Pos.CENTER);
         
+        // Apply styling to form fields
+        applyFormStyling();
+        
         // Initially show info container and hide edit container
         showEditMode(false);
         
@@ -77,7 +81,19 @@ public class ManageEcole implements Initializable {
     
     void loadAutoEcole(int id) {
         try {
-            currentAutoEcole = autoEcoleService.getAutoEcole();
+            // If id is valid, try to find the specific auto-école
+            if (id > 0) {
+                List<AutoEcole> allEcoles = autoEcoleService.findAllAutoEcoles();
+                for (AutoEcole ecole : allEcoles) {
+                    if (ecole.getId() == id) {
+                        currentAutoEcole = ecole;
+                        break;
+                    }
+                }
+            } else {
+                // Otherwise get the first one (default behavior)
+                currentAutoEcole = autoEcoleService.getAutoEcole();
+            }
             
             if (currentAutoEcole != null) {
                 updateInfoLabels();
@@ -110,7 +126,6 @@ public class ManageEcole implements Initializable {
             adresseLabel.setText(currentAutoEcole.getAdresse());
             telephoneLabel.setText(currentAutoEcole.getTelephone());
             emailLabel.setText(currentAutoEcole.getEmail());
-            directeurLabel.setText(currentAutoEcole.getDirecteur() != null ? currentAutoEcole.getDirecteur() : "");
         }
     }
     
@@ -120,7 +135,6 @@ public class ManageEcole implements Initializable {
             adresseField.setText(currentAutoEcole.getAdresse());
             telephoneField.setText(currentAutoEcole.getTelephone());
             emailField.setText(currentAutoEcole.getEmail());
-            directeurField.setText(currentAutoEcole.getDirecteur() != null ? currentAutoEcole.getDirecteur() : "");
         }
     }
     
@@ -138,6 +152,37 @@ public class ManageEcole implements Initializable {
         if (editMode && currentAutoEcole != null) {
             populateEditFields();
         }
+        
+        // Apply fade transition for smooth transition
+        javafx.animation.FadeTransition fadeTransition = new javafx.animation.FadeTransition(
+                javafx.util.Duration.millis(300), 
+                editMode ? editContainer : infoContainer);
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(1.0);
+        fadeTransition.play();
+    }
+    
+    private void applyFormStyling() {
+        // Apply styling to text fields
+        TextField[] fields = {nomField, adresseField, telephoneField, emailField, directeurField};
+        for (TextField field : fields) {
+            field.getStyleClass().add("form-field");
+            
+            // Add focus effect
+            field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    field.setStyle("-fx-border-color: #3182CE; -fx-border-width: 2px;");
+                } else {
+                    field.setStyle("");
+                }
+            });
+        }
+        
+        // Apply styling to buttons
+        saveButton.getStyleClass().add("submit-button");
+        cancelButton.getStyleClass().add("cancel-button");
+        modifierButton.getStyleClass().add("action-button");
+        changeLogoButton.getStyleClass().add("small-button");
     }
     
     @FXML
@@ -168,8 +213,7 @@ public class ManageEcole implements Initializable {
             currentAutoEcole.setAdresse(adresseField.getText().trim());
             currentAutoEcole.setTelephone(telephoneField.getText().trim());
             currentAutoEcole.setEmail(emailField.getText().trim());
-            currentAutoEcole.setDirecteur(directeurField.getText().trim());
-            
+
             // Handle logo file if selected
             if (selectedLogoFile != null) {
                 currentAutoEcole.setLogo(selectedLogoFile.getAbsolutePath());
@@ -248,8 +292,7 @@ public class ManageEcole implements Initializable {
                 writer.println("Adresse: " + currentAutoEcole.getAdresse());
                 writer.println("Téléphone: " + currentAutoEcole.getTelephone());
                 writer.println("Email: " + currentAutoEcole.getEmail());
-                writer.println("Directeur: " + currentAutoEcole.getDirecteur());
-                
+
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Sauvegarde réussie", 
                           "Les informations ont été sauvegardées dans " + file.getName());
             } catch (Exception e) {
