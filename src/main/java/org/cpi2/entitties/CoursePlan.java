@@ -1,7 +1,7 @@
 package org.cpi2.entitties;
 
 public enum CoursePlan {
-    MOTO_BASIC(1, "Basic Motorcycle Course", 199.99, "Fundamental motorcycle training for beginners", 10, 10),
+    MOTO_BASIC(1, "Basic Motorcycle Course",199.99, "Fundamental motorcycle training for beginners", 10, 10),
     MOTO_ADVANCED(2, "Advanced Motorcycle Course", 299.99, "Advanced motorcycle handling and safety techniques", 10, 10),
 
     CAR_BASIC(3, "Basic Car Driving Course", 349.99, "Essential car driving skills for new drivers", 10, 10),
@@ -14,6 +14,7 @@ public enum CoursePlan {
     private final int id;
     private final String name;
     private final double price;
+    //private final TypePermis typePermis;
     private final String description;
     private final int nbreSeanceConduite;
     private final int getNbreSeanceCode;
@@ -22,6 +23,7 @@ public enum CoursePlan {
     CoursePlan(int id, String name, double price, String description, int nbreSeanceConduite, int getNbreSeanceCode) {
         this.id = id;
         this.name = name;
+        //this.typePermis = typePermis;
         this.price = price;
         this.description = description;
         this.nbreSeanceConduite = nbreSeanceConduite;

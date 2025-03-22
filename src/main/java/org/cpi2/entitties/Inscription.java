@@ -90,6 +90,10 @@ public class Inscription {
         this.inscriptioDate = inscriptioDate;
     }
 
+    //Can make Enum if needed
+    public boolean isActive() {
+        return status.equalsIgnoreCase("ACTIVE");
+    }
 
     @Override
     public String toString() {
