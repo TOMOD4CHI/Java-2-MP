@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 
 // Monitor Repository
 public class MoniteurRepository {
@@ -164,7 +165,7 @@ public class MoniteurRepository {
         moniteur.setTelephone(rs.getString("telephone"));
         moniteur.setEmail(rs.getString("email"));
         moniteur.setDateEmbauche(rs.getDate("date_embauche").toLocalDate());
-        moniteur.setSpecialites(new HashSet<>());
+        moniteur.setSpecialites(new ArrayList<>());
         return moniteur;
     }
 

@@ -50,7 +50,7 @@ public class AjouterCandidat {
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
     @FXML private TextField cinField;
-    @FXML private ComboBox<String> typeComboBox;
+    @FXML private ComboBox<TypePermis> typeComboBox;
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
@@ -61,9 +61,7 @@ public class AjouterCandidat {
     private void initialize() {
         typeComboBox.setPrefWidth(200);
         // Add type permis options
-        for (TypePermis type : TypePermis.values()) {
-            typeComboBox.getItems().add(type.name());
-        }
+        typeComboBox.getItems().addAll(TypePermis.values());
     }
 
     @FXML
@@ -94,7 +92,7 @@ public class AjouterCandidat {
         String address = addressField.getText().trim();
         String phone = phoneField.getText().trim();
         String email = emailField.getText().trim();
-        String typePermis = typeComboBox.getValue();
+        TypePermis typePermis = typeComboBox.getValue();
 
         // Check required fields
         if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || 
@@ -151,7 +149,7 @@ public class AjouterCandidat {
             
             // Set type permis from combo box selection
             if (typePermis != null) {
-                candidat.setTypePermis(TypePermis.valueOf(typePermis));
+                candidat.setTypePermis(typePermis);
             }
 
             inscription.setCin(candidat.getCin());
