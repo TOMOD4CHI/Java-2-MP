@@ -479,12 +479,6 @@ ALTER TABLE `vehicule`
 --
 
 --
--- AUTO_INCREMENT for table `auto_ecole`
---
-ALTER TABLE `auto_ecole`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT for table `candidat`
 --
 ALTER TABLE `candidat`
