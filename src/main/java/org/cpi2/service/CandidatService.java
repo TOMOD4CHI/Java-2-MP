@@ -22,8 +22,8 @@ public class CandidatService {
         return candidatRepository.findAll();
     }
 
-    public Optional<Candidat> getCandidatById(Long id) {
-        return candidatRepository.findById(id);
+    public Candidat getCandidatById(Long id) {
+        return candidatRepository.findById(id).orElse(null);
     }
 
     public boolean addCandidat(Candidat candidat) {

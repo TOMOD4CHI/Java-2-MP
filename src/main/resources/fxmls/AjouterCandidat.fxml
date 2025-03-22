@@ -30,7 +30,7 @@
             <TextField  fx:id="prenomField" promptText="entrer le prenom " styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
             <Label text="Cin:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <TextField fx:id="cinField" promptText="Enter Age" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <TextField fx:id="cinField" promptText="Entrer le CIN" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
             <Label text="Type permis :" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
             <ComboBox fx:id="typeComboBox"  GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="200">
@@ -48,6 +48,9 @@
 
             <Label text="Telephone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
             <TextField fx:id="phoneField" promptText="Entrer le numero de telephone" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            
+            <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <TextField fx:id="emailField" promptText="Entrer l'email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
 
         </GridPane>
 

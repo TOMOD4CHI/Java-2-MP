@@ -1,66 +1,92 @@
 package org.cpi2.entitties;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Objects;
 
-public class Document implements Comparable<Document> {
-    private Long id;
-    private String typeDocument;
-    private String nomFichier;
-    private String cheminFichier;
-    private LocalDateTime dateUpload;
-
+public class Document {
+    private int id;
+    private String type;
+    private String nom;
+    private String path;
+    private LocalDate dateUpload;
+    private int candidatId;
+    
     public Document() {
-        this.dateUpload = LocalDateTime.now();
+        this.dateUpload = LocalDate.now();
     }
-
-    public Document(String typeDocument, String nomFichier, String cheminFichier) {
+    
+    public Document(int id, String type, String nom, String path, int candidatId) {
         this();
-        this.typeDocument = typeDocument;
-        this.nomFichier = nomFichier;
-        this.cheminFichier = cheminFichier;
+        this.id = id;
+        this.type = type;
+        this.nom = nom;
+        this.path = path;
+        this.candidatId = candidatId;
     }
-
-    public String getCheminFichier() {
-        return cheminFichier;
-    }
-
-    public void setCheminFichier(String cheminFichier) {
-        this.cheminFichier = cheminFichier;
-    }
-
-    public LocalDateTime getDateUpload() {
-        return dateUpload;
-    }
-
-    public void setDateUpload(LocalDateTime dateUpload) {
-        this.dateUpload = dateUpload;
-    }
-
-    public Long getId() {
+    
+    public int getId() {
         return id;
     }
-
-    public void setId(Long id) {
+    
+    public void setId(int id) {
         this.id = id;
     }
-
-    public String getNomFichier() {
-        return nomFichier;
+    
+    public String getType() {
+        return type;
     }
-
-    public void setNomFichier(String nomFichier) {
-        this.nomFichier = nomFichier;
+    
+    public void setType(String type) {
+        this.type = type;
     }
-
-    public String getTypeDocument() {
-        return typeDocument;
+    
+    public String getNom() {
+        return nom;
     }
-
-    public void setTypeDocument(String typeDocument) {
-        this.typeDocument = typeDocument;
+    
+    public void setNom(String nom) {
+        this.nom = nom;
     }
+    
+    public String getPath() {
+        return path;
+    }
+    
+    public void setPath(String path) {
+        this.path = path;
+    }
+    
+    public LocalDate getDateUpload() {
+        return dateUpload;
+    }
+    
+    public void setDateUpload(LocalDate dateUpload) {
+        this.dateUpload = dateUpload;
+    }
+    
+    public int getCandidatId() {
+        return candidatId;
+    }
+    
+    public void setCandidatId(int candidatId) {
+        this.candidatId = candidatId;
+    }
+    
     @Override
-    public int compareTo(Document o) {
-        return this.dateUpload.compareTo(o.dateUpload);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Document document = (Document) o;
+        return id == document.id;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+    
+    @Override
+    public String toString() {
+        return type + ": " + nom;
     }
 }

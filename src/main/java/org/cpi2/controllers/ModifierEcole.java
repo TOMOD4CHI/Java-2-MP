@@ -1,6 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -19,11 +20,12 @@ import java.util.regex.Pattern;
 
 public class ModifierEcole {
 
-    public TextField nomField;
-    public TextField adresseField;
-    public TextField telephoneField;
-    public TextField emailField;
-    public ImageView logoImageView;
+    @FXML private TextField nomField;
+    @FXML private TextField adresseField;
+    @FXML private TextField telephoneField;
+    @FXML private TextField emailField;
+    @FXML private TextField directeurField;
+    @FXML private ImageView logoImageView;
 
     private Image logoImage;
     private String logoPath;
@@ -55,38 +57,68 @@ public class ModifierEcole {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    // Initialize the controller with existing data
-    public void initialize() {
-        // Load the existing auto ecole data
-        currentAutoEcole = autoEcoleService.viewAutoEcole();
-        if (currentAutoEcole != null) {
-            // Fill the fields with existing data
-            nomField.setText(currentAutoEcole.getNom());
-            adresseField.setText(currentAutoEcole.getAdresse());
-            telephoneField.setText(currentAutoEcole.getTelephone());
-            emailField.setText(currentAutoEcole.getEmail());
+    
+    private void showSuccessAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
+    // Method to set an auto-ecole to modify from the list view
+    public void setAutoEcoleToModify(AutoEcole autoEcole) {
+        if (autoEcole != null) {
+            this.currentAutoEcole = autoEcole;
+            
+            // Fill the fields with the selected auto-ecole data
+            nomField.setText(autoEcole.getNom());
+            adresseField.setText(autoEcole.getAdresse());
+            telephoneField.setText(autoEcole.getTelephone());
+            emailField.setText(autoEcole.getEmail());
+            directeurField.setText(autoEcole.getDirecteur());
 
             // Load the logo if it exists
-            logoPath = currentAutoEcole.getLogoPath();
+            logoPath = autoEcole.getLogo();
             if (logoPath != null && !logoPath.isEmpty()) {
                 try {
                     File logoFile = new File(logoPath);
                     if (logoFile.exists()) {
                         logoImage = new Image(logoFile.toURI().toString());
                         logoImageView.setImage(logoImage);
+                        logoImageView.getStyleClass().add("logo-image");
+                        // Apply dropshadow effect
+                        logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
+                    } else {
+                        // Set default logo if file doesn't exist
+                        logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
                     }
                 } catch (Exception e) {
                     showAlert("Erreur", "Impossible de charger le logo: " + e.getMessage());
+                    // Set default logo on error
+                    logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
                 }
+            } else {
+                // Set default logo if path is empty
+                logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
             }
-        } else {
-            showAlert("Erreur", "Aucune école trouvée à modifier.");
-            //ig ken mfmch auto ecole ywali redirectih ll ajout mais m ynjmch y acceder ll ajout w7dou snn n7esh mch logic l7keya
+        }
+    }
+
+    // Initialize the controller with existing data
+    @FXML
+    public void initialize() {
+        // This method will be called by JavaFX when the FXML is loaded
+        // Default to app_icon.png if no logo is set
+        try {
+            logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+        } catch (Exception e) {
+            System.err.println("Error loading default logo: " + e.getMessage());
         }
     }
 
     // Handle file upload for the logo
+    @FXML
     public void handleLogoUpload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
@@ -110,9 +142,13 @@ public class ModifierEcole {
                 // Save the path for later use
                 logoPath = targetPath.toString();
 
-                // Display the image
+                // Display the image with proper styling
                 logoImage = new Image(file.toURI().toString());
                 logoImageView.setImage(logoImage);
+                logoImageView.getStyleClass().add("logo-image");
+                
+                // Apply dropshadow effect
+                logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
             } catch (Exception e) {
                 showAlert("Erreur", "Impossible de charger l'image: " + e.getMessage());
             }
@@ -120,6 +156,7 @@ public class ModifierEcole {
     }
 
     // Handle saving the modified school data
+    @FXML
     public void handleModifierEcole(ActionEvent event) {
         if (currentAutoEcole == null) {
             showAlert("Erreur", "Aucune école à modifier.");
@@ -131,9 +168,10 @@ public class ModifierEcole {
         String adresse = adresseField.getText().trim();
         String telephone = telephoneField.getText().trim();
         String email = emailField.getText().trim();
+        String directeur = directeurField.getText().trim();
 
         // Validate required fields
-        if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty()) {
+        if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty() || directeur.isEmpty()) {
             showAlert("Erreur de validation", "Tous les champs sont obligatoires.");
             return;
         }
@@ -161,47 +199,41 @@ public class ModifierEcole {
             showAlert("Erreur de validation", "L'adresse doit contenir au moins 10 caractères.");
             return;
         }
+        
+        // Validate directeur name
+        if (directeur.length() < 3) {
+            showAlert("Erreur de validation", "Le nom du directeur doit contenir au moins 3 caractères.");
+            return;
+        }
 
         // Update the auto ecole information
-        boolean success = true;
-
-        if (!nom.equals(currentAutoEcole.getNom())) {
-            success &= autoEcoleService.modifyNom(nom);
+        currentAutoEcole.setNom(nom);
+        currentAutoEcole.setAdresse(adresse);
+        currentAutoEcole.setTelephone(telephone);
+        currentAutoEcole.setEmail(email);
+        currentAutoEcole.setDirecteur(directeur);
+        if (logoPath != null) {
+            currentAutoEcole.setLogo(logoPath);
         }
-
-        if (!adresse.equals(currentAutoEcole.getAdresse())) {
-            success &= autoEcoleService.modifyAddress(adresse);
-        }
-
-        if (!telephone.equals(currentAutoEcole.getTelephone())) {
-            success &= autoEcoleService.modifyTelephone(telephone);
-        }
-
-        if (!email.equals(currentAutoEcole.getEmail())) {
-            success &= autoEcoleService.modifyEmail(email);
-        }
-
-        if (logoPath != null && !logoPath.equals(currentAutoEcole.getLogoPath())) {
-            success &= autoEcoleService.modifyLogoPath(logoPath);
-        }
+        
+        boolean success = autoEcoleService.updateAutoEcole(currentAutoEcole);
 
         if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("Les informations de l'école ont été modifiées avec succès!");
-            alert.showAndWait();
+            showSuccessAlert("Succès", "Les informations de l'école ont été modifiées avec succès!");
             
-            // Reload the data
-            initialize();
+            // Close the window after successful update
+            Stage stage = (Stage) nomField.getScene().getWindow();
+            stage.close();
         } else {
             showAlert("Erreur", "Échec de la modification des informations de l'école.");
         }
     }
 
     // Handle cancelling the operation
+    @FXML
     public void handleCancel(ActionEvent event) {
-        // Reload the existing data to reset the form
-        initialize();
+        // Close the window
+        Stage stage = (Stage) nomField.getScene().getWindow();
+        stage.close();
     }
 }

@@ -4,26 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="BF4">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/GestionVehicule.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MiseAJourKilometrage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Notifications.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/RemplirSeance.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SuiviEntretiens.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/style6.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/css/stylee.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/GestionVehicules.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MiseAJourKilometrage.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/Notifications.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/RemplirSeance.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SuiviEntretiens.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Vehicule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Vehicule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/stylel.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/stylel.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/login.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="linked controllers with services with edits and enhancements to both , added &quot;controle de saisie&quot; and" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,8 +14,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
-        <option value="Class" />
         <option value="CSS File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -50,7 +31,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/TOMOD4CHI/Java-2-MP.git&quot;,
-    &quot;accountId&quot;: &quot;93bd8dc2-d676-4594-a1ba-6aeac9d94f82&quot;
+    &quot;accountId&quot;: &quot;f8925d38-388a-4958-8fcb-723f1b35dbb4&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -71,10 +52,11 @@
   &quot;keyToString&quot;: {
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Java-2-MP [clean].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Ranim&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/user/Documents/GitHub/Java-2-MP/src&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/semia/Documents/GitHub/Java-2-MP/src/main/resources/images&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -94,7 +76,11 @@
     </force-push-targets>
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\semia\Documents\GitHub\Java-2-MP\src\main\resources\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\semia\Documents\GitHub\Java-2-MP\src\main\java\org\cpi2" />
       <recent name="C:\Users\user\Documents\GitHub\Java-2-MP\src" />
       <recent name="C:\Users\semia\Documents\GitHub\Java-2-MP\src\service" />
       <recent name="C:\Users\user\Documents\GitHub\Java-2-MP\src\main\java\org.cpi2\controllers" />
@@ -106,11 +92,16 @@
       <recent name="org.cpi2.controllers" />
     </key>
   </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean" />
+    </option>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.cpi2.Main" />
       <module name="Java-2-MP" />
-      <option name="VM_PARAMETERS" value="--module-path &quot;C:\javafx-sdk-17.0.14\lib&quot; --add-modules javafx.controls,javafx.fxml,javafx.web" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\semia\Downloads\Compressed\tara9\javafx-sdk-23.0.2\lib&quot; --add-modules javafx.controls,javafx.fxml,javafx.web" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -119,8 +110,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
       </set>
     </attachedChunks>
   </component>
@@ -157,11 +148,26 @@
       <workItem from="1742328750025" duration="9515000" />
       <workItem from="1742414358738" duration="3097000" />
       <workItem from="1742417792595" duration="2561000" />
-      <workItem from="1742476668598" duration="204000" />
-      <workItem from="1742480483582" duration="220000" />
-      <workItem from="1742501968368" duration="4551000" />
-      <workItem from="1742513923527" duration="1062000" />
-      <workItem from="1742583140111" duration="4353000" />
+      <workItem from="1742473256621" duration="1755000" />
+      <workItem from="1742475595720" duration="162000" />
+      <workItem from="1742476143137" duration="13000" />
+      <workItem from="1742476174477" duration="45000" />
+      <workItem from="1742476602538" duration="3000" />
+      <workItem from="1742476610763" duration="200000" />
+      <workItem from="1742477139328" duration="137000" />
+      <workItem from="1742477288585" duration="271000" />
+      <workItem from="1742477583977" duration="616000" />
+      <workItem from="1742478265663" duration="45000" />
+      <workItem from="1742478462194" duration="196000" />
+      <workItem from="1742478934115" duration="444000" />
+      <workItem from="1742479454838" duration="120000" />
+      <workItem from="1742479932295" duration="276000" />
+      <workItem from="1742480270860" duration="72000" />
+      <workItem from="1742480362709" duration="848000" />
+      <workItem from="1742602176832" duration="12006000" />
+      <workItem from="1742615910275" duration="330000" />
+      <workItem from="1742616247977" duration="74000" />
+      <workItem from="1742617264982" duration="59000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />
@@ -207,6 +213,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="ramadan kareem bro (added inscritpion class and plan enum)" />
     <MESSAGE value="BF4" />
-    <option name="LAST_COMMIT_MESSAGE" value="BF4" />
+    <MESSAGE value="linked controllers with services with edits and enhancements to both , added &quot;controle de saisie&quot; and" />
+    <option name="LAST_COMMIT_MESSAGE" value="linked controllers with services with edits and enhancements to both , added &quot;controle de saisie&quot; and" />
   </component>
 </project>

@@ -1,6 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -20,13 +21,14 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
-public class    AjouterEcole {
+public class AjouterEcole {
 
-    public TextField nomField;
-    public TextField adresseField;
-    public TextField telephoneField;
-    public TextField emailField;
-    public ImageView logoImageView;
+    @FXML private TextField nomField;
+    @FXML private TextField adresseField;
+    @FXML private TextField telephoneField;
+    @FXML private TextField emailField;
+    @FXML private TextField directeurField;
+    @FXML private ImageView logoImageView;
 
     private Image logoImage;
     private String logoPath;
@@ -37,6 +39,17 @@ public class    AjouterEcole {
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    @FXML
+    public void initialize() {
+        // Default logo path (app_icon.png)
+        try {
+            Path resourcePath = Paths.get(getClass().getResource("/images/app_icon.png").toURI());
+            logoPath = resourcePath.toString();
+        } catch (Exception e) {
+            System.err.println("Error loading default logo: " + e.getMessage());
+        }
+    }
 
     // Validation methods
     private boolean isValidEmail(String email) {
@@ -69,6 +82,7 @@ public class    AjouterEcole {
     }
 
     // Handle file upload for the logo
+    @FXML
     public void handleLogoUpload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
@@ -92,9 +106,13 @@ public class    AjouterEcole {
                 // Save the path for later use
                 logoPath = targetPath.toString();
 
-                // Display the image
+                // Display the image with proper styling
                 logoImage = new Image(file.toURI().toString());
                 logoImageView.setImage(logoImage);
+                logoImageView.getStyleClass().add("logo-image");
+                
+                // Apply dropshadow effect
+                logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
             } catch (Exception e) {
                 showAlert("Erreur", "Impossible de charger l'image: " + e.getMessage());
             }
@@ -102,15 +120,17 @@ public class    AjouterEcole {
     }
 
     // Handle saving the school data
+    @FXML
     public void handleAjouterEcole(ActionEvent event) {
         // Get the values from the form
         String nom = nomField.getText().trim();
         String adresse = adresseField.getText().trim();
         String telephone = telephoneField.getText().trim();
         String email = emailField.getText().trim();
+        String directeur = directeurField.getText().trim();
 
         // Validate required fields
-        if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty()) {
+        if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty() || directeur.isEmpty()) {
             showAlert("Erreur de validation", "Tous les champs sont obligatoires.");
             return;
         }
@@ -139,16 +159,22 @@ public class    AjouterEcole {
             return;
         }
 
+        // Validate directeur (basic check for minimum length)
+        if (directeur.length() < 3) {
+            showAlert("Erreur de validation", "Le nom du directeur doit contenir au moins 3 caractères.");
+            return;
+        }
+
         // Create the AutoEcole object
         AutoEcole autoEcole = new AutoEcole();
         autoEcole.setNom(nom);
         autoEcole.setAdresse(adresse);
         autoEcole.setTelephone(telephone);
         autoEcole.setEmail(email);
-        autoEcole.setLogoPath(logoPath);
+        autoEcole.setDirecteur(directeur);
+        autoEcole.setLogo(logoPath);
 
         // Save the auto école
-        //autoEcoleService.deleteAutoEcole();
         boolean success = autoEcoleService.saveAutoEcole(autoEcole);
 
         if (success) {
@@ -159,25 +185,30 @@ public class    AjouterEcole {
             alert.showAndWait();
             
             // Clear the form
-            nomField.clear();
-            adresseField.clear();
-            telephoneField.clear();
-            emailField.clear();
-            logoImageView.setImage(null);
-            logoPath = null;
+            handleCancel(event);
         } else {
             showAlert("Erreur", "Échec de l'ajout de l'école.");
         }
     }
 
     // Handle cancelling the operation
+    @FXML
     public void handleCancel(ActionEvent event) {
         // Clear all fields
         nomField.clear();
         adresseField.clear();
         telephoneField.clear();
         emailField.clear();
-        logoImageView.setImage(null);
-        logoPath = null;
+        directeurField.clear();
+        
+        // Reset the logo to default
+        try {
+            logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+            Path resourcePath = Paths.get(getClass().getResource("/images/app_icon.png").toURI());
+            logoPath = resourcePath.toString();
+        } catch (Exception e) {
+            logoImageView.setImage(null);
+            logoPath = null;
+        }
     }
 }

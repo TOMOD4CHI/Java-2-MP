@@ -2,7 +2,6 @@ package org.cpi2.repository;
 
 import org.cpi2.entitties.CoursePlan;
 import org.cpi2.entitties.Inscription;
-import org.cpi2.entitties.CoursePlan;
 
 import java.sql.*;
 import java.util.ArrayList;

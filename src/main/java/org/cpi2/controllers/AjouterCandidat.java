@@ -14,10 +14,38 @@ import org.cpi2.service.InscriptionService;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.regex.Pattern;
 
 public class AjouterCandidat {
     private final CandidatService candidatService = new CandidatService();
     private final InscriptionService inscriptionService = new InscriptionService();
+
+    // Validation patterns
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
+    private static final Pattern CIN_PATTERN = Pattern.compile("^[0-9]{8,}$");
+
+    // Validation methods
+    private boolean isValidEmail(String email) {
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
+    }
+
+    private boolean isValidPhone(String phone) {
+        return phone != null && PHONE_PATTERN.matcher(phone).matches();
+    }
+
+    private boolean isValidName(String name) {
+        return name != null && NAME_PATTERN.matcher(name).matches();
+    }
+
+    private boolean isValidCIN(String cin) {
+        return cin != null && CIN_PATTERN.matcher(cin).matches();
+    }
+    
+    private boolean isValidAddress(String address, int minLength) {
+        return address != null && address.length() >= minLength;
+    }
 
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
@@ -25,6 +53,7 @@ public class AjouterCandidat {
     @FXML private ComboBox<String> typeComboBox;
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
+    @FXML private TextField emailField;
     @FXML private Button cancelButton;
     @FXML private Button confirmButton;
 
@@ -45,30 +74,85 @@ public class AjouterCandidat {
         typeComboBox.getSelectionModel().clearSelection();
         addressField.clear();
         phoneField.clear();
+        emailField.clear();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML
     private void confirmAction() {
-        if (nomField.getText().isEmpty() || cinField.getText().isEmpty() ||
-                typeComboBox.getSelectionModel().isEmpty() || addressField.getText().isEmpty() ||
-                phoneField.getText().isEmpty()) {
+        // Retrieve all form field values
+        String nom = nomField.getText().trim();
+        String prenom = prenomField.getText().trim();
+        String cin = cinField.getText().trim();
+        String address = addressField.getText().trim();
+        String phone = phoneField.getText().trim();
+        String email = emailField.getText().trim();
+        String typePermis = typeComboBox.getValue();
 
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Validation Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Merci de remplir tout les champs!");
-            alert.showAndWait();
+        // Check required fields
+        if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || 
+            address.isEmpty() || phone.isEmpty() || typePermis == null) {
+            showAlert("Validation Error", "Merci de remplir tous les champs obligatoires!");
+            return;
+        }
+        
+        // Validate name format
+        if (!isValidName(nom)) {
+            showAlert("Validation Error", "Le nom ne doit contenir que des lettres et des espaces.");
+            return;
+        }
+        
+        // Validate prénom format
+        if (!isValidName(prenom)) {
+            showAlert("Validation Error", "Le prénom ne doit contenir que des lettres et des espaces.");
+            return;
+        }
+
+        // Validate CIN (numeric only and at least 8 digits)
+        if (!isValidCIN(cin)) {
+            showAlert("Validation Error", "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres!");
+            return;
+        }
+        
+        // Validate phone number
+        if (!isValidPhone(phone)) {
+            showAlert("Validation Error", "Le numéro de téléphone doit contenir exactement 8 chiffres.");
+            return;
+        }
+        
+        // Validate email if provided
+        if (!email.isEmpty() && !isValidEmail(email)) {
+            showAlert("Validation Error", "L'adresse email n'est pas valide.");
+            return;
+        }
+        
+        // Validate address
+        if (!isValidAddress(address, 10)) {
+            showAlert("Validation Error", "L'adresse doit contenir au moins 10 caractères.");
             return;
         }
 
         try {
             Inscription inscription = new Inscription();
             Candidat candidat = new Candidat();
-            candidat.setNom(nomField.getText());
-            candidat.setPrenom(prenomField.getText());
-            candidat.setCin(cinField.getText());
-            candidat.setAdresse(addressField.getText());
-            candidat.setTelephone(phoneField.getText());
+            candidat.setNom(nom);
+            candidat.setPrenom(prenom);
+            candidat.setCin(cin);
+            candidat.setAdresse(address);
+            candidat.setTelephone(phone);
+            candidat.setEmail(email);
+            
+            // Set type permis from combo box selection
+            if (typePermis != null) {
+                candidat.setTypePermis(TypePermis.valueOf(typePermis));
+            }
 
             inscription.setCin(candidat.getCin());
             inscription.setPaymentStatus(false);
@@ -86,18 +170,10 @@ public class AjouterCandidat {
                 alert.showAndWait();
                 cancelAction();
             } else {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("Erreur lors de l'ajout du candidat!");
-                alert.showAndWait();
+                showAlert("Erreur", "Erreur lors de l'ajout du candidat!");
             }
         } catch (Exception e) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Une erreur est survenue: " + e.getMessage());
-            alert.showAndWait();
+            showAlert("Erreur", "Une erreur est survenue: " + e.getMessage());
         }
     }
 }

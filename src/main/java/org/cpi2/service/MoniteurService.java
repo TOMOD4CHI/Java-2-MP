@@ -26,8 +26,8 @@ public class MoniteurService {
         return moniteurRepository.findAll();
     }
 
-    public Optional<Moniteur> getMoniteurById(Long id) {
-        return moniteurRepository.findById(id);
+    public Moniteur getMoniteurById(Long id) {
+        return moniteurRepository.findById(id).orElse(null);
     }
 
     public boolean addMoniteur(Moniteur moniteur) {

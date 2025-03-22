@@ -1,13 +1,10 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.Paiement;
-import org.cpi2.entitties.StatutPaiement;
-import org.cpi2.entitties.Tranche;
+
 import org.cpi2.repository.PaiementRepository;
 import org.cpi2.repository.CandidatRepository;
 
-import java.util.List;
-import java.util.Optional;
+
 
 public class PaiementService {
     private final PaiementRepository paiementRepository;

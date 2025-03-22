@@ -42,10 +42,14 @@
             <!-- Téléphone -->
             <Label text="Téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
             <TextField fx:id="phoneField" promptText="Entrer le téléphone" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            
+            <!-- Email -->
+            <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+            <TextField fx:id="emailField" promptText="Entrer l'email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
 
             <!-- Type Permis -->
-            <Label text="Type de permis:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-            <ComboBox fx:id="typeComboBox" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <Label text="Type de permis:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <ComboBox fx:id="typeComboBox" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="6">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Moto" />

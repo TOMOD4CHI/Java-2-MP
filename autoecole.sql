@@ -34,6 +34,7 @@ CREATE TABLE `auto_ecole` (
   `logo_path` varchar(255) DEFAULT NULL,
   `telephone` varchar(20) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `directeur` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -331,6 +332,39 @@ CREATE TABLE `vehicule` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moniteur_specialite`
+--
+
+CREATE TABLE `moniteur_specialite` (
+  `moniteur_id` int(11) NOT NULL,
+  `type_permis_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `seance`
+--
+
+CREATE TABLE `seance` (
+  `id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `temps` time NOT NULL,
+  `duree` int(11) NOT NULL DEFAULT 60,
+  `type` varchar(20) NOT NULL,
+  `lieu` varchar(100) DEFAULT NULL,
+  `moniteur_id` int(11) NOT NULL,
+  `candidat_id` int(11) NOT NULL,
+  `vehicule_id` int(11) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `commentaire` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -475,6 +509,22 @@ ALTER TABLE `vehicule`
   ADD KEY `type_permis_id` (`type_permis_id`);
 
 --
+-- Indexes for table `moniteur_specialite`
+--
+ALTER TABLE `moniteur_specialite`
+  ADD PRIMARY KEY (`moniteur_id`,`type_permis_id`),
+  ADD KEY `fk_moniteur_specialite_type_permis` (`type_permis_id`);
+
+--
+-- Indexes for table `seance`
+--
+ALTER TABLE `seance`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_seance_moniteur` (`moniteur_id`),
+  ADD KEY `fk_seance_candidat` (`candidat_id`),
+  ADD KEY `fk_seance_vehicule` (`vehicule_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -554,6 +604,12 @@ ALTER TABLE `session_conduite`
 -- AUTO_INCREMENT for table `vehicule`
 --
 ALTER TABLE `vehicule`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `seance`
+--
+ALTER TABLE `seance`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -640,6 +696,21 @@ ALTER TABLE `session_conduite`
 --
 ALTER TABLE `vehicule`
   ADD CONSTRAINT `vehicule_ibfk_1` FOREIGN KEY (`type_permis_id`) REFERENCES `type_permis` (`id`);
+
+--
+-- Constraints for table `moniteur_specialite`
+--
+ALTER TABLE `moniteur_specialite`
+  ADD CONSTRAINT `fk_moniteur_specialite_moniteur` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_moniteur_specialite_type_permis` FOREIGN KEY (`type_permis_id`) REFERENCES `type_permis` (`id`);
+
+--
+-- Constraints for table `seance`
+--
+ALTER TABLE `seance`
+  ADD CONSTRAINT `fk_seance_moniteur` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`),
+  ADD CONSTRAINT `fk_seance_candidat` FOREIGN KEY (`candidat_id`) REFERENCES `candidat` (`id`),
+  ADD CONSTRAINT `fk_seance_vehicule` FOREIGN KEY (`vehicule_id`) REFERENCES `vehicule` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

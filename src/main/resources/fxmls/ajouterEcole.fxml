@@ -3,39 +3,73 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Pos?>
 <?import javafx.geometry.Insets?>
-<?import javafx.collections.FXCollections?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.effect.DropShadow?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.cpi2.controllers.AjouterEcole" stylesheets="@/css/style.css" spacing="20" alignment="CENTER" styleClass="form-container">
-    <Label text="Ajouter une Ecole" styleClass="form-title"/>
-
-    <GridPane hgap="10" vgap="10" alignment="CENTER">
-        <columnConstraints>
-            <ColumnConstraints halignment="RIGHT" minWidth="100"/>
-            <ColumnConstraints halignment="LEFT" minWidth="200" hgrow="ALWAYS"/>
-        </columnConstraints>
-
-        <Label text="Nom de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="nomField" promptText="Nom de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-        <Label text="Adresse de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="adresseField" promptText="Adresse de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-        <Label text="Numéro de téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <TextField fx:id="telephoneField" promptText="Numéro de téléphone" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
-        <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <TextField fx:id="emailField" promptText="Email" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-
-        <Label text="Logo:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
-            <ImageView fx:id="logoImageView" fitWidth="100" fitHeight="100" preserveRatio="true"/>
-            <Button text="Choisir Logo" onAction="#handleLogoUpload" styleClass="button"/>
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+           fx:controller="org.cpi2.controllers.AjouterEcole" 
+           stylesheets="@/css/style.css">
+    
+    <VBox maxWidth="650" maxHeight="800" styleClass="form-container" alignment="CENTER" spacing="20">
+        <effect>
+            <DropShadow color="#00000033" radius="10" spread="0.1"/>
+        </effect>
+        <padding>
+            <Insets top="25" right="30" bottom="25" left="30"/>
+        </padding>
+        
+        <Label text="Ajouter une Auto-École" styleClass="form-title"/>
+        
+        <Separator styleClass="form-separator">
+            <VBox.margin>
+                <Insets top="5" bottom="15"/>
+            </VBox.margin>
+        </Separator>
+        
+        <GridPane hgap="15" vgap="15" alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" minWidth="150" maxWidth="150"/>
+                <ColumnConstraints halignment="LEFT" minWidth="300" hgrow="ALWAYS"/>
+            </columnConstraints>
+            
+            <Label text="Nom de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="nomField" promptText="Nom de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            
+            <Label text="Adresse:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="adresseField" promptText="Adresse complète" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            
+            <Label text="Téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="telephoneField" promptText="8 chiffres" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            
+            <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <TextField fx:id="emailField" promptText="example@email.com" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            
+            <Label text="Directeur:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <TextField fx:id="directeurField" promptText="Nom du directeur" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            
+            <Label text="Logo:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.valignment="TOP">
+                <GridPane.margin>
+                    <Insets top="10"/>
+                </GridPane.margin>
+            </Label>
+            
+            <VBox spacing="10" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                <StackPane styleClass="image-container" maxWidth="150" maxHeight="150">
+                    <ImageView fx:id="logoImageView" fitWidth="150" fitHeight="150" preserveRatio="true">
+                        <Image url="@/images/app_icon.png"/>
+                    </ImageView>
+                </StackPane>
+                <Button text="Choisir un logo" onAction="#handleLogoUpload" styleClass="button-primary"/>
+            </VBox>
+        </GridPane>
+        
+        <HBox spacing="15" alignment="CENTER">
+            <padding>
+                <Insets top="20"/>
+            </padding>
+            <Button text="Annuler" onAction="#handleCancel" styleClass="button-secondary"/>
+            <Button text="Ajouter" onAction="#handleAjouterEcole" styleClass="button-primary"/>
         </HBox>
-    </GridPane>
-
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Ajouter" onAction="#handleAjouterEcole" styleClass="button"/>
-        <Button text="Annuler" onAction="#handleCancel" styleClass="button"/>
-    </HBox>
-</VBox>
+    </VBox>
+</StackPane>
