@@ -9,12 +9,13 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/login.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Main");
+        primaryStage.setTitle("log in");
         primaryStage.setHeight(800);
+        primaryStage.setWidth(1100);
 
         primaryStage.setResizable(false);
         primaryStage.show();

@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class Candidat extends Personne {
     private Dossier dossier;
+    private TypePermis typePermis;
 
     public Candidat() {
         super();
@@ -19,7 +20,9 @@ public class Candidat extends Personne {
         this.dossier = new Dossier();
     }
 
-
+    public TypePermis getTypePermis() {
+        return typePermis;
+    }
 
     public Dossier getDossier() {
         return dossier;
@@ -27,6 +30,10 @@ public class Candidat extends Personne {
 
     public void setDossier(Dossier dossier) {
         this.dossier = dossier;
+    }
+
+    public void setTypePermis(TypePermis typePermis) {
+        this.typePermis = typePermis;
     }
 
 }

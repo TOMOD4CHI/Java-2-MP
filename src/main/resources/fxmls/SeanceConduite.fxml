@@ -7,47 +7,82 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cpi2.controllers.SeanceConduite"
-            stylesheets="@/css/style4.css">
+            stylesheets="@/css/style4.css"
+            styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
     <left>
-        <VBox spacing="1.5" minWidth="300" prefWidth="300" >
-            <HBox alignment="center" styleClass="form-title-container">
-                <Label text="Seance Conduite" fx:id="titre" styleClass="form-title"/>
-            </HBox>
+        <VBox styleClass="form-container" spacing="8">
+            <padding>
+                <Insets top="15" right="20" bottom="20" left="20"/>
+            </padding>
 
-            <Label text="Id de candidat:" styleClass="form-label"/>
-            <TextField fx:id="idCandidat" styleClass="form-field"/>
+            <StackPane styleClass="title-wrapper">
+                <Label text="Séance de Conduite" fx:id="titre" styleClass="form-title"/>
+            </StackPane>
 
-            <Label text="Id de Moniteur:" styleClass="form-label"/>
-            <TextField fx:id="idMoniteur" styleClass="form-field"/>
+            <Separator styleClass="form-separator">
+                <VBox.margin>
+                    <Insets top="5" bottom="15"/>
+                </VBox.margin>
+            </Separator>
 
-            <Label text="Id voiture:" styleClass="form-label"/>
-            <TextField fx:id="idVoiture" styleClass="form-field"/>
+            <GridPane hgap="12" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="120" prefWidth="150" hgrow="SOMETIMES"/>
+                    <ColumnConstraints minWidth="150" prefWidth="200" hgrow="SOMETIMES"/>
+                </columnConstraints>
 
-            <Label text="Kilometrage" styleClass="form-label"/>
-            <TextField fx:id="kilometrage" styleClass="form-field"/>
+                <!-- Row 0 -->
+                <Label text="Id de candidat:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="idCandidat" styleClass="form-field" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-            <Label text="Date:" styleClass="form-label"/>
-            <TextField fx:id="date" promptText="JJ/MM/AAAA" styleClass="form-field"/>
+                <!-- Row 1 -->
+                <Label text="Id de Moniteur:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="idMoniteur" styleClass="form-field" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-            <Label text="Temps" styleClass="form-label"/>
-            <TextField fx:id="temps" promptText="HH:MM" styleClass="form-field"/>
+                <!-- Row 2 -->
+                <Label text="Id voiture:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="idVoiture" styleClass="form-field" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-            <Label text="Latitude:" styleClass="form-label"/>
-            <TextField fx:id="latitudeField" editable="false" styleClass="form-field"/>
+                <!-- Row 3 -->
+                <Label text="Kilométrage:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="kilometrage" styleClass="form-field" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-            <Label text="Longitude:" styleClass="form-label"/>
-            <TextField fx:id="longitudeField" editable="false" styleClass="form-field"/>
+                <!-- Row 4 -->
+                <Label text="Date:" styleClass="form-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="date" promptText="JJ/MM/AAAA" styleClass="form-field" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-            <HBox spacing="10" alignment="center" styleClass="button-container">
-                <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="button"/>
-                <Button text="Submit" fx:id="submitButton" onAction="#handleSubmit" styleClass="button"/>
+                <!-- Row 5 -->
+                <Label text="Temps:" styleClass="form-label" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <TextField fx:id="temps" promptText="HH:MM" styleClass="form-field" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                <!-- Row 6 -->
+                <Label text="Latitude:" styleClass="form-label" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                <TextField fx:id="latitudeField" editable="false" styleClass="form-field" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                <!-- Row 7 -->
+                <Label text="Longitude:" styleClass="form-label" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                <TextField fx:id="longitudeField" editable="false" styleClass="form-field" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <HBox spacing="15" alignment="CENTER" styleClass="button-container">
+                <padding>
+                    <Insets top="20" right="0" bottom="0" left="0"/>
+                </padding>
+                <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="button, cancel-button"/>
+                <Button text="Soumettre" fx:id="submitButton" onAction="#handleSubmit" styleClass="button, submit-button"/>
             </HBox>
         </VBox>
     </left>
 
-    <center>
-        <WebView fx:id="mapView"/>
-    </center>
+    <right>
+        <StackPane styleClass="map-container">
+            <WebView fx:id="mapView" minWidth="400" prefWidth="500"/>
+        </StackPane>
+    </right>
 
 </BorderPane>

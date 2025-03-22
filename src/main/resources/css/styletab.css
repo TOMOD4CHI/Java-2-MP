@@ -1,0 +1,185 @@
+/* Background Pane */
+.background-pane {
+    -fx-background-color: rgba(236, 246, 255, 0.6);
+    -fx-background-radius: 20px;
+    -fx-border-color: rgba(179, 213, 255, 0.7);
+    -fx-border-width: 1px;
+    -fx-border-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 15, 0, 0, 5);
+    -fx-padding: 24px;
+}
+
+/* Title */
+.title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3182ce;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 3, 0, 0, 1);
+}
+
+/* Glass Panel for Filters */
+.glass-panel {
+    -fx-background-color: rgba(224, 242, 254, 0.5);
+    -fx-background-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.15), 10, 0, 0, 3);
+    -fx-border-radius: 14px;
+    -fx-border-color: rgba(191, 219, 254, 0.6);
+    -fx-border-width: 1px;
+    -fx-min-height: 250px;
+    -fx-padding: 16px;
+}
+
+/* Filter Labels */
+.filter-label {
+    -fx-text-fill: #2c5282;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+/* Form Fields */
+.glass-field , .DatePicker{
+    -fx-background-color: rgba(226, 232, 240, 0.4);
+    -fx-text-fill: #2d3748;
+    -fx-prompt-text-fill: #718096;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-min-width: 200px;
+    -fx-min-height: 35px;
+    -fx-border-color: rgba(203, 213, 224, 0.6);
+    -fx-border-width: 1px;
+    -fx-padding: 8px;
+}
+
+.glass-field:focused {
+    -fx-background-color: rgba(235, 244, 255, 0.6);
+    -fx-border-color: #63b3ed;
+}
+
+
+.glass-field > .arrow-button {
+    -fx-background-color: rgba(144, 205, 244, 0.4);
+    -fx-background-radius: 0 8px 8px 0;
+}
+
+.glass-field > .arrow-button > .arrow {
+    -fx-background-color: #2b6cb0;
+}
+
+.glass-field .date-picker-popup {
+    -fx-background-color: rgba(235, 248, 255, 0.95);
+    -fx-border-color: rgba(144, 205, 244, 0.6);
+}
+
+.glass-field .date-picker-popup .month-year-pane {
+    -fx-background-color: rgba(186, 230, 253, 0.8);
+}
+
+/* ComboBox customization */
+.glass-field .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2d3748;
+}
+
+.glass-field .combo-box-popup .list-view {
+    -fx-background-color: rgba(235, 248, 255, 0.95);
+    -fx-border-color: rgba(144, 205, 244, 0.6);
+}
+
+.glass-field .combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(144, 205, 244, 0.3);
+}
+
+
+.glass-table {
+    -fx-background-color: rgba(235, 248, 255, 0.4);
+    -fx-background-radius: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.15), 10, 0, 0, 4);
+    -fx-border-radius: 14px;
+    -fx-border-color: rgba(191, 219, 254, 0.6);
+    -fx-border-width: 1px;
+}
+
+.glass-table .column-header {
+    -fx-background-color: rgba(144, 205, 244, 0.5);
+    -fx-border-color: rgba(191, 219, 254, 0.4);
+    -fx-border-width: 0 0 1 0;
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-border-radius: 8px 8px 0 0;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c5282;
+    -fx-padding: 10px;
+}
+
+.glass-table .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.glass-table .table-row-cell {
+    -fx-background-color: rgba(235, 248, 255, 0.2);
+    -fx-text-fill: #2d3748;
+    -fx-border-color: rgba(226, 232, 240, 0.4);
+    -fx-border-width: 0 0 1 0;
+}
+
+.glass-table .table-row-cell:odd {
+    -fx-background-color: rgba(235, 248, 255, 0.4);
+}
+
+.glass-table .table-row-cell:hover {
+    -fx-background-color: rgba(144, 205, 244, 0.2);
+}
+
+.glass-table .table-row-cell:selected {
+    -fx-background-color: rgba(144, 205, 244, 0.5);
+    -fx-text-fill: #2d3748;
+}
+
+.glass-table .table-cell {
+    -fx-text-fill: #2d3748;
+    -fx-alignment: center-left;
+    -fx-padding: 10px;
+    -fx-border-color: transparent;
+}
+
+/* Buttons */
+.glass-button {
+    -fx-background-color: rgba(66, 153, 225, 0.6);
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(144, 205, 244, 0.6);
+    -fx-border-width: 1px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 4, 0, 0, 2);
+}
+
+.glass-button:hover {
+    -fx-background-color: rgba(66, 153, 225, 0.8);
+}
+
+.glass-button:pressed {
+    -fx-background-color: rgba(49, 130, 206, 0.8);
+}
+
+.glass-button-secondary {
+    -fx-background-color: rgba(226, 232, 240, 0.6);
+    -fx-text-fill: #4a5568;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(203, 213, 224, 0.6);
+    -fx-border-width: 1px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(203, 213, 224, 0.3), 4, 0, 0, 2);
+}
+
+.glass-button-secondary:hover {
+    -fx-background-color: rgba(226, 232, 240, 0.8);
+}
+
+.glass-button-secondary:pressed {
+    -fx-background-color: rgba(203, 213, 224, 0.8);
+}

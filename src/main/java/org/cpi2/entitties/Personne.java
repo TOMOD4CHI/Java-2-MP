@@ -1,8 +1,8 @@
 package org.cpi2.entitties;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
 public abstract class Personne {
     protected Long id;
     protected String nom;
@@ -12,9 +12,11 @@ public abstract class Personne {
     protected String telephone;
     protected String email;
     protected LocalDateTime dateCreation;
+    protected LocalDate dateNaissance;
 
     protected Personne() {
         this.dateCreation = LocalDateTime.now();
+        this.dateNaissance = LocalDate.now();
     }
 
     protected Personne(String nom, String prenom, String cin, String adresse, String telephone) {
@@ -70,7 +72,6 @@ public abstract class Personne {
     public void setEmail(String email) {
         this.email = email;
     }
-
     public Long getId() {
         return id;
     }
@@ -95,11 +96,18 @@ public abstract class Personne {
         this.prenom = prenom;
     }
 
-    public String getTelephone() {
+        public String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone(String telephone) {
+        public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
     }
 }

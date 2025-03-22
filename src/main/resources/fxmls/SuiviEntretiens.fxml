@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@/css/stylee.css"
+            fx:controller="org.cpi2.controllers.SuiviEntretiens"
+            styleClass="main-container">
+
+    <top>
+        <VBox spacing="10" styleClass="header-container">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <Label text="Suivi des Entretiens" styleClass="title-label"/>
+
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="vehicle-selector">
+                <Label text="Véhicule:" styleClass="selector-label"/>
+                <ComboBox fx:id="vehiculeComboBox" prefWidth="250" promptText="Sélectionner un véhicule"
+                          styleClass="vehicle-combo"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="refreshBtn" text="Actualiser" styleClass="refresh-button"/>
+            </HBox>
+
+            <Separator styleClass="separator"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" styleClass="content-container">
+            <padding>
+                <Insets top="10" right="15" bottom="10" left="15"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-container">
+                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="vehicle-info">
+                    <HBox>
+                        <Label text="Immatriculation: " styleClass="info-label"/>
+                        <Label fx:id="immatriculationLabel" text="--" styleClass="info-value"/>
+                    </HBox>
+                    <HBox>
+                        <Label text="Marque/Modèle: " styleClass="info-label"/>
+                        <Label fx:id="marqueModeleLabel" text="--" styleClass="info-value"/>
+                    </HBox>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="vehicle-stats">
+                    <HBox>
+                        <Label text="Kilométrage actuel: " styleClass="info-label"/>
+                        <Label fx:id="kilometrageLabel" text="--" styleClass="info-value"/>
+                    </HBox>
+                    <HBox>
+                        <Label text="Dernier entretien: " styleClass="info-label"/>
+                        <Label fx:id="dernierEntretienLabel" text="--" styleClass="info-value"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <TableView fx:id="entretiensTable" VBox.vgrow="ALWAYS" styleClass="maintenance-table">
+                <columns>
+                    <TableColumn fx:id="dateCol" text="Date" styleClass="table-column"/>
+                    <TableColumn fx:id="typeCol" text="Type d'entretien" styleClass="table-column"/>
+                    <TableColumn fx:id="descriptionCol" text="Description" styleClass="table-column"/>
+                    <TableColumn fx:id="coutCol" text="Coût" styleClass="table-column"/>
+                    <TableColumn fx:id="factureCol" text="Facture" styleClass="table-column"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <right>
+        <ScrollPane>
+        <VBox spacing="15" styleClass="action-container" prefWidth="350">
+            <padding>
+                <Insets top="20" right="15" bottom="20" left="15"/>
+            </padding>
+
+            <TitledPane text="Actions" expanded="true" styleClass="actions-pane">
+                <VBox spacing="10">
+                    <Button fx:id="ajouterBtn" text="Ajouter un entretien" maxWidth="Infinity"
+                            onAction="#handleAjouterEntretien" styleClass="action-button, add-button"/>
+                    <Button fx:id="modifierBtn" text="Modifier l'entretien" maxWidth="Infinity"
+                            onAction="#handleModifierEntretien" styleClass="action-button, edit-button"/>
+                    <Button fx:id="supprimerBtn" text="Supprimer l'entretien" maxWidth="Infinity"
+                            onAction="#handleSupprimerEntretien" styleClass="action-button, delete-button"/>
+                    <Button fx:id="voirFactureBtn" text="Voir la facture" maxWidth="Infinity"
+                            onAction="#handleVoirFacture" styleClass="action-button, view-button"/>
+                </VBox>
+            </TitledPane>
+
+            <TitledPane fx:id="formEntretienPane" text="Formulaire Entretien" expanded="false"
+                        styleClass="form-pane" VBox.vgrow="ALWAYS">
+                <VBox spacing="10" styleClass="form-container">
+                    <Label text="Date" styleClass="form-label"/>
+                    <DatePicker fx:id="dateEntretienPicker" maxWidth="Infinity" styleClass="form-date"/>
+
+                    <Label text="Type d'entretien" styleClass="form-label"/>
+                    <ComboBox fx:id="typeEntretienCombo" maxWidth="Infinity" styleClass="form-combo"/>
+
+                    <Label text="Description" styleClass="form-label"/>
+                    <TextArea fx:id="descriptionArea" prefHeight="80" wrapText="true" styleClass="form-textarea"/>
+
+                    <Label text="Coût" styleClass="form-label"/>
+                    <TextField fx:id="coutField" styleClass="form-field"/>
+
+                    <Label text="Facture" styleClass="form-label"/>
+                    <HBox spacing="10" styleClass="file-upload">
+                        <TextField fx:id="factureField" HBox.hgrow="ALWAYS"
+                                   editable="false" styleClass="file-field"/>
+                        <Button text="Parcourir..." onAction="#handleChoisirFacture" styleClass="browse-button"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="form-buttons">
+                        <Button fx:id="annulerEntretienBtn" text="Annuler" onAction="#handleAnnulerEntretien"
+                                styleClass="cancel-button"/>
+                        <Button fx:id="enregistrerEntretienBtn" text="Enregistrer" onAction="#handleEnregistrerEntretien"
+                                styleClass="save-button"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+
+            <TitledPane text="Statistiques" expanded="false" styleClass="stats-pane">
+                <VBox spacing="10">
+                    <GridPane hgap="10" vgap="10" styleClass="stats-grid">
+                        <Label text="Coût total:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                               styleClass="stats-label"/>
+                        <Label fx:id="coutTotalLabel" text="0 €" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                               styleClass="stats-value"/>
+
+                        <Label text="Nb d'entretiens:" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                               styleClass="stats-label"/>
+                        <Label fx:id="nbEntretiensLabel" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                               styleClass="stats-value"/>
+
+                        <Label text="Coût moyen:" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                               styleClass="stats-label"/>
+                        <Label fx:id="coutMoyenLabel" text="0 €" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                               styleClass="stats-value"/>
+                    </GridPane>
+                </VBox>
+            </TitledPane>
+        </VBox>
+        </ScrollPane>
+    </right>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="status-bar">
+            <padding>
+                <Insets top="5" right="15" bottom="5" left="15"/>
+            </padding>
+            <Label fx:id="statusEntretienLabel" text="Prêt" HBox.hgrow="ALWAYS" styleClass="status-label"/>
+            <Label fx:id="totalEntretiensLabel" text="Total: 0 entretiens" styleClass="count-label"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

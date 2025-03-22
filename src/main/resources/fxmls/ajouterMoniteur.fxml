@@ -39,8 +39,10 @@
         <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="form-field"/>
 
         <Label text="Date d'embauche:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="form-label"/>
-        <DatePicker fx:id="dateEmbaucheField" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="form-field"/>
+        <DatePicker fx:id="dateEmbaucheField" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="datepick"/>
 
+        <Label text="Type de Permis:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="form-label"/>
+        <ComboBox fx:id="typePermisComboBox" GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="form-field"/>
 
     </GridPane>
 

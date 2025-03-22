@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@/css/stylee.css"
+            fx:controller="org.cpi2.controllers.GestionVehicule"
+            styleClass="main-container">
+
+
+    <top>
+        <VBox spacing="10" styleClass="header-container">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <Label text="Gestion des Véhicules" styleClass="title-label"/>
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="search-container">
+                <TextField fx:id="rechercheField" promptText="Rechercher un véhicule..."
+                           HBox.hgrow="ALWAYS" styleClass="search-field"/>
+                <Button text="Rechercher" styleClass="search-button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" styleClass="content-container">
+            <padding>
+                <Insets top="10" right="15" bottom="10" left="15"/>
+            </padding>
+
+            <TableView fx:id="vehiculesTable" VBox.vgrow="ALWAYS" styleClass="vehicles-table">
+                <columns>
+                    <TableColumn fx:id="immatriculationCol" text="Immatriculation" styleClass="table-column"/>
+                    <TableColumn fx:id="typeVehiculeCol" text="Type de véhicule" styleClass="table-column"/>
+                    <TableColumn fx:id="marqueModeleCol" text="Marque / Modèle" styleClass="table-column"/>
+                    <TableColumn fx:id="kilometrageCol" text="Kilométrage actuel" styleClass="table-column"/>
+                    <TableColumn fx:id="prochainEntretienCol" text="Prochain entretien" styleClass="table-column"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <right>
+        <ScrollPane>
+        <VBox spacing="15" styleClass="action-container" prefWidth="400">
+            <padding>
+                <Insets top="20" right="15" bottom="20" left="15"/>
+            </padding>
+
+            <TitledPane text="Actions" expanded="true" styleClass="actions-pane">
+                <VBox spacing="10">
+                    <Button fx:id="ajouterBtn" text="Ajouter un véhicule" maxWidth="Infinity"
+                            onAction="#handleAjouterVehicule" styleClass="action-button, add-button"/>
+                    <Button fx:id="modifierBtn" text="Modifier le véhicule" maxWidth="Infinity"
+                            onAction="#handleModifierVehicule" styleClass="action-button, edit-button"/>
+                    <Button fx:id="supprimerBtn" text="Supprimer le véhicule" maxWidth="Infinity"
+                            onAction="#handleSupprimerVehicule" styleClass="action-button, delete-button"/>
+                    <Button fx:id="detailsBtn" text="Voir détails" maxWidth="Infinity"
+                            onAction="#handleVoirDetails" styleClass="action-button, details-button"/>
+                </VBox>
+            </TitledPane>
+
+            <TitledPane fx:id="formPane" text="Formulaire Véhicule" expanded="false"
+                        styleClass="form-pane" VBox.vgrow="ALWAYS">
+                <VBox spacing="10" styleClass="form-container">
+                    <Label text="Immatriculation" styleClass="form-label"/>
+                    <TextField fx:id="immatriculationField" styleClass="form-field"/>
+
+                    <Label text="Type de véhicule" styleClass="form-label"/>
+                    <ComboBox fx:id="typeVehiculeCombo" maxWidth="Infinity" styleClass="form-combo"/>
+
+                    <Label text="Marque" styleClass="form-label"/>
+                    <TextField fx:id="marqueField" styleClass="form-field"/>
+
+                    <Label text="Modèle" styleClass="form-label"/>
+                    <TextField fx:id="modeleField" styleClass="form-field"/>
+
+                    <Label text="Kilométrage initial" styleClass="form-label"/>
+                    <TextField fx:id="kilometrageField" styleClass="form-field"/>
+
+                    <Label text="Date de mise en service" styleClass="form-label"/>
+                    <DatePicker fx:id="dateMiseServicePicker" maxWidth="Infinity" styleClass="form-date"/>
+
+                    <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="form-buttons">
+                        <Button fx:id="annulerBtn" text="Annuler" onAction="#handleAnnuler"
+                                styleClass="cancel-button"/>
+                        <Button fx:id="enregistrerBtn" text="Enregistrer" onAction="#handleEnregistrer"
+                                styleClass="save-button"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+        </VBox>
+        </ScrollPane>
+    </right>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="status-bar">
+            <padding>
+                <Insets top="5" right="15" bottom="5" left="15"/>
+            </padding>
+            <Label fx:id="statusLabel" text="Prêt" HBox.hgrow="ALWAYS" styleClass="status-label"/>
+            <Label fx:id="totalVehiculesLabel" text="Total: 0 véhicules" styleClass="count-label"/>
+        </HBox>
+    </bottom>
+
+
+
+</BorderPane>

@@ -30,10 +30,7 @@ public class Progression {
     @FXML private ProgressBar progressionTotaleBar;
     @FXML private Label progressionPourcentageLabel;
     
-    @FXML private TableView<Seance> seancesTableView;
-    @FXML private TableColumn<Seance, String> typeSeanceColumn;
-    @FXML private TableColumn<Seance, LocalDate> dateSeanceColumn;
-    @FXML private TableColumn<Seance, String> statutSeanceColumn;
+
     
     @FXML private PieChart progressionPieChart;
     @FXML private BarChart<String, Number> progressionBarChart;
@@ -42,33 +39,22 @@ public class Progression {
 
     @FXML
     public void initialize() {
-        // Initialize the period comboBox
-        periodeComboBox.getItems().addAll(
-            "Dernière semaine",
-            "Dernier mois",
-            "Derniers 3 mois",
-            "Tout"
-        );
-        periodeComboBox.getSelectionModel().select("Tout");
+
         
-        // Setup mock data for charts
+      
         setupMockData();
     }
 
     @FXML
     private void rechercheCandidatAction() {
-        // In a real app, this would search for the candidate in the database
+        // In a real app, this would search for the candidate in the database and show the data in the disgnated fields
         // For this example, we'll just populate with mock data
         if (!candidatIdField.getText().isEmpty()) {
             loadCandidatInfo();
         }
     }
     
-    @FXML
-    private void refreshChartsAction() {
-        // This would refresh the charts based on the selected period
-        setupMockData();
-    }
+
     
     @FXML
     private void exportPdfAction() {
@@ -76,7 +62,7 @@ public class Progression {
     }
     
     private void loadCandidatInfo() {
-        // Mock data
+        // Mock data after the services are completetd this will fetch the data of id given
         nomField.setText("Dupont");
         prenomField.setText("Jean");
         typePermisField.setText("B");
@@ -92,12 +78,12 @@ public class Progression {
         progressionTotaleBar.setProgress(progress);
         progressionPourcentageLabel.setText(String.format("%.1f%%", progress * 100));
         
-        // Update charts
+
         setupMockData();
     }
-    // ce la va etre remplir avec des informations du base de donnees
+
     private void setupMockData() {
-        // Setup Pie Chart data
+
         progressionPieChart.getData().clear();
         progressionPieChart.getData().addAll(
             new PieChart.Data("Séances Code Complètes", 8),
@@ -106,7 +92,7 @@ public class Progression {
             new PieChart.Data("Séances Conduite Restantes", 8)
         );
         
-        // Setup Bar Chart data
+
         progressionBarChart.getData().clear();
         
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
@@ -121,21 +107,6 @@ public class Progression {
         
         progressionBarChart.getData().addAll(series1, series2);
     }
-    
-    // Inner class to represent a seance (for TableView)
-    public static class Seance {
-        private String type;
-        private LocalDate date;
-        private String statut;
-        
-        public Seance(String type, LocalDate date, String statut) {
-            this.type = type;
-            this.date = date;
-            this.statut = statut;
-        }
-        
-        public String getType() { return type; }
-        public LocalDate getDate() { return date; }
-        public String getStatut() { return statut; }
-    }
+
+
 }

@@ -13,7 +13,7 @@
            fx:controller="org.cpi2.controllers.AjouterCandidat"
            stylesheets="@/css/style.css">
 
-    <VBox spacing="15" alignment="CENTER" styleClass="form-container">
+    <VBox spacing="15" alignment="CENTER" styleClass="form-container" prefWidth="400">
 
         <Label text="Inscription" styleClass="form-title"/>
 
@@ -33,7 +33,7 @@
             <TextField fx:id="cinField" promptText="Enter Age" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
             <Label text="Type permis :" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-            <ComboBox fx:id="typeComboBox" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <ComboBox fx:id="typeComboBox"  GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="200">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Moto" />

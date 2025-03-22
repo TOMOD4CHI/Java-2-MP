@@ -3,8 +3,13 @@ package org.cpi2.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.cpi2.service.CandidatService;
+import org.cpi2.entitties.Candidat;
+import org.cpi2.entitties.TypePermis;
 
 public class ModifierCandidat {
+    private final CandidatService candidatService = new CandidatService();
+    private Candidat candidatToModify;
 
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
@@ -14,17 +19,30 @@ public class ModifierCandidat {
     @FXML private ComboBox<String> typeComboBox;
 
     public void initialize() {
-        // Load candidate details (e.g., from database)
-        nomField.setText("Exemple Nom");
-        prenomField.setText("Exemple Prénom");
-        cinField.setText("12345678");
-        addressField.setText("Exemple Adresse");
-        phoneField.setText("123456789");
-        typeComboBox.setValue("Voiture");
+        // Initialize type permis options
+        for (TypePermis type : TypePermis.values()) {
+            typeComboBox.getItems().add(type.name());
+        }
+    }
+
+    public void setCandidatToModify(Candidat candidat) {
+        this.candidatToModify = candidat;
+        if (candidat != null) {
+            nomField.setText(candidat.getNom());
+            prenomField.setText(candidat.getPrenom());
+            cinField.setText(candidat.getCin());
+            addressField.setText(candidat.getAdresse());
+            phoneField.setText(candidat.getTelephone());
+        }
     }
 
     @FXML
     private void confirmAction() {
+        if (candidatToModify == null) {
+            showAlert("Erreur", "Aucun candidat sélectionné pour la modification.");
+            return;
+        }
+
         String nom = nomField.getText();
         String prenom = prenomField.getText();
         String cin = cinField.getText();
@@ -37,23 +55,28 @@ public class ModifierCandidat {
             return;
         }
 
-        // Logic to update candidate (e.g., saving the data)
-        showSuccessMessage();
+        try {
+            // Update the candidate object with new values
+            candidatToModify.setNom(nom);
+            candidatToModify.setPrenom(prenom);
+            candidatToModify.setCin(cin);
+            candidatToModify.setAdresse(address);
+            candidatToModify.setTelephone(phone);
 
-        // Optionally, you can leave the stage open if desired.
-        // Stage stage = (Stage) nomField.getScene().getWindow();
-        // stage.close(); // Do not close the window.
+            if (candidatService.updateCandidat(candidatToModify)) {
+                showSuccessMessage();
+                closeWindow();
+            } else {
+                showAlert("Erreur", "La mise à jour du candidat a échoué.");
+            }
+        } catch (Exception e) {
+            showAlert("Erreur", "Une erreur est survenue lors de la mise à jour: " + e.getMessage());
+        }
     }
 
     @FXML
     private void cancelAction() {
-       nomField.clear();
-       prenomField.clear();
-       cinField.clear();
-       addressField.clear();
-       phoneField.clear();
-       typeComboBox.setValue(null);
-
+        closeWindow();
     }
 
     private void showAlert(String title, String message) {
