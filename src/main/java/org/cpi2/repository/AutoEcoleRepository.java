@@ -31,7 +31,7 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
                 autoEcole.setTelephone(rs.getString("telephone"));
                 autoEcole.setEmail(rs.getString("email"));
                 autoEcole.setDirecteur(rs.getString("directeur"));
-                autoEcole.setLogo(rs.getString("logo"));
+                autoEcole.setLogo(rs.getString("logo_path"));
                 return Optional.of(autoEcole);
             }
 
@@ -61,7 +61,7 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
                 autoEcole.setTelephone(rs.getString("telephone"));
                 autoEcole.setEmail(rs.getString("email"));
                 autoEcole.setDirecteur(rs.getString("directeur"));
-                autoEcole.setLogo(rs.getString("logo"));
+                autoEcole.setLogo(rs.getString("logo_path"));
                 return autoEcole;
             }
         }
@@ -88,7 +88,7 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
                 autoEcole.setTelephone(rs.getString("telephone"));
                 autoEcole.setEmail(rs.getString("email"));
                 autoEcole.setDirecteur(rs.getString("directeur"));
-                autoEcole.setLogo(rs.getString("logo"));
+                autoEcole.setLogo(rs.getString("logo_path"));
                 ecoles.add(autoEcole);
             }
 
@@ -99,7 +99,7 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
     }
 
     public boolean save(AutoEcole autoEcole) {
-        String sql = "INSERT INTO auto_ecole (nom, adresse, telephone, email, directeur, logo) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO auto_ecole (nom, adresse, telephone, email, directeur, logo_path) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -128,7 +128,7 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
     }
 
     public boolean update(AutoEcole autoEcole) {
-        String sql = "UPDATE auto_ecole SET nom = ?, adresse = ?, telephone = ?, email = ?, directeur = ?, logo = ? WHERE id = ?";
+        String sql = "UPDATE auto_ecole SET nom = ?, adresse = ?, telephone = ?, email = ?, directeur = ?, logo_path = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

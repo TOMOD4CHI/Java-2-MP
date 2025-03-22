@@ -20,6 +20,9 @@ public class SessionConduite extends Session {
         this.kilometresParcourus = 0;
     }
 
+    public SessionConduite(long planId, LocalDate dateSession, LocalTime heureDebut, long minutes, Moniteur moniteur, Vehicule vehicule, Location pointRencontre) {
+    }
+
     public Integer getKilometresParcourus() {
         return kilometresParcourus;
     }

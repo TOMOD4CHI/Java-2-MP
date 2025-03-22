@@ -93,7 +93,7 @@ public class Vehicule {
     }
 
     // Getters and Setters
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -228,6 +228,11 @@ public class Vehicule {
     @Override
     public String toString() {
         return immatriculation + " - " + marque + " " + modele;
+    }
+
+    public Integer getKilometrageAvantEntretien() {
+        // TODO : add it
+        return 0;
     }
 }
 

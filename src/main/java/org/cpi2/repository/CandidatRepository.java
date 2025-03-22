@@ -123,7 +123,16 @@ public class CandidatRepository {
             stmt.setString(5, candidat.getTelephone());
             stmt.setString(6, candidat.getEmail());
             stmt.setDate(7, Date.valueOf(candidat.getDateNaissance()));
-            stmt.setInt(8, candidat.getTypePermis().ordinal() + 1);
+            
+            // Map TypePermis enum to database IDs based on the code value
+            int typePermisId;
+            switch(candidat.getTypePermis()) {
+                case A: typePermisId = 1; break;  // Moto
+                case B: typePermisId = 2; break;  // Voiture
+                case C: typePermisId = 3; break;  // Camion
+                default: typePermisId = 2; break; // Default to Voiture (B) if not found
+            }
+            stmt.setInt(8, typePermisId);
             stmt.setLong(9, candidat.getId());
 
             int affectedRows = stmt.executeUpdate();

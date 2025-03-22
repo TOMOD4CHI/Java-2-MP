@@ -136,7 +136,7 @@ public class MoniteurRepository {
             }
 
             // Delete existing specialites
-            String deleteSql = "DELETE FROM moniteur_specialite WHERE id_moniteur = ?";
+            String deleteSql = "DELETE FROM moniteur_specialite WHERE moniteur_id = ?";
             try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
                 deleteStmt.setLong(1, moniteur.getId());
                 deleteStmt.executeUpdate();
@@ -167,8 +167,8 @@ public class MoniteurRepository {
 
     private void loadSpecialites(Connection conn, Moniteur moniteur) throws SQLException {
         String sql = "SELECT tp.code FROM type_permis tp " +
-                    "JOIN moniteur_specialite ms ON tp.id = ms.id_type_permis " +
-                    "WHERE ms.id_moniteur = ?";
+                    "JOIN moniteur_specialite ms ON tp.id = ms.type_permis_id " +
+                    "WHERE ms.moniteur_id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, moniteur.getId());
@@ -181,7 +181,7 @@ public class MoniteurRepository {
     }
 
     private boolean saveSpecialites(Connection conn, Moniteur moniteur) throws SQLException {
-        String sql = "INSERT INTO moniteur_specialite (id_moniteur, id_type_permis) VALUES (?, ?)";
+        String sql = "INSERT INTO moniteur_specialite (moniteur_id, type_permis_id) VALUES (?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             for (TypePermis specialite : moniteur.getSpecialites()) {

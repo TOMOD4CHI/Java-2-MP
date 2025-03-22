@@ -60,6 +60,7 @@ CREATE TABLE `candidat` (
   `telephone` varchar(20) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
   `date_naissance` date DEFAULT NULL,
+  `type_permis` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -459,7 +460,8 @@ ALTER TABLE `auto_ecole`
 ALTER TABLE `candidat`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `cin` (`cin`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `fk_candidat_type_permis` (`type_permis`);
 
 --
 -- Indexes for table `document`
@@ -741,6 +743,12 @@ ALTER TABLE `vehicule`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `candidat`
+--
+ALTER TABLE `candidat`
+  ADD CONSTRAINT `fk_candidat_type_permis` FOREIGN KEY (`type_permis`) REFERENCES `type_permis` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `document`

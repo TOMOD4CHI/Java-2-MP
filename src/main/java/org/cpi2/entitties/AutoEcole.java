@@ -31,6 +31,16 @@ public class AutoEcole {
         this.logo = logo;
     }
 
+    public AutoEcole(int id, String nom, String adresse, String telephone, String email, String logo) {
+        this();
+        this.id = id;
+        this.nom = nom;
+        this.adresse = adresse;
+        this.telephone = telephone;
+        this.email = email;
+        this.logo = logo;
+    }
+
     public int getId() {
         return id;
     }

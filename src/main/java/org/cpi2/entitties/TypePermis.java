@@ -24,4 +24,8 @@ public enum TypePermis {
     public String getDescription() {
         return description;
     }
+
+    public String getLibelle() {
+        return this.name();
+    }
 }

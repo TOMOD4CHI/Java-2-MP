@@ -33,6 +33,9 @@ public class Entretien {
         this.createdAt = LocalDate.now();
     }
 
+    public Entretien(LocalDate dateEntretien, String typeEntretien, double cout) {
+    }
+
     // Getters and Setters
     public int getId() {
         return id;

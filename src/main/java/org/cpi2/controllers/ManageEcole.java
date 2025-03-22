@@ -2,6 +2,7 @@ package org.cpi2.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +17,7 @@ import org.cpi2.service.AutoEcoleService;
 
 import java.io.*;
 import java.net.URL;
+import java.security.cert.Extension;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -64,17 +66,18 @@ public class ManageEcole implements Initializable {
         logoImageView.setEffect(dropShadow);
         
         // Center all buttons
-        buttonContainer.setAlignment(javafx.geometry.Pos.CENTER);
-        editButtonsContainer.setAlignment(javafx.geometry.Pos.CENTER);
+        buttonContainer.setAlignment(Pos.CENTER);
+        editButtonsContainer.setAlignment(Pos.CENTER);
         
         // Initially show info container and hide edit container
         showEditMode(false);
         
         // Load auto ecole data
-        loadAutoEcole();
+        Extension selectedEcole = null;
+        loadAutoEcole(Integer.parseInt(selectedEcole.getId()));
     }
     
-    private void loadAutoEcole() {
+    void loadAutoEcole(int id) {
         try {
             currentAutoEcole = autoEcoleService.getAutoEcole();
             
@@ -140,7 +143,7 @@ public class ManageEcole implements Initializable {
     }
     
     @FXML
-    private void handleModifier() {
+    void handleModifier() {
         showEditMode(true);
     }
     

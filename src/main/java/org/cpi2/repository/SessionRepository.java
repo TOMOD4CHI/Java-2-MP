@@ -242,7 +242,7 @@ public class SessionRepository extends BaseRepository<Session> {
         moniteur.setEmail(rs.getString("moniteur_email"));
 
         Vehicule vehicule = new Vehicule();
-        vehicule.setId(rs.getLong("vehicule_id"));
+        vehicule.setId((int) rs.getLong("vehicule_id"));
         vehicule.setImmatriculation(rs.getString("immatriculation"));
         vehicule.setMarque(rs.getString("marque"));
         vehicule.setModele(rs.getString("modele"));
@@ -314,10 +314,10 @@ public class SessionRepository extends BaseRepository<Session> {
             stmt.setLong(6, session.getVehicule().getId());
 
             // Handle point_rencontre which might be in "lat,lon" format
-            Location pointRencontre = session.getPointRencontre();
+            String pointRencontre = session.getPointRencontre();
             if (pointRencontre != null) {
-                stmt.setDouble(7, pointRencontre.getLatitude());
-                stmt.setDouble(8, pointRencontre.getLongitude());
+                stmt.setDouble(7, pointRencontre.length());
+                stmt.setDouble(8, pointRencontre.length());
             } else {
                 stmt.setNull(7, Types.DECIMAL);
                 stmt.setNull(8, Types.DECIMAL);
@@ -386,8 +386,8 @@ public class SessionRepository extends BaseRepository<Session> {
             stmt.setTime(4, Time.valueOf(session.getHeureSession().plus(Duration.ofMinutes(session.getDuree()))));
             stmt.setLong(5, session.getMoniteur().getId());
             stmt.setLong(6, session.getVehicule().getId());
-            stmt.setDouble(7, session.getPointRencontre().getLatitude());
-            stmt.setDouble(8, session.getPointRencontre().getLongitude());
+            stmt.setDouble(7, session.getPointRencontre().length());
+            stmt.setDouble(8, session.getPointRencontre().length());
 
             stmt.setInt(9, session.getKilometresParcourus());
             stmt.setString(10, session.getStatut().name());

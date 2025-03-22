@@ -35,7 +35,7 @@ public class VehiculeService {
      * @param id The vehicle ID
      * @return Optional containing the vehicle if found
      */
-    public Optional<Vehicule> getVehiculeById(int id) {
+    public Optional<Vehicule> getVehiculeById(long id) {
         return vehiculeRepository.findById(id);
     }
 
@@ -74,8 +74,8 @@ public class VehiculeService {
         }
 
         try {
-            Vehicule savedVehicule = vehiculeRepository.save(vehicule);
-            return savedVehicule != null;
+            boolean savedVehicule = vehiculeRepository.save(vehicule);
+            return savedVehicule;
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error adding vehicle", e);
             return false;
@@ -124,12 +124,12 @@ public class VehiculeService {
     public boolean supprimerVehicule(int id) {
         try {
             // Check if vehicle exists
-            if (vehiculeRepository.findById(id).isEmpty()) {
+            if (vehiculeRepository.findById((long) id).isEmpty()) {
                 LOGGER.log(Level.WARNING, "Vehicle with ID " + id + " not found");
                 return false;
             }
 
-            return vehiculeRepository.delete(id);
+            return vehiculeRepository.delete((long) id);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error deleting vehicle", e);
             return false;
@@ -149,16 +149,16 @@ public class VehiculeService {
 
         try {
             // Check if vehicle exists
-            Optional<Vehicule> vehicule = vehiculeRepository.findById(vehiculeId);
+            Optional<Vehicule> vehicule = vehiculeRepository.findById((long) vehiculeId);
             if (vehicule.isEmpty()) {
                 LOGGER.log(Level.WARNING, "Vehicle with ID " + vehiculeId + " not found");
                 return false;
             }
 
             entretien.setVehiculeId(vehiculeId);
-            Entretien savedEntretien = vehiculeRepository.saveEntretien(entretien);
+            boolean savedEntretien = vehiculeRepository.saveEntretien((long)vehiculeId,entretien);
             
-            if (savedEntretien != null) {
+            if (savedEntretien != false) {
                 // Update vehicle maintenance information
                 Vehicule updatedVehicule = vehicule.get();
                 updatedVehicule.setKilometrageTotal(entretien.getKilometrageActuel());
@@ -181,7 +181,7 @@ public class VehiculeService {
      * @return List of maintenance records
      */
     public List<Entretien> getEntretiens(int vehiculeId) {
-        return vehiculeRepository.getEntretiensByVehiculeId(vehiculeId);
+        return vehiculeRepository.getEntretiensByVehiculeId((long) vehiculeId);
     }
 
     /**

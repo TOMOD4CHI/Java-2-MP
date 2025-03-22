@@ -80,4 +80,12 @@ public abstract class Session {
     public void setTypeSession(TypeSession typeSession) {
         this.typeSession = typeSession;
     }
+
+    public long getPlanId() {
+        return 0;
+    }
+
+    public long getDuree() {
+        return 0;
+    }
 }

@@ -188,4 +188,8 @@ public class Seance {
                 ", temps='" + temps + '\'' +
                 '}';
     }
-} 
+
+    public CharSequence getStatut() {
+        return null;
+    }
+}

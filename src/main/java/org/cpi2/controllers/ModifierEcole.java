@@ -1,10 +1,13 @@
 package org.cpi2.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.cpi2.entitties.AutoEcole;
@@ -19,16 +22,18 @@ import java.util.regex.Pattern;
 
 public class ModifierEcole {
 
-    public TextField nomField;
-    public TextField adresseField;
-    public TextField telephoneField;
-    public TextField emailField;
-    public ImageView logoImageView;
+    @FXML public TextField nomField;
+    @FXML public TextField adresseField;
+    @FXML public TextField telephoneField;
+    @FXML public TextField emailField;
+    @FXML public ImageView logoImageView;
+    @FXML public Label validationMessageLabel;
 
     private Image logoImage;
     private String logoPath;
     private final AutoEcoleService autoEcoleService = new AutoEcoleService();
     private AutoEcole currentAutoEcole;
+    private AutoEcole originalAutoEcole; // For reset functionality
 
     // Validation patterns
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
@@ -55,7 +60,7 @@ public class ModifierEcole {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
+
     private void showSuccessAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -63,44 +68,135 @@ public class ModifierEcole {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
+
     // Method to set an auto-ecole to modify from the list view
     public void setAutoEcoleToModify(AutoEcole autoEcole) {
         if (autoEcole != null) {
             this.currentAutoEcole = autoEcole;
-            
-            // Fill the fields with the selected auto-ecole data
-            nomField.setText(autoEcole.getNom());
-            adresseField.setText(autoEcole.getAdresse());
-            telephoneField.setText(autoEcole.getTelephone());
-            emailField.setText(autoEcole.getEmail());
 
-            // Load the logo if it exists
-            logoPath = autoEcole.getLogo();
-            if (logoPath != null && !logoPath.isEmpty()) {
-                try {
-                    File logoFile = new File(logoPath);
-                    if (logoFile.exists()) {
-                        logoImage = new Image(logoFile.toURI().toString());
-                        logoImageView.setImage(logoImage);
-                        logoImageView.getStyleClass().add("logo-image");
-                        // Apply dropshadow effect
-                        logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
-                    }
-                } catch (Exception e) {
-                    showAlert("Erreur", "Impossible de charger le logo: " + e.getMessage());
-                }
-            } else {
-                logoImageView.setImage(null);
-            }
+            // Create a clone of the original auto-ecole for reset functionality
+            this.originalAutoEcole = new AutoEcole(
+                    autoEcole.getId(),
+                    autoEcole.getNom(),
+                    autoEcole.getAdresse(),
+                    autoEcole.getTelephone(),
+                    autoEcole.getEmail(),
+                    autoEcole.getLogo()
+            );
+
+            // Load data into the form with visual styling
+            populateFormFields();
         }
+    }
+
+    private void populateFormFields() {
+        // Fill the fields with the current auto-ecole data
+        nomField.setText(currentAutoEcole.getNom());
+        adresseField.setText(currentAutoEcole.getAdresse());
+        telephoneField.setText(currentAutoEcole.getTelephone());
+        emailField.setText(currentAutoEcole.getEmail());
+
+        // Style fields with current values
+        styleFieldsForEditing();
+
+        // Load the logo if it exists
+        logoPath = currentAutoEcole.getLogo();
+        if (logoPath != null && !logoPath.isEmpty()) {
+            try {
+                File logoFile = new File(logoPath);
+                if (logoFile.exists()) {
+                    logoImage = new Image(logoFile.toURI().toString());
+                    logoImageView.setImage(logoImage);
+                    logoImageView.getStyleClass().add("logo-image");
+                    // Apply dropshadow effect
+                    logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
+                }
+            } catch (Exception e) {
+                showAlert("Erreur", "Impossible de charger le logo: " + e.getMessage());
+            }
+        } else {
+            logoImageView.setImage(null);
+        }
+
+        // Clear any validation messages
+        validationMessageLabel.setText("");
+    }
+
+    private void styleFieldsForEditing() {
+        // Add visual cues for modification
+        nomField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals(originalAutoEcole.getNom())) {
+                nomField.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 2px;");
+            } else {
+                nomField.setStyle("");
+            }
+        });
+
+        adresseField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals(originalAutoEcole.getAdresse())) {
+                adresseField.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 2px;");
+            } else {
+                adresseField.setStyle("");
+            }
+        });
+
+        telephoneField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals(originalAutoEcole.getTelephone())) {
+                telephoneField.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 2px;");
+            } else {
+                telephoneField.setStyle("");
+            }
+        });
+
+        emailField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals(originalAutoEcole.getEmail())) {
+                emailField.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 2px;");
+            } else {
+                emailField.setStyle("");
+            }
+        });
     }
 
     // Initialize the controller with existing data
     public void initialize() {
-        // This method will be called by JavaFX when the FXML is loaded
-        // We will now rely on setAutoEcoleToModify to be called after initialization
-        // if the controller is being used to modify an existing auto-école
+        // Add input validation as users type
+        setupFieldValidation();
+    }
+
+    private void setupFieldValidation() {
+        // Real-time validation feedback
+        nomField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty() && !isValidName(newValue)) {
+                showValidationMessage("Le nom doit contenir uniquement des lettres et des espaces");
+            } else {
+                clearValidationMessage();
+            }
+        });
+
+        telephoneField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty() && !isValidPhone(newValue)) {
+                showValidationMessage("Le téléphone doit contenir exactement 8 chiffres");
+            } else {
+                clearValidationMessage();
+            }
+        });
+
+        emailField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty() && !isValidEmail(newValue)) {
+                showValidationMessage("Format email invalide");
+            } else {
+                clearValidationMessage();
+            }
+        });
+    }
+
+    private void showValidationMessage(String message) {
+        validationMessageLabel.setText(message);
+        validationMessageLabel.setTextFill(Color.RED);
+    }
+
+    private void clearValidationMessage() {
+        validationMessageLabel.setText("");
     }
 
     // Handle file upload for the logo
@@ -131,12 +227,46 @@ public class ModifierEcole {
                 logoImage = new Image(file.toURI().toString());
                 logoImageView.setImage(logoImage);
                 logoImageView.getStyleClass().add("logo-image");
-                
+
                 // Apply dropshadow effect
                 logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
             } catch (Exception e) {
                 showAlert("Erreur", "Impossible de charger l'image: " + e.getMessage());
             }
+        }
+    }
+
+    // Handle reset button - restore original values
+    public void handleReset(ActionEvent event) {
+        if (originalAutoEcole != null) {
+            // Reset to original values
+            nomField.setText(originalAutoEcole.getNom());
+            adresseField.setText(originalAutoEcole.getAdresse());
+            telephoneField.setText(originalAutoEcole.getTelephone());
+            emailField.setText(originalAutoEcole.getEmail());
+
+            // Reset logo if it was changed
+            if (originalAutoEcole.getLogo() != null && !originalAutoEcole.getLogo().isEmpty()) {
+                try {
+                    File logoFile = new File(originalAutoEcole.getLogo());
+                    if (logoFile.exists()) {
+                        logoImage = new Image(logoFile.toURI().toString());
+                        logoImageView.setImage(logoImage);
+                        logoPath = originalAutoEcole.getLogo();
+                    }
+                } catch (Exception e) {
+                    showAlert("Erreur", "Impossible de restaurer le logo original: " + e.getMessage());
+                }
+            }
+
+            // Clear styles
+            nomField.setStyle("");
+            adresseField.setStyle("");
+            telephoneField.setStyle("");
+            emailField.setStyle("");
+
+            // Clear validation messages
+            clearValidationMessage();
         }
     }
 
@@ -191,12 +321,12 @@ public class ModifierEcole {
         if (logoPath != null) {
             currentAutoEcole.setLogo(logoPath);
         }
-        
+
         boolean success = autoEcoleService.updateAutoEcole(currentAutoEcole);
 
         if (success) {
             showSuccessAlert("Succès", "Les informations de l'école ont été modifiées avec succès!");
-            
+
             // Close the window after successful update
             Stage stage = (Stage) nomField.getScene().getWindow();
             stage.close();

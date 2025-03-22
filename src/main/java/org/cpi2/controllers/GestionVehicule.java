@@ -168,7 +168,7 @@ public class GestionVehicule implements Initializable {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                if (vehiculeService.supprimerVehicule(vehiculeSelected.getId())) {
+                if (vehiculeService.supprimerVehicule((int) vehiculeSelected.getId())) {
                     vehiculesList.remove(vehiculeSelected);
                     mettreAJourTotal();
                     statusLabel.setText("Véhicule supprimé");

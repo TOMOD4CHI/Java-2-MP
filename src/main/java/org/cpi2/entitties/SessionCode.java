@@ -23,6 +23,9 @@ public class SessionCode extends Session {
         this.participants = new ArrayList<>();
     }
 
+    public SessionCode(LocalDate dateSession, LocalTime heureDebut, long minutes, Moniteur moniteur, int planId, int capaciteMax) {
+    }
+
     public Integer getCapaciteMax() {
         return capaciteMax;
     }

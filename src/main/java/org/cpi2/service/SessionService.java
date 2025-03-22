@@ -1,6 +1,9 @@
 package service;
-import entitties.*;
-import repository.SessionRepository;
+
+
+import org.cpi2.entitties.SessionCode;
+import org.cpi2.entitties.SessionConduite;
+import org.cpi2.repository.SessionRepository;
 
 import java.util.List;
 
