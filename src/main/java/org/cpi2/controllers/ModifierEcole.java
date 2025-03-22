@@ -82,6 +82,7 @@ public class ModifierEcole {
             }
         } else {
             showAlert("Erreur", "Aucune école trouvée à modifier.");
+            //ig ken mfmch auto ecole ywali redirectih ll ajout mais m ynjmch y acceder ll ajout w7dou snn n7esh mch logic l7keya
         }
     }
 

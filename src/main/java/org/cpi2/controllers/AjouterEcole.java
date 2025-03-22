@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
-public class AjouterEcole {
+public class    AjouterEcole {
 
     public TextField nomField;
     public TextField adresseField;
@@ -148,6 +148,7 @@ public class AjouterEcole {
         autoEcole.setLogoPath(logoPath);
 
         // Save the auto école
+        //autoEcoleService.deleteAutoEcole();
         boolean success = autoEcoleService.saveAutoEcole(autoEcole);
 
         if (success) {

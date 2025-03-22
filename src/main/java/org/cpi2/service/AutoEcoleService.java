@@ -7,6 +7,7 @@ public class AutoEcoleService {
     private final AutoEcoleRepository autoEcoleRepo = new AutoEcoleRepository();
 
     public boolean saveAutoEcole(AutoEcole autoEcole) {
+        deleteAutoEcole();
         return autoEcoleRepo.save(autoEcole);
     }
 
@@ -67,5 +68,8 @@ public class AutoEcoleService {
             }
         }
         return false;
+    }
+    public boolean deleteAutoEcole() {
+        return autoEcoleRepo.delete();
     }
 }

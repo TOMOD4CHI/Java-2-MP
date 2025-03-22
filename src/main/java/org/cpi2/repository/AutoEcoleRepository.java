@@ -37,7 +37,7 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
     }
 
     public boolean save(AutoEcole autoEcole) {
-        String sql = "INSERT INTO auto_ecole (nom, adresse, telephone, email, logo_path) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO auto_ecole (id,nom, adresse, telephone, email, logo_path) VALUES (0,?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -84,13 +84,11 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
         }
     }
 
-    public boolean delete(long id) {
-        String sql = "DELETE FROM auto_ecole WHERE id = ?";
+    public boolean delete() {
+        String sql = "DELETE FROM auto_ecole WHERE id != 0";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting auto école", e);

@@ -6,12 +6,18 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.cpi2.entitties.Inscription;
 import org.cpi2.service.CandidatService;
 import org.cpi2.entitties.Candidat;
 import org.cpi2.entitties.TypePermis;
+import org.cpi2.service.InscriptionService;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class AjouterCandidat {
     private final CandidatService candidatService = new CandidatService();
+    private final InscriptionService inscriptionService = new InscriptionService();
 
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
@@ -56,13 +62,21 @@ public class AjouterCandidat {
         }
 
         try {
+            Inscription inscription = new Inscription();
             Candidat candidat = new Candidat();
             candidat.setNom(nomField.getText());
             candidat.setPrenom(prenomField.getText());
             candidat.setCin(cinField.getText());
-
             candidat.setAdresse(addressField.getText());
             candidat.setTelephone(phoneField.getText());
+
+            inscription.setCin(candidat.getCin());
+            inscription.setPaymentStatus(false);
+            inscription.setStatus("En Cours");
+            inscription.setPaymentCycle("Non défini");
+            inscription.setInscriptioDate(Date.valueOf(LocalDate.now()));
+            //inscription.setPlan(typeComboBox.getSelectionModel().getSelectedIndex());
+
 
             if (candidatService.addCandidat(candidat)) {
                 Alert alert = new Alert(AlertType.INFORMATION);
