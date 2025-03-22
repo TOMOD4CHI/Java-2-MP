@@ -12,6 +12,23 @@ import java.util.logging.Level;
 // Vehicule Repository
 public class VehiculeRepository extends BaseRepository<Vehicule> {
 
+    public List<Vehicule> findAll() {
+        List<Vehicule> vehicules = new ArrayList<>();
+        String sql = "SELECT * FROM vehicule";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                vehicules.add(mapResultSetToVehicule(rs));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error finding all vehicules", e);
+        }
+        return vehicules;
+    }
+
     public Optional<Vehicule> findById(Long id) {
         String sql = "SELECT * FROM vehicule WHERE id = ?";
 
@@ -26,6 +43,24 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error finding vehicule by ID", e);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Vehicule> findByImmatriculation(String immatriculation) {
+        String sql = "SELECT * FROM vehicule WHERE immatriculation = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, immatriculation);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(mapResultSetToVehicule(rs));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error finding vehicule by immatriculation", e);
         }
         return Optional.empty();
     }
@@ -62,10 +97,10 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
                 rs.getString("modele"),
                 typePermis,
                 rs.getDate("date_mise_en_service").toLocalDate(),
-                rs.getInt("kilometrage_avant_entretien") // Change to int if the constructor expects int
+                rs.getInt("kilometrage_avant_entretien")
         );
         vehicule.setId(rs.getLong("id"));
-        vehicule.setKilometrageTotal((int) rs.getDouble("kilometrage_total")); // Convert double to int
+        vehicule.setKilometrageTotal(rs.getInt("kilometrage_total"));
         return vehicule;
     }
 
@@ -95,6 +130,36 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
         return entretiens;
     }
 
+    public boolean saveEntretien(Long vehiculeId, Entretien entretien) {
+        String sql = "INSERT INTO entretien (id_vehicule, date_entretien, type_entretien, cout, description) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setLong(1, vehiculeId);
+            stmt.setDate(2, Date.valueOf(entretien.getDateEntretien()));
+            stmt.setString(3, entretien.getTypeEntretien());
+            stmt.setDouble(4, entretien.getCout());
+            stmt.setString(5, entretien.getDescription());
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                return false;
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    entretien.setId(generatedKeys.getLong(1));
+                    return true;
+                }
+                return false;
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error saving entretien", e);
+            return false;
+        }
+    }
+
     public boolean save(Vehicule vehicule) {
         String sql = """
             INSERT INTO vehicule 
@@ -111,8 +176,8 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setString(3, vehicule.getModele());
             stmt.setString(4, vehicule.getTypePermis().name());
             stmt.setDate(5, Date.valueOf(vehicule.getDateMiseEnService()));
-            stmt.setDouble(6, vehicule.getKilometrageTotal());
-            stmt.setDouble(7, vehicule.getKilometrageAvantEntretien());
+            stmt.setInt(6, vehicule.getKilometrageTotal());
+            stmt.setInt(7, vehicule.getKilometrageAvantEntretien());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -132,43 +197,6 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
         }
     }
 
-    public boolean saveEntretien(Long vehiculeId, Entretien entretien) {
-        String sql = """
-            INSERT INTO entretien 
-            (id_vehicule, date_entretien, type_entretien, description, cout, facture_path)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """;
-
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            stmt.setLong(1, vehiculeId);
-            stmt.setDate(2, Date.valueOf(entretien.getDateEntretien()));
-            stmt.setString(3, entretien.getTypeEntretien());
-            stmt.setString(4, entretien.getDescription());
-            stmt.setDouble(5, entretien.getCout());
-            
-            // Check if facture is null before accessing its methods
-            if (entretien.getFacture() != null) {
-                stmt.setString(6, entretien.getFacture().getCheminFichier());
-            } else {
-                stmt.setNull(6, java.sql.Types.VARCHAR);
-            }
-
-            if (stmt.executeUpdate() > 0) {
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        entretien.setId(generatedKeys.getLong(1));
-                        return true;
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error saving entretien", e);
-        }
-        return false;
-    }
-
     public boolean update(Vehicule vehicule) {
         String sql = """
             UPDATE vehicule 
@@ -185,13 +213,27 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setString(3, vehicule.getModele());
             stmt.setString(4, vehicule.getTypePermis().name());
             stmt.setDate(5, Date.valueOf(vehicule.getDateMiseEnService()));
-            stmt.setDouble(6, vehicule.getKilometrageTotal());
-            stmt.setDouble(7, vehicule.getKilometrageAvantEntretien());
+            stmt.setInt(6, vehicule.getKilometrageTotal());
+            stmt.setInt(7, vehicule.getKilometrageAvantEntretien());
             stmt.setLong(8, vehicule.getId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating vehicule", e);
+            return false;
+        }
+    }
+    
+    public boolean delete(Long id) {
+        String sql = "DELETE FROM vehicule WHERE id = ?";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+            stmt.setLong(1, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting vehicule", e);
             return false;
         }
     }

@@ -171,23 +171,25 @@ public class AfficherEcole {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/modifierEcole.fxml"));
+            // Load manageEcole view which has inline editing capability
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/manageEcole.fxml"));
             Parent root = loader.load();
-
-            // Apply animation to the dialog
+            
             applyFadeInAnimation(root, 300);
-
-            ModifierEcole controller = loader.getController();
-            controller.setAutoEcoleToModify(selectedEcole);
-
+            
+            ManageEcole controller = loader.getController();
+            controller.loadAutoEcole(selectedEcole.getId());
+            controller.handleModifier(); // Automatically switch to edit mode
+            
             Stage stage = new Stage();
-            stage.setTitle("Modifier une école");
+            stage.setTitle("Modifier les informations de l'école");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-
-            // Reload the list after modification
-            loadAutoEcoles();
+            
+            // Update the list when the window is closed
+            stage.setOnHidden(e -> loadAutoEcoles());
+            
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la fenêtre de modification: " + e.getMessage());
