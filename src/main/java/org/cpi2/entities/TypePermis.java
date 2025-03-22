@@ -1,3 +1,5 @@
+package org.cpi2.entities;
+
 public enum TypePermis {
     VOITURE("Voiture"),
     MOTO("Moto"),

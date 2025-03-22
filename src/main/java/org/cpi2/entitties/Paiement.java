@@ -1,5 +1,6 @@
 package org.cpi2.entitties;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public abstract class Paiement {
@@ -7,15 +8,23 @@ public abstract class Paiement {
     protected Double montant;
     protected LocalDateTime datePaiement;
     protected StatutPaiement statut;
+    protected ModePaiement modePaiement;
 
-    protected Paiement() {
-        this.datePaiement = LocalDateTime.now();
+
+    protected Paiement(Long id, Double montant, LocalDateTime datePaiement, ModePaiement modePaiement) {
+        this.id = id;
+        this.datePaiement = datePaiement;
+        this.montant = montant;
+        this.modePaiement = modePaiement;
         this.statut = StatutPaiement.EN_ATTENTE;
     }
 
-    protected Paiement(Double montant) {
-        this();
-        this.montant = montant;
+    public ModePaiement getModePaiement() {
+        return modePaiement;
+    }
+
+    public void setModePaiement(ModePaiement modePaiement) {
+        this.modePaiement = modePaiement;
     }
 
     public LocalDateTime getDatePaiement() {

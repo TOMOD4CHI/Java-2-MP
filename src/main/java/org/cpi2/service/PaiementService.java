@@ -1,9 +1,16 @@
 package org.cpi2.service;
 
 
+import org.cpi2.entitties.Inscription;
+import org.cpi2.entitties.Paiement;
+import org.cpi2.entitties.PaiementInscription;
+import org.cpi2.entitties.StatutPaiement;
 import org.cpi2.repository.PaiementRepository;
 import org.cpi2.repository.CandidatRepository;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 
 
 public class PaiementService {
@@ -15,7 +22,6 @@ public class PaiementService {
         this.candidatRepository = new CandidatRepository();
     }
 
-    /* 7ata lin ta7dher paiment ,  this should be the starting base :>>
 
     public Optional<Paiement> getPaiementById(Long id) {
         return paiementRepository.findById(id);
@@ -29,46 +35,24 @@ public class PaiementService {
         return paiementRepository.save(paiement);
     }
 
-    public boolean mettreAJourStatutTranche(Long trancheId, StatutPaiement nouveauStatut) {
-        return paiementRepository.updateTrancheStatus(trancheId, nouveauStatut);
-    }
 
-    public double calculerMontantTotal(Long candidatId) {
-        List<Paiement> paiements = paiementRepository.findAllByCandidat(candidatId);
+    public double calculerMontantPayer(int inscriptionId) throws SQLException {
+        List<PaiementInscription> paiements = paiementRepository.getTranches(inscriptionId);
         return paiements.stream()
                 .mapToDouble(Paiement::getMontant)
                 .sum();
     }
 
-    public double calculerMontantRestant(Long candidatId, double montantTotal) {
-        double montantPaye = calculerMontantTotal(candidatId);
+    public double calculerMontantRestant(int inscriptionId, double montantTotal) throws SQLException {
+        double montantPaye = calculerMontantPayer(inscriptionId);
         return montantTotal - montantPaye;
     }
 
-    public List<Tranche> getTranchesPaiement(Long paiementId) {
-        Optional<Paiement> paiement = paiementRepository.findById(paiementId);
-        return paiement.map(Paiement::getTranches).orElse(List.of());
-    }
 
-
-
-    public List<Tranche> getTranchesPaiementEnRetard(Long candidatId) {
-        List<Paiement> paiements = getPaiementsByCandidatId(candidatId);
-        return paiements.stream()
-                .flatMap(p -> p.getTranches().stream())
-                .filter(this::verifierPaiementEnRetard)
-                .toList();
-    }
-
-
-    public boolean verifierPaiementEnRetard(Tranche tranche) {
-        return tranche.getStatut() != StatutPaiement.PAYE &&
-                tranche.getDateEcheance().isBefore(java.time.LocalDate.now());
-    }
 
     public boolean verifierSiCandidatExiste(Long candidatId) {
         return candidatRepository.findById(candidatId).isPresent();
     }
 
-    */
+    //Still many other other methods to implement based on the needs of the application
 }
