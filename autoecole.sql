@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 08, 2025 at 01:39 AM
+-- Generation Time: Mar 22, 2025 at 03:42 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `autoecole`
+-- Database: `testecle`
 --
 
 -- --------------------------------------------------------
@@ -42,8 +42,8 @@ CREATE TABLE `auto_ecole` (
 -- Dumping data for table `auto_ecole`
 --
 
-INSERT INTO `auto_ecole` (`id`, `nom`, `adresse`, `logo_path`, `telephone`, `email`, `directeur`, `created_at`) 
-VALUES (1, 'Auto École Exemplaire', 'Avenue des Conducteurs 123, Ville', 'logos/default_logo.png', '12345678', 'contact@autoecole.com', 'Jean Dupont', current_timestamp());
+INSERT INTO `auto_ecole` (`id`, `nom`, `adresse`, `logo_path`, `telephone`, `email`, `directeur`, `created_at`) VALUES
+(1, 'Auto École Exemplaire', 'Avenue des Conducteurs 123, Ville', 'logos/default_logo.png', '12345678', 'contact@autoecole.com', 'Jean Dupont', '2025-03-22 13:11:27');
 
 -- --------------------------------------------------------
 
@@ -174,12 +174,27 @@ CREATE TABLE `moniteur` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `moniteur_specialite`
+--
+
+CREATE TABLE `moniteur_specialite` (
+  `id` int(11) NOT NULL,
+  `moniteur_id` int(11) NOT NULL,
+  `type_permis_id` int(11) NOT NULL,
+  `date_obtention` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `paiement`
 --
 
 CREATE TABLE `paiement` (
   `id` int(11) NOT NULL,
-  `inscription_id` int(10) NOT NULL,
+  `inscription_id` int(10) DEFAULT NULL,
+  `id_examen` int(11) DEFAULT NULL,
   `type_paiement` varchar(20) NOT NULL DEFAULT 'Mensualité',
   `montant` decimal(10,2) NOT NULL,
   `date_paiement` date NOT NULL,
@@ -212,11 +227,10 @@ CREATE TABLE `plan` (
 -- Dumping data for table `plan`
 --
 
-INSERT INTO `plan` (`id`, `libelle`, `description`, `type_permis_id`, `prix`, `duree`, `heures_code`, `heures_conduite`, `actif`, `created_at`) 
-VALUES 
-(1, 'Plan Standard B', 'Permis de conduire B standard', 2, 1200.00, 3, 20, 20, 1, current_timestamp()),
-(2, 'Plan Premium B', 'Permis de conduire B avec heures supplémentaires', 2, 1800.00, 3, 30, 30, 1, current_timestamp()),
-(3, 'Plan Basic A', 'Permis de conduire A moto', 1, 900.00, 2, 15, 15, 1, current_timestamp());
+INSERT INTO `plan` (`id`, `libelle`, `description`, `type_permis_id`, `prix`, `duree`, `heures_code`, `heures_conduite`, `actif`, `created_at`) VALUES
+(1, 'Plan Standard B', 'Permis de conduire B standard', 2, 1200.00, 3, 20, 20, 1, '2025-03-22 13:11:27'),
+(2, 'Plan Premium B', 'Permis de conduire B avec heures supplémentaires', 2, 1800.00, 3, 30, 30, 1, '2025-03-22 13:11:27'),
+(3, 'Plan Basic A', 'Permis de conduire A moto', 1, 900.00, 2, 15, 15, 1, '2025-03-22 13:11:27');
 
 -- --------------------------------------------------------
 
@@ -225,13 +239,11 @@ VALUES
 --
 
 CREATE TABLE `presence_code` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `session_code_id` int(11) NOT NULL,
   `candidat_id` int(11) NOT NULL,
   `present` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_presence_code` (`session_code_id`,`candidat_id`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -241,13 +253,11 @@ CREATE TABLE `presence_code` (
 --
 
 CREATE TABLE `presence_conduite` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `session_conduite_id` int(11) NOT NULL,
   `candidat_id` int(11) NOT NULL,
   `present` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_presence_conduite` (`session_conduite_id`,`candidat_id`)
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -267,6 +277,29 @@ CREATE TABLE `rendez_vous` (
   `confirme` tinyint(1) DEFAULT 0,
   `annule` tinyint(1) DEFAULT 0,
   `raison_annulation` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `seance`
+--
+
+CREATE TABLE `seance` (
+  `id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `heure` time NOT NULL,
+  `duree` int(11) NOT NULL DEFAULT 60,
+  `type` varchar(20) NOT NULL,
+  `lieu` varchar(100) DEFAULT NULL,
+  `moniteur_id` int(11) NOT NULL,
+  `candidat_id` int(11) NOT NULL,
+  `vehicule_id` int(11) DEFAULT NULL,
+  `statut` varchar(20) DEFAULT 'Planifiée',
+  `commentaire` text DEFAULT NULL,
+  `kilometrage_debut` int(11) DEFAULT NULL,
+  `kilometrage_fin` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -333,10 +366,10 @@ CREATE TABLE `type_document` (
 --
 
 INSERT INTO `type_document` (`id`, `libelle`, `description`, `obligatoire`, `created_at`) VALUES
-(1, 'CIN', 'Carte d\'identité nationale', 1, current_timestamp()),
-(2, 'Certificat Médical', 'Certificat d\'aptitude médicale', 1, current_timestamp()),
-(3, 'Photo', 'Photo d\'identité', 1, current_timestamp()),
-(4, 'Autre', 'Autre document', 0, current_timestamp());
+(1, 'CIN', 'Carte d\'identité nationale', 1, '2025-03-22 13:11:28'),
+(2, 'Certificat Médical', 'Certificat d\'aptitude médicale', 1, '2025-03-22 13:11:28'),
+(3, 'Photo', 'Photo d\'identité', 1, '2025-03-22 13:11:28'),
+(4, 'Autre', 'Autre document', 0, '2025-03-22 13:11:28');
 
 -- --------------------------------------------------------
 
@@ -357,10 +390,10 @@ CREATE TABLE `type_examen` (
 --
 
 INSERT INTO `type_examen` (`id`, `libelle`, `description`, `cout`, `created_at`) VALUES
-(1, 'Code', 'Examen du code de la route', 100.00, current_timestamp()),
-(2, 'Circuit', 'Examen de conduite en circuit fermé', 150.00, current_timestamp()),
-(3, 'Créneaux', 'Examen des manœuvres de stationnement', 100.00, current_timestamp()),
-(4, 'Conduite', 'Examen de conduite en circulation', 200.00, current_timestamp());
+(1, 'Code', 'Examen du code de la route', 100.00, '2025-03-22 13:11:28'),
+(2, 'Circuit', 'Examen de conduite en circuit fermé', 150.00, '2025-03-22 13:11:28'),
+(3, 'Créneaux', 'Examen des manœuvres de stationnement', 100.00, '2025-03-22 13:11:28'),
+(4, 'Conduite', 'Examen de conduite en circulation', 200.00, '2025-03-22 13:11:28');
 
 -- --------------------------------------------------------
 
@@ -382,9 +415,9 @@ CREATE TABLE `type_permis` (
 --
 
 INSERT INTO `type_permis` (`id`, `code`, `libelle`, `description`, `age_minimum`, `created_at`) VALUES
-(1, 'A', 'Moto', 'Permis pour conduire une moto', 18, current_timestamp()),
-(2, 'B', 'Voiture', 'Permis pour conduire une voiture', 18, current_timestamp()),
-(3, 'C', 'Camion', 'Permis pour conduire un camion', 21, current_timestamp());
+(1, 'A', 'Moto', 'Permis pour conduire une moto', 18, '2025-03-22 13:11:28'),
+(2, 'B', 'Voiture', 'Permis pour conduire une voiture', 18, '2025-03-22 13:11:28'),
+(3, 'C', 'Camion', 'Permis pour conduire un camion', 21, '2025-03-22 13:11:28');
 
 -- --------------------------------------------------------
 
@@ -407,45 +440,6 @@ CREATE TABLE `vehicule` (
   `date_prochaine_visite_technique` date DEFAULT NULL,
   `date_expiration_assurance` date DEFAULT NULL,
   `statut` varchar(20) DEFAULT 'Disponible',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `moniteur_specialite`
---
-
-CREATE TABLE `moniteur_specialite` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `moniteur_id` int(11) NOT NULL,
-  `type_permis_id` int(11) NOT NULL,
-  `date_obtention` date DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_moniteur_specialite` (`moniteur_id`,`type_permis_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `seance`
---
-
-CREATE TABLE `seance` (
-  `id` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `heure` time NOT NULL,
-  `duree` int(11) NOT NULL DEFAULT 60,
-  `type` varchar(20) NOT NULL,
-  `lieu` varchar(100) DEFAULT NULL,
-  `moniteur_id` int(11) NOT NULL,
-  `candidat_id` int(11) NOT NULL,
-  `vehicule_id` int(11) DEFAULT NULL,
-  `statut` varchar(20) DEFAULT 'Planifiée',
-  `commentaire` text DEFAULT NULL,
-  `kilometrage_debut` int(11) DEFAULT NULL,
-  `kilometrage_fin` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -514,11 +508,20 @@ ALTER TABLE `moniteur`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `moniteur_specialite`
+--
+ALTER TABLE `moniteur_specialite`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_moniteur_specialite` (`moniteur_id`,`type_permis_id`),
+  ADD KEY `fk_moniteur_specialite_type_permis` (`type_permis_id`);
+
+--
 -- Indexes for table `paiement`
 --
 ALTER TABLE `paiement`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `inscription_id` (`inscription_id`);
+  ADD KEY `inscription_id` (`inscription_id`),
+  ADD KEY `id_examen` (`id_examen`);
 
 --
 -- Indexes for table `plan`
@@ -528,6 +531,22 @@ ALTER TABLE `plan`
   ADD KEY `fk_plan_type_permis` (`type_permis_id`);
 
 --
+-- Indexes for table `presence_code`
+--
+ALTER TABLE `presence_code`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_presence_code` (`session_code_id`,`candidat_id`),
+  ADD KEY `presence_code_ibfk_1` (`candidat_id`);
+
+--
+-- Indexes for table `presence_conduite`
+--
+ALTER TABLE `presence_conduite`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_presence_conduite` (`session_conduite_id`,`candidat_id`),
+  ADD KEY `presence_conduite_ibfk_1` (`candidat_id`);
+
+--
 -- Indexes for table `rendez_vous`
 --
 ALTER TABLE `rendez_vous`
@@ -535,6 +554,15 @@ ALTER TABLE `rendez_vous`
   ADD KEY `candidat_id` (`candidat_id`),
   ADD KEY `session_code_id` (`session_code_id`),
   ADD KEY `session_conduite_id` (`session_conduite_id`);
+
+--
+-- Indexes for table `seance`
+--
+ALTER TABLE `seance`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_seance_moniteur` (`moniteur_id`),
+  ADD KEY `fk_seance_candidat` (`candidat_id`),
+  ADD KEY `fk_seance_vehicule` (`vehicule_id`);
 
 --
 -- Indexes for table `session_code`
@@ -579,15 +607,6 @@ ALTER TABLE `vehicule`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `immatriculation` (`immatriculation`),
   ADD KEY `type_permis_id` (`type_permis_id`);
-
---
--- Indexes for table `seance`
---
-ALTER TABLE `seance`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_seance_moniteur` (`moniteur_id`),
-  ADD KEY `fk_seance_candidat` (`candidat_id`),
-  ADD KEY `fk_seance_vehicule` (`vehicule_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -642,6 +661,12 @@ ALTER TABLE `moniteur`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `moniteur_specialite`
+--
+ALTER TABLE `moniteur_specialite`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `paiement`
 --
 ALTER TABLE `paiement`
@@ -654,9 +679,27 @@ ALTER TABLE `plan`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `presence_code`
+--
+ALTER TABLE `presence_code`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `presence_conduite`
+--
+ALTER TABLE `presence_conduite`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `rendez_vous`
 --
 ALTER TABLE `rendez_vous`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `seance`
+--
+ALTER TABLE `seance`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -693,12 +736,6 @@ ALTER TABLE `type_permis`
 -- AUTO_INCREMENT for table `vehicule`
 --
 ALTER TABLE `vehicule`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `seance`
---
-ALTER TABLE `seance`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -739,10 +776,18 @@ ALTER TABLE `inscription`
   ADD CONSTRAINT `inscription_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `plan` (`id`);
 
 --
+-- Constraints for table `moniteur_specialite`
+--
+ALTER TABLE `moniteur_specialite`
+  ADD CONSTRAINT `fk_moniteur_specialite_moniteur` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_moniteur_specialite_type_permis` FOREIGN KEY (`type_permis_id`) REFERENCES `type_permis` (`id`);
+
+--
 -- Constraints for table `paiement`
 --
 ALTER TABLE `paiement`
-  ADD CONSTRAINT `paiement_ibfk_1` FOREIGN KEY (`inscription_id`) REFERENCES `inscription` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `paiement_ibfk_1` FOREIGN KEY (`inscription_id`) REFERENCES `inscription` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `paiement_ibfk_2` FOREIGN KEY (`id_examen`) REFERENCES `examen` (`id`);
 
 --
 -- Constraints for table `plan`
@@ -773,6 +818,14 @@ ALTER TABLE `rendez_vous`
   ADD CONSTRAINT `rendez_vous_ibfk_3` FOREIGN KEY (`session_conduite_id`) REFERENCES `session_conduite` (`id`) ON DELETE SET NULL;
 
 --
+-- Constraints for table `seance`
+--
+ALTER TABLE `seance`
+  ADD CONSTRAINT `fk_seance_candidat` FOREIGN KEY (`candidat_id`) REFERENCES `candidat` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_seance_moniteur` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_seance_vehicule` FOREIGN KEY (`vehicule_id`) REFERENCES `vehicule` (`id`) ON DELETE SET NULL;
+
+--
 -- Constraints for table `session_code`
 --
 ALTER TABLE `session_code`
@@ -792,21 +845,6 @@ ALTER TABLE `session_conduite`
 --
 ALTER TABLE `vehicule`
   ADD CONSTRAINT `vehicule_ibfk_1` FOREIGN KEY (`type_permis_id`) REFERENCES `type_permis` (`id`);
-
---
--- Constraints for table `moniteur_specialite`
---
-ALTER TABLE `moniteur_specialite`
-  ADD CONSTRAINT `fk_moniteur_specialite_moniteur` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_moniteur_specialite_type_permis` FOREIGN KEY (`type_permis_id`) REFERENCES `type_permis` (`id`);
-
---
--- Constraints for table `seance`
---
-ALTER TABLE `seance`
-  ADD CONSTRAINT `fk_seance_moniteur` FOREIGN KEY (`moniteur_id`) REFERENCES `moniteur` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_seance_candidat` FOREIGN KEY (`candidat_id`) REFERENCES `candidat` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_seance_vehicule` FOREIGN KEY (`vehicule_id`) REFERENCES `vehicule` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
