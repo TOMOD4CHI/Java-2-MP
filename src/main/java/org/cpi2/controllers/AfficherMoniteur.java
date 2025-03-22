@@ -2,6 +2,7 @@ package org.cpi2.controllers;
 
 import org.cpi2.entitties.Moniteur;
 import org.cpi2.entitties.TypePermis;
+import org.cpi2.service.MoniteurService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AfficherMoniteur{
+public class AfficherMoniteur {
 
     @FXML
     private TableView<Moniteur> moniteurTable;
@@ -43,14 +44,10 @@ public class AfficherMoniteur{
     private TableColumn<Moniteur, Set<TypePermis>> specialitesColumn;
 
     private ObservableList<Moniteur> moniteursList = FXCollections.observableArrayList();
-
-    // Service to fetch moniteurs data
     private MoniteurService moniteurService;
 
-
-
-
     public void initialize() {
+        moniteurService = new MoniteurService();
         setupTableColumns();
         loadMoniteurs();
     }
@@ -64,7 +61,6 @@ public class AfficherMoniteur{
         dateEmbaucheColumn.setCellValueFactory(new PropertyValueFactory<>("dateEmbauche"));
         specialitesColumn.setCellValueFactory(new PropertyValueFactory<>("specialites"));
 
-        // Custom cell factory for date formatting
         dateEmbaucheColumn.setCellFactory(column -> new TableCell<>() {
             private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -79,7 +75,6 @@ public class AfficherMoniteur{
             }
         });
 
-        // Custom cell factory for specialites formatting
         specialitesColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Set<TypePermis> specialites, boolean empty) {
@@ -95,24 +90,11 @@ public class AfficherMoniteur{
         });
     }
 
+    @FXML
     public void loadMoniteurs() {
-        // Clear previous data
         moniteursList.clear();
-
-        /* Fetch moniteurs from service
         List<Moniteur> moniteurs = moniteurService.getAllMoniteurs();
         moniteursList.addAll(moniteurs);
-
-        // Set items to table
-        moniteurTable.setItems(moniteursList);*/
-    }
-
-    // Example service class stub (in real application, you would have a separate service class)
-    private class MoniteurService {
-        public List<Moniteur> getAllMoniteurs() {
-            // This would be implemented to fetch data from your data source
-            // For demonstration, returning an empty list
-            return List.of();
-        }
+        moniteurTable.setItems(moniteursList);
     }
 }
