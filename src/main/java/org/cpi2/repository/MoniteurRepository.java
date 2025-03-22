@@ -186,7 +186,21 @@ public class MoniteurRepository {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             for (TypePermis specialite : moniteur.getSpecialites()) {
                 stmt.setLong(1, moniteur.getId());
-                stmt.setInt(2, specialite.ordinal() + 1);
+                
+                // Map TypePermis enum to database IDs based on the code value
+                int typePermisId;
+                switch(specialite) {
+                    case A: typePermisId = 1; break;  // Moto
+                    case B: typePermisId = 2; break;  // Voiture
+                    case C: typePermisId = 3; break;  // Camion
+                    default:
+                        // For other types, default to B (Voiture) as it's the most common
+                        typePermisId = 2;
+                        LOGGER.log(Level.WARNING, "TypePermis " + specialite + " not found in database, defaulting to B (Voiture)");
+                        break;
+                }
+                
+                stmt.setInt(2, typePermisId);
                 stmt.addBatch();
             }
             stmt.executeBatch();

@@ -1,6 +1,7 @@
 package org.cpi2.controllers;
 
 import org.cpi2.entitties.Candidat;
+import org.cpi2.service.CandidatService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -32,10 +33,7 @@ public class AfficherCandidat  {
 
     private ObservableList<Candidat> candidatsList = FXCollections.observableArrayList();
 
-    private CandidatService candidatService;
-
-
-
+    private final CandidatService candidatService = new CandidatService();
 
     public void initialize() {
         setupTableColumns();
@@ -53,21 +51,11 @@ public class AfficherCandidat  {
     public void loadCandidats() {
         candidatsList.clear();
 
-        /* Fetch candidates from service
+        // Fetch candidates from service
         List<Candidat> candidats = candidatService.getAllCandidats();
         candidatsList.addAll(candidats);
 
         // Set items to table
-        candidatTable.setItems(candidatsList);*/
-
-    }
-
-    // Example service class stub (in real application, you would have a separate service class)
-    private class CandidatService {
-        public List<Candidat> getAllCandidats() {
-            // This would be implemented to fetch data from your data source
-            // For demonstration, returning an empty list
-            return List.of();
-        }
+        candidatTable.setItems(candidatsList);
     }
 }

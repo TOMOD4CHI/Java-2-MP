@@ -4,31 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="many chages i guess">
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="stable and woking">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoecole.sql" beforeDir="false" afterPath="$PROJECT_DIR$/autoecole.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/GestionVehicule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/GestionVehicule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherCandidat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherEcole.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ManageEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ManageEcole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/AutoEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/AutoEcole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Entretien.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Entretien.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Seance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Seance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/SessionCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/SessionCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/SessionConduite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/SessionConduite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypePermis.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypePermis.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Vehicule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Vehicule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/AutoEcoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/AutoEcoleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/CandidatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/CandidatRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SessionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SessionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/VehiculeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/VehiculeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/SessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/SessionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/VehiculeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/VehiculeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/AjouterCandidat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/AjouterCandidat.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/ModifierCandidat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ModifierCandidat.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/ajouterEcole.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ajouterEcole.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/modifierEcole.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/modifierEcole.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/MoniteurRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/MoniteurRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,7 +178,7 @@
       <workItem from="1742640676737" duration="1315000" />
       <workItem from="1742642044387" duration="1176000" />
       <workItem from="1742644928526" duration="1859000" />
-      <workItem from="1742647411469" duration="12063000" />
+      <workItem from="1742647411469" duration="16213000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />
@@ -239,7 +220,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742647560642</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="stable and woking">
+      <option name="closed" value="true" />
+      <created>1742665828199</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1742665828199</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,6 +251,7 @@
     <MESSAGE value="many updates" />
     <MESSAGE value="linked controllers with services with edits and enhancements to both , added &quot;controle de saisie&quot; and" />
     <MESSAGE value="many chages i guess" />
-    <option name="LAST_COMMIT_MESSAGE" value="many chages i guess" />
+    <MESSAGE value="stable and woking" />
+    <option name="LAST_COMMIT_MESSAGE" value="stable and woking" />
   </component>
 </project>

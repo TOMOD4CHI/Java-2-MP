@@ -97,6 +97,7 @@ public class AfficherEcole {
         try {
             ecoleList.clear();
             List<AutoEcole> ecoles = autoEcoleService.findAllAutoEcoles();
+            ecoleList.addAll(ecoles);
             
             if (ecoles.isEmpty()) {
                 System.out.println("No auto-écoles found in database");
@@ -228,4 +229,4 @@ public class AfficherEcole {
         alert.setContentText(message);
         alert.showAndWait();
     }
-} 
+}

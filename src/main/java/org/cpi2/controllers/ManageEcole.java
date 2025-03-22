@@ -72,9 +72,7 @@ public class ManageEcole implements Initializable {
         // Initially show info container and hide edit container
         showEditMode(false);
         
-        // Load auto ecole data
-        Extension selectedEcole = null;
-        loadAutoEcole(Integer.parseInt(selectedEcole.getId()));
+        // The auto-école data will be loaded when loadAutoEcole is called from AfficherEcole
     }
     
     void loadAutoEcole(int id) {
@@ -324,4 +322,4 @@ public class ManageEcole implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
-} 
+}
