@@ -189,7 +189,7 @@ public class MoniteurRepository {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             for (TypePermis specialite : moniteur.getSpecialites()) {
                 stmt.setLong(1, moniteur.getId());
-                stmt.setInt(2, specialite.ordinal() + 1);
+                stmt.setString(2, specialite.name());
                 stmt.addBatch();
             }
             stmt.executeBatch();

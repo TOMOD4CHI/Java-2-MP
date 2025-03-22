@@ -108,7 +108,7 @@ public class MoniteurService {
 
     public boolean addSpeciality(Moniteur moniteur, TypePermis typePermis) {
         try {
-            Set<TypePermis> specialites = moniteur.getSpecialites();
+            List<TypePermis> specialites = moniteur.getSpecialites();
             specialites.add(typePermis);
             moniteur.setSpecialites(specialites);
             return moniteurRepository.update(moniteur);
@@ -120,7 +120,7 @@ public class MoniteurService {
 
     public boolean removeSpeciality(Moniteur moniteur, TypePermis typePermis) {
         try {
-            Set<TypePermis> specialites = moniteur.getSpecialites();
+            List<TypePermis> specialites = moniteur.getSpecialites();
             specialites.remove(typePermis);
             moniteur.setSpecialites(specialites);
             return moniteurRepository.update(moniteur);
