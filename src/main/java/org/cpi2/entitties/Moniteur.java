@@ -1,17 +1,22 @@
 package org.cpi2.entitties;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Moniteur extends Personne {
     private LocalDate dateEmbauche;
     private List<TypePermis> specialites;
+    private Map<LocalDateTime, RendezVous> emploiDuTemps;
     
     public Moniteur() {
         super();
         this.specialites = new ArrayList<>();
+        this.emploiDuTemps = new HashMap<>();
     }
     
     public Moniteur(String nom, String prenom, String cin, String adresse, String telephone,
@@ -21,6 +26,7 @@ public class Moniteur extends Personne {
         this.dateNaissance = dateNaissance;
         this.dateEmbauche = dateEmbauche;
         this.specialites = new ArrayList<>();
+        this.emploiDuTemps = new HashMap<>();
     }
     
     public LocalDate getDateEmbauche() {
@@ -45,6 +51,14 @@ public class Moniteur extends Personne {
     
     public boolean removeSpecialite(TypePermis typePermis) {
         return this.specialites.remove(typePermis);
+    }
+    
+    public Map<LocalDateTime, RendezVous> getEmploiDuTemps() {
+        return emploiDuTemps;
+    }
+    
+    public void setEmploiDuTemps(Map<LocalDateTime, RendezVous> emploiDuTemps) {
+        this.emploiDuTemps = emploiDuTemps;
     }
     
     @Override

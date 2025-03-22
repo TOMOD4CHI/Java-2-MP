@@ -1,10 +1,12 @@
 package org.cpi2.repository;
 
 import org.cpi2.entitties.Moniteur;
+import org.cpi2.entitties.RendezVous;
 import org.cpi2.entitties.TypePermis;
 
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +34,7 @@ public class MoniteurRepository {
             while (rs.next()) {
                 Moniteur moniteur = mapResultSetToMoniteur(rs);
                 loadSpecialites(conn, moniteur);
+                loadRendezVous(conn, moniteur);
                 moniteurs.add(moniteur);
             }
         } catch (SQLException e) {
@@ -42,6 +45,10 @@ public class MoniteurRepository {
     }
 
     public Optional<Moniteur> findById(Long id) {
+        if (id == null) {
+            return Optional.empty();
+        }
+        
         String sql = "SELECT * FROM moniteur WHERE id = ?";
 
         try (Connection conn = getConnection();
@@ -53,6 +60,7 @@ public class MoniteurRepository {
             if (rs.next()) {
                 Moniteur moniteur = mapResultSetToMoniteur(rs);
                 loadSpecialites(conn, moniteur);
+                loadRendezVous(conn, moniteur);
                 return Optional.of(moniteur);
             }
         } catch (SQLException e) {
@@ -63,6 +71,10 @@ public class MoniteurRepository {
     }
 
     public Optional<Moniteur> findByCin(String cin) {
+        if (cin == null || cin.isEmpty()) {
+            return Optional.empty();
+        }
+        
         String sql = "SELECT * FROM moniteur WHERE cin = ?";
 
         try (Connection conn = getConnection();
@@ -74,6 +86,7 @@ public class MoniteurRepository {
             if (rs.next()) {
                 Moniteur moniteur = mapResultSetToMoniteur(rs);
                 loadSpecialites(conn, moniteur);
+                loadRendezVous(conn, moniteur);
                 return Optional.of(moniteur);
             }
         } catch (SQLException e) {
@@ -84,8 +97,13 @@ public class MoniteurRepository {
     }
 
     public boolean save(Moniteur moniteur) {
-        String sql = "INSERT INTO moniteur (nom, prenom, cin, adresse, telephone, email, date_embauche) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        if (moniteur == null) {
+            LOGGER.log(Level.WARNING, "Cannot save null moniteur");
+            return false;
+        }
+        
+        String sql = "INSERT INTO moniteur (nom, prenom, cin, adresse, telephone, email, date_naissance, date_embauche) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -96,7 +114,10 @@ public class MoniteurRepository {
             stmt.setString(4, moniteur.getAdresse());
             stmt.setString(5, moniteur.getTelephone());
             stmt.setString(6, moniteur.getEmail());
-            stmt.setDate(7, Date.valueOf(moniteur.getDateEmbauche()));
+            stmt.setDate(7, moniteur.getDateNaissance() != null ? 
+                            Date.valueOf(moniteur.getDateNaissance()) : null);
+            stmt.setDate(8, moniteur.getDateEmbauche() != null ? 
+                            Date.valueOf(moniteur.getDateEmbauche()) : null);
 
             int affectedRows = stmt.executeUpdate();
 
@@ -107,19 +128,27 @@ public class MoniteurRepository {
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     moniteur.setId(generatedKeys.getLong(1));
-                    return saveSpecialites(conn, moniteur);
+                    boolean specialitesResult = saveSpecialites(conn, moniteur);
+                    boolean rendezVousResult = saveRendezVous(conn, moniteur);
+                    return specialitesResult && rendezVousResult;
                 }
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error saving moniteur", e);
         }
 
+
         return false;
     }
 
     public boolean update(Moniteur moniteur) {
+        if (moniteur == null || moniteur.getId() == null) {
+            LOGGER.log(Level.WARNING, "Cannot update null moniteur or moniteur without ID");
+            return false;
+        }
+        
         String sql = "UPDATE moniteur SET nom = ?, prenom = ?, cin = ?, adresse = ?, " +
-                    "telephone = ?, email = ?, date_embauche = ? WHERE id = ?";
+                    "telephone = ?, email = ?, date_naissance = ?, date_embauche = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -130,8 +159,11 @@ public class MoniteurRepository {
             stmt.setString(4, moniteur.getAdresse());
             stmt.setString(5, moniteur.getTelephone());
             stmt.setString(6, moniteur.getEmail());
-            stmt.setDate(7, Date.valueOf(moniteur.getDateEmbauche()));
-            stmt.setLong(8, moniteur.getId());
+            stmt.setDate(7, moniteur.getDateNaissance() != null ? 
+                            Date.valueOf(moniteur.getDateNaissance()) : null);
+            stmt.setDate(8, moniteur.getDateEmbauche() != null ? 
+                            Date.valueOf(moniteur.getDateEmbauche()) : null);
+            stmt.setLong(9, moniteur.getId());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -139,15 +171,23 @@ public class MoniteurRepository {
                 return false;
             }
 
-            // Delete existing specialites
-            String deleteSql = "DELETE FROM moniteur_specialite WHERE id_moniteur = ?";
-            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
+            // Update specialites
+            String deleteSpecialitesSql = "DELETE FROM moniteur_specialite WHERE id_moniteur = ?";
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSpecialitesSql)) {
                 deleteStmt.setLong(1, moniteur.getId());
                 deleteStmt.executeUpdate();
             }
-
-            // Save new specialites
-            return saveSpecialites(conn, moniteur);
+            boolean specialitesResult = saveSpecialites(conn, moniteur);
+            
+            // Update rendez-vous
+            String deleteRendezVousSql = "DELETE FROM moniteur_rendez_vous WHERE id_moniteur = ?";
+            try (PreparedStatement deleteStmt = conn.prepareStatement(deleteRendezVousSql)) {
+                deleteStmt.setLong(1, moniteur.getId());
+                deleteStmt.executeUpdate();
+            }
+            boolean rendezVousResult = saveRendezVous(conn, moniteur);
+            
+            return specialitesResult && rendezVousResult;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating moniteur", e);
         }
@@ -164,13 +204,28 @@ public class MoniteurRepository {
         moniteur.setAdresse(rs.getString("adresse"));
         moniteur.setTelephone(rs.getString("telephone"));
         moniteur.setEmail(rs.getString("email"));
-        moniteur.setDateEmbauche(rs.getDate("date_embauche").toLocalDate());
+        
+        Date dateNaissance = rs.getDate("date_naissance");
+        if (dateNaissance != null) {
+            moniteur.setDateNaissance(dateNaissance.toLocalDate());
+        }
+        
+        Date dateEmbauche = rs.getDate("date_embauche");
+        if (dateEmbauche != null) {
+            moniteur.setDateEmbauche(dateEmbauche.toLocalDate());
+        }
+        
         moniteur.setSpecialites(new ArrayList<>());
+        moniteur.setEmploiDuTemps(new HashMap<>());
         return moniteur;
     }
 
     private void loadSpecialites(Connection conn, Moniteur moniteur) throws SQLException {
-        String sql = "SELECT tp.code FROM type_permis tp " +
+        if (moniteur == null || moniteur.getId() == null) {
+            return;
+        }
+        
+        String sql = "SELECT tp.id, tp.code FROM type_permis tp " +
                     "JOIN moniteur_specialite ms ON tp.id = ms.id_type_permis " +
                     "WHERE ms.id_moniteur = ?";
 
@@ -179,20 +234,118 @@ public class MoniteurRepository {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                moniteur.getSpecialites().add(TypePermis.valueOf(rs.getString("code")));
+                String typePermisCode = rs.getString("code");
+                try {
+                    TypePermis typePermis = TypePermis.valueOf(typePermisCode);
+                    moniteur.addSpecialite(typePermis);
+                } catch (IllegalArgumentException e) {
+                    LOGGER.log(Level.WARNING, "Invalid TypePermis code in database: " + typePermisCode, e);
+                }
             }
         }
     }
 
     private boolean saveSpecialites(Connection conn, Moniteur moniteur) throws SQLException {
+        if (moniteur == null || moniteur.getId() == null || moniteur.getSpecialites() == null) {
+            return false;
+        }
+        
+        // First get the IDs of all TypePermis from the database
+        Map<String, Integer> typePermisIds = new HashMap<>();
+        String getTypePermisIdsSql = "SELECT id, code FROM type_permis";
+        
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(getTypePermisIdsSql)) {
+            
+            while (rs.next()) {
+                typePermisIds.put(rs.getString("code"), rs.getInt("id"));
+            }
+        }
+        
+        // Now insert the specialities
         String sql = "INSERT INTO moniteur_specialite (id_moniteur, id_type_permis) VALUES (?, ?)";
-
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             for (TypePermis specialite : moniteur.getSpecialites()) {
+                Integer typePermisId = typePermisIds.get(specialite.name());
+                if (typePermisId == null) {
+                    LOGGER.log(Level.WARNING, "TypePermis not found in database: " + specialite.name());
+                    continue;
+                }
+                
                 stmt.setLong(1, moniteur.getId());
-                stmt.setString(2, specialite.name());
+                stmt.setInt(2, typePermisId);
                 stmt.addBatch();
             }
+            
+            stmt.executeBatch();
+            return true;
+        }
+    }
+    
+    private void loadRendezVous(Connection conn, Moniteur moniteur) throws SQLException {
+        if (moniteur == null || moniteur.getId() == null) {
+            return;
+        }
+        
+        String sql = "SELECT mrv.date_time, rv.* FROM moniteur_rendez_vous mrv " +
+                    "JOIN rendez_vous rv ON mrv.id_rendez_vous = rv.id " +
+                    "WHERE mrv.id_moniteur = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, moniteur.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            Map<LocalDateTime, RendezVous> emploiDuTemps = new HashMap<>();
+            while (rs.next()) {
+                try {
+                    // Get the date_time from the moniteur_rendez_vous table
+                    Timestamp timestamp = rs.getTimestamp("date_time");
+                    LocalDateTime dateTime = timestamp.toLocalDateTime();
+                    
+                    // Create and populate the RendezVous object
+                    RendezVous rendezVous = new RendezVous();
+                    rendezVous.setId(rs.getLong("id"));
+                    // Set other RendezVous properties based on your schema
+                    
+                    // Add to emploiDuTemps
+                    emploiDuTemps.put(dateTime, rendezVous);
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Error loading rendez-vous", e);
+                }
+            }
+            
+            moniteur.setEmploiDuTemps(emploiDuTemps);
+        }
+    }
+    
+    private boolean saveRendezVous(Connection conn, Moniteur moniteur) throws SQLException {
+        if (moniteur == null || moniteur.getId() == null || moniteur.getEmploiDuTemps() == null) {
+            return false;
+        }
+        
+        // If no rendez-vous to save, return true (success)
+        if (moniteur.getEmploiDuTemps().isEmpty()) {
+            return true;
+        }
+        
+        // Insert the rendez-vous associations
+        String sql = "INSERT INTO moniteur_rendez_vous (id_moniteur, id_rendez_vous, date_time) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (Map.Entry<LocalDateTime, RendezVous> entry : moniteur.getEmploiDuTemps().entrySet()) {
+                LocalDateTime dateTime = entry.getKey();
+                RendezVous rendezVous = entry.getValue();
+                
+                if (rendezVous == null || rendezVous.getId() == null) {
+                    LOGGER.log(Level.WARNING, "RendezVous or its ID is null");
+                    continue;
+                }
+                
+                stmt.setLong(1, moniteur.getId());
+                stmt.setLong(2, rendezVous.getId());
+                stmt.setTimestamp(3, Timestamp.valueOf(dateTime));
+                stmt.addBatch();
+            }
+            
             stmt.executeBatch();
             return true;
         }
