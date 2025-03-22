@@ -1,5 +1,8 @@
 package org.cpi2.entitties;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum CoursePlan {
     MOTO_BASIC(1, "Basic Motorcycle Course", 199.99, "Fundamental motorcycle training for beginners", 10, 10),
     MOTO_ADVANCED(2, "Advanced Motorcycle Course", 299.99, "Advanced motorcycle handling and safety techniques", 10, 10),
@@ -18,6 +21,13 @@ public enum CoursePlan {
     private final int nbreSeanceConduite;
     private final int getNbreSeanceCode;
 
+    private static final Map<Integer, CoursePlan> lookup = new HashMap<>();
+
+    static {
+        for (CoursePlan plan : values()) {
+            lookup.put(plan.getId(), plan);
+        }
+    }
 
     CoursePlan(int id, String name, double price, String description, int nbreSeanceConduite, int getNbreSeanceCode) {
         this.id = id;
@@ -52,12 +62,7 @@ public enum CoursePlan {
     }
 
     public static CoursePlan getById(int id) {
-        for (CoursePlan plan : values()) {
-            if (plan.getId() == id) {
-                return plan;
-            }
-        }
-        throw new IllegalArgumentException("No course plan found with ID: " + id);
+        return lookup.getOrDefault(id, null);
     }
 
     public String getCategory() {
