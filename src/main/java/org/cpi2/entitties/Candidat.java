@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Candidat extends Personne {
     private TypePermis typePermis;
     private List<Document> documents;
+    private Dossier dossier;
     
     public Candidat() {
         super();
@@ -45,6 +46,14 @@ public class Candidat extends Personne {
     
     public boolean removeDocument(Document document) {
         return this.documents.remove(document);
+    }
+    
+    public Dossier getDossier() {
+        return dossier;
+    }
+    
+    public void setDossier(Dossier dossier) {
+        this.dossier = dossier;
     }
     
     @Override

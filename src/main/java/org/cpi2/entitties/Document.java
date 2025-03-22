@@ -3,7 +3,7 @@ package org.cpi2.entitties;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Document {
+public class Document implements Comparable<Document> {
     private Long id;
     private String typeDocument;
     private String nomFichier;
@@ -77,5 +77,19 @@ public class Document {
     @Override
     public String toString() {
         return typeDocument + ": " + nomFichier;
+    }
+    
+    @Override
+    public int compareTo(Document other) {
+        if (this.dateUpload == null && other.dateUpload == null) {
+            return 0;
+        }
+        if (this.dateUpload == null) {
+            return -1;
+        }
+        if (other.dateUpload == null) {
+            return 1;
+        }
+        return this.dateUpload.compareTo(other.dateUpload);
     }
 }

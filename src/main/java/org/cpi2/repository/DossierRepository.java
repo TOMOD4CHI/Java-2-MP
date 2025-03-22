@@ -2,6 +2,7 @@ package org.cpi2.repository;
 
 import org.cpi2.entitties.Document;
 import org.cpi2.entitties.Dossier;
+import org.cpi2.entitties.Candidat;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -11,6 +12,7 @@ public class DossierRepository extends BaseRepository<Dossier> {
     private static final Logger LOGGER = Logger.getLogger(DossierRepository.class.getName());
     private final DocumentRepository documentRepository = new DocumentRepository();
     private final TypeDocumentRepository typeDocumentRepository = new TypeDocumentRepository();
+    private final CandidatRepository candidatRepository = new CandidatRepository();
 
     public Optional<Dossier> findById(Long id) {
         String sql = """
@@ -57,6 +59,14 @@ public class DossierRepository extends BaseRepository<Dossier> {
     private Dossier mapResultSetToDossier(ResultSet rs) throws SQLException {
         Dossier dossier = new Dossier();
         dossier.setId(rs.getLong("id"));
+        
+        // Load candidat
+        Long candidatId = rs.getLong("candidat_id");
+        if (!rs.wasNull()) {
+            Candidat candidat = candidatRepository.findById(candidatId).orElse(null);
+            dossier.setCandidat(candidat);
+        }
+        
         return dossier;
     }
 
