@@ -62,10 +62,10 @@ package org.cpi2.repository;
                         rs.getString("modele"),
                         typePermis,
                         rs.getDate("date_mise_en_service").toLocalDate(),
-                        rs.getInt("kilometrage_avant_entretien") // Change to int if the constructor expects int
+                        rs.getDouble("kilometrage_avant_entretien")
                 );
                 vehicule.setId(rs.getLong("id"));
-                vehicule.setKilometrageTotal((int) rs.getDouble("kilometrage_total")); // Convert double to int
+                vehicule.setKilometrageTotal(rs.getDouble("kilometrage_total"));
                 return vehicule;
             }
 
