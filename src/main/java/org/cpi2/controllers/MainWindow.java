@@ -10,10 +10,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.MenuBar;
-import javafx.scene.image.Image;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -25,81 +27,134 @@ public class MainWindow implements Initializable {
     @FXML private StackPane contentArea;
     @FXML private ImageView backgroundImage;
     @FXML private ImageView logoImageView;
+    // Fullscreen button removed as requested
 
+    private Stage stage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         createLogoAnimation();
+        
+        // We'll set up the stage properties after the scene is fully loaded
+        // using Platform.runLater to ensure the scene is ready
+        javafx.application.Platform.runLater(() -> {
+            try {
+                Stage stage = (Stage) contentArea.getScene().getWindow();
+                stage.setResizable(true);
+                stage.setMinWidth(800);
+                stage.setMinHeight(600);
+                stage.setMaximized(false);
+                
+                // Set default size - wider as requested
+                stage.setWidth(1280);
+                stage.setHeight(800);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void createLogoAnimation() {
-        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1.5), logoImageView);
-        rotateTransition.setFromAngle(-180);
-        rotateTransition.setToAngle(0);
-        rotateTransition.setInterpolator(Interpolator.EASE_OUT);
-
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1.5), logoImageView);
-        scaleTransition.setFromX(0.8);
-        scaleTransition.setFromY(0.8);
+        // Simpler logo animation with just subtle fade-in
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.0), logoImageView);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(0.75);
+        fadeTransition.setInterpolator(Interpolator.EASE_OUT);
+        
+        // Add subtle scale for a gentle entrance
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1.0), logoImageView);
+        scaleTransition.setFromX(0.95);
+        scaleTransition.setFromY(0.95);
         scaleTransition.setToX(1.0);
         scaleTransition.setToY(1.0);
         scaleTransition.setInterpolator(Interpolator.EASE_OUT);
 
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.5), logoImageView);
-        fadeTransition.setFromValue(0);
-        fadeTransition.setToValue(0.6);
-        fadeTransition.setInterpolator(Interpolator.EASE_OUT);
-
         ParallelTransition parallelTransition = new ParallelTransition();
-        parallelTransition.getChildren().addAll(rotateTransition, scaleTransition, fadeTransition);
+        parallelTransition.getChildren().addAll(scaleTransition, fadeTransition);
         parallelTransition.play();
     }
 
-    @FXML public void loadAjouterEcole(){loadViewWithTransition("/fxmls/AjouterEcole.fxml"); };
-    @FXML public void loadModifierEcole(){loadViewWithTransition("/fxmls/ModifierEcole.fxml"); }
+    // Fullscreen toggle functionality removed as requested
+
+    @FXML public void loadAjouterEcole() {loadViewWithTransition("/fxmls/ajouterEcole.fxml"); }
+    @FXML public void loadModifierEcole() {loadViewWithTransition("/fxmls/modifierEcole.fxml"); }
+    @FXML public void loadManageEcole() {loadViewWithTransition("/fxmls/manageEcole.fxml"); }
 
 
     @FXML public void loadAjouterCandidat() { loadViewWithTransition("/fxmls/AjouterCandidat.fxml"); }
     @FXML public void loadModifierCandidat() { loadViewWithTransition("/fxmls/ModifierCandidat.fxml"); }
-    @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/documents.fxml"); }
-    @FXML public void loadProgression() { loadViewWithTransition("/fxmls/progression.fxml"); }
-    @FXML public void loadExamRegistration() { loadViewWithTransition("/fxmls/examRegistration.fxml"); }
-    @FXML public void loadExam() { loadViewWithTransition("/fxmls/passExam.fxml"); }
-
+    @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/Documents.fxml"); }
+    @FXML public void loadRemplirSeance() { loadViewWithTransition("/fxmls/RemplirSeance.fxml"); }
+    @FXML public void loadAfficherSeance() { loadViewWithTransition("/fxmls/AfficherSeance.fxml"); }
+    @FXML public void loadConfirmPresence() { loadViewWithTransition("/fxmls/ConfirmPresence.fxml"); }
+    @FXML public void loadProgression() { loadViewWithTransition("/fxmls/Progression.fxml"); }
+    @FXML public void loadExamRegistration() { loadViewWithTransition("/fxmls/ExamRegistration.fxml"); }
+    @FXML public void loadExam() { loadViewWithTransition("/fxmls/Exam.fxml"); }
+    @FXML public void loadGestionVehicules() { loadViewWithTransition("/fxmls/GestionVehicules.fxml"); }
+    @FXML public void loadDashboardCandidates() { loadViewWithTransition("/fxmls/DashboardCandidates.fxml"); }
+    @FXML public void loadDashboardVehicles() { loadViewWithTransition("/fxmls/DashboardVehicles.fxml"); }
+    @FXML public void loadDashboardFinance() { loadViewWithTransition("/fxmls/DashboardFinance.fxml"); }
+    @FXML public void loadAfficherCandidat() { loadViewWithTransition("/fxmls/AfficherCandidat.fxml"); }
+    @FXML public void loadPayment() { loadViewWithTransition("/fxmls/Paiement.fxml"); }
+    @FXML public void loadAjouterMoniteur() { loadViewWithTransition("/fxmls/AjouterMoniteur.fxml"); }
+    @FXML public void loadModifierMoniteur() { loadViewWithTransition("/fxmls/ModifierMoniteur.fxml"); }
+    @FXML public void loadAfficherMoniteur() { loadViewWithTransition("/fxmls/AfficherMoniteur.fxml"); }
     @FXML public void loadSessionConduite() { loadViewWithTransition("/fxmls/SeanceConduite.fxml"); }
     @FXML public void loadSessionCode() { loadViewWithTransition("/fxmls/SeanceCode.fxml"); }
-    @FXML public void loadMoniteurDispo() { loadViewWithTransition("/fxmls/MoniteurDispo.fxml"); }
-    @FXML public void loadConfirmPresence() { loadViewWithTransition("/fxmls/ConfirmPresence.fxml"); }
-    @FXML public void loadManageSchedules() { loadViewWithTransition("/fxmls/ManageSchedules.fxml"); }
-
-    @FXML public void loadGestionVehicules() { loadViewWithTransition("/fxmls/GestionVehicules.fxml"); }
     @FXML public void loadSuiviEntretiens() { loadViewWithTransition("/fxmls/SuiviEntretiens.fxml"); }
     @FXML public void loadMiseAJourKilometrage() { loadViewWithTransition("/fxmls/MiseAJourKilometrage.fxml"); }
     @FXML public void loadNotifications() { loadViewWithTransition("/fxmls/Notifications.fxml"); }
-
-    @FXML public void loadPayment() { loadViewWithTransition("/fxmls/Payment.fxml"); }
     @FXML public void loadInvoice() { loadViewWithTransition("/fxmls/Invoice.fxml"); }
     @FXML public void loadPaymentHistory() { loadViewWithTransition("/fxmls/PaymentHistory.fxml"); }
-
-
-    @FXML public void loadDashboardFinance() { loadViewWithTransition("/fxmls/DashboardFinance.fxml"); }
-    @FXML public void loadDashboardCandidates() { loadViewWithTransition("/fxmls/DashboardCandidates.fxml"); }
-    @FXML public void loadDashboardVehicles() { loadViewWithTransition("/fxmls/DashboardVehicles.fxml"); }
 
     private void loadViewWithTransition(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
 
-            // Apply fade-in effect
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(300), view);
-            fadeIn.setFromValue(0);
-            fadeIn.setToValue(1);
-
-            contentArea.getChildren().clear();
-            contentArea.getChildren().add(view);
-            fadeIn.play();
+            // Create a fade-out transition for current content
+            if (!contentArea.getChildren().isEmpty()) {
+                FadeTransition fadeOut = new FadeTransition(Duration.millis(150), contentArea.getChildren().get(0));
+                fadeOut.setFromValue(1.0);
+                fadeOut.setToValue(0.0);
+                fadeOut.setOnFinished(event -> {
+                    contentArea.getChildren().clear();
+                    contentArea.getChildren().add(view);
+                    
+                    // Apply multiple animations for an engaging entrance
+                    FadeTransition fadeIn = new FadeTransition(Duration.millis(300), view);
+                    fadeIn.setFromValue(0);
+                    fadeIn.setToValue(1);
+                    
+                    ScaleTransition scaleIn = new ScaleTransition(Duration.millis(300), view);
+                    scaleIn.setFromX(0.95);
+                    scaleIn.setFromY(0.95);
+                    scaleIn.setToX(1.0);
+                    scaleIn.setToY(1.0);
+                    
+                    ParallelTransition parallelTransition = new ParallelTransition();
+                    parallelTransition.getChildren().addAll(fadeIn, scaleIn);
+                    parallelTransition.play();
+                });
+                fadeOut.play();
+            } else {
+                contentArea.getChildren().add(view);
+                
+                // Initial load (no existing content to transition from)
+                FadeTransition fadeIn = new FadeTransition(Duration.millis(300), view);
+                fadeIn.setFromValue(0);
+                fadeIn.setToValue(1);
+                
+                ScaleTransition scaleIn = new ScaleTransition(Duration.millis(300), view);
+                scaleIn.setFromX(0.95);
+                scaleIn.setFromY(0.95);
+                scaleIn.setToX(1.0);
+                scaleIn.setToY(1.0);
+                
+                ParallelTransition parallelTransition = new ParallelTransition();
+                parallelTransition.getChildren().addAll(fadeIn, scaleIn);
+                parallelTransition.play();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,43 +162,16 @@ public class MainWindow implements Initializable {
 
     @FXML private ImageView monImageView;
 
-
-    @FXML
     public void loadMain() {
         contentArea.getChildren().clear();
-
+        
+        // Add logo back if it's not already in the contentArea
         if (!contentArea.getChildren().contains(logoImageView)) {
             contentArea.getChildren().add(logoImageView);
+            createLogoAnimation();
         }
-
-        createLogoAnimation();
     }
-    public void loadAjouterSalle(ActionEvent actionEvent) {
-    }
-
+    
     public void loadModifierSalle(ActionEvent actionEvent) {
-    }
-
-    public void loadAjouterMoniteur() {loadViewWithTransition("/fxmls/ajouterMoniteur.fxml");
-    }
-
-    public void loadModifierMoniteur() {loadViewWithTransition("/fxmls/ModifierMoniteur.fxml");
-    }
-
-    public void loadAfficherCandidat() {
-        loadViewWithTransition("/fxmls/afficherCandidat.fxml");
-    }
-
-    public void loadAfficherSeance() {
-        loadViewWithTransition("/fxmls/afficherSeance.fxml");
-
-    }
-
-    public void loadAfficherMoniteur() {
-        loadViewWithTransition("/fxmls/afficherMoniteur.fxml");
-    }
-
-    public void loadRemplirSeance() {
-        loadViewWithTransition("/fxmls/RemplirSeance.fxml");
     }
 }

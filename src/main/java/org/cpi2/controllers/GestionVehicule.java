@@ -1,10 +1,10 @@
 package org.cpi2.controllers;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.cpi2.entitties.TypePermis;
@@ -91,13 +91,18 @@ public class GestionVehicule  {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisation des colonnes
         immatriculationCol.setCellValueFactory(new PropertyValueFactory<>("immatriculation"));
-        typeVehiculeCol.setCellValueFactory(new PropertyValueFactory<>("typeVehicule"));
+        typeVehiculeCol.setCellValueFactory(cellData -> {
+            TypePermis typePermis = cellData.getValue().getTypePermis();
+            return new SimpleStringProperty(typePermis != null ? typePermis.getCode() : "");
+        });
         marqueModeleCol.setCellValueFactory(cellData -> cellData.getValue().marqueModeleProperty());
-        kilometrageCol.setCellValueFactory(new PropertyValueFactory<>("kilometrage"));
-        prochainEntretienCol.setCellValueFactory(new PropertyValueFactory<>("prochainEntretien"));
+        kilometrageCol.setCellValueFactory(new PropertyValueFactory<>("kilometrageTotal"));
+        prochainEntretienCol.setCellValueFactory(new PropertyValueFactory<>("dateMiseEnService"));
 
         // Initialisation des types de véhicules
-        typeVehiculeCombo.getItems().addAll("Voiture", "Moto", "Camion");
+        for (TypePermis type : TypePermis.values()) {
+            typeVehiculeCombo.getItems().add(type.getCode());
+        } // Add TypePermis codes (B=Voiture, A=Moto, C=Camion)
 
         // Chargement des données de test
         chargerDonneesTest();
@@ -123,11 +128,11 @@ public class GestionVehicule  {
      */
     private void chargerDonneesTest() {
         // Données de test en attendant l'implémentation du service
-        vehiculesList.add(new Vehicule("AB-123-CD", "Voiture", "Renault", "Clio", 45000, LocalDate.now().plusMonths(3)));
-        vehiculesList.add(new Vehicule("EF-456-GH", "Voiture", "Peugeot", "308", 72000, LocalDate.now().plusMonths(1)));
-        vehiculesList.add(new Vehicule("IJ-789-KL", "Moto", "Honda", "CBR", 15000, LocalDate.now().plusMonths(6)));
-        vehiculesList.add(new Vehicule("MN-012-OP", "Camion", "Volvo", "FH16", 120000, LocalDate.now().minusMonths(1)));
-
+        vehiculesList.add(new Vehicule("AB-123-CD", "Renault", "Clio", TypePermis.B, LocalDate.now().plusMonths(3), 45000));
+        vehiculesList.add(new Vehicule("EF-456-GH", "Peugeot", "308", TypePermis.B, LocalDate.now().plusMonths(1), 72000));
+        vehiculesList.add(new Vehicule("IJ-789-KL", "Honda", "CBR", TypePermis.A, LocalDate.now().plusMonths(6), 15000));
+        vehiculesList.add(new Vehicule("MN-012-OP", "Volvo", "FH16", TypePermis.C, LocalDate.now().minusMonths(1), 120000));
+        
         vehiculesTable.setItems(vehiculesList);
     }
 
@@ -230,7 +235,13 @@ public class GestionVehicule  {
         if (isEditMode && vehiculeSelected != null) {
             // Mise à jour
             vehiculeSelected.setImmatriculation(immatriculationField.getText());
-            vehiculeSelected.setTypePermis(TypePermis.valueOf(typeVehiculeCombo.getValue()));
+            // Find the TypePermis enum by its code
+            for (TypePermis type : TypePermis.values()) {
+                if (type.getCode().equals(typeVehiculeCombo.getValue())) {
+                    vehiculeSelected.setTypePermis(type);
+                    break;
+                }
+            }
             vehiculeSelected.setMarque(marqueField.getText());
             vehiculeSelected.setModele(modeleField.getText());
             vehiculeSelected.setKilometrageTotal(Integer.parseInt(kilometrageField.getText()));
@@ -239,14 +250,21 @@ public class GestionVehicule  {
             statusLabel.setText("Véhicule modifié avec succès");
         } else {
             // Création
-            Vehicule nouveauVehicule = new Vehicule(
-                    immatriculationField.getText(),
-                    typeVehiculeCombo.getValue(),
-                    marqueField.getText(),
-                    modeleField.getText(),
-                    Integer.parseInt(kilometrageField.getText()),
-                    LocalDate.now().plusMonths(3) // Date d'entretien par défaut (à remplacer)
-            );
+            Vehicule nouveauVehicule = new Vehicule();
+            nouveauVehicule.setImmatriculation(immatriculationField.getText());
+            
+            // Find the TypePermis enum by its code
+            for (TypePermis type : TypePermis.values()) {
+                if (type.getCode().equals(typeVehiculeCombo.getValue())) {
+                    nouveauVehicule.setTypePermis(type);
+                    break;
+                }
+            }
+            
+            nouveauVehicule.setMarque(marqueField.getText());
+            nouveauVehicule.setModele(modeleField.getText());
+            nouveauVehicule.setKilometrageTotal(Integer.parseInt(kilometrageField.getText()));
+            nouveauVehicule.setProchainEntretien(LocalDate.now().plusMonths(3)); // Date d'entretien par défaut (à remplacer)
             nouveauVehicule.setDateMiseEnService(dateMiseServicePicker.getValue());
 
             vehiculesList.add(nouveauVehicule);
@@ -318,7 +336,10 @@ public class GestionVehicule  {
      */
     private void remplirChamps(Vehicule vehicule) {
         immatriculationField.setText(vehicule.getImmatriculation());
-        typeVehiculeCombo.setValue(String.valueOf(vehicule.getTypePermis()));
+        // Set the combo box value to the TypePermis code
+        if (vehicule.getTypePermis() != null) {
+            typeVehiculeCombo.setValue(vehicule.getTypePermis().getCode());
+        }
         marqueField.setText(vehicule.getMarque());
         modeleField.setText(vehicule.getModele());
         kilometrageField.setText(String.valueOf(vehicule.getKilometrageAvantEntretien()));

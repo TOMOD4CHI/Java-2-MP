@@ -3,6 +3,7 @@ package org.cpi2.entitties;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
 public abstract class Personne {
     protected Long id;
     protected String nom;

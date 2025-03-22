@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Rectangle?>
+
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+           fx:controller="org.cpi2.controllers.AfficherEcole" 
+           stylesheets="@/css/style.css" style="-fx-background-color: transparent;"
+           fx:id="rootPane">
+    
+    <VBox spacing="20" alignment="CENTER" styleClass="form-container" style="-fx-background-radius: 15;">
+        <effect>
+            <DropShadow color="#00000033" radius="10" spread="0.1"/>
+        </effect>
+        
+        <HBox alignment="CENTER" styleClass="header-container">
+            <Label text="Liste des Auto-Écoles" styleClass="form-title">
+                <font>
+                    <Font name="System Bold" size="24"/>
+                </font>
+            </Label>
+        </HBox>
+        
+        <VBox VBox.vgrow="ALWAYS" spacing="15" styleClass="content-container" fx:id="contentContainer">
+            <TableView fx:id="ecoleTableView" VBox.vgrow="ALWAYS" styleClass="custom-table-view">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="nomColumn" text="Nom" prefWidth="150"/>
+                    <TableColumn fx:id="adresseColumn" text="Adresse" prefWidth="200"/>
+                    <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="120"/>
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="150"/>
+                </columns>
+                <placeholder>
+                    <Label text="Aucune auto-école disponible" style="-fx-text-fill: #555;"/>
+                </placeholder>
+            </TableView>
+            
+            <HBox spacing="25" alignment="CENTER" styleClass="detail-container" fx:id="detailContainer">
+                <VBox spacing="10" alignment="CENTER" styleClass="logo-container" minWidth="200">
+                    <Label text="Logo de l'école" styleClass="section-label"/>
+                    <StackPane styleClass="logo-frame" minHeight="150" minWidth="150">
+                        <Rectangle width="140" height="140" arcWidth="20" arcHeight="20" styleClass="logo-background"/>
+                        <ImageView fx:id="logoImageView" fitWidth="130" fitHeight="130" preserveRatio="true"/>
+                    </StackPane>
+                </VBox>
+                
+                <VBox spacing="15" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="actions-container">
+                    <Button text="✚ Ajouter une école" onAction="#handleAjouterEcole" 
+                            styleClass="action-button, add-button" maxWidth="250" />
+                    <Button text="✏️ Modifier l'école sélectionnée" onAction="#handleModifierEcole" 
+                            styleClass="action-button, edit-button" maxWidth="250" />
+                    <Button text="🗑️ Supprimer l'école sélectionnée" onAction="#handleSupprimerEcole" 
+                            styleClass="action-button, delete-button" maxWidth="250" />
+                </VBox>
+            </HBox>
+        </VBox>
+        
+        <padding>
+            <Insets top="20" right="30" bottom="20" left="30"/>
+        </padding>
+    </VBox>
+</StackPane> 

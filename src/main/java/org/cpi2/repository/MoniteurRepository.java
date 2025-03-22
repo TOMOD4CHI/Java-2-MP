@@ -5,7 +5,6 @@ import org.cpi2.entitties.TypePermis;
 
 import java.sql.*;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,12 +12,9 @@ import java.util.logging.Logger;
 // Monitor Repository
 public class MoniteurRepository {
     private static final Logger LOGGER = Logger.getLogger(MoniteurRepository.class.getName());
-    private static final String URL = "jdbc:mysql://localhost:3306/auto_ecole";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DatabaseConfig.getConnection();
     }
 
     public List<Moniteur> findAll() {

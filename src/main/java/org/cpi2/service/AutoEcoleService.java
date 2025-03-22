@@ -3,73 +3,82 @@ package org.cpi2.service;
 import org.cpi2.entitties.AutoEcole;
 import org.cpi2.repository.AutoEcoleRepository;
 
+import java.sql.SQLException;
+import java.util.List;
+
 public class AutoEcoleService {
-    private final AutoEcoleRepository autoEcoleRepo = new AutoEcoleRepository();
-
+    
+    private final AutoEcoleRepository autoEcoleRepository;
+    
+    public AutoEcoleService() {
+        this.autoEcoleRepository = new AutoEcoleRepository();
+    }
+    
+    /**
+     * Get the auto-école information
+     * Since only one auto-école is supposed to exist, this returns the first one found
+     * @return The auto-école or null if none exists
+     */
+    public AutoEcole getAutoEcole() {
+        try {
+            return autoEcoleRepository.findFirst();
+        } catch (SQLException e) {
+            System.err.println("Error retrieving auto-école: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    /**
+     * Get all auto-écoles from the database
+     * @return A list of all auto-écoles
+     */
+    public List<AutoEcole> findAllAutoEcoles() {
+        return autoEcoleRepository.findAll();
+    }
+    
+    /**
+     * Save new auto-école to database
+     * @param autoEcole The auto-école to save
+     * @return true if successful, false otherwise
+     */
     public boolean saveAutoEcole(AutoEcole autoEcole) {
-        deleteAutoEcole();
-        return autoEcoleRepo.save(autoEcole);
-    }
-
-    public AutoEcole viewAutoEcole() {
-        return autoEcoleRepo.findById(0L).orElse(null);
-    }
-
-    public boolean modifyNom(String nouveauNom) {
-        if (nouveauNom != null && !nouveauNom.isEmpty()) {
-            AutoEcole autoEcole = autoEcoleRepo.findById(0L).orElse(null);
-            if (autoEcole != null) {
-                autoEcole.setNom(nouveauNom);
-                return autoEcoleRepo.update(autoEcole);
-            }
+        try {
+            return autoEcoleRepository.save(autoEcole);
+        } catch (Exception e) {
+            System.err.println("Error saving auto-école: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
-
-    public boolean modifyAddress(String nouvelleAdresse) {
-        if (nouvelleAdresse != null && !nouvelleAdresse.isEmpty()) {
-            AutoEcole autoEcole = autoEcoleRepo.findById(0L).orElse(null);
-            if (autoEcole != null) {
-                autoEcole.setAdresse(nouvelleAdresse);
-                return autoEcoleRepo.update(autoEcole);
-            }
+    
+    /**
+     * Update an existing auto-école in database
+     * @param autoEcole The auto-école to update
+     * @return true if successful, false otherwise
+     */
+    public boolean updateAutoEcole(AutoEcole autoEcole) {
+        try {
+            return autoEcoleRepository.update(autoEcole);
+        } catch (Exception e) {
+            System.err.println("Error updating auto-école: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
-
-    public boolean modifyTelephone(String nouveauTelephone) {
-        if (nouveauTelephone != null && !nouveauTelephone.isEmpty()) {
-            AutoEcole autoEcole = autoEcoleRepo.findById(0L).orElse(null);
-            if (autoEcole != null) {
-                autoEcole.setTelephone(nouveauTelephone);
-                return autoEcoleRepo.update(autoEcole);
-            }
+    
+    /**
+     * Delete an auto-école from database by ID
+     * @param id The ID of the auto-école to delete
+     * @return true if successful, false otherwise
+     */
+    public boolean deleteAutoEcole(int id) {
+        try {
+            return autoEcoleRepository.deleteById(id);
+        } catch (Exception e) {
+            System.err.println("Error deleting auto-école: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
-        return false;
-    }
-
-    public boolean modifyEmail(String nouveauEmail) {
-        if (nouveauEmail != null && !nouveauEmail.isEmpty()) {
-            AutoEcole autoEcole = autoEcoleRepo.findById(0L).orElse(null);
-            if (autoEcole != null) {
-                autoEcole.setEmail(nouveauEmail);
-                return autoEcoleRepo.update(autoEcole);
-            }
-        }
-        return false;
-    }
-
-    public boolean modifyLogoPath(String nouveauLogoPath) {
-        if (nouveauLogoPath != null && !nouveauLogoPath.isEmpty()) {
-            AutoEcole autoEcole = autoEcoleRepo.findById(0L).orElse(null);
-            if (autoEcole != null) {
-                autoEcole.setLogoPath(nouveauLogoPath);
-                return autoEcoleRepo.update(autoEcole);
-            }
-        }
-        return false;
-    }
-    public boolean deleteAutoEcole() {
-        return autoEcoleRepo.delete();
     }
 }

@@ -3,12 +3,13 @@ package org.cpi2.entitties;
 import java.util.*;
 
 public class AutoEcole {
-    private Long id;
+    private int id;
     private String nom;
     private String adresse;
     private String telephone;
     private String email;
-    private String logoPath;
+    private String directeur;
+    private String logo;
     private List<Vehicule> flotte;
     private Map<Long, Moniteur> moniteurs;
     private Map<Long, Candidat> candidats;
@@ -19,68 +20,23 @@ public class AutoEcole {
         this.candidats = new TreeMap<>();
     }
 
-    public AutoEcole(String nom, String adresse, String telephone, String email) {
+    public AutoEcole(int id, String nom, String adresse, String telephone, String email, String directeur, String logo) {
         this();
+        this.id = id;
         this.nom = nom;
         this.adresse = adresse;
         this.telephone = telephone;
         this.email = email;
+        this.directeur = directeur;
+        this.logo = logo;
     }
 
-    public String getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
-
-    public Map<Long, Candidat> getCandidats() {
-        return candidats;
-    }
-
-    public void setCandidats(Map<Long, Candidat> candidats) {
-        this.candidats = candidats;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Vehicule> getFlotte() {
-        return flotte;
-    }
-
-    public void setFlotte(List<Vehicule> flotte) {
-        this.flotte = flotte;
-    }
-
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
-    }
-
-    public String getLogoPath() {
-        return logoPath;
-    }
-
-    public void setLogoPath(String logoPath) {
-        this.logoPath = logoPath;
-    }
-
-    public Map<Long, Moniteur> getMoniteurs() {
-        return moniteurs;
-    }
-
-    public void setMoniteurs(Map<Long, Moniteur> moniteurs) {
-        this.moniteurs = moniteurs;
     }
 
     public String getNom() {
@@ -91,11 +47,80 @@ public class AutoEcole {
         this.nom = nom;
     }
 
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
     public String getTelephone() {
         return telephone;
     }
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDirecteur() {
+        return directeur;
+    }
+
+    public void setDirecteur(String directeur) {
+        this.directeur = directeur;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public List<Vehicule> getFlotte() {
+        return flotte;
+    }
+
+    public void setFlotte(List<Vehicule> flotte) {
+        this.flotte = flotte;
+    }
+
+    public Map<Long, Moniteur> getMoniteurs() {
+        return moniteurs;
+    }
+
+    public void setMoniteurs(Map<Long, Moniteur> moniteurs) {
+        this.moniteurs = moniteurs;
+    }
+
+    public Map<Long, Candidat> getCandidats() {
+        return candidats;
+    }
+
+    public void setCandidats(Map<Long, Candidat> candidats) {
+        this.candidats = candidats;
+    }
+
+    @Override
+    public String toString() {
+        return "AutoEcole{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", adresse='" + adresse + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", email='" + email + '\'' +
+                ", directeur='" + directeur + '\'' +
+                ", logo='" + logo + '\'' +
+                '}';
     }
 }

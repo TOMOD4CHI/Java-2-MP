@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="org.cpi2.controllers.AjouterEcole"
+      spacing="10" alignment="CENTER" styleClass="form-container">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <!-- Form fields here -->
+    
+    <Button text="Ajouter Auto École" 
+            styleClass="primary-button"
+            onAction="#handleAjouterEcole"
+            maxWidth="200"/>
+</VBox>

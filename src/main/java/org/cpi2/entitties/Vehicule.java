@@ -16,24 +16,38 @@ public class Vehicule {
     private Integer kilometrageTotal;
     private Integer kilometrageAvantEntretien;
     private Map<LocalDate, Entretien> historique;
+    private LocalDate dateProchainEntretien;
+    private LocalDate dateDerniereVisiteTechnique;
+    private LocalDate dateProchaineVisiteTechnique;
+    private LocalDate dateExpirationAssurance;
+    
+    /**
+     * No-argument constructor for Vehicule class
+     */
+    public Vehicule() {
+        this.kilometrageTotal = 0;
+        this.historique = new TreeMap<>();
+    }
 
     public Vehicule(String immatriculation, String voiture, String renault, String clio, int i, LocalDate localDate) {
         this.kilometrageTotal = 0;
         this.historique = new TreeMap<>();
     }
+    
     public StringProperty marqueModeleProperty() {
         return new SimpleStringProperty(marque + " " + modele); // Concatenates marque and modele
     }
 
     public Vehicule(String immatriculation, String marque, String modele, TypePermis typePermis,
                     LocalDate dateMiseEnService, Integer kilometrageAvantEntretien) {
-        this("AB-123-CD", "Voiture", "Renault", "Clio", 45000, LocalDate.now().plusMonths(3));
         this.immatriculation = immatriculation;
         this.marque = marque;
         this.modele = modele;
         this.typePermis = typePermis;
         this.dateMiseEnService = dateMiseEnService;
         this.kilometrageAvantEntretien = kilometrageAvantEntretien;
+        this.kilometrageTotal = 0;
+        this.historique = new TreeMap<>();
     }
 
     @Override
@@ -120,5 +134,39 @@ public class Vehicule {
     public void setTypePermis(TypePermis typePermis) {
         this.typePermis = typePermis;
     }
+
+    public LocalDate getDateProchainEntretien() {
+        return dateProchainEntretien;
+    }
+
+    public void setProchainEntretien(LocalDate dateProchainEntretien) {
+        this.dateProchainEntretien = dateProchainEntretien;
+    }
+
+    public LocalDate getDateDerniereVisiteTechnique() {
+        return dateDerniereVisiteTechnique;
+    }
+
+    public void setDateDerniereVisiteTechnique(LocalDate dateDerniereVisiteTechnique) {
+        this.dateDerniereVisiteTechnique = dateDerniereVisiteTechnique;
+    }
+
+    public LocalDate getDateProchaineVisiteTechnique() {
+        return dateProchaineVisiteTechnique;
+    }
+
+    public void setDateProchaineVisiteTechnique(LocalDate dateProchaineVisiteTechnique) {
+        this.dateProchaineVisiteTechnique = dateProchaineVisiteTechnique;
+    }
+
+    public LocalDate getDateExpirationAssurance() {
+        return dateExpirationAssurance;
+    }
+
+    public void setDateExpirationAssurance(LocalDate dateExpirationAssurance) {
+        this.dateExpirationAssurance = dateExpirationAssurance;
+    }
+
+
 }
 

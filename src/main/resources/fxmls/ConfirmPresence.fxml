@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.ConfirmPresence"
+            stylesheets="@/css/style.css"
+            styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <center>
+        <VBox styleClass="form-container" spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="25" right="30" bottom="25" left="30"/>
+            </padding>
+            
+            <StackPane styleClass="title-wrapper">
+                <Label text="Confirmer Présence" styleClass="form-title"/>
+            </StackPane>
+            
+            <Separator styleClass="form-separator">
+                <VBox.margin>
+                    <Insets top="5" bottom="15"/>
+                </VBox.margin>
+            </Separator>
+
+            <HBox spacing="20" alignment="CENTER">
+                <VBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS">
+                    <Label text="Séances programmées" styleClass="section-label"/>
+                    <TableView fx:id="sessionsTable" VBox.vgrow="ALWAYS" styleClass="custom-table-view" prefHeight="300">
+                        <columns>
+                            <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+                            <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
+                            <TableColumn fx:id="dateColumn" text="Date" prefWidth="100"/>
+                            <TableColumn fx:id="timeColumn" text="Heure" prefWidth="80"/>
+                            <TableColumn fx:id="candidateColumn" text="Candidat" prefWidth="120"/>
+                            <TableColumn fx:id="monitorColumn" text="Moniteur" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </HBox>
+            
+            <GridPane hgap="15" vgap="15" alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" minWidth="150"/>
+                    <ColumnConstraints halignment="LEFT" minWidth="250" hgrow="ALWAYS"/>
+                </columnConstraints>
+                
+                <Label text="ID de séance:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="sessionIdCombo" promptText="Sélectionner une séance" 
+                          GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field" 
+                          prefWidth="250"/>
+
+                <Label text="Statut de présence:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="presenceStatusCombo" promptText="Sélectionner le statut"
+                          GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field"
+                          prefWidth="250"/>
+                
+                <Label text="Commentaire:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextArea fx:id="commentArea" promptText="Notes et commentaires sur la présence" 
+                          GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field"
+                          prefHeight="80" wrapText="true"/>
+            </GridPane>
+
+            <HBox spacing="15" alignment="CENTER">
+                <VBox.margin>
+                    <Insets top="20"/>
+                </VBox.margin>
+                <Button text="Annuler" onAction="#handleCancel" styleClass="button, cancel-button"/>
+                <Button text="Confirmer" onAction="#handleConfirm" styleClass="button, submit-button"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane> 
