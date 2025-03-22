@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.DashboardCandidates"
+            stylesheets="@/css/style.css"
+            styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <top>
+        <VBox alignment="CENTER" spacing="10">
+            <Label text="Tableau de Bord des Candidats" styleClass="dashboard-title"/>
+            <HBox alignment="CENTER" spacing="15" styleClass="period-selector">
+                <Label text="Période:" styleClass="form-label"/>
+                <ComboBox fx:id="periodCombo" promptText="Sélectionner une période" styleClass="form-field"/>
+                <DatePicker fx:id="startDate" promptText="Date début" styleClass="form-field"/>
+                <DatePicker fx:id="endDate" promptText="Date fin" styleClass="form-field"/>
+                <Button text="Appliquer" onAction="#handleApplyFilter" styleClass="button, submit-button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
+            <VBox spacing="20">
+                <!-- KPI Cards Row -->
+                <HBox spacing="15" alignment="CENTER">
+                    <VBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </VBox.margin>
+                    
+                    <!-- Total Candidates Card -->
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <Label text="Total des Candidats" styleClass="card-title"/>
+                        <Label fx:id="totalCandidatsLabel" text="156" styleClass="card-value"/>
+                        <Label fx:id="candidatsChangeLabel" text="+12% vs période précédente" styleClass="change-positive"/>
+                    </VBox>
+                    
+                    <!-- New Candidates Card -->
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <Label text="Nouveaux Candidats" styleClass="card-title"/>
+                        <Label fx:id="newCandidatsLabel" text="24" styleClass="card-value"/>
+                        <Label fx:id="newCandidatsChangeLabel" text="+8% vs période précédente" styleClass="change-positive"/>
+                    </VBox>
+                    
+                    <!-- Completion Rate Card -->
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <Label text="Taux de Réussite" styleClass="card-title"/>
+                        <Label fx:id="completionRateLabel" text="78%" styleClass="card-value"/>
+                        <Label fx:id="completionChangeLabel" text="+5% vs période précédente" styleClass="change-positive"/>
+                    </VBox>
+                    
+                    <!-- Active Candidates Card -->
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <Label text="Candidats Actifs" styleClass="card-title"/>
+                        <Label fx:id="activeCandidatsLabel" text="87" styleClass="card-value"/>
+                        <Label fx:id="activeChangeLabel" text="+3% vs période précédente" styleClass="change-positive"/>
+                    </VBox>
+                </HBox>
+                
+                <!-- Charts Row 1 -->
+                <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <!-- Registration Trend Chart -->
+                    <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                        <Label text="Évolution des Inscriptions" styleClass="chart-title"/>
+                        <LineChart fx:id="registrationChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
+                            <xAxis>
+                                <CategoryAxis fx:id="registrationDateAxis" label="Date"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="registrationCountAxis" label="Nombre d'inscriptions"/>
+                            </yAxis>
+                        </LineChart>
+                    </VBox>
+                    
+                    <!-- Age Distribution -->
+                    <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                        <Label text="Répartition par Âge" styleClass="chart-title"/>
+                        <PieChart fx:id="ageDistributionChart" animated="true" labelsVisible="true" VBox.vgrow="ALWAYS"/>
+                    </VBox>
+                </HBox>
+                
+                <!-- Charts Row 2 -->
+                <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
+                    <!-- Session Attendance -->
+                    <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                        <Label text="Participation aux Séances" styleClass="chart-title"/>
+                        <BarChart fx:id="attendanceChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
+                            <xAxis>
+                                <CategoryAxis fx:id="attendanceTypeAxis" label="Type de Séance"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="attendanceRateAxis" label="Taux de Présence (%)"/>
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+                    
+                    <!-- Exam Results -->
+                    <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
+                        <Label text="Résultats aux Examens" styleClass="chart-title"/>
+                        <StackedBarChart fx:id="examResultsChart" animated="true" VBox.vgrow="ALWAYS">
+                            <xAxis>
+                                <CategoryAxis fx:id="examTypeAxis" label="Type d'Examen"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="examResultsAxis" label="Nombre de Candidats"/>
+                            </yAxis>
+                        </StackedBarChart>
+                    </VBox>
+                </HBox>
+                
+                <!-- Recent Candidates Table -->
+                <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
+                    <Label text="Candidats Récents" styleClass="table-title"/>
+                    <TableView fx:id="recentCandidatesTable" VBox.vgrow="ALWAYS" styleClass="custom-table-view">
+                        <columns>
+                            <TableColumn fx:id="candidateIdColumn" text="ID" prefWidth="60"/>
+                            <TableColumn fx:id="candidateNameColumn" text="Nom" prefWidth="150"/>
+                            <TableColumn fx:id="candidateAgeColumn" text="Âge" prefWidth="60"/>
+                            <TableColumn fx:id="candidatePhoneColumn" text="Téléphone" prefWidth="120"/>
+                            <TableColumn fx:id="candidateEmailColumn" text="Email" prefWidth="180"/>
+                            <TableColumn fx:id="candidateStatusColumn" text="Statut" prefWidth="100"/>
+                            <TableColumn fx:id="candidateRegistrationDateColumn" text="Date d'Inscription" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane> 
