@@ -12,12 +12,9 @@ import java.util.logging.Logger;
 // Candidat Repository
 public class CandidatRepository {
     private static final Logger LOGGER = Logger.getLogger(CandidatRepository.class.getName());
-    private static final String URL = "jdbc:mysql://localhost:3306/autoecole";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DatabaseConfig.getConnection();
     }
 
     public List<Candidat> findAll() {

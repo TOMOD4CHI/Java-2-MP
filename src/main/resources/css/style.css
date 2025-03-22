@@ -36,6 +36,16 @@
     -fx-padding: 5px 10px;
 }
 
+.info-value {
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 400;
+    -fx-text-fill: #2D3748;
+    -fx-padding: 5px 10px;
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-radius: 8px;
+}
+
 .form-container {
     -fx-background-color: rgba(255, 255, 255, 0.85);
     -fx-background-radius: 16px;
@@ -60,6 +70,16 @@
     -fx-text-fill: #2B6CB0;
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 2, 0, 0, 1);
     -fx-padding: 10px 0;
+    -fx-alignment: center;
+}
+
+.form-section-title {
+    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B6CB0;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 1, 0, 0, 1);
+    -fx-padding: 5px 0;
     -fx-alignment: center;
 }
 
@@ -92,6 +112,29 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 4, 0, 0, 0);
 }
 
+/* Auto Ecole Styling */
+.auto-ecole-info, .auto-ecole-edit {
+    -fx-background-color: rgba(240, 247, 255, 0.7);
+    -fx-background-radius: 12px;
+    -fx-border-color: #BEE3F8;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.15), 5, 0, 0, 2);
+    -fx-padding: 15px;
+    -fx-alignment: center;
+    -fx-spacing: 15;
+}
+
+.auto-ecole-edit {
+    -fx-background-color: rgba(230, 244, 255, 0.8);
+    -fx-border-color: #74baff;
+}
+
+.logo-image {
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.35), 8, 0, 0, 3);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+
 /* Button Styling */
 .button {
     -fx-background-color: #3182CE;
@@ -122,7 +165,7 @@
 
 /* Action Button Styling */
 .action-button {
-    -fx-min-width: 200px;
+    -fx-min-width: 150px;
     -fx-min-height: 45px;
     -fx-font-size: 15px;
     -fx-padding: 12px 24px;
@@ -154,6 +197,29 @@
 
 .delete-button:hover {
     -fx-background-color: #C53030;
+}
+
+.cancel-button {
+    -fx-background-color: #718096;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #4A5568;
+}
+
+.submit-button {
+    -fx-background-color: #38A169;
+}
+
+.submit-button:hover {
+    -fx-background-color: #2F855A;
+}
+
+.small-button {
+    -fx-min-width: 120px;
+    -fx-min-height: 30px;
+    -fx-font-size: 13px;
+    -fx-padding: 8px 12px;
 }
 
 /* Menu Styling */
@@ -477,23 +543,6 @@
 }
 
 /* Button styles - extending with specialized button types */
-
-.cancel-button {
-    -fx-background-color: rgba(226, 232, 240, 0.8);
-    -fx-text-fill: #4A5568;
-    -fx-border-color: rgba(203, 213, 224, 0.6);
-}
-
-.cancel-button:hover {
-    -fx-background-color: rgba(203, 213, 224, 0.85);
-    -fx-effect: dropshadow(gaussian, rgba(113, 128, 150, 0.15), 5, 0, 0, 2);
-    -fx-text-fill: #2D3748;
-}
-
-.cancel-button:pressed {
-    -fx-background-color: rgba(180, 190, 200, 0.9);
-    -fx-effect: dropshadow(gaussian, rgba(113, 128, 150, 0.1), 3, 0, 0, 1);
-}
 
 .submit-button {
     -fx-background-color: rgba(72, 187, 120, 0.8);

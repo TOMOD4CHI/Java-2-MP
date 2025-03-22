@@ -1,7 +1,6 @@
 package org.cpi2.entitties;
 
 import java.util.*;
-import java.util.Objects;
 
 public class AutoEcole {
     private int id;
@@ -30,15 +29,6 @@ public class AutoEcole {
         this.email = email;
         this.directeur = directeur;
         this.logo = logo;
-    }
-
-    public AutoEcole(int id, String nom, String adresse, String telephone, String email, String directeur) {
-        this.id = id;
-        this.nom = nom;
-        this.adresse = adresse;
-        this.telephone = telephone;
-        this.email = email;
-        this.directeur = directeur;
     }
 
     public int getId() {
@@ -119,20 +109,6 @@ public class AutoEcole {
 
     public void setCandidats(Map<Long, Candidat> candidats) {
         this.candidats = candidats;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AutoEcole autoEcole = (AutoEcole) o;
-        return id == autoEcole.id &&
-               Objects.equals(nom, autoEcole.nom);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nom);
     }
 
     @Override

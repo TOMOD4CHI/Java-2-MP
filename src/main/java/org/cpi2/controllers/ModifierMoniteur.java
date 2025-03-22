@@ -10,8 +10,8 @@ import org.cpi2.entitties.TypePermis;
 import org.cpi2.service.MoniteurService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class ModifierMoniteur {
@@ -169,7 +169,7 @@ public class ModifierMoniteur {
         currentMoniteur.setDateEmbauche(dateEmbauche);
         
         // Update specialities
-        List<TypePermis> specialites = new ArrayList<>();
+        Set<TypePermis> specialites = new HashSet<>();
         specialites.add(typePermis);
         currentMoniteur.setSpecialites(specialites);
 

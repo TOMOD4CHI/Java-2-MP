@@ -49,9 +49,14 @@ public class ModifierCandidat {
     @FXML private ComboBox<String> typeComboBox;
 
     public void initialize() {
-        // Initialize type permis options
+        // Clear existing items and initialize type permis options
+        typeComboBox.getItems().clear();
         for (TypePermis type : TypePermis.values()) {
-            typeComboBox.getItems().add(type.name());
+            typeComboBox.getItems().add(type.getLibelle());
+        }
+        // Set default selection
+        if (!typeComboBox.getItems().isEmpty()) {
+            typeComboBox.getSelectionModel().selectFirst();
         }
     }
 
@@ -67,7 +72,7 @@ public class ModifierCandidat {
             
             // Set the type permis in combo box
             if (candidat.getTypePermis() != null) {
-                typeComboBox.setValue(candidat.getTypePermis().name());
+                typeComboBox.setValue(candidat.getTypePermis().getLibelle());
             }
         }
     }
@@ -139,7 +144,13 @@ public class ModifierCandidat {
             
             // Set type permis from combo box selection
             if (typePermis != null) {
-                candidatToModify.setTypePermis(TypePermis.valueOf(typePermis));
+                // Find the TypePermis enum by its libelle
+                for (TypePermis type : TypePermis.values()) {
+                    if (type.getLibelle().equals(typePermis)) {
+                        candidatToModify.setTypePermis(type);
+                        break;
+                    }
+                }
             }
 
             if (candidatService.updateCandidat(candidatToModify)) {

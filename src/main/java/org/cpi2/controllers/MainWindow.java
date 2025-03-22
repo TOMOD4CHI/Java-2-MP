@@ -3,6 +3,7 @@ package org.cpi2.controllers;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
+import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -23,51 +25,56 @@ import java.util.ResourceBundle;
 public class MainWindow implements Initializable {
 
     @FXML private StackPane contentArea;
-    @FXML private ImageView logoImage;
-    @FXML private Button mainButton;
+    @FXML private ImageView backgroundImage;
+    @FXML private ImageView logoImageView;
+    // Fullscreen button removed as requested
 
     private Stage stage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createLogoAnimation();
+        
+        // We'll set up the stage properties after the scene is fully loaded
+        // using Platform.runLater to ensure the scene is ready
+        javafx.application.Platform.runLater(() -> {
+            try {
+                Stage stage = (Stage) contentArea.getScene().getWindow();
+                stage.setResizable(true);
+                stage.setMinWidth(800);
+                stage.setMinHeight(600);
+                stage.setMaximized(false);
+                
+                // Set default size - wider as requested
+                stage.setWidth(1280);
+                stage.setHeight(800);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void createLogoAnimation() {
         // Simpler logo animation with just subtle fade-in
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.0), logoImage);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.0), logoImageView);
         fadeTransition.setFromValue(0);
-        fadeTransition.setToValue(0.95);
+        fadeTransition.setToValue(0.75);
         fadeTransition.setInterpolator(Interpolator.EASE_OUT);
         
         // Add subtle scale for a gentle entrance
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1.0), logoImage);
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1.0), logoImageView);
         scaleTransition.setFromX(0.95);
         scaleTransition.setFromY(0.95);
         scaleTransition.setToX(1.0);
         scaleTransition.setToY(1.0);
         scaleTransition.setInterpolator(Interpolator.EASE_OUT);
-        
-        ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, scaleTransition);
+
+        ParallelTransition parallelTransition = new ParallelTransition();
+        parallelTransition.getChildren().addAll(scaleTransition, fadeTransition);
         parallelTransition.play();
     }
 
-    @FXML
-    public void toggleFullscreen() {
-        if (stage == null) {
-            stage = (Stage) mainButton.getScene().getWindow();
-        }
-        
-        boolean isFullScreen = stage.isFullScreen();
-        stage.setFullScreen(!isFullScreen);
-        
-        // Update button text based on fullscreen state
-        if (isFullScreen) {
-            mainButton.setText("Plein écran");
-        } else {
-            mainButton.setText("Quitter plein écran");
-        }
-    }
+    // Fullscreen toggle functionality removed as requested
 
     @FXML public void loadAjouterEcole() {loadViewWithTransition("/fxmls/ajouterEcole.fxml"); }
     @FXML public void loadModifierEcole() {loadViewWithTransition("/fxmls/modifierEcole.fxml"); }
@@ -99,7 +106,6 @@ public class MainWindow implements Initializable {
     @FXML public void loadNotifications() { loadViewWithTransition("/fxmls/Notifications.fxml"); }
     @FXML public void loadInvoice() { loadViewWithTransition("/fxmls/Invoice.fxml"); }
     @FXML public void loadPaymentHistory() { loadViewWithTransition("/fxmls/PaymentHistory.fxml"); }
-    @FXML public void loadGestionSeances() { loadViewWithTransition("/fxmls/gestionSeances.fxml"); }
 
     private void loadViewWithTransition(String fxmlPath) {
         try {
@@ -160,8 +166,8 @@ public class MainWindow implements Initializable {
         contentArea.getChildren().clear();
         
         // Add logo back if it's not already in the contentArea
-        if (!contentArea.getChildren().contains(logoImage)) {
-            contentArea.getChildren().add(logoImage);
+        if (!contentArea.getChildren().contains(logoImageView)) {
+            contentArea.getChildren().add(logoImageView);
             createLogoAnimation();
         }
     }

@@ -60,7 +60,7 @@ public class ConfirmPresence {
     private void loadSessions() {
         try {
             // Load sessions with today's date or future dates
-            List<Seance> sessions = seanceService.getAllSeances();
+            List<Seance> sessions = seanceService.findAllSeances();
             
             // Filter for sessions that haven't been marked for attendance yet
             List<Seance> pendingSessions = sessions.stream()

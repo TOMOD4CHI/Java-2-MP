@@ -50,7 +50,7 @@ public class AjouterCandidat {
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
     @FXML private TextField cinField;
-    @FXML private ComboBox<TypePermis> typeComboBox;
+    @FXML private ComboBox<String> typeComboBox;
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
@@ -60,8 +60,15 @@ public class AjouterCandidat {
     @FXML
     private void initialize() {
         typeComboBox.setPrefWidth(200);
-        // Add type permis options
-        typeComboBox.getItems().addAll(TypePermis.values());
+        // Clear existing items and add type permis options
+        typeComboBox.getItems().clear();
+        for (TypePermis type : TypePermis.values()) {
+            typeComboBox.getItems().add(type.getLibelle());
+        }
+        // Set default selection
+        if (!typeComboBox.getItems().isEmpty()) {
+            typeComboBox.getSelectionModel().selectFirst();
+        }
     }
 
     @FXML
@@ -92,7 +99,7 @@ public class AjouterCandidat {
         String address = addressField.getText().trim();
         String phone = phoneField.getText().trim();
         String email = emailField.getText().trim();
-        TypePermis typePermis = typeComboBox.getValue();
+        String typePermis = typeComboBox.getValue();
 
         // Check required fields
         if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || 
@@ -149,7 +156,13 @@ public class AjouterCandidat {
             
             // Set type permis from combo box selection
             if (typePermis != null) {
-                candidat.setTypePermis(typePermis);
+                // Find the TypePermis enum by its libelle
+                for (TypePermis type : TypePermis.values()) {
+                    if (type.getLibelle().equals(typePermis)) {
+                        candidat.setTypePermis(type);
+                        break;
+                    }
+                }
             }
 
             inscription.setCin(candidat.getCin());

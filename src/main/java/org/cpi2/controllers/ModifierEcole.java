@@ -1,7 +1,6 @@
 package org.cpi2.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -20,12 +19,11 @@ import java.util.regex.Pattern;
 
 public class ModifierEcole {
 
-    @FXML private TextField nomField;
-    @FXML private TextField adresseField;
-    @FXML private TextField telephoneField;
-    @FXML private TextField emailField;
-    @FXML private TextField directeurField;
-    @FXML private ImageView logoImageView;
+    public TextField nomField;
+    public TextField adresseField;
+    public TextField telephoneField;
+    public TextField emailField;
+    public ImageView logoImageView;
 
     private Image logoImage;
     private String logoPath;
@@ -76,7 +74,6 @@ public class ModifierEcole {
             adresseField.setText(autoEcole.getAdresse());
             telephoneField.setText(autoEcole.getTelephone());
             emailField.setText(autoEcole.getEmail());
-            directeurField.setText(autoEcole.getDirecteur());
 
             // Load the logo if it exists
             logoPath = autoEcole.getLogo();
@@ -89,36 +86,24 @@ public class ModifierEcole {
                         logoImageView.getStyleClass().add("logo-image");
                         // Apply dropshadow effect
                         logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
-                    } else {
-                        // Set default logo if file doesn't exist
-                        logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
                     }
                 } catch (Exception e) {
                     showAlert("Erreur", "Impossible de charger le logo: " + e.getMessage());
-                    // Set default logo on error
-                    logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
                 }
             } else {
-                // Set default logo if path is empty
-                logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+                logoImageView.setImage(null);
             }
         }
     }
 
     // Initialize the controller with existing data
-    @FXML
     public void initialize() {
         // This method will be called by JavaFX when the FXML is loaded
-        // Default to app_icon.png if no logo is set
-        try {
-            logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
-        } catch (Exception e) {
-            System.err.println("Error loading default logo: " + e.getMessage());
-        }
+        // We will now rely on setAutoEcoleToModify to be called after initialization
+        // if the controller is being used to modify an existing auto-école
     }
 
     // Handle file upload for the logo
-    @FXML
     public void handleLogoUpload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
@@ -156,7 +141,6 @@ public class ModifierEcole {
     }
 
     // Handle saving the modified school data
-    @FXML
     public void handleModifierEcole(ActionEvent event) {
         if (currentAutoEcole == null) {
             showAlert("Erreur", "Aucune école à modifier.");
@@ -168,10 +152,9 @@ public class ModifierEcole {
         String adresse = adresseField.getText().trim();
         String telephone = telephoneField.getText().trim();
         String email = emailField.getText().trim();
-        String directeur = directeurField.getText().trim();
 
         // Validate required fields
-        if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty() || directeur.isEmpty()) {
+        if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty()) {
             showAlert("Erreur de validation", "Tous les champs sont obligatoires.");
             return;
         }
@@ -199,19 +182,12 @@ public class ModifierEcole {
             showAlert("Erreur de validation", "L'adresse doit contenir au moins 10 caractères.");
             return;
         }
-        
-        // Validate directeur name
-        if (directeur.length() < 3) {
-            showAlert("Erreur de validation", "Le nom du directeur doit contenir au moins 3 caractères.");
-            return;
-        }
 
         // Update the auto ecole information
         currentAutoEcole.setNom(nom);
         currentAutoEcole.setAdresse(adresse);
         currentAutoEcole.setTelephone(telephone);
         currentAutoEcole.setEmail(email);
-        currentAutoEcole.setDirecteur(directeur);
         if (logoPath != null) {
             currentAutoEcole.setLogo(logoPath);
         }
@@ -230,7 +206,6 @@ public class ModifierEcole {
     }
 
     // Handle cancelling the operation
-    @FXML
     public void handleCancel(ActionEvent event) {
         // Close the window
         Stage stage = (Stage) nomField.getScene().getWindow();

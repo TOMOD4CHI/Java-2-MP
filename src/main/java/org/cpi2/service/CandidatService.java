@@ -22,12 +22,12 @@ public class CandidatService {
         return candidatRepository.findAll();
     }
 
-    public Candidat getCandidatById(Long id) {
-        return candidatRepository.findById(id).orElse(null);
+    public Optional<Candidat> getCandidatById(Long id) {
+        return candidatRepository.findById(id);
     }
 
     public boolean addCandidat(Candidat candidat) {
-        if(candidatRepository.findByCin(candidat.getCin()).isEmpty()) {
+        if(!candidatRepository.findByCin(candidat.getCin()).isEmpty()) {
             LOGGER.info("Candidat already exists");
             return false;
         }

@@ -30,7 +30,7 @@
             
             <!-- Auto-école info section -->
             <HBox spacing="30" alignment="CENTER">
-                <VBox spacing="15" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-info">
+                <VBox fx:id="infoContainer" spacing="15" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-info">
                     <Label text="Informations de l'Auto-École" styleClass="form-section-title"/>
                     
                     <GridPane hgap="15" vgap="15" alignment="CENTER">
@@ -55,8 +55,45 @@
                         <Label fx:id="directeurLabel" text="-" styleClass="info-value" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
                     </GridPane>
                     
-                    <HBox spacing="15" alignment="CENTER">
+                    <HBox fx:id="buttonContainer" spacing="15" alignment="CENTER">
                         <Button fx:id="modifierButton" text="Modifier" onAction="#handleModifier" styleClass="button, action-button"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Édition inline form -->
+                <VBox fx:id="editContainer" spacing="15" visible="false" managed="false" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-edit">
+                    <Label text="Modifier les informations" styleClass="form-section-title"/>
+                    
+                    <GridPane hgap="15" vgap="15" alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" minWidth="120"/>
+                            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        
+                        <Label text="Nom:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="nomField" promptText="Nom de l'auto-école" styleClass="form-field" 
+                                  GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        
+                        <Label text="Adresse:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="adresseField" promptText="Adresse" styleClass="form-field" 
+                                  GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        
+                        <Label text="Téléphone:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextField fx:id="telephoneField" promptText="Numéro de téléphone" styleClass="form-field" 
+                                  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                        
+                        <Label text="Email:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="emailField" promptText="Adresse email" styleClass="form-field" 
+                                  GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                        
+                        <Label text="Directeur:" styleClass="form-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <TextField fx:id="directeurField" promptText="Nom du directeur" styleClass="form-field" 
+                                  GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                    </GridPane>
+                    
+                    <HBox fx:id="editButtonsContainer" spacing="15" alignment="CENTER">
+                        <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" styleClass="button, cancel-button"/>
+                        <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="button, submit-button"/>
                     </HBox>
                 </VBox>
                 
@@ -64,52 +101,9 @@
                     <ImageView fx:id="logoImageView" fitWidth="200" fitHeight="200" styleClass="logo-image" preserveRatio="true">
                         <Image url="@/images/logo4.png"/>
                     </ImageView>
-                    <Button text="Changer le logo" onAction="#handleChangeLogo" styleClass="button, small-button"/>
+                    <Button fx:id="changeLogoButton" text="Changer le logo" onAction="#handleChangeLogo" styleClass="button, small-button"/>
                 </VBox>
             </HBox>
-            
-            <!-- Form for editing auto-ecole -->
-            <VBox fx:id="formContainer" spacing="15" visible="false" managed="false">
-                <Separator>
-                    <VBox.margin>
-                        <Insets top="10" bottom="10"/>
-                    </VBox.margin>
-                </Separator>
-                
-                <Label text="Modifier les informations" styleClass="form-section-title"/>
-                
-                <GridPane hgap="15" vgap="15" alignment="CENTER">
-                    <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" minWidth="120"/>
-                        <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
-                    </columnConstraints>
-                    
-                    <Label text="Nom:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                    <TextField fx:id="nomField" promptText="Nom de l'auto-école" styleClass="form-field" 
-                              GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                    
-                    <Label text="Adresse:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <TextField fx:id="adresseField" promptText="Adresse" styleClass="form-field" 
-                              GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-                    
-                    <Label text="Téléphone:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                    <TextField fx:id="telephoneField" promptText="Numéro de téléphone" styleClass="form-field" 
-                              GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-                    
-                    <Label text="Email:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                    <TextField fx:id="emailField" promptText="Adresse email" styleClass="form-field" 
-                              GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-                    
-                    <Label text="Directeur:" styleClass="form-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                    <TextField fx:id="directeurField" promptText="Nom du directeur" styleClass="form-field" 
-                              GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-                </GridPane>
-                
-                <HBox spacing="15" alignment="CENTER">
-                    <Button text="Annuler" onAction="#handleAnnuler" styleClass="button, cancel-button"/>
-                    <Button text="Enregistrer" onAction="#handleSave" styleClass="button, submit-button"/>
-                </HBox>
-            </VBox>
         </VBox>
     </center>
     

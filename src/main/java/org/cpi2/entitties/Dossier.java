@@ -6,7 +6,6 @@ import java.util.TreeSet;
 
 public class Dossier {
     private Long id;
-    private Candidat candidat;
     private Map<String, TreeSet<Document>> documents;
 
     public Dossier() {
@@ -27,13 +26,5 @@ public class Dossier {
 
     public void setId(Long id) {
         this.id = id;
-    }
-    
-    public Candidat getCandidat() {
-        return candidat;
-    }
-    
-    public void setCandidat(Candidat candidat) {
-        this.candidat = candidat;
     }
 }

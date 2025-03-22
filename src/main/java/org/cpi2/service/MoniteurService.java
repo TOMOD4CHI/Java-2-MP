@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.logging.Logger;
 
@@ -25,21 +26,12 @@ public class MoniteurService {
         return moniteurRepository.findAll();
     }
 
-    public Moniteur getMoniteurById(Long id) {
-        if (id == null) {
-            LOGGER.warning("Null ID provided to getMoniteurById");
-            return null;
-        }
-        return moniteurRepository.findById(id).orElse(null);
+    public Optional<Moniteur> getMoniteurById(Long id) {
+        return moniteurRepository.findById(id);
     }
 
     public boolean addMoniteur(Moniteur moniteur) {
         try {
-            if (moniteur == null) {
-                LOGGER.warning("Null moniteur provided to addMoniteur");
-                return false;
-            }
-            
             // Validate required fields
             if (moniteur.getNom() == null || moniteur.getNom().isEmpty() ||
                 moniteur.getPrenom() == null || moniteur.getPrenom().isEmpty() ||
@@ -68,11 +60,6 @@ public class MoniteurService {
 
     public boolean updateMoniteur(Moniteur moniteur) {
         try {
-            if (moniteur == null) {
-                LOGGER.warning("Null moniteur provided to updateMoniteur");
-                return false;
-            }
-            
             // Validate required fields
             if (moniteur.getNom() == null || moniteur.getNom().isEmpty() ||
                 moniteur.getPrenom() == null || moniteur.getPrenom().isEmpty() ||
@@ -101,33 +88,18 @@ public class MoniteurService {
     }
 
     public List<Moniteur> findMoniteursBySpeciality(TypePermis typePermis) {
-        if (typePermis == null) {
-            LOGGER.warning("Null typePermis provided to findMoniteursBySpeciality");
-            return getAllMoniteurs();
-        }
-        
         return moniteurRepository.findAll().stream()
                 .filter(moniteur -> moniteur.getSpecialites().contains(typePermis))
                 .collect(Collectors.toList());
     }
 
     public List<Moniteur> findAvailableMoniteurs(LocalDateTime dateTime) {
-        if (dateTime == null) {
-            LOGGER.warning("Null dateTime provided to findAvailableMoniteurs");
-            return getAllMoniteurs();
-        }
-        
         return moniteurRepository.findAll().stream()
                 .filter(moniteur -> !moniteur.getEmploiDuTemps().containsKey(dateTime))
                 .collect(Collectors.toList());
     }
 
     public List<Moniteur> findAvailableMoniteursBySpeciality(LocalDateTime dateTime, TypePermis typePermis) {
-        if (dateTime == null || typePermis == null) {
-            LOGGER.warning("Null parameters provided to findAvailableMoniteursBySpeciality");
-            return getAllMoniteurs();
-        }
-        
         return moniteurRepository.findAll().stream()
                 .filter(moniteur -> !moniteur.getEmploiDuTemps().containsKey(dateTime))
                 .filter(moniteur -> moniteur.getSpecialites().contains(typePermis))
@@ -136,18 +108,9 @@ public class MoniteurService {
 
     public boolean addSpeciality(Moniteur moniteur, TypePermis typePermis) {
         try {
-            if (moniteur == null || typePermis == null) {
-                LOGGER.warning("Null parameters provided to addSpeciality");
-                return false;
-            }
-            
-            // Check if speciality already exists
-            if (moniteur.getSpecialites().contains(typePermis)) {
-                LOGGER.info("Speciality already exists for moniteur: " + typePermis);
-                return true; // Already exists, so technically success
-            }
-            
-            moniteur.addSpecialite(typePermis);
+            Set<TypePermis> specialites = moniteur.getSpecialites();
+            specialites.add(typePermis);
+            moniteur.setSpecialites(specialites);
             return moniteurRepository.update(moniteur);
         } catch (Exception e) {
             LOGGER.severe("Error adding speciality: " + e.getMessage());
@@ -157,22 +120,10 @@ public class MoniteurService {
 
     public boolean removeSpeciality(Moniteur moniteur, TypePermis typePermis) {
         try {
-            if (moniteur == null || typePermis == null) {
-                LOGGER.warning("Null parameters provided to removeSpeciality");
-                return false;
-            }
-            
-            // Check if it's the last speciality
-            if (moniteur.getSpecialites().size() <= 1) {
-                LOGGER.warning("Cannot remove the last speciality");
-                return false;
-            }
-            
-            boolean removed = moniteur.removeSpecialite(typePermis);
-            if (removed) {
-                return moniteurRepository.update(moniteur);
-            }
-            return false;
+            Set<TypePermis> specialites = moniteur.getSpecialites();
+            specialites.remove(typePermis);
+            moniteur.setSpecialites(specialites);
+            return moniteurRepository.update(moniteur);
         } catch (Exception e) {
             LOGGER.severe("Error removing speciality: " + e.getMessage());
             return false;
@@ -181,11 +132,6 @@ public class MoniteurService {
 
     public boolean scheduleRendezVous(Moniteur moniteur, LocalDateTime dateTime, RendezVous rendezVous) {
         try {
-            if (moniteur == null || dateTime == null || rendezVous == null) {
-                LOGGER.warning("Null parameters provided to scheduleRendezVous");
-                return false;
-            }
-            
             if (moniteur.getEmploiDuTemps().containsKey(dateTime)) {
                 LOGGER.warning("Time slot already occupied for moniteur: " + moniteur.getId());
                 return false;
@@ -203,11 +149,6 @@ public class MoniteurService {
 
     public boolean cancelRendezVous(Moniteur moniteur, LocalDateTime dateTime) {
         try {
-            if (moniteur == null || dateTime == null) {
-                LOGGER.warning("Null parameters provided to cancelRendezVous");
-                return false;
-            }
-            
             if (!moniteur.getEmploiDuTemps().containsKey(dateTime)) {
                 LOGGER.warning("No rendez-vous found for time: " + dateTime);
                 return false;
@@ -224,29 +165,16 @@ public class MoniteurService {
     }
 
     public Map<LocalDateTime, RendezVous> getMoniteurSchedule(Moniteur moniteur) {
-        if (moniteur == null) {
-            LOGGER.warning("Null moniteur provided to getMoniteurSchedule");
-            return null;
-        }
         return moniteur.getEmploiDuTemps();
     }
 
     public List<Moniteur> findMoniteursHiredAfter(LocalDate date) {
-        if (date == null) {
-            LOGGER.warning("Null date provided to findMoniteursHiredAfter");
-            return getAllMoniteurs();
-        }
-        
         return moniteurRepository.findAll().stream()
                 .filter(moniteur -> moniteur.getDateEmbauche().isAfter(date))
                 .collect(Collectors.toList());
     }
 
     public Moniteur findByCin(String cin) {
-        if (cin == null || cin.isEmpty()) {
-            LOGGER.warning("Null or empty CIN provided to findByCin");
-            return null;
-        }
         return moniteurRepository.findByCin(cin).orElse(null);
     }
 }
