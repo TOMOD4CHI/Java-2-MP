@@ -23,9 +23,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.cpi2.entitties.AutoEcole;
+import org.cpi2.entities.AutoEcole;
 import org.cpi2.service.AutoEcoleService;
-import javafx.scene.effect.DropShadow;
 
 import java.io.File;
 import java.io.IOException;

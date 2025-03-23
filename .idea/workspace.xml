@@ -4,7 +4,81 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment=":o" />
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment=":o">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherCandidat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherEcole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherMoniteur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherMoniteur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherSeance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherSeance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterCandidat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterEcole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterMoniteur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterMoniteur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ConfirmPresence.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ConfirmPresence.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/GestionVehicule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/GestionVehicule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Invoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Invoice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ManageEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ManageEcole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierCandidat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierMoniteur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierMoniteur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/PaymentHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/PaymentHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/RemplirSeance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/RemplirSeance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceConduite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceConduite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/TypePermis.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/TypePermis.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/AutoEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/AutoEcole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Candidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Candidat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/CoursePlan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/CoursePlan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Document.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Document.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Dossier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Dossier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Entretien.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Entretien.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Examen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Examen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Inscription.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Inscription.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Location.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/ModePaiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/ModePaiement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Moniteur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Moniteur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Paiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Paiement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/PaiementExamen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/PaiementExamen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/PaiementInscription.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/PaiementInscription.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Personne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Personne.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/RendezVous.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/RendezVous.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Seance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Seance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Session.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/SessionCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/SessionCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/SessionConduite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/SessionConduite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/StatutPaiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/StatutPaiement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/StatutSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/StatutSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Tranche.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Tranche.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypeDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/TypeDocument.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypeExamen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/TypeExamen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypePermis.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/TypeSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/TypeSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entitties/Vehicule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Vehicule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/AutoEcoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/AutoEcoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/CandidatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/CandidatRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/DocumentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/DocumentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/DossierRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/DossierRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/ExamenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/ExamenRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/InscriptionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/InscriptionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/MoniteurRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/MoniteurRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/PaiementRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/PaiementRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/PlanRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/PlanRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SeanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SeanceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SessionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SessionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/TypeDocumentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/TypeDocumentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/VehiculeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/VehiculeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/AutoEcoleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/AutoEcoleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/CandidatService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/CandidatService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/DocumentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/DocumentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/DossierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/DossierService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/ExamenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/ExamenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/InscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/InscriptionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/MoniteurService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/MoniteurService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/PaiementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/PaiementService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/SeanceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/SeanceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/SessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/SessionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/VehiculeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/VehiculeService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -179,7 +253,8 @@
       <workItem from="1742684722625" duration="14205000" />
       <workItem from="1742738243488" duration="3796000" />
       <workItem from="1742742773399" duration="8013000" />
-      <workItem from="1742754167765" duration="3229000" />
+      <workItem from="1742754167765" duration="4222000" />
+      <workItem from="1742758458898" duration="316000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />
@@ -261,7 +336,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742757370231</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary=":o">
+      <option name="closed" value="true" />
+      <created>1742757440853</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1742757440853</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

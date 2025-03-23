@@ -1,8 +1,8 @@
 package org.cpi2.repository;
 
-import org.cpi2.entitties.Candidat;
-import org.cpi2.entitties.Examen;
-import org.cpi2.entitties.TypeExamen;
+import org.cpi2.entities.Candidat;
+import org.cpi2.entities.Examen;
+import org.cpi2.entities.TypeExamen;
 
 import java.sql.*;
 import java.sql.Date;

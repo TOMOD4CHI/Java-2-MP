@@ -3,8 +3,8 @@ package org.cpi2.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.cpi2.entitties.Moniteur;
-import org.cpi2.entitties.TypePermis;
+import org.cpi2.entities.Moniteur;
+import org.cpi2.entities.TypePermis;
 import org.cpi2.service.MoniteurService;
 
 import java.time.LocalDate;

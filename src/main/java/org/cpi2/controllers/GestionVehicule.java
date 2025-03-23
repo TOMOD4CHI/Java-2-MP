@@ -8,8 +8,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.cpi2.entitties.TypePermis;
-import org.cpi2.entitties.Vehicule;
+import org.cpi2.entities.TypePermis;
+import org.cpi2.entities.Vehicule;
 import org.cpi2.service.VehiculeService;
 
 import java.net.URL;

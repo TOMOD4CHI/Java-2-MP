@@ -1,7 +1,7 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.CoursePlan;
-import org.cpi2.entitties.Inscription;
+import org.cpi2.entities.CoursePlan;
+import org.cpi2.entities.Inscription;
 import org.cpi2.repository.InscriptionRepository;
 import org.cpi2.repository.PlanRepository;
 

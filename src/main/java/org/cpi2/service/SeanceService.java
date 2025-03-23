@@ -1,6 +1,6 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.Seance;
+import org.cpi2.entities.Seance;
 import org.cpi2.repository.SeanceRepository;
 
 import java.util.List;

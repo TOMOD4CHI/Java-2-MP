@@ -4,11 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.cpi2.service.CandidatService;
-import org.cpi2.entitties.Candidat;
-import org.cpi2.entitties.TypePermis;
+import org.cpi2.entities.Candidat;
+import org.cpi2.entities.TypePermis;
 import org.cpi2.utils.ValidationUtils;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 

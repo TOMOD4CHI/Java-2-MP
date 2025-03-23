@@ -18,7 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.cpi2.entitties.AutoEcole;
+import org.cpi2.entities.AutoEcole;
 import org.cpi2.service.AutoEcoleService;
 import org.cpi2.utils.EventBus;
 

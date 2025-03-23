@@ -1,8 +1,8 @@
 package service;
 
 
-import org.cpi2.entitties.SessionCode;
-import org.cpi2.entitties.SessionConduite;
+import org.cpi2.entities.SessionCode;
+import org.cpi2.entities.SessionConduite;
 import org.cpi2.repository.SessionRepository;
 
 import java.util.List;

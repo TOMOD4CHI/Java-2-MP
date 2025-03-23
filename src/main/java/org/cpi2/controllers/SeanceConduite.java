@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
-import org.cpi2.entitties.Seance;
+import org.cpi2.entities.Seance;
 import org.cpi2.service.SeanceService;
 
 import java.time.LocalDate;

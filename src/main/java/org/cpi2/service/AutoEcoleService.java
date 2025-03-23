@@ -1,6 +1,6 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.AutoEcole;
+import org.cpi2.entities.AutoEcole;
 import org.cpi2.repository.AutoEcoleRepository;
 
 import java.sql.SQLException;

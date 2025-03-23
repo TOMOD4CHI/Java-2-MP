@@ -1,4 +1,4 @@
-package org.cpi2.entitties;
+package org.cpi2.entities;
 
 public class Candidat extends Personne {
     private Dossier dossier;

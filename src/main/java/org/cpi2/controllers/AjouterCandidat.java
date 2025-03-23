@@ -6,10 +6,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import org.cpi2.entitties.Inscription;
+import org.cpi2.entities.Inscription;
 import org.cpi2.service.CandidatService;
-import org.cpi2.entitties.Candidat;
-import org.cpi2.entitties.TypePermis;
+import org.cpi2.entities.Candidat;
+import org.cpi2.entities.TypePermis;
 import org.cpi2.service.InscriptionService;
 import org.cpi2.utils.ValidationUtils;
 

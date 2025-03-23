@@ -9,9 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.stage.Stage;
-import org.cpi2.entitties.Candidat;
-import org.cpi2.entitties.Moniteur;
-import org.cpi2.entitties.SessionCode;
+import org.cpi2.entities.Candidat;
+import org.cpi2.entities.Moniteur;
+import org.cpi2.entities.SessionCode;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
