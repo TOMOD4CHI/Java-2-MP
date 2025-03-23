@@ -81,6 +81,9 @@ public class ManageEcole implements Initializable {
         buttonContainer.setAlignment(Pos.CENTER);
         editButtonsContainer.setAlignment(Pos.CENTER);
         
+        // Setup real-time validation
+        setupValidation();
+        
         // Apply styling to form fields
         applyFormStyling();
         
@@ -89,6 +92,94 @@ public class ManageEcole implements Initializable {
         
         // Load auto-école data
         loadAutoEcoleData();
+    }
+
+    private void setupValidation() {
+        // Setup real-time validation for each field
+        nomField.textProperty().addListener((obs, oldVal, newVal) -> validateField(nomField, nomError, "Le nom", NAME_PATTERN));
+        directeurField.textProperty().addListener((obs, oldVal, newVal) -> validateField(directeurField, directeurError, "Le nom du directeur", NAME_PATTERN));
+        emailField.textProperty().addListener((obs, oldVal, newVal) -> validateField(emailField, emailError, "L'email", EMAIL_PATTERN));
+        telephoneField.textProperty().addListener((obs, oldVal, newVal) -> validateField(telephoneField, telephoneError, "Le numéro de téléphone", PHONE_PATTERN));
+        adresseField.textProperty().addListener((obs, oldVal, newVal) -> validateNonEmpty(adresseField, adresseError, "L'adresse"));
+        passwordField.textProperty().addListener((obs, oldVal, newVal) -> validatePassword(passwordField, passwordError));
+    }
+
+    private void validateField(TextField field, Label errorLabel, String fieldName, Pattern pattern) {
+        String value = field.getText().trim();
+        boolean isValid = !value.isEmpty() && pattern.matcher(value).matches();
+        
+        updateFieldValidation(field, errorLabel, isValid, 
+            isValid ? null : String.format("%s n'est pas valide", fieldName));
+    }
+
+    private void validateNonEmpty(TextField field, Label errorLabel, String fieldName) {
+        String value = field.getText().trim();
+        boolean isValid = !value.isEmpty();
+        
+        updateFieldValidation(field, errorLabel, isValid,
+            isValid ? null : String.format("%s ne peut pas être vide", fieldName));
+    }
+
+    private void validatePassword(PasswordField field, Label errorLabel) {
+        String value = field.getText();
+        boolean isValid = value.length() >= 5;
+        
+        updateFieldValidation(field, errorLabel, isValid,
+            isValid ? null : "Le mot de passe doit contenir au moins 5 caractères");
+    }
+
+    private void updateFieldValidation(TextInputControl field, Label errorLabel, boolean isValid, String errorMessage) {
+        // Remove existing style classes
+        field.getStyleClass().removeAll("field-error", "field-valid");
+        
+        // Add appropriate style class
+        if (!field.getText().trim().isEmpty()) {
+            field.getStyleClass().add(isValid ? "field-valid" : "field-error");
+        }
+        
+        // Update error label
+        errorLabel.setText(errorMessage);
+        errorLabel.setVisible(errorMessage != null);
+        errorLabel.setManaged(errorMessage != null);
+    }
+    
+    private void applyFormStyling() {
+        // Apply styling to text fields
+        TextField[] fields = {nomField, adresseField, telephoneField, emailField, directeurField};
+        for (TextField field : fields) {
+            if (field != null) {
+                field.getStyleClass().add("form-field");
+                
+                // Add focus effect
+                field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        field.setStyle("-fx-border-color: #3182CE; -fx-border-width: 2px;");
+                    } else {
+                        field.setStyle("");
+                    }
+                });
+            }
+        }
+        
+        // Apply styling to password field
+        if (passwordField != null) {
+            passwordField.getStyleClass().add("form-field");
+            
+            // Add focus effect
+            passwordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    passwordField.setStyle("-fx-border-color: #3182CE; -fx-border-width: 2px;");
+                } else {
+                    passwordField.setStyle("");
+                }
+            });
+        }
+        
+        // Apply styling to buttons
+        saveButton.getStyleClass().add("submit-button");
+        cancelButton.getStyleClass().add("cancel-button");
+        modifierButton.getStyleClass().add("action-button");
+        changeLogoButton.getStyleClass().add("small-button");
     }
     
     private void loadAutoEcoleData() {
@@ -168,45 +259,6 @@ public class ManageEcole implements Initializable {
         fadeTransition.setFromValue(0.0);
         fadeTransition.setToValue(1.0);
         fadeTransition.play();
-    }
-    
-    private void applyFormStyling() {
-        // Apply styling to text fields
-        TextField[] fields = {nomField, adresseField, telephoneField, emailField, directeurField};
-        for (TextField field : fields) {
-            if (field != null) {
-                field.getStyleClass().add("form-field");
-                
-                // Add focus effect
-                field.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                    if (newValue) {
-                        field.setStyle("-fx-border-color: #3182CE; -fx-border-width: 2px;");
-                    } else {
-                        field.setStyle("");
-                    }
-                });
-            }
-        }
-        
-        // Apply styling to password field
-        if (passwordField != null) {
-            passwordField.getStyleClass().add("form-field");
-            
-            // Add focus effect
-            passwordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    passwordField.setStyle("-fx-border-color: #3182CE; -fx-border-width: 2px;");
-                } else {
-                    passwordField.setStyle("");
-                }
-            });
-        }
-        
-        // Apply styling to buttons
-        saveButton.getStyleClass().add("submit-button");
-        cancelButton.getStyleClass().add("cancel-button");
-        modifierButton.getStyleClass().add("action-button");
-        changeLogoButton.getStyleClass().add("small-button");
     }
     
     @FXML

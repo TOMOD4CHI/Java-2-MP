@@ -8,19 +8,19 @@ import org.cpi2.entitties.Candidat;
 import org.cpi2.entitties.TypePermis;
 import org.cpi2.utils.ValidationUtils;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class ModifierCandidat {
     private final CandidatService candidatService = new CandidatService();
     private Candidat candidatToModify;
     
-    // Validation patterns
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
     private static final Pattern CIN_PATTERN = Pattern.compile("^[0-9]{8,}$");
 
-    // Validation methods
     private boolean isValidEmail(String email) {
         return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
@@ -47,17 +47,24 @@ public class ModifierCandidat {
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
-    @FXML private ComboBox<String> typeComboBox;
+    @FXML private ComboBox<TypePermis> typeComboBox;
+    
+    // Error labels
+    @FXML private Label nomError;
+    @FXML private Label prenomError;
+    @FXML private Label cinError;
+    @FXML private Label addressError;
+    @FXML private Label phoneError;
+    @FXML private Label emailError;
+    @FXML private Label typeError;
 
     public void initialize() {
         // Clear existing items and initialize type permis options
         typeComboBox.getItems().clear();
-        for (TypePermis type : TypePermis.values()) {
-            typeComboBox.getItems().add(type.getLibelle());
-        }
+        typeComboBox.getItems().addAll(TypePermis.values());
         // Set default selection
         if (!typeComboBox.getItems().isEmpty()) {
-            typeComboBox.getSelectionModel().selectFirst();
+            typeComboBox.setValue(TypePermis.B);
         }
         
         // Set placeholders for input fields
@@ -97,17 +104,17 @@ public class ModifierCandidat {
             "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres", 2);
             
         // Type permis validation
-        ValidationUtils.<String>addValidation(typeComboBox, 
+        ValidationUtils.<TypePermis>addValidation(typeComboBox, 
             value -> value != null, 
-            "Veuillez sélectionner un type de permis", 1);
+            "Le type de permis est obligatoire", 1);
             
         // Address validation
         ValidationUtils.addValidation(addressField, 
             text -> !text.trim().isEmpty(), 
             "L'adresse est obligatoire", 1);
         ValidationUtils.addValidation(addressField, 
-            text -> isValidAddress(text, 10), 
-            "L'adresse doit contenir au moins 10 caractères", 2);
+            text -> isValidAddress(text, 5), 
+            "L'adresse doit contenir au moins 5 caractères", 2);
             
         // Phone validation
         ValidationUtils.addValidation(phoneField, 
@@ -115,120 +122,160 @@ public class ModifierCandidat {
             "Le numéro de téléphone est obligatoire", 1);
         ValidationUtils.addValidation(phoneField, 
             this::isValidPhone, 
-            "Le numéro de téléphone doit contenir exactement 8 chiffres", 2);
+            "Le numéro doit contenir exactement 8 chiffres", 2);
             
-        // Email validation (only if not empty)
+        // Email validation
         ValidationUtils.addValidation(emailField, 
-            text -> text.trim().isEmpty() || isValidEmail(text), 
-            "L'adresse email n'est pas valide", 1);
-    }
-
-    public void setCandidatToModify(Candidat candidat) {
-        this.candidatToModify = candidat;
-        if (candidat != null) {
-            nomField.setText(candidat.getNom());
-            prenomField.setText(candidat.getPrenom());
-            cinField.setText(candidat.getCin());
-            addressField.setText(candidat.getAdresse());
-            phoneField.setText(candidat.getTelephone());
-            emailField.setText(candidat.getEmail());
-            
-            // Set the type permis in combo box
-            if (candidat.getTypePermis() != null) {
-                typeComboBox.setValue(candidat.getTypePermis().getLibelle());
-            }
-        }
+            text -> !text.trim().isEmpty(), 
+            "L'email est obligatoire", 1);
+        ValidationUtils.addValidation(emailField, 
+            this::isValidEmail, 
+            "Format d'email invalide", 2);
     }
 
     @FXML
-    private void confirmAction() {
-        if (candidatToModify == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Aucun candidat sélectionné pour la modification.");
-            alert.showAndWait();
-            return;
-        }
-
-        // Validate all fields first
-        if (ValidationUtils.hasAnyErrors()) {
-            // If there are validation errors, don't proceed
-            return;
-        }
-
-        String nom = nomField.getText().trim();
-        String prenom = prenomField.getText().trim();
+    private void searchCandidat() {
         String cin = cinField.getText().trim();
-        String address = addressField.getText().trim();
-        String phone = phoneField.getText().trim();
-        String email = emailField.getText().trim();
-        String typePermis = typeComboBox.getValue();
-
-        // Check required fields (should be caught by validation, but just in case)
-        if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || address.isEmpty() || phone.isEmpty() || typePermis == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Tous les champs sont obligatoires.");
-            alert.showAndWait();
+        if (!isValidCIN(cin)) {
+            showError("Format CIN invalide", "Le CIN doit contenir au moins 8 chiffres.");
             return;
         }
 
         try {
-            // Update the candidate object with new values
-            candidatToModify.setNom(nom);
-            candidatToModify.setPrenom(prenom);
-            candidatToModify.setCin(cin);
-            candidatToModify.setAdresse(address);
-            candidatToModify.setTelephone(phone);
-            candidatToModify.setEmail(email);
-            
-            // Set type permis from combo box selection
-            if (typePermis != null) {
-                // Find the TypePermis enum by its libelle
-                for (TypePermis type : TypePermis.values()) {
-                    if (type.getLibelle().equals(typePermis)) {
-                        candidatToModify.setTypePermis(type);
-                        break;
-                    }
-                }
-            }
-
-            if (candidatService.updateCandidat(candidatToModify)) {
-                showSuccessMessage();
-                closeWindow();
+            Optional<Candidat> candidatOpt = candidatService.findByCin(cin);
+            if (candidatOpt.isPresent()) {
+                candidatToModify = candidatOpt.get();
+                populateFields(candidatToModify);
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("La mise à jour du candidat a échoué.");
-                alert.showAndWait();
+                showError("Candidat non trouvé", "Aucun candidat trouvé avec ce CIN.");
+                clearFields();
             }
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Une erreur est survenue lors de la mise à jour: " + e.getMessage());
+            showError("Erreur", "Une erreur s'est produite lors de la recherche du candidat: " + e.getMessage());
+        }
+    }
+
+    private void populateFields(Candidat candidat) {
+        nomField.setText(candidat.getNom());
+        prenomField.setText(candidat.getPrenom());
+        cinField.setText(candidat.getCin());
+        addressField.setText(candidat.getAdresse());
+        phoneField.setText(candidat.getTelephone());
+        emailField.setText(candidat.getEmail());
+        typeComboBox.setValue(candidat.getTypePermis());
+    }
+
+    private void clearFields() {
+        nomField.clear();
+        prenomField.clear();
+        addressField.clear();
+        phoneField.clear();
+        emailField.clear();
+        if (!typeComboBox.getItems().isEmpty()) {
+            typeComboBox.getSelectionModel().selectFirst();
+        }
+    }
+
+    private void showError(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void confirmAction() {
+        if (!validateInput()) {
+            showError("Validation", "Veuillez corriger les erreurs avant de continuer.");
+            return;
+        }
+
+        try {
+            if (candidatToModify == null) {
+                showError("Aucun candidat", "Veuillez d'abord rechercher un candidat à modifier.");
+                return;
+            }
+
+            // Update candidat object
+            candidatToModify.setNom(nomField.getText().trim());
+            candidatToModify.setPrenom(prenomField.getText().trim());
+            candidatToModify.setAdresse(addressField.getText().trim());
+            candidatToModify.setTelephone(phoneField.getText().trim());
+            candidatToModify.setEmail(emailField.getText().trim());
+            candidatToModify.setTypePermis(typeComboBox.getValue());
+
+            // Save to database
+            candidatService.updateCandidat(candidatToModify);
+
+            // Show success message
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setHeaderText("Modification réussie");
+            alert.setContentText("Le candidat a été modifié avec succès.");
             alert.showAndWait();
+
+            // Close the window
+            ((Stage) nomField.getScene().getWindow()).close();
+
+        } catch (Exception e) {
+            showError("Erreur", "Une erreur s'est produite lors de la modification: " + e.getMessage());
         }
     }
 
     @FXML
     private void cancelAction() {
-        closeWindow();
+        ((Stage) nomField.getScene().getWindow()).close();
     }
 
-    private void showSuccessMessage() {
-        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-        successAlert.setTitle("Succès");
-        successAlert.setHeaderText(null);
-        successAlert.setContentText("Les informations du candidat ont été mises à jour avec succès.");
-        successAlert.showAndWait();
-    }
+    private boolean validateInput() {
+        boolean isValid = true;
 
-    private void closeWindow() {
-        Stage stage = (Stage) nomField.getScene().getWindow();
-        stage.close();
+        // Clear previous error messages
+        nomError.setText("");
+        prenomError.setText("");
+        cinError.setText("");
+        addressError.setText("");
+        phoneError.setText("");
+        emailError.setText("");
+        typeError.setText("");
+
+        // Validate each field
+        if (!isValidName(nomField.getText())) {
+            nomError.setText("Le nom est invalide");
+            isValid = false;
+        }
+
+        if (!isValidName(prenomField.getText())) {
+            prenomError.setText("Le prénom est invalide");
+            isValid = false;
+        }
+
+        if (!isValidCIN(cinField.getText())) {
+            cinError.setText("Le CIN est invalide");
+            isValid = false;
+        }
+
+        if (!isValidAddress(addressField.getText(), 5)) {
+            addressError.setText("L'adresse est invalide");
+            isValid = false;
+        }
+
+        if (!isValidPhone(phoneField.getText())) {
+            phoneError.setText("Le numéro de téléphone est invalide");
+            isValid = false;
+        }
+
+        if (!isValidEmail(emailField.getText())) {
+            emailError.setText("L'email est invalide");
+            isValid = false;
+        }
+
+        if (typeComboBox.getValue() == null) {
+            typeError.setText("Le type de permis est obligatoire");
+            isValid = false;
+        }
+
+        return isValid;
     }
 }

@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.cpi2.controllers.DashboardVehicles"
-            stylesheets="@/css/style.css"
-            styleClass="root">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane styleClass="root" stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.DashboardVehicles">
 
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
     <top>
         <VBox alignment="CENTER" spacing="10">
-            <Label text="Tableau de Bord des Véhicules" styleClass="dashboard-title"/>
+            <Label styleClass="dashboard-title" text="Tableau de Bord des Véhicules" />
             <HBox alignment="CENTER" spacing="15" styleClass="period-selector">
-                <Label text="Filtrer par:" styleClass="form-label"/>
-                <ComboBox fx:id="filterCombo" promptText="Tous les véhicules" styleClass="form-field"/>
-                <Button text="Appliquer" onAction="#handleApplyFilter" styleClass="button, submit-button"/>
+                <Label styleClass="form-label" text="Filtrer par:" />
+                <ComboBox fx:id="filterCombo" promptText="Tous les véhicules" styleClass="form-field" />
+                <Button onAction="#handleApplyFilter" styleClass="button, submit-button" text="Appliquer" />
             </HBox>
         </VBox>
     </top>
@@ -29,53 +36,53 @@
         <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
             <VBox spacing="20">
                 <!-- KPI Cards Row -->
-                <HBox spacing="15" alignment="CENTER">
+                <HBox alignment="CENTER" spacing="15">
                     <VBox.margin>
-                        <Insets top="10" bottom="10"/>
+                        <Insets bottom="10" top="10" />
                     </VBox.margin>
                     
                     <!-- Total Vehicles Card -->
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
-                        <Label text="Total des Véhicules" styleClass="card-title"/>
-                        <Label fx:id="totalVehiclesLabel" text="12" styleClass="card-value"/>
+                        <Label styleClass="card-title" text="Total des Véhicules" />
+                        <Label fx:id="totalVehiclesLabel" styleClass="card-value" text="12" />
                     </VBox>
                     
                     <!-- Available Vehicles Card -->
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
-                        <Label text="Véhicules Disponibles" styleClass="card-title"/>
-                        <Label fx:id="availableVehiclesLabel" text="8" styleClass="card-value"/>
+                        <Label styleClass="card-title" text="Véhicules Disponibles" />
+                        <Label fx:id="availableVehiclesLabel" styleClass="card-value" text="8" />
                     </VBox>
                     
                     <!-- Maintenance Due Card -->
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
-                        <Label text="Entretiens à Faire" styleClass="card-title"/>
-                        <Label fx:id="maintenanceDueLabel" text="3" styleClass="card-value"/>
+                        <Label styleClass="card-title" text="Entretiens à Faire" />
+                        <Label fx:id="maintenanceDueLabel" styleClass="card-value" text="3" />
                     </VBox>
                     
                     <!-- Total KM Card -->
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
-                        <Label text="Kilométrage Total" styleClass="card-title"/>
-                        <Label fx:id="totalKmLabel" text="157,340 km" styleClass="card-value"/>
+                        <Label styleClass="card-title" text="Kilométrage Total" />
+                        <Label fx:id="totalKmLabel" styleClass="card-value" text="157,340 km" />
                     </VBox>
                 </HBox>
                 
                 <!-- Charts Row 1 -->
-                <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER" spacing="15" VBox.vgrow="ALWAYS">
                     <!-- Vehicle Usage Chart -->
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
-                        <Label text="Utilisation des Véhicules" styleClass="chart-title"/>
-                        <PieChart fx:id="vehicleUsageChart" animated="true" labelsVisible="true" VBox.vgrow="ALWAYS"/>
+                        <Label styleClass="chart-title" text="Utilisation des Véhicules" />
+                        <PieChart fx:id="vehicleUsageChart" animated="true" labelsVisible="true" VBox.vgrow="ALWAYS" />
                     </VBox>
                     
                     <!-- Maintenance History -->
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
-                        <Label text="Historique des Entretiens" styleClass="chart-title"/>
-                        <BarChart fx:id="maintenanceHistoryChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
+                        <Label styleClass="chart-title" text="Historique des Entretiens" />
+                        <BarChart fx:id="maintenanceHistoryChart" animated="true" legendVisible="false" VBox.vgrow="ALWAYS">
                             <xAxis>
-                                <CategoryAxis fx:id="maintenanceMonthAxis" label="Mois"/>
+                                <CategoryAxis fx:id="maintenanceMonthAxis" label="Mois" />
                             </xAxis>
                             <yAxis>
-                                <NumberAxis fx:id="maintenanceCountAxis" label="Nombre d'entretiens"/>
+                                <NumberAxis fx:id="maintenanceCountAxis" label="Nombre d'entretiens" />
                             </yAxis>
                         </BarChart>
                     </VBox>
@@ -83,35 +90,35 @@
                 
                 <!-- Vehicle Table -->
                 <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
-                    <Label text="État des Véhicules" styleClass="table-title"/>
-                    <TableView fx:id="vehiclesTable" VBox.vgrow="ALWAYS" styleClass="custom-table-view">
+                    <Label styleClass="table-title" text="État des Véhicules" />
+                    <TableView fx:id="vehiclesTable" styleClass="custom-table-view" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="vehicleIdColumn" text="ID" prefWidth="60"/>
-                            <TableColumn fx:id="vehicleModelColumn" text="Modèle" prefWidth="150"/>
-                            <TableColumn fx:id="vehiclePlateColumn" text="Immatriculation" prefWidth="120"/>
-                            <TableColumn fx:id="vehicleKmColumn" text="Kilométrage" prefWidth="100"/>
-                            <TableColumn fx:id="vehicleStatusColumn" text="Statut" prefWidth="100"/>
-                            <TableColumn fx:id="vehicleLastMaintenanceColumn" text="Dernier Entretien" prefWidth="120"/>
-                            <TableColumn fx:id="vehicleNextMaintenanceColumn" text="Prochain Entretien" prefWidth="120"/>
+                            <TableColumn fx:id="vehicleIdColumn" prefWidth="60" text="ID" />
+                            <TableColumn fx:id="vehicleModelColumn" prefWidth="150" text="Modèle" />
+                            <TableColumn fx:id="vehiclePlateColumn" prefWidth="120" text="Immatriculation" />
+                            <TableColumn fx:id="vehicleKmColumn" prefWidth="100" text="Kilométrage" />
+                            <TableColumn fx:id="vehicleStatusColumn" prefWidth="100" text="Statut" />
+                            <TableColumn fx:id="vehicleLastMaintenanceColumn" prefWidth="120" text="Dernier Entretien" />
+                            <TableColumn fx:id="vehicleNextMaintenanceColumn" prefWidth="120" text="Prochain Entretien" />
                         </columns>
                     </TableView>
                 </VBox>
                 
                 <!-- Maintenance Alerts -->
                 <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
-                    <Label text="Alertes d'Entretien" styleClass="table-title"/>
-                    <TableView fx:id="maintenanceAlertsTable" VBox.vgrow="ALWAYS" styleClass="custom-table-view">
+                    <Label styleClass="table-title" text="Alertes d'Entretien" />
+                    <TableView fx:id="maintenanceAlertsTable" styleClass="custom-table-view" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="alertVehicleColumn" text="Véhicule" prefWidth="150"/>
-                            <TableColumn fx:id="alertTypeColumn" text="Type" prefWidth="120"/>
-                            <TableColumn fx:id="alertDueDateColumn" text="Date Prévue" prefWidth="120"/>
-                            <TableColumn fx:id="alertStatusColumn" text="Statut" prefWidth="100"/>
-                            <TableColumn fx:id="alertPriorityColumn" text="Priorité" prefWidth="80"/>
-                            <TableColumn fx:id="alertActionsColumn" text="Actions" prefWidth="120"/>
+                            <TableColumn fx:id="alertVehicleColumn" prefWidth="150" text="Véhicule" />
+                            <TableColumn fx:id="alertTypeColumn" prefWidth="120" text="Type" />
+                            <TableColumn fx:id="alertDueDateColumn" prefWidth="120" text="Date Prévue" />
+                            <TableColumn fx:id="alertStatusColumn" prefWidth="100" text="Statut" />
+                            <TableColumn fx:id="alertPriorityColumn" prefWidth="80" text="Priorité" />
+                            <TableColumn fx:id="alertActionsColumn" prefWidth="186.39996337890625" text="Actions" />
                         </columns>
                     </TableView>
                 </VBox>
             </VBox>
         </ScrollPane>
     </center>
-</BorderPane> 
+</BorderPane>

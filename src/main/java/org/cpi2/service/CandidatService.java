@@ -70,4 +70,7 @@ public class CandidatService {
         return candidatRepository.update(candidat);
     }
 
+    public Optional<Candidat> findByCin(String cin) {
+        return candidatRepository.findByCin(cin);
+    }
 }

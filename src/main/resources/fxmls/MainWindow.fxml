@@ -8,7 +8,8 @@
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cpi2.controllers.MainWindow"
-            stylesheets="@/css/style.css">
+            stylesheets="@/css/style.css"
+            prefHeight="600" prefWidth="800">
     <top>
         <VBox alignment="CENTER" spacing="15">
             <padding>

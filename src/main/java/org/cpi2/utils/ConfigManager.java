@@ -17,7 +17,7 @@ public class ConfigManager {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             return reader.readLine();
         } catch (IOException e) {
-            return "profile"; // Default menu
+            return "profile";
         }
     }
 }

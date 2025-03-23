@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,6 +36,8 @@ public class MainWindow implements Initializable {
     @FXML private Label ecoleAddressLabel;
     @FXML private Label ecoleTelLabel;
     @FXML private Label ecoleEmailLabel;
+    @FXML private Label userNameLabel;
+    @FXML private Button logoutButton;
     // Fullscreen button removed as requested
 
     private Stage stage;
@@ -223,6 +227,31 @@ public class MainWindow implements Initializable {
     @FXML public void loadNotifications() { loadViewWithTransition("/fxmls/Notifications.fxml"); }
     @FXML public void loadInvoice() { loadViewWithTransition("/fxmls/Invoice.fxml"); }
     @FXML public void loadPaymentHistory() { loadViewWithTransition("/fxmls/PaymentHistory.fxml"); }
+    
+    /**
+     * Handles the logout action when the logout button is clicked
+     * Returns the user to the login screen
+     */
+    @FXML
+    public void logout() {
+        try {
+            // Load the login screen
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/login.fxml"));
+            Parent loginRoot = loader.load();
+            
+            // Get the current stage
+            Stage stage = (Stage) logoutButton.getScene().getWindow();
+            
+            // Create a new scene with the login screen
+            Scene scene = new Scene(loginRoot, stage.getWidth(), stage.getHeight());
+            stage.setTitle("Login");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error loading login screen: " + e.getMessage());
+        }
+    }
 
     private void loadViewWithTransition(String fxmlPath) {
         try {
