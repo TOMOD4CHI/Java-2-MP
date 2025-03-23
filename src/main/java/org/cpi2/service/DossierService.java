@@ -2,10 +2,13 @@ package org.cpi2.service;
 
 import org.cpi2.entitties.Document;
 import org.cpi2.entitties.Dossier;
+import org.cpi2.entitties.TypeDocument;
 import org.cpi2.repository.DossierRepository;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -62,9 +65,9 @@ public class DossierService {
         return documentService.deleteDocument(documentId);
     }
 
-    public Map<String, TreeSet<Document>> getDocumentsByDossier(Long dossierId) {
+    public Map<TypeDocument, TreeSet<Document>> getDocumentsByDossier(Long dossierId) {
         Optional<Dossier> dossierOpt = dossierRepository.findById(dossierId);
-        return dossierOpt.map(Dossier::getDocuments).orElse(Map.of());
+        return dossierOpt.map(Dossier::getDocuments).orElse(null);
     }
 
     public boolean verifierDocumentsObligatoires(Long dossierId, List<String> typesObligatoires) {
@@ -119,5 +122,76 @@ public class DossierService {
 
     public boolean candidatPossedeUnDossier(Long candidatId) {
         return dossierRepository.findByCandidatId(candidatId).isPresent();
+    }
+    //The commented methods below may concern the vehicule management part of the application
+    /*
+    public boolean verifierExpirationDocuments(Long dossierId) {
+        List<Document> documents = documentService.getDocumentsByDossierId(dossierId);
+        LocalDate today = LocalDate.now();
+        
+        for (Document doc : documents) {
+            if (doc.getDateExpiration() != null && 
+                doc.getDateExpiration().toLocalDate().isBefore(today)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Map<String, List<Document>> getDocumentsExpirantBientot(Long dossierId, int joursAvantExpiration) {
+        Map<String, List<Document>> documentsParType = new HashMap<>();
+        List<Document> documents = documentService.getDocumentsByDossierId(dossierId);
+        LocalDate dateLimit = LocalDate.now().plusDays(joursAvantExpiration);
+
+        for (Document doc : documents) {
+            if (doc.getDateExpiration() != null && 
+                doc.getDateExpiration().toLocalDate().isBefore(dateLimit)) {
+                documentsParType
+                    .computeIfAbsent(doc.getTypeDocument(), k -> new ArrayList<>())
+                    .add(doc);
+            }
+        }
+        return documentsParType;
+    }
+    */
+    public String genererRapportEtatDossier(Long dossierId) {
+        Optional<Dossier> dossierOpt = getDossierById(dossierId);
+        if (dossierOpt.isEmpty()) {
+            return "Dossier non trouvé";
+        }
+
+        StringBuilder rapport = new StringBuilder();
+        rapport.append("État du dossier #").append(dossierId).append("\n\n");
+
+        Map<TypeDocument, TreeSet<Document>> documents = dossierOpt.get().getDocuments();
+        List<String> typesObligatoires = List.of("CIN", "PERMIS", "CERTIFICAT_MEDICAL");
+
+        // Vérifier documents obligatoires
+        rapport.append("Documents obligatoires:\n");
+        for (String type : typesObligatoires) {
+            rapport.append("- ").append(type).append(": ");
+            if (documents.containsKey(type) && !documents.get(type).isEmpty()) {
+                rapport.append("✓ Présent\n");
+            } else {
+                rapport.append("✗ Manquant\n");
+            }
+        }
+    /*
+        // Vérifier documents expirés
+        rapport.append("\nDocuments expirés:\n");
+        for (Map.Entry<String, TreeSet<Document>> entry : documents.entrySet()) {
+            for (Document doc : entry.getValue()) {
+                if (doc.getDateExpiration() != null && 
+                    doc.getDateExpiration().toLocalDate().isBefore(LocalDate.now())) {
+                    rapport.append("- ").append(doc.getTypeDocument())
+                          .append(" (Expiré le: ").append(doc.getDateExpiration().toLocalDate())
+                          .append(")\n");
+                }
+            }
+        }
+
+   */
+
+        return rapport.toString();
     }
 }

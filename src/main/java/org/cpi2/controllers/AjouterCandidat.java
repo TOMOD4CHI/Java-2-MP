@@ -205,6 +205,7 @@ public class AjouterCandidat {
 
 
             if (candidatService.addCandidat(candidat)) {
+
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Succès");
                 alert.setHeaderText(null);

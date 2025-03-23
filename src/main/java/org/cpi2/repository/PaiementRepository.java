@@ -119,7 +119,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             String paiementSql = """
                 INSERT INTO paiement (inscription_id,id_examen,type_paiement, montant, date_paiement,mode_paiement)
                 VALUES (?, ?, ?, ?,?,?)
-            """;
+             """;
 
             try (PreparedStatement stmt = conn.prepareStatement(paiementSql, Statement.RETURN_GENERATED_KEYS)) {
                 if (paiement instanceof PaiementInscription) {

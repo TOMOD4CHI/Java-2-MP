@@ -2,6 +2,7 @@ package org.cpi2.repository;
 
 import org.cpi2.Exceptions.DataNotFound;
 import org.cpi2.entitties.Document;
+import org.cpi2.entitties.TypeDocument;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -52,10 +53,15 @@ public class DocumentRepository extends BaseRepository<Document> {
         return documents;
     }
 
+
     private Document mapResultSetToDocument(ResultSet rs) throws SQLException {
-        String typeDocument = typeDocumentRepository
+        String typeDoc = typeDocumentRepository
                 .findById(rs.getInt("type_document_id"))
                 .orElse(null);
+        if(typeDoc == null) {
+            return null;
+        }
+        TypeDocument typeDocument = TypeDocument.valueOf(typeDoc);
 
         Document document = new Document();
         document.setId(rs.getLong("id"));
@@ -74,7 +80,12 @@ public class DocumentRepository extends BaseRepository<Document> {
             INSERT INTO document (dossier_id, type_document_id, nom_fichier, chemin_fichier)
             VALUES (?, ?, ?, ?)
         """;
-        long typeDocumentId = (long)typeDocumentRepository.findByLibelle(document.getTypeDocument()).get();
+        long typeDocumentId = (long)typeDocumentRepository.findByLibelle(document.getTypeDocument().name()).get();
+
+        if(typeDocumentId == 0) {
+            throw new DataNotFound("Type document not found");
+        }
+
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -104,7 +115,11 @@ public class DocumentRepository extends BaseRepository<Document> {
             SET dossier_id = ?, type_document_id = ?, nom_fichier = ?, chemin_fichier = ?
             WHERE id = ?
         """;
-        long typeDocumentId = (long)typeDocumentRepository.findByLibelle(document.getTypeDocument()).get();
+        long typeDocumentId = (long)typeDocumentRepository.findByLibelle(document.getTypeDocument().name()).get();
+
+        if(typeDocumentId == 0) {
+            throw new DataNotFound("Type document not found");
+        }
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -194,6 +209,52 @@ public class DocumentRepository extends BaseRepository<Document> {
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error finding document by dossier and type", e);
+        }
+        return documents;
+    }
+
+    public List<Document> findExpiredDocuments() {
+        List<Document> documents = new ArrayList<>();
+        String sql = """
+            SELECT * FROM document d
+            JOIN type_document td ON d.type_document_id = td.id
+            WHERE td.requires_expiration = true 
+            AND d.date_expiration < CURRENT_DATE
+        """;
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                documents.add(mapResultSetToDocument(rs));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error finding expired documents", e);
+        }
+        return documents;
+    }
+
+    public List<Document> findDocumentsExpiringInDays(int days) {
+        List<Document> documents = new ArrayList<>();
+        String sql = """
+            SELECT * FROM document d
+            JOIN type_document td ON d.type_document_id = td.id
+            WHERE td.requires_expiration = true 
+            AND d.date_expiration BETWEEN CURRENT_DATE AND CURRENT_DATE + ?
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, days);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                documents.add(mapResultSetToDocument(rs));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error finding documents expiring soon", e);
         }
         return documents;
     }
