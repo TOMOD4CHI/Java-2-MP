@@ -14,6 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.cpi2.entitties.AutoEcole;
 import org.cpi2.service.AutoEcoleService;
+import org.cpi2.utils.EventBus;
 
 import java.io.*;
 import java.net.URL;
@@ -262,6 +263,9 @@ public class ManageEcole implements Initializable {
                 
                 showEditMode(false);
                 updateInfoLabels();
+                
+                // Publish event to update the footer in MainWindow
+                EventBus.publish("AUTO_ECOLE_UPDATED", currentAutoEcole);
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement", 
                           "Impossible d'enregistrer les informations de l'auto-école.");

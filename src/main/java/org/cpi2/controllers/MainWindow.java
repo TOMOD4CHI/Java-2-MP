@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.cpi2.entitties.AutoEcole;
 import org.cpi2.service.AutoEcoleService;
+import org.cpi2.utils.EventBus;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +50,13 @@ public class MainWindow implements Initializable {
         // Create logo animation
         createLogoAnimation();
         
+        // Subscribe to auto-école update events
+        EventBus.subscribe("AUTO_ECOLE_UPDATED", data -> {
+            if (data instanceof AutoEcole) {
+                updateFooterInfo((AutoEcole) data);
+            }
+        });
+        
         // We'll set up the stage properties after the scene is fully loaded
         Platform.runLater(this::setupMainWindow);
     }
@@ -70,15 +78,13 @@ public class MainWindow implements Initializable {
                 return;
             }
             
-            // Set the main window size to match the login window
+            // Set window properties for 1920x1080 screen
             stage.setResizable(true);
-            stage.setMinWidth(600);
-            stage.setMinHeight(400);
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
             stage.setMaximized(false);
             
-            // Set default size - wider as requested
-            stage.setWidth(600);
-            stage.setHeight(400);
+            stage.setHeight(825); 
             
             // Set application icon
             setApplicationIcon(stage);
@@ -100,15 +106,39 @@ public class MainWindow implements Initializable {
             AutoEcole autoEcole = autoEcoleService.getAutoEcole();
             
             if (autoEcole != null) {
-                // Set the footer labels with auto-école information
-                ecoleNameLabel.setText(autoEcole.getNom());
-                ecoleAddressLabel.setText(autoEcole.getAdresse());
-                ecoleTelLabel.setText("Tél: " + autoEcole.getTelephone());
-                ecoleEmailLabel.setText("Email: " + autoEcole.getEmail());
+                updateFooterInfo(autoEcole);
             }
         } catch (Exception e) {
             System.err.println("Error loading auto-école information: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Updates the footer information with the provided auto-école data
+     * This method can be called from other controllers when auto-école information changes
+     * @param autoEcole The updated auto-école information
+     */
+    public void updateFooterInfo(AutoEcole autoEcole) {
+        if (autoEcole != null) {
+            // Set the footer labels with auto-école information
+            ecoleNameLabel.setText(autoEcole.getNom());
+            ecoleAddressLabel.setText(autoEcole.getAdresse());
+            ecoleTelLabel.setText("Tél: " + autoEcole.getTelephone());
+            ecoleEmailLabel.setText("Email: " + autoEcole.getEmail());
+            
+            // Also update the logo if it has changed
+            if (autoEcole.getLogo() != null && !autoEcole.getLogo().isEmpty()) {
+                try {
+                    File logoFile = new File(autoEcole.getLogo());
+                    if (logoFile.exists()) {
+                        Image logoImage = new Image(logoFile.toURI().toString());
+                        logoImageView.setImage(logoImage);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error updating logo: " + e.getMessage());
+                }
+            }
         }
     }
     
