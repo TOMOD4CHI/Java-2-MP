@@ -1,10 +1,8 @@
 package org.cpi2.service;
 
 
-import org.cpi2.entitties.Inscription;
-import org.cpi2.entitties.Paiement;
-import org.cpi2.entitties.PaiementInscription;
-import org.cpi2.entitties.StatutPaiement;
+import org.cpi2.entities.Paiement;
+import org.cpi2.entities.PaiementInscription;
 import org.cpi2.repository.PaiementRepository;
 import org.cpi2.repository.CandidatRepository;
 

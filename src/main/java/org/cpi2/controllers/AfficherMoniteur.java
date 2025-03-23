@@ -1,7 +1,7 @@
 package org.cpi2.controllers;
 
-import org.cpi2.entitties.Moniteur;
-import org.cpi2.entitties.TypePermis;
+import org.cpi2.entities.Moniteur;
+import org.cpi2.entities.TypePermis;
 import org.cpi2.service.MoniteurService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

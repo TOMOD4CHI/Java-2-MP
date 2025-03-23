@@ -1,6 +1,6 @@
 package org.cpi2.controllers;
 
-import org.cpi2.entitties.*;
+import org.cpi2.entities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

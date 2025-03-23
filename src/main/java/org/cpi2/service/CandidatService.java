@@ -1,6 +1,6 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.*;
+import org.cpi2.entities.*;
 import org.cpi2.repository.CandidatRepository;
 import org.cpi2.repository.InscriptionRepository;
 

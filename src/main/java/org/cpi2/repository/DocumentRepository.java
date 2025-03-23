@@ -1,7 +1,7 @@
 package org.cpi2.repository;
 
 import org.cpi2.Exceptions.DataNotFound;
-import org.cpi2.entitties.Document;
+import org.cpi2.entities.Document;
 
 import java.sql.*;
 import java.util.ArrayList;

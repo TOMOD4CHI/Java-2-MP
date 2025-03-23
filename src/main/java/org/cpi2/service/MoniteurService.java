@@ -1,8 +1,8 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.Moniteur;
-import org.cpi2.entitties.RendezVous;
-import org.cpi2.entitties.TypePermis;
+import org.cpi2.entities.Moniteur;
+import org.cpi2.entities.RendezVous;
+import org.cpi2.entities.TypePermis;
 import org.cpi2.repository.MoniteurRepository;
 
 import java.time.LocalDate;

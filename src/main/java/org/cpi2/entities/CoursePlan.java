@@ -1,4 +1,4 @@
-package org.cpi2.entitties;
+package org.cpi2.entities;
 
 public enum CoursePlan {
     MOTO_BASIC(1, "Basic Motorcycle Course",199.99, "Fundamental motorcycle training for beginners", 10, 10),

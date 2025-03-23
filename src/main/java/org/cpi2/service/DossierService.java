@@ -1,7 +1,7 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.Document;
-import org.cpi2.entitties.Dossier;
+import org.cpi2.entities.Document;
+import org.cpi2.entities.Dossier;
 import org.cpi2.repository.DossierRepository;
 
 import java.io.File;

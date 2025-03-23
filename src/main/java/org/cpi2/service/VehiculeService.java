@@ -1,8 +1,8 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.Entretien;
-import org.cpi2.entitties.TypePermis;
-import org.cpi2.entitties.Vehicule;
+import org.cpi2.entities.Entretien;
+import org.cpi2.entities.TypePermis;
+import org.cpi2.entities.Vehicule;
 import org.cpi2.repository.VehiculeRepository;
 
 import java.time.LocalDate;

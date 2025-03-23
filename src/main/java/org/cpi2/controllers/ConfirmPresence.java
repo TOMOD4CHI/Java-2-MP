@@ -6,11 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.cpi2.entitties.Seance;
+import org.cpi2.entities.Seance;
 import org.cpi2.service.SeanceService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ConfirmPresence {

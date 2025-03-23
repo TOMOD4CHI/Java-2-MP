@@ -1,6 +1,5 @@
-package org.cpi2.entitties;
+package org.cpi2.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public abstract class Paiement {

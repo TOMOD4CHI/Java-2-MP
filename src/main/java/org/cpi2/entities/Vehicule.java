@@ -1,4 +1,4 @@
-package org.cpi2.entitties;
+package org.cpi2.entities;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

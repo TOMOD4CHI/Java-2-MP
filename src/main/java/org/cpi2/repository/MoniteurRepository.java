@@ -1,7 +1,7 @@
 package org.cpi2.repository;
 
-import org.cpi2.entitties.Moniteur;
-import org.cpi2.entitties.TypePermis;
+import org.cpi2.entities.Moniteur;
+import org.cpi2.entities.TypePermis;
 
 import java.sql.*;
 import java.sql.Date;

@@ -1,6 +1,4 @@
-package org.cpi2.entitties;
-
-import java.time.LocalDate;
+package org.cpi2.entities;
 
 public class Seance {
     private Long id;

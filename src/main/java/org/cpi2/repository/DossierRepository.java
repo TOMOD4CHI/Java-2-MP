@@ -1,7 +1,7 @@
 package org.cpi2.repository;
 
-import org.cpi2.entitties.Document;
-import org.cpi2.entitties.Dossier;
+import org.cpi2.entities.Document;
+import org.cpi2.entities.Dossier;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;

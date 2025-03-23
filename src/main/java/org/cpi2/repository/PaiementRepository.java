@@ -1,6 +1,6 @@
 package org.cpi2.repository;
 
-import org.cpi2.entitties.*;
+import org.cpi2.entities.*;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -6,7 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import org.cpi2.entitties.Candidat;
+import org.cpi2.entities.Candidat;
 import org.cpi2.utils.AlertUtil;
 
 import java.net.URL;

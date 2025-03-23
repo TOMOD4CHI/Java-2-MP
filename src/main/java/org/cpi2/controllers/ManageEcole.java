@@ -12,14 +12,12 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.cpi2.entitties.AutoEcole;
+import org.cpi2.entities.AutoEcole;
 import org.cpi2.service.AutoEcoleService;
 import org.cpi2.utils.EventBus;
 
 import java.io.*;
 import java.net.URL;
-import java.security.cert.Extension;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 

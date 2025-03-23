@@ -1,9 +1,9 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.Candidat;
-import org.cpi2.entitties.Examen;
-import org.cpi2.entitties.Inscription;
-import org.cpi2.entitties.TypeExamen;
+import org.cpi2.entities.Candidat;
+import org.cpi2.entities.Examen;
+import org.cpi2.entities.Inscription;
+import org.cpi2.entities.TypeExamen;
 import org.cpi2.repository.CandidatRepository;
 import org.cpi2.repository.ExamenRepository;
 

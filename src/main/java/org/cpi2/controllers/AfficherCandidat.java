@@ -1,6 +1,6 @@
 package org.cpi2.controllers;
 
-import org.cpi2.entitties.Candidat;
+import org.cpi2.entities.Candidat;
 import org.cpi2.service.CandidatService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
