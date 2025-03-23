@@ -4,6 +4,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,29 +40,107 @@ public class MainWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        createLogoAnimation();
+        // Load auto-école information for the footer
         loadAutoEcoleInfo();
         
+        // Load the logo
+        loadLogo();
+        
+        // Create logo animation
+        createLogoAnimation();
+        
         // We'll set up the stage properties after the scene is fully loaded
-        // using Platform.runLater to ensure the scene is ready
-        javafx.application.Platform.runLater(() -> {
-            try {
-                Stage stage = (Stage) contentArea.getScene().getWindow();
-                stage.setResizable(true);
-                stage.setMinWidth(800);
-                stage.setMinHeight(600);
-                stage.setMaximized(false);
-                
-                // Set default size - wider as requested
-                stage.setWidth(1280);
-                stage.setHeight(800);
-                
-                // Set application icon
-                setApplicationIcon(stage);
-            } catch (Exception e) {
-                e.printStackTrace();
+        Platform.runLater(this::setupMainWindow);
+    }
+    
+    private void setupMainWindow() {
+        try {
+            // Wait until the scene is available
+            if (contentArea.getScene() == null) {
+                // If scene is not available yet, try again later
+                Platform.runLater(this::setupMainWindow);
+                return;
             }
-        });
+            
+            // Get the stage from the scene
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+            if (stage == null) {
+                // If window is not available yet, try again later
+                Platform.runLater(this::setupMainWindow);
+                return;
+            }
+            
+            // Set the main window size to match the login window
+            stage.setResizable(true);
+            stage.setMinWidth(600);
+            stage.setMinHeight(400);
+            stage.setMaximized(false);
+            
+            // Set default size - wider as requested
+            stage.setWidth(600);
+            stage.setHeight(400);
+            
+            // Set application icon
+            setApplicationIcon(stage);
+            
+            // Center the window on screen
+            stage.centerOnScreen();
+        } catch (Exception e) {
+            System.err.println("Error setting up main window: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Loads auto-école information and displays it in the footer
+     */
+    private void loadAutoEcoleInfo() {
+        try {
+            // Get the auto-école information from the database
+            AutoEcole autoEcole = autoEcoleService.getAutoEcole();
+            
+            if (autoEcole != null) {
+                // Set the footer labels with auto-école information
+                ecoleNameLabel.setText(autoEcole.getNom());
+                ecoleAddressLabel.setText(autoEcole.getAdresse());
+                ecoleTelLabel.setText("Tél: " + autoEcole.getTelephone());
+                ecoleEmailLabel.setText("Email: " + autoEcole.getEmail());
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading auto-école information: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void loadLogo() {
+        try {
+            AutoEcole autoEcole = autoEcoleService.getAutoEcole();
+            if (autoEcole != null && autoEcole.getLogo() != null && !autoEcole.getLogo().isEmpty()) {
+                try {
+                    File logoFile = new File(autoEcole.getLogo());
+                    if (logoFile.exists()) {
+                        Image logoImage = new Image(logoFile.toURI().toString());
+                        logoImageView.setImage(logoImage);
+                    } else {
+                        // Use default logo if file doesn't exist
+                        logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+                    }
+                } catch (Exception e) {
+                    // Use default logo if there's an error loading the custom logo
+                    logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+                    System.err.println("Error loading logo image: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                // Use default logo if no logo path is specified
+                logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+            }
+        } catch (Exception e) {
+            // Use default logo if there's any error
+            logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+            System.err.println("Error in loadLogo method: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void createLogoAnimation() {
@@ -181,54 +260,6 @@ public class MainWindow implements Initializable {
     }
     
     public void loadModifierSalle(ActionEvent actionEvent) {
-    }
-    
-    /**
-     * Loads auto-école information and displays it in the footer
-     */
-    private void loadAutoEcoleInfo() {
-        try {
-            // Get the auto-école information from the database
-            AutoEcole autoEcole = autoEcoleService.getAutoEcole();
-            
-            if (autoEcole != null) {
-                // Set the footer labels with auto-école information
-                ecoleNameLabel.setText(autoEcole.getNom());
-                ecoleAddressLabel.setText(autoEcole.getAdresse());
-                ecoleTelLabel.setText("Tél: " + autoEcole.getTelephone());
-                ecoleEmailLabel.setText("Email: " + autoEcole.getEmail());
-                
-                // Load the logo if it exists
-                if (autoEcole.getLogo() != null && !autoEcole.getLogo().isEmpty()) {
-                    try {
-                        File logoFile = new File(autoEcole.getLogo());
-                        if (logoFile.exists()) {
-                            Image logoImage = new Image(logoFile.toURI().toString());
-                            logoImageView.setImage(logoImage);
-                        } else {
-                            // Use default logo if file doesn't exist
-                            logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
-                        }
-                    } catch (Exception e) {
-                        // Use default logo if there's an error loading the custom logo
-                        logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
-                        e.printStackTrace();
-                    }
-                } else {
-                    // Use default logo if no logo path is specified
-                    logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
-                }
-            } else {
-                // Set default values if no auto-école is found
-                ecoleNameLabel.setText("Auto-École");
-                ecoleAddressLabel.setText("Adresse non définie");
-                ecoleTelLabel.setText("Tél: Non défini");
-                ecoleEmailLabel.setText("Email: Non défini");
-                logoImageView.setImage(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
     
     /**

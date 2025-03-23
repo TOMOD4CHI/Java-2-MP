@@ -1,6 +1,8 @@
 package org.cpi2.controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -9,8 +11,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.cpi2.entitties.AutoEcole;
 import org.cpi2.service.AutoEcoleService;
+import org.cpi2.utils.ValidationUtils;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,14 +22,20 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class    AjouterEcole {
+public class AjouterEcole implements Initializable {
 
+    @FXML
     public TextField nomField;
+    @FXML
     public TextField adresseField;
+    @FXML
     public TextField telephoneField;
+    @FXML
     public TextField emailField;
+    @FXML
     public ImageView logoImageView;
 
     private Image logoImage;
@@ -38,34 +48,37 @@ public class    AjouterEcole {
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    // Validation methods
-    private boolean isValidEmail(String email) {
-        return email != null && EMAIL_PATTERN.matcher(email).matches();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Set placeholders for input fields
+        nomField.setPromptText("Entrez le nom de l'école");
+        adresseField.setPromptText("Entrez l'adresse complète");
+        telephoneField.setPromptText("Entrez le numéro (8 chiffres)");
+        emailField.setPromptText("exemple@domaine.com");
+        
+        setupValidation();
     }
 
-    private boolean isValidPhone(String phone) {
-        return phone != null && PHONE_PATTERN.matcher(phone).matches();
-    }
-
-    private boolean isValidName(String name) {
-        return name != null && NAME_PATTERN.matcher(name).matches();
-    }
-
-    private boolean isValidDate(String dateStr) {
-        try {
-            LocalDate.parse(dateStr, DATE_FORMATTER);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    private void setupValidation() {
+        // Validate name field
+        ValidationUtils.addValidation(nomField, 
+            name -> name != null && !name.isEmpty() && NAME_PATTERN.matcher(name).matches(),
+            "Le nom de l'école ne doit contenir que des lettres et des espaces", 1);
+        
+        // Validate address field
+        ValidationUtils.addValidation(adresseField,
+            address -> address != null && address.length() >= 10,
+            "L'adresse doit contenir au moins 10 caractères", 1);
+        
+        // Validate phone field
+        ValidationUtils.addValidation(telephoneField,
+            phone -> phone != null && PHONE_PATTERN.matcher(phone).matches(),
+            "Le numéro de téléphone doit contenir exactement 8 chiffres", 1);
+        
+        // Validate email field
+        ValidationUtils.addValidation(emailField,
+            email -> email != null && EMAIL_PATTERN.matcher(email).matches(),
+            "L'adresse email n'est pas valide", 1);
     }
 
     // Handle file upload for the logo
@@ -107,6 +120,11 @@ public class    AjouterEcole {
 
     // Handle saving the school data
     public void handleAjouterEcole(ActionEvent event) {
+        // Check if there are any validation errors
+        if (ValidationUtils.hasAnyErrors()) {
+            return;
+        }
+        
         // Get the values from the form
         String nom = nomField.getText().trim();
         String adresse = adresseField.getText().trim();
@@ -119,30 +137,6 @@ public class    AjouterEcole {
             return;
         }
 
-        // Validate name format
-        if (!isValidName(nom)) {
-            showAlert("Erreur de validation", "Le nom de l'école ne doit contenir que des lettres et des espaces.");
-            return;
-        }
-
-        // Validate phone number format
-        if (!isValidPhone(telephone)) {
-            showAlert("Erreur de validation", "Le numéro de téléphone doit contenir exactement 8 chiffres.");
-            return;
-        }
-
-        // Validate email format
-        if (!isValidEmail(email)) {
-            showAlert("Erreur de validation", "L'adresse email n'est pas valide.");
-            return;
-        }
-
-        // Validate address (basic check for minimum length)
-        if (adresse.length() < 10) {
-            showAlert("Erreur de validation", "L'adresse doit contenir au moins 10 caractères.");
-            return;
-        }
-
         // Create the AutoEcole object
         AutoEcole autoEcole = new AutoEcole();
         autoEcole.setNom(nom);
@@ -152,7 +146,6 @@ public class    AjouterEcole {
         autoEcole.setLogo(logoPath);
 
         // Save the auto école
-        //autoEcoleService.deleteAutoEcole();
         boolean success = autoEcoleService.saveAutoEcole(autoEcole);
 
         if (success) {
@@ -163,19 +156,26 @@ public class    AjouterEcole {
             alert.showAndWait();
             
             // Clear the form
-            nomField.clear();
-            adresseField.clear();
-            telephoneField.clear();
-            emailField.clear();
-            logoImageView.setImage(null);
-            logoPath = null;
+            clearForm();
         } else {
             showAlert("Erreur", "Échec de l'ajout de l'école.");
         }
     }
 
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     // Handle cancelling the operation
     public void handleCancel(ActionEvent event) {
+        clearForm();
+    }
+    
+    private void clearForm() {
         // Clear all fields
         nomField.clear();
         adresseField.clear();
@@ -183,5 +183,11 @@ public class    AjouterEcole {
         emailField.clear();
         logoImageView.setImage(null);
         logoPath = null;
+        
+        // Clear validation styles
+        ValidationUtils.clearValidation(nomField);
+        ValidationUtils.clearValidation(adresseField);
+        ValidationUtils.clearValidation(telephoneField);
+        ValidationUtils.clearValidation(emailField);
     }
 }

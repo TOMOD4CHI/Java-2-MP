@@ -29,12 +29,14 @@ public class ManageEcole implements Initializable {
     @FXML private Label telephoneLabel;
     @FXML private Label emailLabel;
     @FXML private Label directeurLabel;
+    @FXML private Label passwordLabel;
     
     @FXML private TextField nomField;
     @FXML private TextField adresseField;
     @FXML private TextField telephoneField;
     @FXML private TextField emailField;
     @FXML private TextField directeurField;
+    @FXML private PasswordField passwordField;
     
     @FXML private ImageView logoImageView;
     @FXML private Button changeLogoButton;
@@ -46,6 +48,14 @@ public class ManageEcole implements Initializable {
     
     @FXML private VBox infoContainer;
     @FXML private VBox editContainer;
+    
+    // Error labels for validation
+    @FXML private Label nomError;
+    @FXML private Label adresseError;
+    @FXML private Label telephoneError;
+    @FXML private Label emailError;
+    @FXML private Label directeurError;
+    @FXML private Label passwordError;
     
     private final AutoEcoleService autoEcoleService = new AutoEcoleService();
     private AutoEcole currentAutoEcole;
@@ -76,41 +86,20 @@ public class ManageEcole implements Initializable {
         // Initially show info container and hide edit container
         showEditMode(false);
         
-        // The auto-école data will be loaded when loadAutoEcole is called from AfficherEcole
+        // Load auto-école data
+        loadAutoEcoleData();
     }
     
-    void loadAutoEcole(int id) {
+    private void loadAutoEcoleData() {
+        // Load auto-école data from database
         try {
-            // If id is valid, try to find the specific auto-école
-            if (id > 0) {
-                List<AutoEcole> allEcoles = autoEcoleService.findAllAutoEcoles();
-                for (AutoEcole ecole : allEcoles) {
-                    if (ecole.getId() == id) {
-                        currentAutoEcole = ecole;
-                        break;
-                    }
-                }
-            } else {
-                // Otherwise get the first one (default behavior)
-                currentAutoEcole = autoEcoleService.getAutoEcole();
-            }
-            
+            currentAutoEcole = autoEcoleService.getAutoEcole();
             if (currentAutoEcole != null) {
                 updateInfoLabels();
                 populateEditFields();
                 
                 // Load logo if it exists
-                if (currentAutoEcole.getLogo() != null && !currentAutoEcole.getLogo().isEmpty()) {
-                    try {
-                        File logoFile = new File(currentAutoEcole.getLogo());
-                        if (logoFile.exists()) {
-                            Image logoImage = new Image(logoFile.toURI().toString());
-                            logoImageView.setImage(logoImage);
-                        }
-                    } catch (Exception e) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger le logo", e.getMessage());
-                    }
-                }
+                loadLogo();
             } else {
                 // If no auto-école exists, show the edit form
                 showEditMode(true);
@@ -120,12 +109,28 @@ public class ManageEcole implements Initializable {
         }
     }
     
+    private void loadLogo() {
+        if (currentAutoEcole != null && currentAutoEcole.getLogo() != null && !currentAutoEcole.getLogo().isEmpty()) {
+            try {
+                File logoFile = new File(currentAutoEcole.getLogo());
+                if (logoFile.exists()) {
+                    Image logoImage = new Image(logoFile.toURI().toString());
+                    logoImageView.setImage(logoImage);
+                }
+            } catch (Exception e) {
+                System.err.println("Erreur lors du chargement du logo: " + e.getMessage());
+            }
+        }
+    }
+    
     private void updateInfoLabels() {
         if (currentAutoEcole != null) {
             nomLabel.setText(currentAutoEcole.getNom());
             adresseLabel.setText(currentAutoEcole.getAdresse());
             telephoneLabel.setText(currentAutoEcole.getTelephone());
             emailLabel.setText(currentAutoEcole.getEmail());
+            directeurLabel.setText(currentAutoEcole.getUsername());
+            passwordLabel.setText("********"); // Hide actual password for security
         }
     }
     
@@ -135,6 +140,8 @@ public class ManageEcole implements Initializable {
             adresseField.setText(currentAutoEcole.getAdresse());
             telephoneField.setText(currentAutoEcole.getTelephone());
             emailField.setText(currentAutoEcole.getEmail());
+            directeurField.setText(currentAutoEcole.getUsername());
+            passwordField.setText(currentAutoEcole.getPassword());
         }
     }
     
@@ -166,14 +173,30 @@ public class ManageEcole implements Initializable {
         // Apply styling to text fields
         TextField[] fields = {nomField, adresseField, telephoneField, emailField, directeurField};
         for (TextField field : fields) {
-            field.getStyleClass().add("form-field");
+            if (field != null) {
+                field.getStyleClass().add("form-field");
+                
+                // Add focus effect
+                field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        field.setStyle("-fx-border-color: #3182CE; -fx-border-width: 2px;");
+                    } else {
+                        field.setStyle("");
+                    }
+                });
+            }
+        }
+        
+        // Apply styling to password field
+        if (passwordField != null) {
+            passwordField.getStyleClass().add("form-field");
             
             // Add focus effect
-            field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            passwordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
-                    field.setStyle("-fx-border-color: #3182CE; -fx-border-width: 2px;");
+                    passwordField.setStyle("-fx-border-color: #3182CE; -fx-border-width: 2px;");
                 } else {
-                    field.setStyle("");
+                    passwordField.setStyle("");
                 }
             });
         }
@@ -198,6 +221,9 @@ public class ManageEcole implements Initializable {
     
     @FXML
     private void handleSave() {
+        // Clear previous error messages
+        clearErrorMessages();
+        
         // Validate input
         if (!validateInput()) {
             return;
@@ -213,6 +239,12 @@ public class ManageEcole implements Initializable {
             currentAutoEcole.setAdresse(adresseField.getText().trim());
             currentAutoEcole.setTelephone(telephoneField.getText().trim());
             currentAutoEcole.setEmail(emailField.getText().trim());
+            currentAutoEcole.setUsername(directeurField.getText().trim());
+            
+            // Update password if provided
+            if (passwordField.getText() != null && !passwordField.getText().isEmpty()) {
+                currentAutoEcole.setPassword(passwordField.getText().trim());
+            }
 
             // Handle logo file if selected
             if (selectedLogoFile != null) {
@@ -321,40 +353,83 @@ public class ManageEcole implements Initializable {
         return name != null && NAME_PATTERN.matcher(name).matches();
     }
     
+    private void clearErrorMessages() {
+        // Hide all error labels
+        Label[] errorLabels = {nomError, adresseError, telephoneError, emailError, directeurError, passwordError};
+        for (Label label : errorLabels) {
+            if (label != null) {
+                label.setVisible(false);
+                label.setManaged(false);
+                label.setText("");
+            }
+        }
+    }
+    
     private boolean validateInput() {
-        StringBuilder errors = new StringBuilder();
+        boolean isValid = true;
         
+        // Validate nom
         if (nomField.getText().trim().isEmpty()) {
-            errors.append("- Le nom est obligatoire\n");
+            showError(nomError, "Le nom est obligatoire");
+            isValid = false;
         } else if (!isValidName(nomField.getText().trim())) {
-            errors.append("- Le nom doit contenir uniquement des lettres et des espaces\n");
+            showError(nomError, "Le nom doit contenir uniquement des lettres et des espaces");
+            isValid = false;
         }
         
+        // Validate adresse
         if (adresseField.getText().trim().isEmpty()) {
-            errors.append("- L'adresse est obligatoire\n");
+            showError(adresseError, "L'adresse est obligatoire");
+            isValid = false;
         } else if (adresseField.getText().trim().length() < 10) {
-            errors.append("- L'adresse doit contenir au moins 10 caractères\n");
+            showError(adresseError, "L'adresse doit contenir au moins 10 caractères");
+            isValid = false;
         }
         
+        // Validate telephone
         if (telephoneField.getText().trim().isEmpty()) {
-            errors.append("- Le numéro de téléphone est obligatoire\n");
+            showError(telephoneError, "Le numéro de téléphone est obligatoire");
+            isValid = false;
         } else if (!isValidPhone(telephoneField.getText().trim())) {
-            errors.append("- Le numéro de téléphone doit contenir 8 chiffres\n");
+            showError(telephoneError, "Le numéro de téléphone doit contenir 8 chiffres");
+            isValid = false;
         }
         
+        // Validate email
         if (emailField.getText().trim().isEmpty()) {
-            errors.append("- L'adresse email est obligatoire\n");
+            showError(emailError, "L'adresse email est obligatoire");
+            isValid = false;
         } else if (!isValidEmail(emailField.getText().trim())) {
-            errors.append("- L'adresse email n'est pas valide\n");
+            showError(emailError, "L'adresse email n'est pas valide");
+            isValid = false;
         }
         
-        if (errors.length() > 0) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
-                    "Veuillez corriger les erreurs suivantes:", errors.toString());
-            return false;
+        // Validate directeur
+        if (directeurField.getText().trim().isEmpty()) {
+            showError(directeurError, "Le nom du directeur est obligatoire");
+            isValid = false;
         }
         
-        return true;
+        // Validate password if it's a new auto-école or if the field is not empty
+        if ((currentAutoEcole == null || currentAutoEcole.getId() == 0) && 
+            (passwordField.getText() == null || passwordField.getText().isEmpty())) {
+            showError(passwordError, "Le mot de passe est obligatoire");
+            isValid = false;
+        } else if (passwordField.getText() != null && !passwordField.getText().isEmpty() && 
+                   passwordField.getText().length() < 5) {
+            showError(passwordError, "Le mot de passe doit contenir au moins 5 caractères");
+            isValid = false;
+        }
+        
+        return isValid;
+    }
+    
+    private void showError(Label errorLabel, String message) {
+        if (errorLabel != null) {
+            errorLabel.setText(message);
+            errorLabel.setVisible(true);
+            errorLabel.setManaged(true);
+        }
     }
     
     // Alert utility methods directly integrated

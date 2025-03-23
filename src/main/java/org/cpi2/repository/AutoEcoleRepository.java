@@ -123,8 +123,8 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
             stmt.setString(2, autoEcole.getAdresse());
             stmt.setString(3, autoEcole.getTelephone());
             stmt.setString(4, autoEcole.getEmail());
-            stmt.setString(5, autoEcole.getUsername());
-            stmt.setString(6, autoEcole.getPassword());
+            stmt.setString(5, autoEcole.getUsername() != null ? autoEcole.getUsername() : "user");
+            stmt.setString(6, autoEcole.getPassword() != null ? autoEcole.getPassword() : "pass");
             stmt.setString(7, autoEcole.getLogo());
 
             int affectedRows = stmt.executeUpdate();
@@ -153,8 +153,8 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
             stmt.setString(2, autoEcole.getAdresse());
             stmt.setString(3, autoEcole.getTelephone());
             stmt.setString(4, autoEcole.getEmail());
-            stmt.setString(5, autoEcole.getUsername());
-            stmt.setString(6, autoEcole.getPassword());
+            stmt.setString(5, autoEcole.getUsername() != null ? autoEcole.getUsername() : "user");
+            stmt.setString(6, autoEcole.getPassword() != null ? autoEcole.getPassword() : "pass");
             stmt.setString(7, autoEcole.getLogo());
             stmt.setInt(8, autoEcole.getId());
 

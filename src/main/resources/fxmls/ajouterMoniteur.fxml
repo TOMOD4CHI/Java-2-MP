@@ -21,28 +21,44 @@
         </columnConstraints>
 
         <Label text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label"/>
-        <TextField fx:id="nomField" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="form-field"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <TextField fx:id="nomField" styleClass="form-field"/>
+        </VBox>
 
         <Label text="Prénom:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label"/>
-        <TextField fx:id="prenomField" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="form-field"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="prenomField" styleClass="form-field"/>
+        </VBox>
 
         <Label text="CIN:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label"/>
-        <TextField fx:id="cinField" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="cinField" styleClass="form-field"/>
+        </VBox>
 
         <Label text="Adresse:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="form-label"/>
-        <TextField fx:id="adresseField" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="form-field"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField fx:id="adresseField" styleClass="form-field"/>
+        </VBox>
 
         <Label text="Téléphone:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="form-label"/>
-        <TextField fx:id="telephoneField" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="form-field"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <TextField fx:id="telephoneField" styleClass="form-field"/>
+        </VBox>
 
         <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="form-label"/>
-        <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="form-field"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <TextField fx:id="emailField" styleClass="form-field"/>
+        </VBox>
 
         <Label text="Date d'embauche:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="form-label"/>
-        <DatePicker fx:id="dateEmbaucheField" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="datepick"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <DatePicker fx:id="dateEmbaucheField" styleClass="datepick"/>
+        </VBox>
 
         <Label text="Type de Permis:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="form-label"/>
-        <ComboBox fx:id="typePermisComboBox" GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="form-field"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <ComboBox fx:id="typePermisComboBox" styleClass="form-field"/>
+        </VBox>
 
     </GridPane>
 

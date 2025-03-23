@@ -173,14 +173,18 @@ public class AfficherEcole {
 
         try {
             // Load manageEcole view which has inline editing capability
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/manageEcole.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/AutoEcoleManagement.fxml"));
             Parent root = loader.load();
             
             applyFadeInAnimation(root, 300);
             
             ManageEcole controller = loader.getController();
-            controller.loadAutoEcole(selectedEcole.getId());
-            controller.handleModifier(); // Automatically switch to edit mode
+            // Instead of calling loadAutoEcole, we'll set the auto-école data directly
+            if (selectedEcole != null) {
+                // Load the auto-école data automatically in the controller's initialize method
+                // Just need to trigger edit mode
+                controller.handleModifier(); // Automatically switch to edit mode
+            }
             
             Stage stage = new Stage();
             stage.setTitle("Modifier les informations de l'école");

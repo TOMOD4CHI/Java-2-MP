@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `auto_ecole` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(100) NOT NULL,
   `adresse` text NOT NULL,
   `logo_path` varchar(255) DEFAULT NULL,
@@ -37,15 +37,15 @@ CREATE TABLE `auto_ecole` (
   `username` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  UNIQUE KEY `unique_auto_ecole` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `auto_ecole`
 --
 
-INSERT INTO `auto_ecole` (`id`, `nom`, `adresse`, `logo_path`, `telephone`, `email`, `directeur`, `created_at`) VALUES
-(1, 'Auto École Exemplaire', 'Avenue des Conducteurs 123, Ville', 'logos/default_logo.png', '12345678', 'contact@autoecole.com', 'Jean Dupont', '2025-03-22 13:11:27');
+INSERT INTO `auto_ecole` (`id`, `nom`, `adresse`, `logo_path`, `telephone`, `email`, `username`, `password`, `created_at`) VALUES
+(1, 'Auto École Exemplaire', 'Avenue des Conducteurs 123, Ville', 'logos/default_logo.png', '12345678', 'contact@autoecole.com', 'user', 'pass', '2025-03-22 13:11:27');
 
 -- --------------------------------------------------------
 
@@ -54,7 +54,7 @@ INSERT INTO `auto_ecole` (`id`, `nom`, `adresse`, `logo_path`, `telephone`, `ema
 --
 
 CREATE TABLE `candidat` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(50) NOT NULL,
   `prenom` varchar(50) NOT NULL,
   `cin` varchar(20) NOT NULL,
@@ -63,7 +63,8 @@ CREATE TABLE `candidat` (
   `email` varchar(100) DEFAULT NULL,
   `date_naissance` date DEFAULT NULL,
   `type_permis` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -73,12 +74,13 @@ CREATE TABLE `candidat` (
 --
 
 CREATE TABLE `document` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `dossier_id` int(11) NOT NULL,
   `type_document_id` int(11) NOT NULL,
   `nom_fichier` varchar(255) NOT NULL,
   `chemin_fichier` varchar(255) NOT NULL,
-  `date_upload` timestamp NOT NULL DEFAULT current_timestamp()
+  `date_upload` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -88,12 +90,13 @@ CREATE TABLE `document` (
 --
 
 CREATE TABLE `dossier` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `candidat_id` int(11) NOT NULL,
   `statut` varchar(50) DEFAULT 'En attente',
   `date_creation` date DEFAULT NULL,
   `notes` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -103,7 +106,7 @@ CREATE TABLE `dossier` (
 --
 
 CREATE TABLE `entretien` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `vehicule_id` int(11) NOT NULL,
   `date_entretien` date NOT NULL,
   `type_entretien` varchar(100) NOT NULL,
@@ -112,7 +115,8 @@ CREATE TABLE `entretien` (
   `kilometrage` int(11) NOT NULL,
   `facture_path` varchar(255) DEFAULT NULL,
   `statut` varchar(50) DEFAULT 'Planifié',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -122,7 +126,7 @@ CREATE TABLE `entretien` (
 --
 
 CREATE TABLE `examen` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `candidat_id` int(11) NOT NULL,
   `type_examen_id` int(11) NOT NULL,
   `date_examen` date NOT NULL,
@@ -131,7 +135,8 @@ CREATE TABLE `examen` (
   `frais` decimal(10,2) NOT NULL,
   `resultat` tinyint(1) DEFAULT NULL,
   `commentaire` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -141,7 +146,7 @@ CREATE TABLE `examen` (
 --
 
 CREATE TABLE `inscription` (
-  `id` int(10) NOT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `candidat_id` int(11) NOT NULL,
   `cin` varchar(20) NOT NULL,
   `plan_id` int(10) NOT NULL,
@@ -150,7 +155,8 @@ CREATE TABLE `inscription` (
   `cycle_paiement` varchar(20) NOT NULL DEFAULT 'Mensuel',
   `date_inscription` date NOT NULL DEFAULT current_timestamp(),
   `date_paiement_suivant` date DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -160,7 +166,7 @@ CREATE TABLE `inscription` (
 --
 
 CREATE TABLE `moniteur` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(50) NOT NULL,
   `prenom` varchar(50) NOT NULL,
   `cin` varchar(20) NOT NULL,
@@ -171,7 +177,8 @@ CREATE TABLE `moniteur` (
   `date_embauche` date NOT NULL,
   `salaire` decimal(10,2) DEFAULT NULL,
   `statut` varchar(20) DEFAULT 'Actif',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -181,11 +188,12 @@ CREATE TABLE `moniteur` (
 --
 
 CREATE TABLE `moniteur_specialite` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `moniteur_id` int(11) NOT NULL,
   `type_permis_id` int(11) NOT NULL,
   `date_obtention` date DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -195,7 +203,7 @@ CREATE TABLE `moniteur_specialite` (
 --
 
 CREATE TABLE `paiement` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `inscription_id` int(10) DEFAULT NULL,
   `id_examen` int(11) DEFAULT NULL,
   `type_paiement` varchar(20) NOT NULL DEFAULT 'Mensualité',
@@ -204,7 +212,8 @@ CREATE TABLE `paiement` (
   `mode_paiement` varchar(50) DEFAULT 'Espèces',
   `reference` varchar(100) DEFAULT NULL,
   `notes` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -214,7 +223,7 @@ CREATE TABLE `paiement` (
 --
 
 CREATE TABLE `plan` (
-  `id` int(10) NOT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(50) NOT NULL,
   `description` text DEFAULT NULL,
   `type_permis_id` int(11) DEFAULT NULL,
@@ -223,7 +232,8 @@ CREATE TABLE `plan` (
   `heures_code` int(11) DEFAULT 0,
   `heures_conduite` int(11) DEFAULT 0,
   `actif` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -242,11 +252,12 @@ INSERT INTO `plan` (`id`, `libelle`, `description`, `type_permis_id`, `prix`, `d
 --
 
 CREATE TABLE `presence_code` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `session_code_id` int(11) NOT NULL,
   `candidat_id` int(11) NOT NULL,
   `present` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -256,11 +267,12 @@ CREATE TABLE `presence_code` (
 --
 
 CREATE TABLE `presence_conduite` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `session_conduite_id` int(11) NOT NULL,
   `candidat_id` int(11) NOT NULL,
   `present` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -270,7 +282,7 @@ CREATE TABLE `presence_conduite` (
 --
 
 CREATE TABLE `rendez_vous` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `candidat_id` int(11) NOT NULL,
   `session_code_id` int(11) DEFAULT NULL,
   `session_conduite_id` int(11) DEFAULT NULL,
@@ -280,7 +292,8 @@ CREATE TABLE `rendez_vous` (
   `confirme` tinyint(1) DEFAULT 0,
   `annule` tinyint(1) DEFAULT 0,
   `raison_annulation` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -290,7 +303,7 @@ CREATE TABLE `rendez_vous` (
 --
 
 CREATE TABLE `seance` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `heure` time NOT NULL,
   `duree` int(11) NOT NULL DEFAULT 60,
@@ -303,7 +316,8 @@ CREATE TABLE `seance` (
   `commentaire` text DEFAULT NULL,
   `kilometrage_debut` int(11) DEFAULT NULL,
   `kilometrage_fin` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -313,7 +327,7 @@ CREATE TABLE `seance` (
 --
 
 CREATE TABLE `session_code` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `plan_id` int(10) NOT NULL,
   `date_session` date NOT NULL,
   `heure_debut` time NOT NULL,
@@ -324,7 +338,8 @@ CREATE TABLE `session_code` (
   `nombre_inscrits` int(11) DEFAULT 0,
   `statut` varchar(20) NOT NULL DEFAULT 'Planifiée',
   `notes` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -334,7 +349,7 @@ CREATE TABLE `session_code` (
 --
 
 CREATE TABLE `session_conduite` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `plan_id` int(10) NOT NULL,
   `date_session` date NOT NULL,
   `heure_debut` time NOT NULL,
@@ -347,7 +362,8 @@ CREATE TABLE `session_conduite` (
   `kilometres_parcourus` int(11) DEFAULT NULL,
   `statut` varchar(20) NOT NULL DEFAULT 'Planifiée',
   `notes` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -357,11 +373,12 @@ CREATE TABLE `session_conduite` (
 --
 
 CREATE TABLE `type_document` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(50) NOT NULL,
   `description` text DEFAULT NULL,
   `obligatoire` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -381,11 +398,12 @@ INSERT INTO `type_document` (`id`, `libelle`, `description`, `obligatoire`, `cre
 --
 
 CREATE TABLE `type_examen` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(50) NOT NULL,
   `description` text DEFAULT NULL,
   `cout` decimal(10,2) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -405,12 +423,13 @@ INSERT INTO `type_examen` (`id`, `libelle`, `description`, `cout`, `created_at`)
 --
 
 CREATE TABLE `type_permis` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(10) NOT NULL,
   `libelle` varchar(50) NOT NULL,
   `description` text DEFAULT NULL,
   `age_minimum` int(11) DEFAULT 18,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -429,7 +448,7 @@ INSERT INTO `type_permis` (`id`, `code`, `libelle`, `description`, `age_minimum`
 --
 
 CREATE TABLE `vehicule` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `immatriculation` varchar(20) NOT NULL,
   `type_permis_id` int(11) NOT NULL,
   `marque` varchar(50) NOT NULL,
@@ -443,7 +462,8 @@ CREATE TABLE `vehicule` (
   `date_prochaine_visite_technique` date DEFAULT NULL,
   `date_expiration_assurance` date DEFAULT NULL,
   `statut` varchar(20) DEFAULT 'Disponible',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -454,13 +474,12 @@ CREATE TABLE `vehicule` (
 -- Indexes for table `auto_ecole`
 --
 ALTER TABLE `auto_ecole`
-  ADD PRIMARY KEY (`id`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `candidat`
 --
 ALTER TABLE `candidat`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `cin` (`cin`),
   ADD UNIQUE KEY `email` (`email`),
   ADD KEY `fk_candidat_type_permis` (`type_permis`);
@@ -469,7 +488,6 @@ ALTER TABLE `candidat`
 -- Indexes for table `document`
 --
 ALTER TABLE `document`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `dossier_id` (`dossier_id`),
   ADD KEY `type_document_id` (`type_document_id`);
 
@@ -477,21 +495,18 @@ ALTER TABLE `document`
 -- Indexes for table `dossier`
 --
 ALTER TABLE `dossier`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `candidat_id` (`candidat_id`);
 
 --
 -- Indexes for table `entretien`
 --
 ALTER TABLE `entretien`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `vehicule_id` (`vehicule_id`);
 
 --
 -- Indexes for table `examen`
 --
 ALTER TABLE `examen`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `candidat_id` (`candidat_id`),
   ADD KEY `type_examen_id` (`type_examen_id`);
 
@@ -499,7 +514,6 @@ ALTER TABLE `examen`
 -- Indexes for table `inscription`
 --
 ALTER TABLE `inscription`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `fk_inscription_candidat` (`candidat_id`),
   ADD KEY `plan_id` (`plan_id`);
 
@@ -507,7 +521,6 @@ ALTER TABLE `inscription`
 -- Indexes for table `moniteur`
 --
 ALTER TABLE `moniteur`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `cin` (`cin`),
   ADD UNIQUE KEY `email` (`email`);
 
@@ -515,7 +528,6 @@ ALTER TABLE `moniteur`
 -- Indexes for table `moniteur_specialite`
 --
 ALTER TABLE `moniteur_specialite`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_moniteur_specialite` (`moniteur_id`,`type_permis_id`),
   ADD KEY `fk_moniteur_specialite_type_permis` (`type_permis_id`);
 
@@ -523,7 +535,6 @@ ALTER TABLE `moniteur_specialite`
 -- Indexes for table `paiement`
 --
 ALTER TABLE `paiement`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `inscription_id` (`inscription_id`),
   ADD KEY `id_examen` (`id_examen`);
 
@@ -531,14 +542,12 @@ ALTER TABLE `paiement`
 -- Indexes for table `plan`
 --
 ALTER TABLE `plan`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `fk_plan_type_permis` (`type_permis_id`);
 
 --
 -- Indexes for table `presence_code`
 --
 ALTER TABLE `presence_code`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_presence_code` (`session_code_id`,`candidat_id`),
   ADD KEY `presence_code_ibfk_1` (`candidat_id`);
 
@@ -546,7 +555,6 @@ ALTER TABLE `presence_code`
 -- Indexes for table `presence_conduite`
 --
 ALTER TABLE `presence_conduite`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_presence_conduite` (`session_conduite_id`,`candidat_id`),
   ADD KEY `presence_conduite_ibfk_1` (`candidat_id`);
 
@@ -554,7 +562,6 @@ ALTER TABLE `presence_conduite`
 -- Indexes for table `rendez_vous`
 --
 ALTER TABLE `rendez_vous`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `candidat_id` (`candidat_id`),
   ADD KEY `session_code_id` (`session_code_id`),
   ADD KEY `session_conduite_id` (`session_conduite_id`);
@@ -563,7 +570,6 @@ ALTER TABLE `rendez_vous`
 -- Indexes for table `seance`
 --
 ALTER TABLE `seance`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `fk_seance_moniteur` (`moniteur_id`),
   ADD KEY `fk_seance_candidat` (`candidat_id`),
   ADD KEY `fk_seance_vehicule` (`vehicule_id`);
@@ -572,7 +578,6 @@ ALTER TABLE `seance`
 -- Indexes for table `session_code`
 --
 ALTER TABLE `session_code`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `moniteur_id` (`moniteur_id`),
   ADD KEY `plan_id` (`plan_id`);
 
@@ -580,7 +585,6 @@ ALTER TABLE `session_code`
 -- Indexes for table `session_conduite`
 --
 ALTER TABLE `session_conduite`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `moniteur_id` (`moniteur_id`),
   ADD KEY `vehicule_id` (`vehicule_id`),
   ADD KEY `plan_id` (`plan_id`);
@@ -589,26 +593,25 @@ ALTER TABLE `session_conduite`
 -- Indexes for table `type_document`
 --
 ALTER TABLE `type_document`
-  ADD PRIMARY KEY (`id`);
+  ADD UNIQUE KEY `libelle` (`libelle`);
 
 --
 -- Indexes for table `type_examen`
 --
 ALTER TABLE `type_examen`
-  ADD PRIMARY KEY (`id`);
+  ADD UNIQUE KEY `libelle` (`libelle`);
 
 --
 -- Indexes for table `type_permis`
 --
 ALTER TABLE `type_permis`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code` (`code`);
+  ADD UNIQUE KEY `code` (`code`),
+  ADD UNIQUE KEY `libelle` (`libelle`);
 
 --
 -- Indexes for table `vehicule`
 --
 ALTER TABLE `vehicule`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `immatriculation` (`immatriculation`),
   ADD KEY `type_permis_id` (`type_permis_id`);
 

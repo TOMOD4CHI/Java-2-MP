@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import org.cpi2.service.CandidatService;
 import org.cpi2.entitties.Candidat;
 import org.cpi2.entitties.TypePermis;
+import org.cpi2.utils.ValidationUtils;
 
 import java.util.regex.Pattern;
 
@@ -58,6 +59,68 @@ public class ModifierCandidat {
         if (!typeComboBox.getItems().isEmpty()) {
             typeComboBox.getSelectionModel().selectFirst();
         }
+        
+        // Set placeholders for input fields
+        nomField.setPromptText("Entrez le nom");
+        prenomField.setPromptText("Entrez le prénom");
+        cinField.setPromptText("Entrez le CIN (8 chiffres minimum)");
+        addressField.setPromptText("Entrez l'adresse complète");
+        phoneField.setPromptText("Entrez le numéro (8 chiffres)");
+        emailField.setPromptText("exemple@domaine.com");
+        
+        setupValidation();
+    }
+    
+    private void setupValidation() {
+        // Nom validation
+        ValidationUtils.addValidation(nomField, 
+            text -> !text.trim().isEmpty(), 
+            "Le nom est obligatoire", 1);
+        ValidationUtils.addValidation(nomField, 
+            this::isValidName, 
+            "Le nom ne doit contenir que des lettres et des espaces", 2);
+            
+        // Prénom validation
+        ValidationUtils.addValidation(prenomField, 
+            text -> !text.trim().isEmpty(), 
+            "Le prénom est obligatoire", 1);
+        ValidationUtils.addValidation(prenomField, 
+            this::isValidName, 
+            "Le prénom ne doit contenir que des lettres et des espaces", 2);
+            
+        // CIN validation
+        ValidationUtils.addValidation(cinField, 
+            text -> !text.trim().isEmpty(), 
+            "Le CIN est obligatoire", 1);
+        ValidationUtils.addValidation(cinField, 
+            this::isValidCIN, 
+            "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres", 2);
+            
+        // Type permis validation
+        ValidationUtils.<String>addValidation(typeComboBox, 
+            value -> value != null, 
+            "Veuillez sélectionner un type de permis", 1);
+            
+        // Address validation
+        ValidationUtils.addValidation(addressField, 
+            text -> !text.trim().isEmpty(), 
+            "L'adresse est obligatoire", 1);
+        ValidationUtils.addValidation(addressField, 
+            text -> isValidAddress(text, 10), 
+            "L'adresse doit contenir au moins 10 caractères", 2);
+            
+        // Phone validation
+        ValidationUtils.addValidation(phoneField, 
+            text -> !text.trim().isEmpty(), 
+            "Le numéro de téléphone est obligatoire", 1);
+        ValidationUtils.addValidation(phoneField, 
+            this::isValidPhone, 
+            "Le numéro de téléphone doit contenir exactement 8 chiffres", 2);
+            
+        // Email validation (only if not empty)
+        ValidationUtils.addValidation(emailField, 
+            text -> text.trim().isEmpty() || isValidEmail(text), 
+            "L'adresse email n'est pas valide", 1);
     }
 
     public void setCandidatToModify(Candidat candidat) {
@@ -80,7 +143,17 @@ public class ModifierCandidat {
     @FXML
     private void confirmAction() {
         if (candidatToModify == null) {
-            showAlert("Erreur", "Aucun candidat sélectionné pour la modification.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Aucun candidat sélectionné pour la modification.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Validate all fields first
+        if (ValidationUtils.hasAnyErrors()) {
+            // If there are validation errors, don't proceed
             return;
         }
 
@@ -92,44 +165,13 @@ public class ModifierCandidat {
         String email = emailField.getText().trim();
         String typePermis = typeComboBox.getValue();
 
+        // Check required fields (should be caught by validation, but just in case)
         if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || address.isEmpty() || phone.isEmpty() || typePermis == null) {
-            showAlert("Erreur", "Tous les champs sont obligatoires.");
-            return;
-        }
-        
-        // Validate name format
-        if (!isValidName(nom)) {
-            showAlert("Validation Error", "Le nom ne doit contenir que des lettres et des espaces.");
-            return;
-        }
-        
-        // Validate prénom format
-        if (!isValidName(prenom)) {
-            showAlert("Validation Error", "Le prénom ne doit contenir que des lettres et des espaces.");
-            return;
-        }
-
-        // Validate CIN (numeric only and at least 8 digits)
-        if (!isValidCIN(cin)) {
-            showAlert("Validation Error", "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres!");
-            return;
-        }
-        
-        // Validate phone number
-        if (!isValidPhone(phone)) {
-            showAlert("Validation Error", "Le numéro de téléphone doit contenir exactement 8 chiffres.");
-            return;
-        }
-        
-        // Validate email if provided
-        if (!email.isEmpty() && !isValidEmail(email)) {
-            showAlert("Validation Error", "L'adresse email n'est pas valide.");
-            return;
-        }
-        
-        // Validate address
-        if (!isValidAddress(address, 10)) {
-            showAlert("Validation Error", "L'adresse doit contenir au moins 10 caractères.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Tous les champs sont obligatoires.");
+            alert.showAndWait();
             return;
         }
 
@@ -157,24 +199,24 @@ public class ModifierCandidat {
                 showSuccessMessage();
                 closeWindow();
             } else {
-                showAlert("Erreur", "La mise à jour du candidat a échoué.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("La mise à jour du candidat a échoué.");
+                alert.showAndWait();
             }
         } catch (Exception e) {
-            showAlert("Erreur", "Une erreur est survenue lors de la mise à jour: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Une erreur est survenue lors de la mise à jour: " + e.getMessage());
+            alert.showAndWait();
         }
     }
 
     @FXML
     private void cancelAction() {
         closeWindow();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     private void showSuccessMessage() {

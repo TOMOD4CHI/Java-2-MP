@@ -42,16 +42,24 @@
                         </columnConstraints>
 
                         <Label text="Nom de l'école:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                        <TextField fx:id="nomField" promptText="Entrez le nom de l'école" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <TextField fx:id="nomField" promptText="Entrez le nom de l'école" styleClass="form-field"/>
+                        </VBox>
 
                         <Label text="Adresse:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <TextField fx:id="adresseField" promptText="Entrez l'adresse complète" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <TextField fx:id="adresseField" promptText="Entrez l'adresse complète" styleClass="form-field"/>
+                        </VBox>
 
                         <Label text="Téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <TextField fx:id="telephoneField" promptText="Ex: +212 500000000" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <TextField fx:id="telephoneField" promptText="Ex: +212 500000000" styleClass="form-field"/>
+                        </VBox>
 
                         <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                        <TextField fx:id="emailField" promptText="contact@ecole.ma" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <TextField fx:id="emailField" promptText="contact@ecole.ma" styleClass="form-field"/>
+                        </VBox>
 
                         <Label text="Logo:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
                         <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4" alignment="CENTER_LEFT">
