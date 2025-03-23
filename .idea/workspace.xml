@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="cool things as always" />
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment=":o" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -179,7 +179,7 @@
       <workItem from="1742684722625" duration="14205000" />
       <workItem from="1742738243488" duration="3796000" />
       <workItem from="1742742773399" duration="8013000" />
-      <workItem from="1742754167765" duration="2912000" />
+      <workItem from="1742754167765" duration="3229000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />
@@ -253,7 +253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742757062910</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary=":o">
+      <option name="closed" value="true" />
+      <created>1742757370231</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1742757370231</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -280,6 +288,7 @@
     <MESSAGE value="monitor now works, and condidta show in database" />
     <MESSAGE value="too many good things" />
     <MESSAGE value="cool things as always" />
-    <option name="LAST_COMMIT_MESSAGE" value="cool things as always" />
+    <MESSAGE value=":o" />
+    <option name="LAST_COMMIT_MESSAGE" value=":o" />
   </component>
 </project>
