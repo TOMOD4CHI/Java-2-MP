@@ -30,4 +30,5 @@ public class Candidat extends Personne {
         this.typePermis = typePermis;
     }
 
+
 }

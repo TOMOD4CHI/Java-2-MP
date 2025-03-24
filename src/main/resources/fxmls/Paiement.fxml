@@ -1,130 +1,175 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
 
-<BorderPane styleClass="root" stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.Paiement">
-
+<BorderPane styleClass="root, payment-page" stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.Paiement">
     <padding>
-        <Insets bottom="20" left="20" right="20" top="20" />
+        <Insets bottom="30" left="30" right="30" top="30" />
     </padding>
 
     <top>
-        <VBox alignment="CENTER" spacing="10">
-            <Label styleClass="page-title" text="Gestion des Paiements" />
-            <Separator />
+        <VBox alignment="CENTER" spacing="15" styleClass="header-container">
+            <Label styleClass="page-title" text="Gestion des Paiements">
+                <effect>
+                    <DropShadow color="#00000022" radius="5" spread="0.2"/>
+                </effect>
+            </Label>
+            <Separator styleClass="header-separator"/>
         </VBox>
     </top>
 
-    <left>
-        <VBox prefWidth="350" spacing="15" styleClass="form-container">
-            <padding>
-                <Insets bottom="20" left="20" right="20" top="20" />
-            </padding>
-            
-            <Label styleClass="form-section-title" text="Enregistrer un nouveau paiement" />
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label prefWidth="100" styleClass="form-label" text="Type:" />
-                <ComboBox fx:id="typeComboBox" promptText="Sélectionner un type" styleClass="form-field" HBox.hgrow="ALWAYS" />
-            </HBox>
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label prefWidth="100" styleClass="form-label" text="Candidat:" />
-                <ComboBox fx:id="candidatComboBox" promptText="Sélectionner un candidat" styleClass="form-field" HBox.hgrow="ALWAYS" />
-            </HBox>
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label prefWidth="100" styleClass="form-label" text="Montant:" />
-                <TextField fx:id="montantField" promptText="0.00 DT" styleClass="form-field" HBox.hgrow="ALWAYS" />
-            </HBox>
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label prefWidth="100" styleClass="form-label" text="Date:" />
-                <DatePicker fx:id="datePicker" promptText="Sélectionner une date" styleClass="form-field" HBox.hgrow="ALWAYS" />
-            </HBox>
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label prefWidth="100" styleClass="form-label" text="Méthode:" />
-                <ComboBox fx:id="methodeComboBox" promptText="Sélectionner une méthode" styleClass="form-field" HBox.hgrow="ALWAYS" />
-            </HBox>
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label prefWidth="100" styleClass="form-label" text="Description:" />
-                <TextArea fx:id="descriptionArea" prefHeight="60" promptText="Description du paiement" styleClass="form-field" wrapText="true" HBox.hgrow="ALWAYS" />
-            </HBox>
-            
-            <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10 0 0 0;">
-                <Button onAction="#handleCancel" prefWidth="120" styleClass="button, cancel-button" text="Annuler" />
-                <Button onAction="#handleSave" prefWidth="120" styleClass="button, submit-button" text="Enregistrer" />
-            </HBox>
-            
-            <Separator>
-                <VBox.margin>
-                    <Insets bottom="20" top="20" />
-                </VBox.margin>
-            </Separator>
-            
-            <Label styleClass="form-section-title" text="Rechercher des paiements" />
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label prefWidth="100" styleClass="form-label" text="Période:" />
-                <DatePicker fx:id="startDatePicker" prefWidth="110" promptText="Date début" styleClass="form-field" />
-                <Label alignment="CENTER" styleClass="form-label" text="à" />
-                <DatePicker fx:id="endDatePicker" prefWidth="110" promptText="Date fin" styleClass="form-field" />
-            </HBox>
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label prefWidth="100" styleClass="form-label" text="Candidat:" />
-                <ComboBox fx:id="searchCandidatComboBox" promptText="Tous les candidats" styleClass="form-field" HBox.hgrow="ALWAYS" />
-            </HBox>
-            
-            <HBox alignment="CENTER" spacing="10">
-                <Button onAction="#handleSearch" prefWidth="150" styleClass="button, action-button" text="Rechercher" />
-            </HBox>
-        </VBox>
-    </left>
-
     <center>
-        <VBox spacing="10" styleClass="table-container">
-            <padding>
-                <Insets bottom="20" left="20" right="0" top="20" />
-            </padding>
-            
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label styleClass="table-title" text="Historique des paiements" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Label fx:id="totalLabel" styleClass="total-label" text="Total: 0.00 DT" />
-            </HBox>
-            
-            <TableView fx:id="paiementsTable" prefHeight="498.0" prefWidth="946.0" styleClass="custom-table-view" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="dateColumn" prefWidth="100" text="Date" />
-                    <TableColumn fx:id="candidatColumn" prefWidth="150" text="Candidat" />
-                    <TableColumn fx:id="typeColumn" prefWidth="150" text="Type" />
-                    <TableColumn fx:id="montantColumn" prefWidth="100" text="Montant" />
-                    <TableColumn fx:id="methodeColumn" prefWidth="100" text="Méthode" />
-                    <TableColumn fx:id="descriptionColumn" prefWidth="200" text="Description" />
-                    <TableColumn fx:id="actionsColumn" prefWidth="180.0" text="Actions" />
-                </columns>
-            </TableView>
-            
-            <HBox alignment="CENTER_RIGHT" spacing="10">
-                <Button fx:id="printButton" onAction="#handlePrint" styleClass="button, action-button" text="Imprimer" />
-                <Button fx:id="exportButton" onAction="#handleExport" styleClass="button, action-button" text="Exporter" />
-            </HBox>
-        </VBox>
+        <TabPane fx:id="paymentTabPane" styleClass="payment-tabs" VBox.vgrow="ALWAYS">
+            <Tab text="Inscription" closable="false">
+                <StackPane styleClass="tab-content-container">
+                    <effect>
+                        <DropShadow color="#00000022" radius="10" spread="0.1"/>
+                    </effect>
+                    <VBox spacing="25" styleClass="payment-form, payment-card">
+                        <padding>
+                            <Insets top="25" right="25" bottom="25" left="25"/>
+                        </padding>
+
+                        <HBox styleClass="form-header" alignment="CENTER_LEFT" spacing="15">
+                            <Label text="Détails de l'inscription" styleClass="section-title"/>
+                        </HBox>
+
+                        <HBox spacing="20" styleClass="payment-content-container">
+                            <GridPane vgap="20" hgap="15" styleClass="payment-grid" HBox.hgrow="ALWAYS">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <Label text="Candidat:" styleClass="form-label"/>
+                                </HBox>
+                                <ComboBox fx:id="inscriptionCandidatCombo" prefWidth="300" styleClass="payment-combo, modern-combo" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <Label text="Montant:" styleClass="form-label"/>
+                                </HBox>
+                                <TextField fx:id="inscriptionMontantField" prefWidth="300" maxWidth="300" styleClass="payment-field, modern-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                    <Label text="Type de Paiement:" styleClass="form-label"/>
+                                </HBox>
+                                <ComboBox fx:id="inscriptionTypeCombo" prefWidth="300" styleClass="payment-combo, modern-combo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                    <Label text="Mode de Paiement:" styleClass="form-label"/>
+                                </HBox>
+                                <ComboBox fx:id="inscriptionModeCombo" prefWidth="300" styleClass="payment-combo, modern-combo" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                            </GridPane>
+                            
+                            <VBox spacing="20" styleClass="payment-status-container" minWidth="300" alignment="TOP_LEFT">
+                                <HBox alignment="CENTER_LEFT" spacing="15">
+                                    <Label text="État du paiement" styleClass="section-title"/>
+                                </HBox>
+                                
+                                <VBox spacing="15" styleClass="status-box">
+                                    <HBox spacing="10" alignment="CENTER_LEFT">
+                                        <Label text="Statut:" styleClass="status-label"/>
+                                        <Text fx:id="inscriptionStatusText" styleClass="status-text"/>
+                                    </HBox>
+                                    <ProgressBar fx:id="inscriptionProgressBar" prefWidth="300" styleClass="payment-progress, modern-progress"/>
+                                </VBox>
+
+                                <GridPane vgap="12" hgap="20" styleClass="payment-details-grid">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                        <ColumnConstraints hgrow="ALWAYS"/>
+                                    </columnConstraints>
+                                    
+                                    <Label text="Montant total:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                    <Text fx:id="inscriptionTotalText" styleClass="info-value, total-amount" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                    
+                                    <Label text="Montant payé:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                    <Text fx:id="inscriptionPaidText" styleClass="info-value, paid-amount" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                    
+                                    <Label text="Reste à payer:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                    <Text fx:id="inscriptionRemainingText" styleClass="info-value, remaining-amount" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                </GridPane>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="payment-actions">
+                            <Button fx:id="inscriptionPayButton" styleClass="primary-button, payment-button" onAction="#handleInscriptionPayment">
+                                <graphic>
+                                    <HBox spacing="10" alignment="CENTER">
+                                        <Text text="Effectuer le paiement"/>
+                                    </HBox>
+                                </graphic>
+                            </Button>
+                        </HBox>
+                    </VBox>
+                </StackPane>
+            </Tab>
+
+            <Tab text="Examen" closable="false">
+                <StackPane styleClass="tab-content-container">
+                    <effect>
+                        <DropShadow color="#00000022" radius="10" spread="0.1"/>
+                    </effect>
+                    <VBox spacing="25" styleClass="payment-form, payment-card">
+                        <padding>
+                            <Insets top="25" right="25" bottom="25" left="25"/>
+                        </padding>
+
+                        <HBox styleClass="form-header" alignment="CENTER_LEFT" spacing="15">
+                            <Label text="Paiement d'examen" styleClass="section-title"/>
+                        </HBox>
+
+                        <HBox spacing="20" styleClass="exam-content-container">
+                            <GridPane vgap="20" hgap="15" styleClass="payment-grid" HBox.hgrow="ALWAYS">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <Label text="Examen:" styleClass="form-label"/>
+                                </HBox>
+                                <ComboBox fx:id="examenCombo" prefWidth="300" styleClass="payment-combo, modern-combo" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <Label text="Montant:" styleClass="form-label"/>
+                                </HBox>
+                                <TextField fx:id="examenMontantField" prefWidth="300" maxWidth="300" styleClass="payment-field, modern-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <HBox alignment="CENTER_LEFT" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                    <Label text="Mode de Paiement:" styleClass="form-label"/>
+                                </HBox>
+                                <ComboBox fx:id="examenModeCombo" prefWidth="300" styleClass="payment-combo, modern-combo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            </GridPane>
+                            
+                            <VBox spacing="15" styleClass="exam-info-container" minWidth="300" alignment="TOP_LEFT">
+                                <HBox alignment="CENTER_LEFT" spacing="15">
+                                    <Label text="Information importante" styleClass="section-title"/>
+                                </HBox>
+                                <HBox styleClass="info-box" spacing="10">
+                                    <Text styleClass="info-text" text="Le paiement doit être effectué avant la date de l'examen"/>
+                                </HBox>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="payment-actions">
+                            <Button fx:id="examenPayButton" styleClass="primary-button, payment-button" onAction="#handleExamenPayment">
+                                <graphic>
+                                    <HBox spacing="10" alignment="CENTER">
+                                        <Text text="Effectuer le paiement"/>
+                                    </HBox>
+                                </graphic>
+                            </Button>
+                        </HBox>
+                    </VBox>
+                </StackPane>
+            </Tab>
+        </TabPane>
     </center>
 </BorderPane>

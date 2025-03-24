@@ -28,10 +28,20 @@
 
 /* Form Styles */
 .form-container {
-    -fx-background-color: white;
+    -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.98));
     background-color: white;
-    -fx-background-radius: 8px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 4);
+    -fx-background-radius: 15px;
+    -fx-border-color: rgba(190, 227, 248, 0.6);
+    -fx-border-radius: 15px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.15), 12, 0, 0, 5);
+    -fx-transition-duration: 0.3s;
+}
+
+.form-container:hover {
+    -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 1), rgba(247, 250, 255, 1));
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.25), 15, 0, 0, 6);
+    -fx-border-color: rgba(190, 227, 248, 0.8);
 }
 
 .form-label {
@@ -43,18 +53,20 @@
 }
 
 .form-field {
-    -fx-background-color: #edf2f7;
+    -fx-background-color: linear-gradient(to bottom, #edf2f7, #f7fafc);
     background-color: #edf2f7;
-    -fx-background-radius: 4px;
-    -fx-border-radius: 4px;
-    border-radius: 4px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    border-radius: 8px;
     -fx-border-color: transparent;
     border-color: transparent;
-    -fx-padding: 8px;
-    padding: 8px;
+    -fx-padding: 12px;
+    padding: 12px;
     -fx-font-size: 14px;
     font-size: 14px;
     -fx-prompt-text-fill: #a0aec0;
+    -fx-transition-duration: 0.2s;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 4, 0, 0, 1);
 }
 
 .form-field:focused {
@@ -64,6 +76,9 @@
     border-color: #3182ce;
     -fx-border-width: 2px;
     border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.2), 6, 0, 0, 2);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
 }
 
 /* Validation Styles */
@@ -91,26 +106,29 @@
 
 /* Button Styles */
 .primary-button {
-    -fx-background-color: #3182ce;
+    -fx-background-color: linear-gradient(to right, #3182ce, #2c5282);
     background-color: #3182ce;
     -fx-text-fill: white;
     color: white;
     -fx-font-weight: bold;
     font-weight: bold;
-    -fx-padding: 8 16;
-    padding: 8px 16px;
-    -fx-background-radius: 4px;
-    border-radius: 4px;
+    -fx-padding: 10 20;
+    padding: 10px 20px;
+    -fx-background-radius: 8px;
+    border-radius: 8px;
     -fx-cursor: hand;
     cursor: pointer;
-    -fx-transition-duration: 0.2s;
-    transition-duration: 0.2s;
+    -fx-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.2), 5, 0, 0, 2);
 }
 
 .primary-button:hover {
-    -fx-background-color: #2c5282;
+    -fx-background-color: linear-gradient(to right, #2c5282, #2a4365);
     background-color: #2c5282;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.4), 8, 0, 0, 3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
 }
 
 .primary-button:pressed {
@@ -120,32 +138,35 @@
 }
 
 .secondary-button {
-    -fx-background-color: #edf2f7;
+    -fx-background-color: linear-gradient(to right, #edf2f7, #e2e8f0);
     background-color: #edf2f7;
     -fx-text-fill: #4a5568;
     color: #4a5568;
     -fx-font-weight: bold;
     font-weight: bold;
-    -fx-padding: 8 16;
-    padding: 8px 16px;
-    -fx-background-radius: 4px;
-    border-radius: 4px;
+    -fx-padding: 10 20;
+    padding: 10px 20px;
+    -fx-background-radius: 8px;
+    border-radius: 8px;
     -fx-border-color: #cbd5e0;
     border-color: #cbd5e0;
     -fx-border-width: 1px;
     border-width: 1px;
     -fx-cursor: hand;
     cursor: pointer;
-    -fx-transition-duration: 0.2s;
-    transition-duration: 0.2s;
+    -fx-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -fx-effect: dropshadow(gaussian, rgba(74, 85, 104, 0.1), 4, 0, 0, 2);
 }
 
 .secondary-button:hover {
-    -fx-background-color: #e2e8f0;
+    -fx-background-color: linear-gradient(to right, #e2e8f0, #cbd5e0);
     background-color: #e2e8f0;
     -fx-text-fill: #2d3748;
     color: #2d3748;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(74, 85, 104, 0.2), 6, 0, 0, 2);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
 }
 
 .secondary-button:pressed {
@@ -506,20 +527,20 @@
 
 /* Cancel button */
 .cancel-button {
-    -fx-background-color: #e53e3e;
-    background-color: #e53e3e;
+    -fx-background-color: linear-gradient(to right, #E53E3E, #C53030);
     -fx-text-fill: white;
     color: white;
     -fx-font-weight: bold;
     font-weight: bold;
-    -fx-padding: 8px 16px;
-    padding: 8px 16px;
-    -fx-background-radius: 4px;
-    border-radius: 4px;
+    -fx-padding: 10px 20px;
+    padding: 10px 20px;
+    -fx-background-radius: 8px;
+    border-radius: 8px;
     -fx-cursor: hand;
     cursor: pointer;
-    -fx-transition-duration: 0.2s;
-    transition-duration: 0.2s;
+    -fx-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -fx-effect: dropshadow(gaussian, rgba(229, 62, 62, 0.2), 5, 0, 0, 2);
 }
 
 .cancel-button:hover {
@@ -605,6 +626,79 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.35), 12, 0, 0, 4);
     -fx-scale-x: 1.01;
     -fx-scale-y: 1.01;
+}
+
+/* Payment Form Styles */
+.payment-container {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f7faff);
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.15), 15, 0, 4, 8);
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+    -fx-transition-duration: 0.3s;
+}
+
+.payment-card {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-radius: 18px;
+    -fx-border-color: #bee3f8;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 18px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.1), 8, 0, 0, 4);
+    -fx-transition-duration: 0.3s;
+}
+
+.payment-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.25), 12, 0, 0, 6);
+    -fx-background-color: rgba(255, 255, 255, 0.98);
+}
+
+.payment-field {
+    -fx-background-color: #f0f8ff;
+    -fx-background-radius: 10px;
+    -fx-border-color: #90cdf4;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 12px 15px;
+    -fx-font-size: 14px;
+    -fx-transition-duration: 0.2s;
+}
+
+.payment-field:focused {
+    -fx-border-color: #3182ce;
+    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.2), 5, 0, 0, 2);
+}
+
+.payment-progress {
+    -fx-accent: #3182ce;
+    -fx-background-color: #e2e8f0;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-pref-height: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.1), 3, 0, 0, 1);
+}
+
+@keyframes payment-success {
+    0% { -fx-opacity: 0; -fx-scale-x: 0.8; -fx-scale-y: 0.8; }
+    100% { -fx-opacity: 1; -fx-scale-x: 1; -fx-scale-y: 1; }
+}
+
+.payment-success-icon {
+    -fx-fill: #38a169;
+    -fx-effect: dropshadow(gaussian, rgba(72, 187, 120, 0.3), 8, 0, 0, 2);
+    -fx-animation: payment-success 0.6s ease-out;
+}
+
+/* Payment Form Animation Keyframes */
+@keyframes form-entry {
+    0% { -fx-opacity: 0; -fx-translate-y: 20; }
+    100% { -fx-opacity: 1; -fx-translate-y: 0; }
+}
+
+@keyframes loading-pulse {
+    0%, 100% { -fx-opacity: 0.6; }
+    50% { -fx-opacity: 1; }
 }
 
 .school-info-section {
@@ -753,9 +847,13 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 8, 0, 0, 3);
     -fx-min-height: 50px;
     -fx-pref-height: 50px;
-    -fx-max-width: 900px;
-    -fx-padding: 0 10px;
+    -fx-max-width: 1050px;
+    -fx-padding: 0 40px;
     -fx-transition-duration: 0.3s;
+}
+
+.menu-bar > .menu:last-child {
+    -fx-border-width: 0 !important;
 }
 
 .main-menu-bar:hover {
@@ -776,7 +874,7 @@
 
 /* Fix for the last menu item to remove the right border */
 .menu:last-child {
-    -fx-border-width: 0;
+    -fx-border-width: 0 !important;
 }
 
 .menu:hover {
@@ -1768,4 +1866,157 @@
     border-width: 2px;
     -fx-background-color: #f0fff4;
     background-color: #f0fff4;
+}
+
+/* Payment Page Styles */
+.payment-page {
+    -fx-background-color: linear-gradient(to bottom right, #EBF8FF, #F0F5FA);
+}
+
+.header-container {
+    -fx-padding: 0 0 20 0;
+}
+
+.header-icon {
+    -fx-fill: #3182ce;
+    -fx-opacity: 0.9;
+}
+
+.header-separator {
+    -fx-opacity: 0.6;
+}
+
+.payment-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 10, 0, 0, 4);
+}
+
+.payment-tabs .tab-header-area {
+    -fx-padding: 0 0 10 0;
+}
+
+.payment-tabs .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-border-color: transparent;
+    -fx-padding: 8 15;
+}
+
+.payment-tabs .tab:selected {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0 #E2E8F0 white #E2E8F0;
+}
+
+.payment-tabs .tab-label {
+    -fx-text-fill: #4A5568;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.payment-tabs .tab:selected .tab-label {
+    -fx-text-fill: #2D3748;
+}
+
+.section-icon {
+    -fx-fill: #4299E1;
+}
+
+.field-icon {
+    -fx-fill: #718096;
+}
+
+.modern-combo {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8px;
+    -fx-padding: 8;
+}
+
+.modern-combo:focused {
+    -fx-border-color: #4299E1;
+    -fx-border-width: 2px;
+}
+
+.modern-field {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8px;
+    -fx-padding: 8;
+}
+
+.modern-field:focused {
+    -fx-border-color: #4299E1;
+    -fx-border-width: 2px;
+}
+
+.status-box {
+    -fx-background-color: #F7FAFC;
+    -fx-background-radius: 8px;
+    -fx-padding: 15;
+    -fx-border-color: #EDF2F7;
+    -fx-border-radius: 8px;
+}
+
+.status-label {
+    -fx-text-fill: #4A5568;
+    -fx-font-weight: bold;
+}
+
+.status-text {
+    -fx-fill: #2D3748;
+    -fx-font-weight: bold;
+}
+
+.modern-progress {
+    -fx-pref-height: 8px;
+}
+
+.modern-progress .bar {
+    -fx-background-color: #4299E1;
+    -fx-background-radius: 4px;
+}
+
+.modern-progress .track {
+    -fx-background-color: #EDF2F7;
+    -fx-background-radius: 4px;
+}
+
+.payment-button {
+    -fx-padding: 12 25;
+}
+
+.button-icon {
+    -fx-fill: white;
+}
+
+.total-amount {
+    -fx-fill: #2D3748;
+    -fx-font-weight: bold;
+}
+
+.paid-amount {
+    -fx-fill: #38A169;
+    -fx-font-weight: bold;
+}
+
+.remaining-amount {
+    -fx-fill: #E53E3E;
+    -fx-font-weight: bold;
+}
+
+.warning-icon {
+    -fx-fill: #ED8936;
+}
+
+.info-box {
+    -fx-background-color: #FFFAF0;
+    -fx-background-radius: 8px;
+    -fx-padding: 12;
+    -fx-border-color: #FEEBC8;
+    -fx-border-radius: 8px;
 }

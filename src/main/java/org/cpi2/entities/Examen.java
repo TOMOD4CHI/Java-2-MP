@@ -69,4 +69,8 @@ public class Examen {
     public void setType(TypeExamen type) {
         this.type = type;
     }
+
+    public String getTypeExamen() {
+        return "fix this part of the code";
+    }
 }
