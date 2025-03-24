@@ -117,8 +117,8 @@ public class InscriptionService {
         return planRepository.findAll();
     }
 
-    public List<CoursePlan> getPlansByCategory(String category) {
-        return planRepository.findByCategory(category);
+    public List<CoursePlan> getPlansByTypePermis(String category) {
+        return planRepository.findByTypePermis(category);
     }
 
     public Optional<CoursePlan> getPlanById(Integer planId) {

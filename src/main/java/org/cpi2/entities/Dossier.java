@@ -6,17 +6,17 @@ import java.util.TreeSet;
 
 public class Dossier {
     private Long id;
-    private Map<String, TreeSet<Document>> documents;
+    private Map<TypeDocument, TreeSet<Document>> documents;
 
     public Dossier() {
         this.documents = new HashMap<>();
     }
 
-    public Map<String, TreeSet<Document>> getDocuments() {
+    public Map<TypeDocument, TreeSet<Document>> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Map<String, TreeSet<Document>> documents) {
+    public void setDocuments(Map<TypeDocument, TreeSet<Document>> documents) {
         this.documents = documents;
     }
 
@@ -27,4 +27,5 @@ public class Dossier {
     public void setId(Long id) {
         this.id = id;
     }
+
 }

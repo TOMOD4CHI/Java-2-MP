@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Document implements Comparable<Document> {
     private Long id;
-    private String typeDocument;
+    private TypeDocument typeDocument;
     private String nomFichier;
     private String cheminFichier;
     private LocalDateTime dateUpload;
@@ -13,7 +13,7 @@ public class Document implements Comparable<Document> {
         this.dateUpload = LocalDateTime.now();
     }
 
-    public Document(String typeDocument, String nomFichier, String cheminFichier) {
+    public Document(TypeDocument typeDocument, String nomFichier, String cheminFichier) {
         this();
         this.typeDocument = typeDocument;
         this.nomFichier = nomFichier;
@@ -52,11 +52,11 @@ public class Document implements Comparable<Document> {
         this.nomFichier = nomFichier;
     }
 
-    public String getTypeDocument() {
+    public TypeDocument getTypeDocument() {
         return typeDocument;
     }
 
-    public void setTypeDocument(String typeDocument) {
+    public void setTypeDocument(TypeDocument typeDocument) {
         this.typeDocument = typeDocument;
     }
     @Override

@@ -11,14 +11,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DocumentService {
     private final DocumentRepository documentRepository;
     private final TypeDocumentRepository typeDocumentRepository;
     private final String uploadDirectory = "uploads/documents/";  // Base directory for document storage
+    private static final Logger LOGGER = Logger.getLogger(DocumentService.class.getName());
 
     public DocumentService() {
         this.documentRepository = new DocumentRepository();
@@ -159,6 +163,61 @@ public class DocumentService {
         File directory = new File(directoryPath);
         if (!directory.exists()) {
             directory.mkdirs();
+        }
+    }
+
+    public List<Document> getExpiredDocuments() {
+        return documentRepository.findExpiredDocuments();
+    }
+
+    public List<Document> getDocumentsExpiringInDays(int days) {
+        return documentRepository.findDocumentsExpiringInDays(days);
+    }
+
+    public boolean validateDocument(Document document, String expectedType, long maxFileSizeMB) {
+        // Validate file type
+        String fileExtension = getFileExtension(document.getNomFichier()).toLowerCase();
+        boolean isValidType = switch (expectedType) {
+            case "IMAGE" -> fileExtension.matches("jpg|jpeg|png|gif");
+            case "PDF" -> fileExtension.equals("pdf");
+            case "DOCUMENT" -> fileExtension.matches("pdf|doc|docx");
+            default -> false;
+        };
+
+        if (!isValidType) {
+            return false;
+        }
+
+        // Validate file size
+        File file = new File(document.getCheminFichier());
+        long fileSizeInMB = file.length() / (1024 * 1024);
+        return fileSizeInMB <= maxFileSizeMB;
+    }
+
+    private String getFileExtension(String fileName) {
+        int lastDotIndex = fileName.lastIndexOf('.');
+        return lastDotIndex > 0 ? fileName.substring(lastDotIndex + 1) : "";
+    }
+
+    public boolean backupDocument(Document document, String backupDirectory) {
+        try {
+            File sourceFile = new File(document.getCheminFichier());
+            if (!sourceFile.exists()) {
+                return false;
+            }
+
+            String backupPath = backupDirectory + "/" + 
+                               document.getId() + "_" + 
+                               LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + "_" +
+                               document.getNomFichier();
+
+            Files.copy(sourceFile.toPath(), 
+                      Paths.get(backupPath), 
+                      StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error backing up document", e);
+            return false;
         }
     }
 }

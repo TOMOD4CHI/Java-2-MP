@@ -53,6 +53,10 @@ public enum CoursePlan {
         return getNbreSeanceCode;
     }
 
+    public int getToatalSeances() {
+        return nbreSeanceConduite + getNbreSeanceCode;
+    }
+
     public static CoursePlan getById(int id) {
         for (CoursePlan plan : values()) {
             if (plan.getId() == id) {
@@ -62,13 +66,13 @@ public enum CoursePlan {
         throw new IllegalArgumentException("No course plan found with ID: " + id);
     }
 
-    public String getCategory() {
+    public TypePermis getCategory() {
         if (this.name.startsWith("Moto")) {
-            return "Motorcycle";
+            return TypePermis.A;
         } else if (this.name.startsWith("Car")) {
-            return "Car";
+            return TypePermis.B;
         } else {
-            return "Truck";
+            return TypePermis.C;
         }
     }
 

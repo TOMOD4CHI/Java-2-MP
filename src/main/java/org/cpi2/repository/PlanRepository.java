@@ -1,5 +1,6 @@
 package org.cpi2.repository;
 
+import org.cpi2.Exceptions.DataNotFound;
 import org.cpi2.entities.CoursePlan;
 
 import java.sql.*;
@@ -56,11 +57,13 @@ public class PlanRepository extends BaseRepository<CoursePlan> {
             throw new SQLException("Invalid plan ID", e);
         }
     }
-    public List<CoursePlan> findByCategory(String category) {
+
+    //These methods belong to the service layer
+    public List<CoursePlan> findByTypePermis(String category) {
         List<CoursePlan> matchingPlans = new ArrayList<>();
 
         for (CoursePlan plan : CoursePlan.values()) {
-            if (plan.getCategory().equalsIgnoreCase(category)) {
+            if (plan.getCategory().getLibelle().equalsIgnoreCase(category)) {
                 matchingPlans.add(plan);
             }
         }
@@ -75,4 +78,5 @@ public class PlanRepository extends BaseRepository<CoursePlan> {
         }
         return Optional.empty();
     }
+
 }

@@ -2,6 +2,7 @@ package org.cpi2.repository;
 
 import org.cpi2.entities.Document;
 import org.cpi2.entities.Dossier;
+import org.cpi2.entities.TypeDocument;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -62,7 +63,7 @@ public class DossierRepository extends BaseRepository<Dossier> {
 
     private void loadDocumentsForDossier(Dossier dossier) {
         List<Document> documents = documentRepository.findByDossierId(dossier.getId());
-        Map<String, TreeSet<Document>> documentMap = new HashMap<>();
+        Map<TypeDocument, TreeSet<Document>> documentMap = new HashMap<>();
         for (Document document : documents) {
             documentMap.putIfAbsent(document.getTypeDocument(), new TreeSet<>());
             documentMap.get(document.getTypeDocument()).add(document);
@@ -100,7 +101,7 @@ public class DossierRepository extends BaseRepository<Dossier> {
     }
 
     private void saveDocuments(Dossier dossier) {
-        for (Map.Entry<String, TreeSet<Document>> entry : dossier.getDocuments().entrySet()) {
+        for (Map.Entry<TypeDocument, TreeSet<Document>> entry : dossier.getDocuments().entrySet()) {
             for (Document document : entry.getValue()) {
                 documentRepository.save(document, dossier.getId());
             }
@@ -162,4 +163,34 @@ public class DossierRepository extends BaseRepository<Dossier> {
         return documentRepository.delete(documentId);
     }
 
+    public List<Dossier> findDossiersWithMissingDocuments(List<TypeDocument> requiredDocumentTypes) {
+        List<Dossier> dossiers = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("""
+            SELECT DISTINCT d.* FROM dossier d
+            WHERE NOT EXISTS (
+                SELECT 1 FROM document doc
+                JOIN type_document td ON doc.type_document_id = td.id
+                WHERE doc.dossier_id = d.id
+                AND td.libelle = ?
+            )
+        """);
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            for (TypeDocument docType : requiredDocumentTypes) {
+                stmt.setString(1, docType.name());
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    Dossier dossier = mapResultSetToDossier(rs);
+                    loadDocumentsForDossier(dossier);
+                    dossiers.add(dossier);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error finding dossiers with missing documents", e);
+        }
+        return dossiers;
+    }
 }
