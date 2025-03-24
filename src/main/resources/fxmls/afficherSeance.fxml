@@ -35,8 +35,12 @@
                     <ComboBox fx:id="typeSessionFilter" promptText="Tous les types" styleClass="glass-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                     <Label text="ID du moniteur:" styleClass="filter-label" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                    <TextField fx:id="moniteurIdFilter" promptText="Entrer ID moniteur" styleClass="glass-field" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-
+                    <TextField fx:id="moniteurIdFilter"
+                               minHeight="35"
+                               promptText="Entrer ID moniteur"
+                               styleClass="glass-field, text-field"
+                               GridPane.columnIndex="3"
+                               GridPane.rowIndex="0" />
                     <!-- Second row -->
                     <Label text="Date de début:" styleClass="filter-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                     <DatePicker fx:id="dateDebutFilter" promptText="Date de début" styleClass="glass-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />

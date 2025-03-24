@@ -27,7 +27,6 @@ public class AjouterCandidat {
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
     private static final Pattern CIN_PATTERN = Pattern.compile("^[0-9]{8,}$");
 
-    // Validation methods
     private boolean isValidEmail(String email) {
         return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
@@ -61,12 +60,10 @@ public class AjouterCandidat {
     @FXML
     private void initialize() {
         typeComboBox.setPrefWidth(200);
-        // Clear existing items and add type permis options
         typeComboBox.getItems().clear();
         for (TypePermis type : TypePermis.values()) {
             typeComboBox.getItems().add(type.getLibelle());
         }
-        // Set default selection
         if (!typeComboBox.getItems().isEmpty()) {
             typeComboBox.getSelectionModel().selectFirst();
         }

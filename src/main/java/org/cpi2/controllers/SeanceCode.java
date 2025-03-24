@@ -1,93 +1,118 @@
 package org.cpi2.controllers;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import org.cpi2.entitties.Moniteur;
+import org.cpi2.entitties.TypePermis;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SeanceCode {
+    @FXML private TextField capfield;
+    @FXML private DatePicker datefield;
+    @FXML private TextField tempsfield;
+    @FXML private TextField moniteurfield;
+
+    @FXML private TableView<Moniteur> moniteurTableView;
+    @FXML private TableColumn<Moniteur, Long> idMoniteurColumn;
+    @FXML private TableColumn<Moniteur, String> nomMoniteurColumn;
+    @FXML private TableColumn<Moniteur, String> prenomMoniteurColumn;
+    @FXML private TableColumn<Moniteur, String> specialiteColumn;
+
+    @FXML private Button cancelButton;
+    @FXML private Button planifierButton;
 
     @FXML
-    private TextField candidatfield;
+    public void initialize() {
+        // Initialize the table columns
+        idMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nomMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        prenomMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
+        specialiteColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getSpecialites().stream()
+                        .map(TypePermis::toString)
+                        .collect(Collectors.joining(", "))));
 
-    @FXML
-    private TextField sessionfield;
+        // Populate table with mock data
+        loadMockMoniteurs();
+    }
 
-    @FXML
-    private CheckBox autoAssignCheckBox;
+    private void loadMockMoniteurs() {
+        List<Moniteur> mockMoniteurs = createMockMoniteurs();
+        moniteurTableView.getItems().clear();
+        moniteurTableView.getItems().addAll(mockMoniteurs);
+    }
 
-    @FXML
-    private Button cancelButton;
+    private List<Moniteur> createMockMoniteurs() {
+        List<Moniteur> moniteurs = new ArrayList<>();
 
-    @FXML
-    private Button planifierButton;
+        Moniteur moniteur1 = new Moniteur("Dupont", "Jean", "AB1234",
+                "123 Rue de Paris", "0601020304",
+                LocalDate.of(1985, 5, 15), "jean.dupont@example.com",
+                LocalDate.of(2015, 3, 1), 2500.0);
+        moniteur1.addSpecialite(TypePermis.B);
 
-    @FXML
-    private void handleCancel() {
-        // Effacer les champs
-        candidatfield.clear();
-        sessionfield.clear();
-        autoAssignCheckBox.setSelected(false);
+        Moniteur moniteur2 = new Moniteur("Martin", "Sophie", "CD5678",
+                "456 Avenue Lyon", "0607080910",
+                LocalDate.of(1990, 8, 20), "sophie.martin@example.com",
+                LocalDate.of(2018, 6, 15), 2700.0);
+        moniteur2.addSpecialite(TypePermis.A);
+
+        moniteurs.add(moniteur1);
+        moniteurs.add(moniteur2);
+
+        return moniteurs;
     }
 
     @FXML
     private void handlePlanifier() {
-        if (autoAssignCheckBox.isSelected()) {
-            // Auto-assign logic
-            String sessionId = sessionfield.getText();
-
-            if (sessionId.isEmpty()) {
-                showAlert("Erreur", "Veuillez spécifier un ID de séance pour l'assignation automatique.");
-                return;
-            }
-
-            try {
-                // Here we would interact with the existing service layer
-                // Since we're not importing services, we'll assume these methods exist elsewhere
-                // and just mock the functionality for now
-
-                // Simulate checking if session exists and is a code session
-                boolean sessionExists = true; // This would be validated by a service
-                boolean isCodeSession = true; // This would be validated by a service
-
-                if (!sessionExists) {
-                    showAlert("Erreur", "Séance introuvable.");
-                    return;
-                }
-
-                if (!isCodeSession) {
-                    showAlert("Erreur", "La séance spécifiée n'est pas une séance de code.");
-                    return;
-                }
-
-                // Simulate auto-assignment based on inscription date and capacity
-                int candidatsAssigned = 3; // This would be the actual number returned by the service
-
-                showAlert("Succès", candidatsAssigned + " candidat(s) ont été assignés automatiquement à la séance " + sessionId + ".");
-            } catch (Exception e) {
-                showAlert("Erreur", "Une erreur est survenue: " + e.getMessage());
-            }
-        } else {
-            // Original manual assignment logic
-            String candidatId = candidatfield.getText();
-            String sessionId = sessionfield.getText();
-
-            if (candidatId.isEmpty() || sessionId.isEmpty()) {
-                showAlert("Erreur", "Veuillez remplir tous les champs.");
-                return;
-            }
-
-            // Simulation d'une planification réussie
-            showAlert("Succès", "Le candidat " + candidatId + " a été ajouté à la séance " + sessionId + ".");
+        // Validate inputs
+        if (!validateInputs()) {
+            return;
         }
+
+        // Placeholder for seance planning logic
+        showAlert("Planification", "Séance de code planifiée avec succès", Alert.AlertType.INFORMATION);
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    @FXML
+    private void handleCancel() {
+        // Close the current window
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
+    }
+
+    private boolean validateInputs() {
+        // Basic input validation
+        if (capfield.getText().isEmpty()) {
+            showAlert("Validation", "Veuillez saisir la capacité de la séance", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (datefield.getValue() == null) {
+            showAlert("Validation", "Veuillez sélectionner une date", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (tempsfield.getText().isEmpty()) {
+            showAlert("Validation", "Veuillez saisir le temps de la séance", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showAlert(String title, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText(content);
         alert.showAndWait();
     }
 }

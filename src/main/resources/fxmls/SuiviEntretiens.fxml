@@ -72,7 +72,7 @@
 
     <right>
         <ScrollPane>
-        <VBox spacing="15" styleClass="action-container" prefWidth="350">
+        <VBox spacing="15" styleClass="action-container" prefWidth="600">
             <padding>
                 <Insets top="20" right="15" bottom="20" left="15"/>
             </padding>

@@ -45,7 +45,7 @@
 
     <right>
         <ScrollPane>
-        <VBox spacing="15" styleClass="action-container" prefWidth="400">
+        <VBox spacing="15" styleClass="action-container" prefWidth="600">
             <padding>
                 <Insets top="20" right="15" bottom="20" left="15"/>
             </padding>
@@ -66,22 +66,22 @@
             <TitledPane fx:id="formPane" text="Formulaire Véhicule" expanded="false"
                         styleClass="form-pane" VBox.vgrow="ALWAYS">
                 <VBox spacing="10" styleClass="form-container">
-                    <Label text="Immatriculation" styleClass="form-label"/>
+                    <Label text="Immatriculation:" styleClass="form-label"/>
                     <TextField fx:id="immatriculationField" styleClass="form-field"/>
 
-                    <Label text="Type de véhicule" styleClass="form-label"/>
+                    <Label text="Type de véhicule:" styleClass="form-label"/>
                     <ComboBox fx:id="typeVehiculeCombo" maxWidth="Infinity" styleClass="form-combo"/>
 
-                    <Label text="Marque" styleClass="form-label"/>
+                    <Label text="Marque:" styleClass="form-label"/>
                     <TextField fx:id="marqueField" styleClass="form-field"/>
 
-                    <Label text="Modèle" styleClass="form-label"/>
+                    <Label text="Modèle:" styleClass="form-label"/>
                     <TextField fx:id="modeleField" styleClass="form-field"/>
 
-                    <Label text="Kilométrage initial" styleClass="form-label"/>
+                    <Label text="Kilométrage initial:" styleClass="form-label"/>
                     <TextField fx:id="kilometrageField" styleClass="form-field"/>
 
-                    <Label text="Date de mise en service" styleClass="form-label"/>
+                    <Label text="Date de mise en service:" styleClass="form-label"/>
                     <DatePicker fx:id="dateMiseServicePicker" maxWidth="Infinity" styleClass="form-date"/>
 
                     <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="form-buttons">

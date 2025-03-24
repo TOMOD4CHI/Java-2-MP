@@ -1,4 +1,66 @@
-/* Background Pane */
+.glass-field,
+.text-field,
+.combo-box,
+.date-picker {
+    -fx-background-color: rgba(226, 232, 240, 0.4);
+    -fx-text-fill: #2d3748;
+    -fx-prompt-text-fill: #718096;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-min-width: 250px;
+    -fx-max-width: 250px;
+    -fx-min-height: 35px;
+    -fx-border-color: rgba(203, 213, 224, 0.6);
+}
+
+.glass-field:focused,
+.text-field:focused,
+.combo-box:focused,
+.date-picker:focused {
+    -fx-background-color: rgba(235, 244, 255, 0.6);
+    -fx-border-color: #63b3ed;
+}
+
+.combo-box > .arrow-button {
+    -fx-background-color: rgba(144, 205, 244, 0.4);
+    -fx-background-radius: 0 8px 8px 0;
+}
+
+.combo-box > .arrow-button > .arrow {
+    -fx-background-color: #2b6cb0;
+}
+
+.date-picker > .arrow-button {
+    -fx-background-color: rgba(144, 205, 244, 0.4);
+    -fx-background-radius: 0 8px 8px 0;
+}
+
+.date-picker > .arrow-button > .arrow {
+    -fx-background-color: #2b6cb0;
+}
+
+/* Popup and dropdown styling */
+.date-picker-popup,
+.combo-box-popup {
+    -fx-background-color: rgba(235, 248, 255, 0.95);
+    -fx-border-color: rgba(144, 205, 244, 0.6);
+}
+
+.combo-box-popup .list-view,
+.date-picker-popup .month-year-pane {
+    -fx-background-color: rgba(235, 248, 255, 0.95);
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(144, 205, 244, 0.3);
+}
+.page-title {
+    -fx-font-size: 55px;
+    -fx-alignment: center ;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3182ce;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 3, 0, 0, 1);
+}
 .background-pane {
     -fx-background-color: rgba(236, 246, 255, 0.6);
     -fx-background-radius: 20px;
@@ -9,15 +71,7 @@
     -fx-padding: 24px;
 }
 
-/* Title */
-.title {
-    -fx-font-size: 26px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #3182ce;
-    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 3, 0, 0, 1);
-}
 
-/* Glass Panel for Filters */
 .glass-panel {
     -fx-background-color: rgba(224, 242, 254, 0.5);
     -fx-background-radius: 14px;
@@ -29,26 +83,13 @@
     -fx-padding: 16px;
 }
 
-/* Filter Labels */
 .filter-label {
     -fx-text-fill: #2c5282;
     -fx-font-weight: bold;
     -fx-font-size: 13px;
 }
 
-/* Form Fields */
-.glass-field , .DatePicker{
-    -fx-background-color: rgba(226, 232, 240, 0.4);
-    -fx-text-fill: #2d3748;
-    -fx-prompt-text-fill: #718096;
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
-    -fx-min-width: 200px;
-    -fx-min-height: 35px;
-    -fx-border-color: rgba(203, 213, 224, 0.6);
-    -fx-border-width: 1px;
-    -fx-padding: 8px;
-}
+
 
 .glass-field:focused {
     -fx-background-color: rgba(235, 244, 255, 0.6);
@@ -74,7 +115,6 @@
     -fx-background-color: rgba(186, 230, 253, 0.8);
 }
 
-/* ComboBox customization */
 .glass-field .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: #2d3748;

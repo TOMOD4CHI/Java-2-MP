@@ -33,24 +33,24 @@
             <VBox spacing="10" maxWidth="450" styleClass="selector-container">
                 <Label text="Sélectionner un véhicule" styleClass="form-header"/>
                 <ComboBox fx:id="vehiculeComboBox" maxWidth="Infinity" promptText="Sélectionner un véhicule"
-                          styleClass="vehicle-combo"/>
+                          styleClass="form-field"/>
             </VBox>
 
             <VBox fx:id="infoContainer" spacing="10" maxWidth="450" styleClass="info-container">
                 <HBox styleClass="info-box">
                     <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="Immatriculation" styleClass="info-label"/>
-                        <Label fx:id="immatriculationLabel" text="--" styleClass="info-value"/>
+                        <Label text="Immatriculation" styleClass="form-label"/>
+                        <Label fx:id="immatriculationLabel" text="--" styleClass="form-label"/>
                     </VBox>
                     <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="Marque / Modèle" styleClass="info-label"/>
-                        <Label fx:id="marqueModeleLabel" text="--" styleClass="info-value"/>
+                        <Label text="Marque / Modèle" styleClass="form-label"/>
+                        <Label fx:id="marqueModeleLabel" text="--" styleClass="form-label"/>
                     </VBox>
                 </HBox>
 
                 <VBox spacing="5" styleClass="current-km-box">
-                    <Label text="Kilométrage actuel" styleClass="info-label-large"/>
-                    <Label fx:id="kilometrageActuelLabel" text="--" styleClass="km-value"/>
+                    <Label text="Kilométrage actuel" styleClass="form-label"/>
+                    <Label fx:id="kilometrageActuelLabel" text="--" styleClass="form-label"/>
                 </VBox>
             </VBox>
 
@@ -58,8 +58,8 @@
                 <Label text="Nouveau kilométrage" styleClass="form-header"/>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <TextField fx:id="nouveauKilometrageField" promptText="Entrez le nouveau kilométrage"
-                               HBox.hgrow="ALWAYS" styleClass="km-field"/>
-                    <Label text="km" styleClass="km-unit"/>
+                               HBox.hgrow="ALWAYS" styleClass="form-field"/>
+                    <Label text="km" styleClass="form-label"/>
                 </HBox>
                 <Label fx:id="infoKilometrageLabel"
                        text="Le nouveau kilométrage doit être supérieur à l'ancien"

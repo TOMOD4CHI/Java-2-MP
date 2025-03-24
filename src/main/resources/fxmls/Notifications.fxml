@@ -66,7 +66,7 @@
 
     <right>
         <ScrollPane>
-        <VBox spacing="15" styleClass="details-container" prefWidth="280">
+        <VBox spacing="15" styleClass="details-container" prefWidth="380">
             <padding>
                 <Insets top="20" right="15" bottom="20" left="15"/>
             </padding>
@@ -74,57 +74,57 @@
             <TitledPane text="Détails de la notification" expanded="true" styleClass="details-pane">
                 <VBox spacing="15" styleClass="notification-details">
                     <HBox styleClass="detail-header">
-                        <Label fx:id="detailTypeLabel" text="Type: --" styleClass="detail-type"/>
+                        <Label fx:id="detailTypeLabel" text="Type: --" styleClass="form-label"/>
                     </HBox>
 
                     <VBox spacing="5" styleClass="detail-section">
-                        <Label text="Véhicule concerné" styleClass="section-header"/>
-                        <Label fx:id="detailVehiculeLabel" text="--" styleClass="detail-value"/>
+                        <Label text="Véhicule concerné" styleClass="form-title"/>
+                        <Label fx:id="detailVehiculeLabel" text="--" styleClass="form-label"/>
                     </VBox>
 
                     <VBox spacing="5" styleClass="detail-section">
-                        <Label text="Description" styleClass="section-header"/>
+                        <Label text="Description" styleClass="form-label"/>
                         <TextArea fx:id="detailDescriptionArea" wrapText="true" editable="false"
-                                  prefHeight="80" styleClass="detail-description"/>
+                                  prefHeight="80" styleClass="form-field"/>
                     </VBox>
 
                     <VBox spacing="5" styleClass="detail-section">
-                        <Label text="Échéance" styleClass="section-header"/>
-                        <Label fx:id="detailEcheanceLabel" text="--" styleClass="detail-value"/>
+                        <Label text="Échéance" styleClass="form-label"/>
+                        <Label fx:id="detailEcheanceLabel" text="--" styleClass="form-label"/>
                     </VBox>
 
                     <VBox spacing="5" styleClass="detail-section">
-                        <Label text="Statut" styleClass="section-header"/>
-                        <Label fx:id="detailStatutLabel" text="--" styleClass="detail-status"/>
+                        <Label text="Statut" styleClass="form-label"/>
+                        <Label fx:id="detailStatutLabel" text="--" styleClass="form-label"/>
                     </VBox>
 
                     <HBox spacing="10" alignment="CENTER" styleClass="action-buttons">
                         <Button fx:id="marquerTraiteBtn" text="Marquer comme traité" maxWidth="Infinity"
                                 HBox.hgrow="ALWAYS" onAction="#handleMarquerTraite"
-                                styleClass="mark-handled-button"/>
+                                styleClass="button"/>
                     </HBox>
 
                     <Button fx:id="voirVehiculeBtn" text="Voir le véhicule" maxWidth="Infinity"
-                            onAction="#handleVoirVehicule" styleClass="view-vehicle-button"/>
+                            onAction="#handleVoirVehicule" styleClass="button"/>
                 </VBox>
             </TitledPane>
 
             <TitledPane text="Statistiques" expanded="false" styleClass="stats-pane">
                 <GridPane hgap="10" vgap="10" styleClass="stats-grid">
                     <Label text="Notifications urgentes:" GridPane.rowIndex="0" GridPane.columnIndex="0"
-                           styleClass="stats-label"/>
+                           styleClass="form-label"/>
                     <Label fx:id="nbUrgentesLabel" text="0" GridPane.rowIndex="0" GridPane.columnIndex="1"
-                           styleClass="stats-value, urgent-count"/>
+                           styleClass="form-label"/>
 
                     <Label text="Notifications à venir:" GridPane.rowIndex="1" GridPane.columnIndex="0"
-                           styleClass="stats-label"/>
+                           styleClass="form-label"/>
                     <Label fx:id="nbAVenirLabel" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1"
-                           styleClass="stats-value, upcoming-count"/>
+                           styleClass="form-label"/>
 
                     <Label text="Total:" GridPane.rowIndex="2" GridPane.columnIndex="0"
-                           styleClass="stats-label"/>
+                           styleClass="form-label"/>
                     <Label fx:id="totalLabel" text="0" GridPane.rowIndex="2" GridPane.columnIndex="1"
-                           styleClass="stats-value, total-count"/>
+                           styleClass="form-label"/>
                 </GridPane>
             </TitledPane>
         </VBox>
@@ -136,7 +136,7 @@
             <padding>
                 <Insets top="5" right="15" bottom="5" left="15"/>
             </padding>
-            <Label fx:id="statusLabel" text="Dernière vérification: --" styleClass="status-label"/>
+            <Label fx:id="statusLabel" text="Dernière vérification: --" styleClass="form-label"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Hyperlink fx:id="paramNotificationsLink" text="Paramètres de notification"
                        onAction="#handleParametresNotifications" styleClass="settings-link"/>
