@@ -25,6 +25,7 @@ public class ExamRegistration {
     @FXML private Button verifierEligibiliteButton;
     @FXML private Button enregistrerButton;
     @FXML private Button annulerButton;
+    @FXML private Label dateFooterLabel;
 
     @FXML
     public void initialize() {
@@ -44,6 +45,9 @@ public class ExamRegistration {
                 }
             }
         });
+        
+        // Set current date in footer
+        dateFooterLabel.setText("📅 Date: " + LocalDate.now().toString());
     }
 
     @FXML

@@ -7,12 +7,18 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<StackPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.cpi2.controllers.PassExam"
            stylesheets="@/css/style3.css">
 
-    <VBox spacing="15" alignment="CENTER" styleClass="form-container">
+    <!-- Main Content (Scrollable) -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" hbarPolicy="NEVER">
+            <VBox spacing="10" alignment="CENTER" styleClass="form-container">
+                <padding>
+                    <Insets top="5" right="15" bottom="10" left="15"/>
+                </padding>
 
         <Label text="Passer un Examen" styleClass="form-title"/>
         <Separator/>
@@ -46,7 +52,20 @@
             <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="button"/>
             <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" styleClass="button"/>
         </HBox>
+        
+        <Region VBox.vgrow="ALWAYS"/>
 
-    </VBox>
-
-</StackPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <!-- Footer -->
+    <bottom>
+        <HBox alignment="CENTER" styleClass="footer">
+            <padding>
+                <Insets top="5" right="20" bottom="5" left="20"/>
+            </padding>
+            <Label text="© 2023 Auto-École. Tous droits réservés." styleClass="footer-text"/>
+        </HBox>
+    </bottom>
+</BorderPane>

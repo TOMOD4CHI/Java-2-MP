@@ -4,75 +4,109 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.cpi2.controllers.ExamRegistration"
-      spacing="15" stylesheets="@/css/style2.css" styleClass="root">
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
-
-    <Label text="Inscription à un Examen" styleClass="page-title"/>
-
-
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="ID Candidat:" styleClass="form-label"/>
-        <TextField fx:id="candidatIdField" prefWidth="150" styleClass="form-field"/>
-        <Button text="Rechercher" onAction="#rechercheCandidatAction" styleClass="button"/>
-    </HBox>
-
-
-    <TitledPane text="Informations Candidat" expanded="true" styleClass="form-title">
-        <GridPane hgap="10" vgap="10">
-            <columnConstraints>
-                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-            </columnConstraints>
-
-            <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
-
-            <Label text="Prénom:" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-label"/>
-            <TextField fx:id="prenomField" GridPane.rowIndex="0" GridPane.columnIndex="3" editable="false" styleClass="form-field"/>
-
-            <Label text="CIN:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextField fx:id="cinField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
-        </GridPane>
-    </TitledPane>
-
-    <!-- Exam Registration -->
-    <TitledPane text="Détails de l'Examen" expanded="true" styleClass="form-title">
-        <VBox spacing="10">
-            <GridPane hgap="10" vgap="10">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="NEVER" minWidth="150"/>
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                </columnConstraints>
-
-                <Label text="Type d'examen:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
-                <ComboBox fx:id="typeExamenComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity" styleClass="form-field"/>
-
-                <Label text="Date de l'examen:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-                <DatePicker fx:id="dateExamenPicker" GridPane.rowIndex="1" GridPane.columnIndex="1" minHeight="40" maxWidth="Infinity" styleClass="datepick"/>
-
-                <Label text="Frais d'examen (DT):" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
-                <TextField fx:id="fraisField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" editable="false"/>
-
-                <Label text="Frais payés:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-                <CheckBox fx:id="fraisPaiementCheckBox" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field"/>
-
-                <Label text="Éligibilité:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
-                <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="4" GridPane.columnIndex="1">
-                    <Label fx:id="eligibiliteLabel" text="Eligibilité non vérifiée" styleClass="form-label"/>
-                    <Button fx:id="verifierEligibiliteButton" text="Vérifier Éligibilité" onAction="#verifierEligibiliteAction" styleClass="button"/>
-                </HBox>
-            </GridPane>
+      stylesheets="@/css/style2.css" styleClass="root">
+    
+    <!-- Header -->
+    <top>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="10" right="20" bottom="5" left="20"/>
+            </padding>
+            <Label text="Inscription à un Examen" styleClass="page-title"/>
         </VBox>
-    </TitledPane>
+    </top>
+    
+    <!-- Main Content (Scrollable) -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="5" right="20" bottom="5" left="20"/>
+                </padding>
 
-    <!-- Buttons -->
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button fx:id="annulerButton" text="Annuler" styleClass="button"/>
-    </HBox>
-</VBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="ID Candidat:" styleClass="form-label"/>
+                    <TextField fx:id="candidatIdField" prefWidth="150" styleClass="form-field"/>
+                    <Button text="Rechercher" onAction="#rechercheCandidatAction" styleClass="button"/>
+                </HBox>
+
+                <TitledPane text="Informations Candidat" expanded="true" styleClass="form-title">
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                            <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
+
+                        <Label text="Prénom:" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-label"/>
+                        <TextField fx:id="prenomField" GridPane.rowIndex="0" GridPane.columnIndex="3" editable="false" styleClass="form-field"/>
+
+                        <Label text="CIN:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <TextField fx:id="cinField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
+                    </GridPane>
+                </TitledPane>
+
+                <!-- Exam Registration -->
+                <TitledPane text="Détails de l'Examen" expanded="true" styleClass="form-title">
+                    <VBox spacing="10">
+                        <GridPane hgap="10" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="Type d'examen:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                            <ComboBox fx:id="typeExamenComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity" styleClass="form-field"/>
+
+                            <Label text="Date de l'examen:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                            <DatePicker fx:id="dateExamenPicker" GridPane.rowIndex="1" GridPane.columnIndex="1" minHeight="40" maxWidth="Infinity" styleClass="datepick"/>
+
+                            <Label text="Frais d'examen (DT):" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                            <TextField fx:id="fraisField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" editable="false"/>
+
+                            <Label text="Frais payés:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                            <CheckBox fx:id="fraisPaiementCheckBox" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field"/>
+
+                            <Label text="Éligibilité:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
+                            <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="4" GridPane.columnIndex="1">
+                                <Label fx:id="eligibiliteLabel" text="Eligibilité non vérifiée" styleClass="form-label"/>
+                                <Button fx:id="verifierEligibiliteButton" text="Vérifier Éligibilité" onAction="#verifierEligibiliteAction" styleClass="button"/>
+                            </HBox>
+                        </GridPane>
+                    </VBox>
+                </TitledPane>
+
+                <!-- Buttons -->
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button fx:id="annulerButton" text="Annuler" onAction="#annulerAction" styleClass="button"/>
+                    <Button fx:id="enregistrerButton" text="Enregistrer" onAction="#enregistrerAction" styleClass="button"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <!-- Footer -->
+    <bottom>
+        <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="15">
+            <padding>
+                <Insets top="0" right="20" left="20"/>
+            </padding>
+
+            <!-- Left side: Auto-école info -->
+            <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="5">
+                <Label styleClass="footer-text" text="🏫 Inscription à l'examen"/>
+            </VBox>
+
+            <!-- Right side: Contact info -->
+            <VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" spacing="5">
+                <Label styleClass="footer-text" text="📅 Date: " fx:id="dateFooterLabel"/>
+            </VBox>
+        </HBox>
+    </bottom>
+</BorderPane>

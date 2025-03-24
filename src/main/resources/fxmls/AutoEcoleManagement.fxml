@@ -26,9 +26,9 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="20">
+        <VBox alignment="CENTER" spacing="10">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="10" right="20" bottom="10" left="20"/>
             </padding>
             
             <VBox styleClass="form-container" maxWidth="600" alignment="CENTER">

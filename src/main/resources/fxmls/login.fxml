@@ -23,7 +23,7 @@
                         <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
                         <Pane fx:id="logoContainer" styleClass="login-logo-pane">
                             <ImageView styleClass="login-logo-image" fx:id="logoImageView" fitWidth="400" fitHeight="400" >
-                                <Image url="@/images/logo1.png"/>
+                                <Image url="@/images/app_icon.png"/>
                             </ImageView>
                         </Pane>
                     </VBox>

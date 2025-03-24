@@ -5,13 +5,13 @@ import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -45,6 +45,20 @@ public class login  {
         if (passwordField != null) {
             passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
                 validateInput();
+            });
+        }
+        
+        // Set the app icon after the scene is initialized
+        if (logoContainer != null) {
+            logoContainer.sceneProperty().addListener((observable, oldScene, newScene) -> {
+                if (newScene != null) {
+                    Platform.runLater(() -> {
+                        Stage stage = (Stage) newScene.getWindow();
+                        if (stage != null) {
+                            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+                        }
+                    });
+                }
             });
         }
     }

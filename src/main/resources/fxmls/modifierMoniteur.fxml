@@ -10,10 +10,10 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.cpi2.controllers.ModifierMoniteur"
       stylesheets="@/css/style.css"
-      alignment="CENTER" spacing="15" styleClass="form-container">
+      alignment="CENTER" spacing="10" styleClass="form-container">
 
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="15" right="20" bottom="15" left="20"/>
     </padding>
 
     <Label text="Modifier un Moniteur" styleClass="page-title"/>
@@ -30,47 +30,50 @@
             <TextField fx:id="cinField" promptText="Entrez le CIN" HBox.hgrow="ALWAYS" styleClass="form-field"/>
             <Button text="Rechercher" onAction="#searchMoniteur" styleClass="primary-button"/>
         </HBox>
-        <Label fx:id="cinError" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="error-label"/>
+        <Label fx:id="cinError" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
 
         <!-- Nom -->
         <Label text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label"/>
         <TextField fx:id="nomField" promptText="Entrez le nom" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field"/>
-        <Label fx:id="nomError" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="error-label"/>
+        <Label fx:id="nomError" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
 
         <!-- Prénom -->
         <Label text="Prénom:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="form-label"/>
         <TextField fx:id="prenomField" promptText="Entrez le prénom" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="form-field"/>
-        <Label fx:id="prenomError" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="error-label"/>
+        <Label fx:id="prenomError" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
 
         <!-- Adresse -->
         <Label text="Adresse:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="form-label"/>
         <TextField fx:id="adresseField" promptText="Entrez l'adresse" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="form-field"/>
-        <Label fx:id="adresseError" GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="error-label"/>
+        <Label fx:id="adresseError" GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
 
         <!-- Téléphone -->
         <Label text="Téléphone:" GridPane.columnIndex="0" GridPane.rowIndex="8" styleClass="form-label"/>
         <TextField fx:id="telephoneField" promptText="Entrez le numéro de téléphone" GridPane.columnIndex="1" GridPane.rowIndex="8" styleClass="form-field"/>
-        <Label fx:id="telephoneError" GridPane.columnIndex="1" GridPane.rowIndex="9" styleClass="error-label"/>
+        <Label fx:id="telephoneError" GridPane.columnIndex="1" GridPane.rowIndex="9" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
 
         <!-- Email -->
         <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="10" styleClass="form-label"/>
         <TextField fx:id="emailField" promptText="Entrez l'email" GridPane.columnIndex="1" GridPane.rowIndex="10" styleClass="form-field"/>
-        <Label fx:id="emailError" GridPane.columnIndex="1" GridPane.rowIndex="11" styleClass="error-label"/>
+        <Label fx:id="emailError" GridPane.columnIndex="1" GridPane.rowIndex="11" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
 
         <!-- Date d'embauche -->
         <Label text="Date d'embauche:" GridPane.columnIndex="0" GridPane.rowIndex="12" styleClass="form-label"/>
         <DatePicker fx:id="dateEmbaucheField" promptText="Sélectionnez la date" GridPane.columnIndex="1" GridPane.rowIndex="12" styleClass="form-field"/>
-        <Label fx:id="dateError" GridPane.columnIndex="1" GridPane.rowIndex="13" styleClass="error-label"/>
+        <Label fx:id="dateError" GridPane.columnIndex="1" GridPane.rowIndex="13" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
 
         <!-- Type de Permis -->
         <Label text="Type de Permis:" GridPane.columnIndex="0" GridPane.rowIndex="14" styleClass="form-label"/>
         <ComboBox fx:id="typePermisComboBox" GridPane.columnIndex="1" GridPane.rowIndex="14" styleClass="form-field"/>
-        <Label fx:id="typePermisError" GridPane.columnIndex="1" GridPane.rowIndex="15" styleClass="error-label"/>
+        <Label fx:id="typePermisError" GridPane.columnIndex="1" GridPane.rowIndex="15" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
     </GridPane>
 
     <HBox spacing="10" alignment="CENTER">
         <Button text="Modifier" onAction="#modifierAction" styleClass="primary-button"/>
         <Button text="Annuler" onAction="#cancelAction" styleClass="cancel-button"/>
     </HBox>
+    
+
+
 
 </VBox>
