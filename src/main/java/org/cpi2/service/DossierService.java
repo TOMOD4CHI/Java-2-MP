@@ -1,14 +1,12 @@
 package org.cpi2.service;
 
-import org.cpi2.entitties.Document;
-import org.cpi2.entitties.Dossier;
-import org.cpi2.entitties.TypeDocument;
+import org.cpi2.entities.Document;
+import org.cpi2.entities.Dossier;
+import org.cpi2.entities.TypeDocument;
 import org.cpi2.repository.DossierRepository;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,6 +35,12 @@ public class DossierService {
 
     public boolean creerDossier(Dossier dossier, Long candidatId) {
         return dossierRepository.save(dossier, candidatId);
+    }
+
+    //this method could be used when modifying the type of a document and
+    //in case it exists in the dossier, it should can be overwritten
+    public boolean containsType(Dossier dossier,TypeDocument type) {
+        return dossier.getDocuments().containsKey(type);
     }
 
     public boolean supprimerDossier(Long dossierId) {
