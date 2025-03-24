@@ -26,6 +26,13 @@ public class CandidatService {
         return candidatRepository.findById(id);
     }
 
+    public long CinToId(String cin) {
+        if(candidatRepository.findByCin(cin).isPresent()){
+            return candidatRepository.findByCin(cin).get().getId();
+        }
+        return -1;
+    }
+
     public boolean addCandidat(Candidat candidat) {
         if(!candidatRepository.findByCin(candidat.getCin()).isEmpty()) {
             LOGGER.info("Candidat already exists");

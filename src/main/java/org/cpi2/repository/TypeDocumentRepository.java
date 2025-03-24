@@ -50,7 +50,7 @@ public class TypeDocumentRepository extends BaseRepository<TypeDocument> {
         return typeDocuments;
     }
 
-    public Optional<Integer> findByLibelle(String libelle) throws DataNotFound {
+    public Optional<Long> findByLibelle(String libelle) throws DataNotFound {
         String sql = """
             SELECT * FROM type_document 
             WHERE libelle = ?
@@ -63,7 +63,7 @@ public class TypeDocumentRepository extends BaseRepository<TypeDocument> {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(rs.getInt("id"));
+                return Optional.of(rs.getLong("id"));
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error finding type document by libelle", e);

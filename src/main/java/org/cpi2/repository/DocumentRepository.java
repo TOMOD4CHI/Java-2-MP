@@ -80,9 +80,8 @@ public class DocumentRepository extends BaseRepository<Document> {
             INSERT INTO document (dossier_id, type_document_id, nom_fichier, chemin_fichier)
             VALUES (?, ?, ?, ?)
         """;
-        long typeDocumentId = (long)typeDocumentRepository.findByLibelle(document.getTypeDocument().name()).get();
-
-        if(typeDocumentId == 0) {
+        long typeDocumentId = typeDocumentRepository.findByLibelle(document.getTypeDocument().name()).orElse(0L);
+        if (typeDocumentId == 0) {
             throw new DataNotFound("Type document not found");
         }
 

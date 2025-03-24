@@ -11,6 +11,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.cpi2.entities.Document;
+import org.cpi2.entities.Dossier;
+import org.cpi2.entities.TypeDocument;
+import org.cpi2.service.DossierService;
+import org.cpi2.service.TypeDocumentService;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -31,17 +36,14 @@ public class Documents {
     @FXML private TableColumn<Document, LocalDate> dateColumn;
 
     private File selectedFile;
+    private final TypeDocumentService typeDocumentService = new TypeDocumentService();
+    private final DossierService dossierService = new DossierService();
 
     @FXML
     public void initialize() {
         // Initialize the ComboBox with document types
         typeDocumentComboBox.getItems().addAll(
-            "Carte Identité", 
-            "Permis de Conduire", 
-            "Certificat Médical", 
-            "Photo d'identité", 
-            "Justificatif de domicile",
-            "Autre"
+                typeDocumentService.getAllTypeDocuments()
         );
         
         // Set current date as default for date picker
@@ -71,7 +73,20 @@ public class Documents {
         if (validateForm()) {
             // Here you would save the document to database
             // For this example, we'll just show a success alert
-            
+
+            Dossier dossier = dossierService.getDossierByCandidat(candidatIdField.getText()).orElse(null);
+            if(dossier != null) {
+                TypeDocument typeDocument = TypeDocument.valueOf(typeDocumentComboBox.getValue());
+                org.cpi2.entities.Document document = new org.cpi2.entities.Document(typeDocument, selectedFile.getName(), selectedFile.getAbsolutePath());
+                dossierService.ajouterDocument(dossier.getId(), document, selectedFile);
+            }
+            else{
+                //Alert that the candidate does not exist
+                //RIP l UI hay 3al CLI for now 7ta someone fix it
+                System.out.println("Candidat does not exist");
+                return;
+            }
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Succès");
             alert.setHeaderText(null);

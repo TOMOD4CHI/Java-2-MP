@@ -22,7 +22,7 @@ public class TypeDocumentService {
         return typeDocumentRepository.findAll();
     }
 
-    public Integer getTypeDocumentIdByLibelle(String libelle) throws DataNotFound {
+    public Long getTypeDocumentIdByLibelle(String libelle) throws DataNotFound {
         return typeDocumentRepository.findByLibelle(libelle)
                 .orElseThrow(() -> new DataNotFound("Type document not found"));
     }

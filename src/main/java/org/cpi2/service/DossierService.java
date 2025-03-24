@@ -15,10 +15,12 @@ import java.util.TreeSet;
 public class DossierService {
     private final DossierRepository dossierRepository;
     private final DocumentService documentService;
+    private final CandidatService candidatService;
 
     public DossierService() {
         this.dossierRepository = new DossierRepository();
         this.documentService = new DocumentService();
+        this.candidatService = new CandidatService();
     }
 
     public Optional<Dossier> getDossierById(Long id) {
@@ -29,8 +31,20 @@ public class DossierService {
         return dossierRepository.findAll();
     }
 
-    public Optional<Dossier> getDossierByCandidat(Long candidatId) {
-        return dossierRepository.findByCandidatId(candidatId);
+    public Optional<Dossier> getDossierByCandidat(String candidatCin) {
+        long candidatId = candidatService.CinToId(candidatCin);
+        if (candidatId!=-1 && candidatService.getCandidatById(candidatId).isPresent()) {
+            Dossier dossier = dossierRepository.findByCandidatId(candidatId).orElse(null);
+            if (dossier != null) {
+                return Optional.of(dossier);
+            }
+            else {
+
+                if(creerDossier(new Dossier(), candidatId))
+                    return dossierRepository.findByCandidatId(candidatId);
+            }
+            }
+        return Optional.empty();
     }
 
     public boolean creerDossier(Dossier dossier, Long candidatId) {
