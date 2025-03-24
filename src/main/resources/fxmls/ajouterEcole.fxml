@@ -48,23 +48,24 @@
                         <TextField fx:id="adresseField" promptText="Entrez l'adresse complète" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
                         <Label text="Téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <TextField fx:id="telephoneField" promptText="Ex: +212 500000000" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <TextField fx:id="telephoneField" promptText="Ex: +216 500000000" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
                         <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                         <TextField fx:id="emailField" promptText="contact@ecole.ma" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
                         <Label text="Logo:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                        <VBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4" alignment="CENTER_LEFT">
-                            <StackPane>
-                                <Rectangle width="120" height="120" arcWidth="15" arcHeight="15" styleClass="logo-background" fill="white" stroke="#BEE3F8"/>
-                                <ImageView fx:id="logoImageView" fitWidth="110" fitHeight="110" preserveRatio="true" styleClass="logo-image"/>
-                            </StackPane>
+                        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4" alignment="CENTER_LEFT">
                             <Button text="Choisir un Logo" onAction="#handleLogoUpload" styleClass="button">
                                 <graphic>
                                     <Label text="+" styleClass="icon-3d-text"/>
                                 </graphic>
                             </Button>
-                        </VBox>
+
+                                <Rectangle width="100" height="100" arcWidth="15" arcHeight="15" styleClass="logo-background" fill="white" stroke="#BEE3F8"/>
+                                <ImageView fx:id="logoImageView" fitWidth="110" fitHeight="110" preserveRatio="true" styleClass="logo-image"/>
+
+
+                        </HBox>
                     </GridPane>
 
                     <HBox spacing="20" alignment="CENTER" styleClass="button-container">

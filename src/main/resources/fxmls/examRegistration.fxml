@@ -4,47 +4,44 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.cpi2.controllers.ExamRegistration"
-      spacing="15" stylesheets="@/css/style2.css" styleClass="root">
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+<ScrollPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.ExamRegistration"
+            fitToWidth="true" stylesheets="@/css/style2.css">
+    <VBox spacing="15" styleClass="root">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
 
-    <Label text="Inscription à un Examen" styleClass="page-title"/>
+        <Label text="Inscription à un Examen" styleClass="page-title" alignment="CENTER" maxWidth="Infinity"/>
 
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="ID Candidat:" styleClass="form-label"/>
+            <TextField fx:id="candidatIdField" HBox.hgrow="ALWAYS" prefWidth="150" styleClass="form-field"/>
+            <Button text="Rechercher" onAction="#rechercheCandidatAction" styleClass="button"/>
+        </HBox>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="ID Candidat:" styleClass="form-label"/>
-        <TextField fx:id="candidatIdField" prefWidth="150" styleClass="form-field"/>
-        <Button text="Rechercher" onAction="#rechercheCandidatAction" styleClass="button"/>
-    </HBox>
+        <TitledPane text="Informations Candidat" expanded="true" styleClass="form-title" maxWidth="Infinity">
+            <GridPane hgap="15" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="120"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                    <ColumnConstraints hgrow="NEVER" minWidth="120"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
 
+                <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
 
-    <TitledPane text="Informations Candidat" expanded="true" styleClass="form-title">
-        <GridPane hgap="10" vgap="10">
-            <columnConstraints>
-                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-            </columnConstraints>
+                <Label text="Prénom:" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-label"/>
+                <TextField fx:id="prenomField" GridPane.rowIndex="0" GridPane.columnIndex="3" editable="false" styleClass="form-field"/>
 
-            <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
+                <Label text="CIN:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextField fx:id="cinField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
+            </GridPane>
+        </TitledPane>
 
-            <Label text="Prénom:" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-label"/>
-            <TextField fx:id="prenomField" GridPane.rowIndex="0" GridPane.columnIndex="3" editable="false" styleClass="form-field"/>
-
-            <Label text="CIN:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextField fx:id="cinField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" styleClass="form-field"/>
-        </GridPane>
-    </TitledPane>
-
-    <!-- Exam Registration -->
-    <TitledPane text="Détails de l'Examen" expanded="true" styleClass="form-title">
-        <VBox spacing="10">
-            <GridPane hgap="10" vgap="10">
+        <TitledPane text="Détails de l'Examen" expanded="true" styleClass="form-title" maxWidth="Infinity">
+            <GridPane hgap="15" vgap="10">
                 <columnConstraints>
                     <ColumnConstraints hgrow="NEVER" minWidth="150"/>
                     <ColumnConstraints hgrow="ALWAYS"/>
@@ -60,19 +57,19 @@
                 <TextField fx:id="fraisField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" editable="false"/>
 
                 <Label text="Frais payés:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-                <CheckBox fx:id="fraisPaiementCheckBox" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field"/>
+                <CheckBox fx:id="fraisPaiementCheckBox" GridPane.rowIndex="3" GridPane.columnIndex="1" />
 
                 <Label text="Éligibilité:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
                 <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="4" GridPane.columnIndex="1">
-                    <Label fx:id="eligibiliteLabel" text="Eligibilité non vérifiée" styleClass="form-label"/>
+                    <Label fx:id="eligibiliteLabel" text="Eligibilité non vérifiée" styleClass="text"/>
                     <Button fx:id="verifierEligibiliteButton" text="Vérifier Éligibilité" onAction="#verifierEligibiliteAction" styleClass="button"/>
                 </HBox>
             </GridPane>
-        </VBox>
-    </TitledPane>
+        </TitledPane>
 
-    <!-- Buttons -->
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button fx:id="annulerButton" text="Annuler" styleClass="button"/>
-    </HBox>
-</VBox>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="annulerButton" text="Annuler" styleClass="button"/>
+            <Button fx:id="enregistrerButton" text="Enregistrer" styleClass="button"/>
+        </HBox>
+    </VBox>
+</ScrollPane>

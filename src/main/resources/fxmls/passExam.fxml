@@ -7,46 +7,70 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="org.cpi2.controllers.PassExam"
-           stylesheets="@/css/style3.css">
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.PassExam"
+            fitToWidth="true"
+            stylesheets="@/css/style3.css">
+    <HBox spacing="30" alignment="TOP_CENTER" >
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
 
-    <VBox spacing="15" alignment="CENTER" styleClass="form-container">
+        <VBox spacing="20" alignment="TOP_CENTER" styleClass="form-container" HBox.hgrow="SOMETIMES" maxWidth="400">
+            <Label text="Passer un Examen" styleClass="form-title" alignment="CENTER" maxWidth="Infinity"/>
+            <Separator/>
 
-        <Label text="Passer un Examen" styleClass="form-title"/>
-        <Separator/>
+            <GridPane hgap="15" vgap="15" alignment="CENTER" styleClass="form-grid">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="120"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
 
-        <GridPane hgap="10" vgap="10" alignment="CENTER">
+                <Label text="ID Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextField fx:id="idCandidatField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field" promptText="Entrez l'ID du candidat"/>
 
-            <Label text="ID Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextField fx:id="idCandidatField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field"/>
+                <Label text="ID Examen:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextField fx:id="idExamenField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field" promptText="Entrez l'ID de l'examen"/>
 
-            <Label text="ID Examen:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextField fx:id="idExamenField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field"/>
+                <Label text="Résultat:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                <ComboBox fx:id="resultatComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" promptText="Sélectionnez un résultat">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Réussi"/>
+                            <String fx:value="Échoué"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
 
-            <Label text="Résultat:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
-            <ComboBox fx:id="resultatComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Réussi"/>
-                        <String fx:value="Échoué"/>
-                    </FXCollections>
-                </items>
-            </ComboBox>
+                <Label text="Commentaires:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                <TextArea fx:id="commentaireArea" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="comment" prefRowCount="3" promptText="Commentaires supplémentaires"/>
+            </GridPane>
 
-            <Label text="Commentaires:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextArea fx:id="commentaireArea" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="comment" prefRowCount="3"/>
+            <Separator/>
 
-        </GridPane>
+            <HBox spacing="15" alignment="CENTER" maxWidth="Infinity">
+                <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="button" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" styleClass="button" HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
 
-        <Separator/>
+        <VBox spacing="20" HBox.hgrow="SOMETIMES" maxWidth="600" styleClass="form-container">
+            <Label text="Liste des Examens"  styleClass="form-title" alignment="CENTER" maxWidth="Infinity"/>
+            <Separator/>
 
-        <HBox spacing="15" alignment="CENTER">
-            <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="button"/>
-            <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" styleClass="button"/>
-        </HBox>
-
-    </VBox>
-
-</StackPane>
+            <TableView fx:id="examsTableView" VBox.vgrow="ALWAYS" styleClass="exam-table">
+                <columns>
+                    <TableColumn fx:id="idExamenColumn" text="ID Examen" prefWidth="100" />
+                    <TableColumn fx:id="typeExamenColumn" text="Type d'Examen" prefWidth="150"/>
+                    <TableColumn fx:id="dateExamenColumn" text="Date" prefWidth="100"/>
+                    <TableColumn fx:id="candidatColumn" text="Candidat" prefWidth="150"/>
+                    <TableColumn fx:id="resultatColumn" text="Résultat" prefWidth="100"/>
+                </columns>
+                <placeholder>
+                    <Label text="Aucun examen trouvé" styleClass="placeholder-text"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </HBox>
+</ScrollPane>

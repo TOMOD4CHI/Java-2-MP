@@ -173,6 +173,7 @@
 }
 
 .form-label {
+    -fx-alignment: left;
     -fx-font-family: "Poppins", "Segoe UI", sans-serif;
     -fx-font-size: 14px;
     -fx-font-weight: 600;
@@ -260,7 +261,7 @@
 }
 
 /* Return Button Styling */
-.return-button {
+.return-button,.filter-button {
     -fx-background-color: rgba(190, 227, 248, 0.5);
     -fx-text-fill: #2B6CB0;
     -fx-background-radius: 8px;
@@ -270,6 +271,15 @@
     -fx-font-weight: 500;
     -fx-padding: 6px 12px;
 }
+.filter-button:pressed,.filter-button:selected{
+    -fx-background-color: rgba(217, 232, 243, 0.8);
+    -fx-text-fill: #1c60af;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #4cb7f6;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-padding: 6px 12px;}
 
 .return-button:hover {
     -fx-background-color: rgba(190, 227, 248, 0.7);

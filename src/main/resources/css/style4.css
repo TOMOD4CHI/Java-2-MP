@@ -38,7 +38,6 @@
     -fx-opacity: 0.6;
 }
 
-/* Form field - made smaller */
 .form-field {
     -fx-background-color: rgb(255, 255, 255);
     -fx-border-color: rgb(187, 230, 255);

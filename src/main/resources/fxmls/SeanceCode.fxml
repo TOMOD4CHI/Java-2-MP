@@ -6,35 +6,46 @@
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.cpi2.controllers.SeanceCode"
            stylesheets="@/css/style.css"
-           prefWidth="400" prefHeight="350">
+           prefWidth="800" prefHeight="500">
 
-    <!-- Wrapper to center everything -->
-    <VBox spacing="15" alignment="center" styleClass="form-container">
-        <Label text="Planifier une Séance de Code" styleClass="form-title"/>
+    <HBox spacing="20" alignment="center">
+        <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" maxWidth="400">
+            <Label text="Planifier une Séance de Code" styleClass="form-title"/>
 
+            <HBox spacing="10" alignment="center_left">
+                <Label text="Capacite du Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="capfield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="10" alignment="center_left">
+                <Label text="Date du Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
+                <DatePicker fx:id="datefield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="10" alignment="center_left">
+                <Label text="Temps du Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="tempsfield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
+            </HBox>
 
-        <HBox spacing="10" alignment="center">
-            <Label text="Capacite du Séance :" styleClass="form-label"/>
-            <TextField fx:id="capfield"  styleClass="form-field"/>
-        </HBox>
-        <HBox spacing="10" alignment="center">
-            <Label text="Date du Séance :" styleClass="form-label"/>
-            <DatePicker fx:id="datefield"  styleClass="form-field"/>
-        </HBox>
-        <HBox spacing="10" alignment="center">
-            <Label text="Temps du Séance :" styleClass="form-label"/>
-            <TextField fx:id="tempsfield"  styleClass="form-field"/>
-        </HBox>
+            <HBox spacing="10" alignment="center_left">
+                <Label text="Id du Moniteur :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="moniteurfield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
+            </HBox>
 
+            <HBox spacing="15" alignment="center">
+                <Button text="Annuler" fx:id="cancelButton" onAction="#handleCancel" styleClass="button, cancel-button"/>
+                <Button text="Planifier" fx:id="planifierButton" onAction="#handlePlanifier" styleClass="button, submit-button"/>
+            </HBox>
+        </VBox>
 
-        <HBox spacing="10" alignment="center">
-            <Label text="Id du Moniteur :" styleClass="form-label"/>
-            <TextField fx:id="moniteurfield"  styleClass="form-field"/>
-        </HBox>
-
-        <HBox spacing="15" alignment="center">
-            <Button text="Annuler" fx:id="cancelButton" onAction="#handleCancel"/>
-            <Button text="Planifier" fx:id="planifierButton" onAction="#handlePlanifier"/>
-        </HBox>
-    </VBox>
+        <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="form-container">
+            <Label text="Liste des Moniteurs" styleClass="form-title"/>
+            <TableView fx:id="moniteurTableView" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="idMoniteurColumn" text="ID" prefWidth="100"/>
+                    <TableColumn fx:id="nomMoniteurColumn" text="Nom" prefWidth="150"/>
+                    <TableColumn fx:id="prenomMoniteurColumn" text="Prénom" prefWidth="150"/>
+                    <TableColumn fx:id="specialiteColumn" text="Spécialité" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </HBox>
 </StackPane>

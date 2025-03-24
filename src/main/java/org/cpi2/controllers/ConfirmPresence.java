@@ -1,140 +1,143 @@
 package org.cpi2.controllers;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.cpi2.entitties.Seance;
-import org.cpi2.service.SeanceService;
+import javafx.stage.Stage;
+import org.cpi2.entitties.Moniteur;
+import org.cpi2.entitties.TypePermis;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConfirmPresence {
-    
-    @FXML private TableView<Seance> sessionsTable;
-    @FXML private TableColumn<Seance, Long> idColumn;
-    @FXML private TableColumn<Seance, String> typeColumn;
-    @FXML private TableColumn<Seance, String> dateColumn;
-    @FXML private TableColumn<Seance, String> timeColumn;
-    @FXML private TableColumn<Seance, String> candidateColumn;
-    @FXML private TableColumn<Seance, String> monitorColumn;
-    
-    @FXML private ComboBox<String> sessionIdCombo;
-    @FXML private ComboBox<String> presenceStatusCombo;
-    @FXML private TextArea commentArea;
-    
-    private final SeanceService seanceService = new SeanceService();
-    private final ObservableList<Seance> seanceList = FXCollections.observableArrayList();
-    
+    @FXML private TextField capfield;
+    @FXML private DatePicker datefield;
+    @FXML private TextField tempsfield;
+    @FXML private TextField moniteurfield;
+
+    @FXML private TableView<Moniteur> moniteurTableView;
+    @FXML private TableColumn<Moniteur, Long> idMoniteurColumn;
+    @FXML private TableColumn<Moniteur, String> nomMoniteurColumn;
+    @FXML private TableColumn<Moniteur, String> prenomMoniteurColumn;
+    @FXML private TableColumn<Moniteur, String> specialiteColumn;
+    @FXML private TableColumn<Moniteur, String> candidatsColumn;
+
+    @FXML private Button cancelButton;
+    @FXML private Button planifierButton;
+
     @FXML
     public void initialize() {
-        // Set up table columns
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        timeColumn.setCellValueFactory(new PropertyValueFactory<>("temps"));
-        candidateColumn.setCellValueFactory(new PropertyValueFactory<>("candidatName"));
-        monitorColumn.setCellValueFactory(new PropertyValueFactory<>("moniteurName"));
-        
-        // Initialize the presence status combo box
-        presenceStatusCombo.getItems().addAll("Présent", "Absent", "Retard", "Excusé");
-        
-        // Load available sessions from database
-        loadSessions();
-        
-        // Add listener to the table selection to populate the combo box
-        sessionsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                sessionIdCombo.setValue(String.valueOf(newSelection.getId()));
-            }
-        });
-        
-        // Load session IDs into combo box
-        loadSessionIds();
-    }
-    
-    private void loadSessions() {
-        try {
-            // Load sessions with today's date or future dates
-            List<Seance> sessions = seanceService.findAllSeances();
-            
-            // Filter for sessions that haven't been marked for attendance yet
-            List<Seance> pendingSessions = sessions.stream()
-                    .filter(seance -> seance.getStatut() == null || seance.getStatut().isEmpty())
-                    .toList();
-            
-            seanceList.clear();
-            seanceList.addAll(pendingSessions);
-            sessionsTable.setItems(seanceList);
-            
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les séances: " + e.getMessage());
+        // Add null checks for each column
+        if (idMoniteurColumn != null) {
+            idMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        }
+        if (nomMoniteurColumn != null) {
+            nomMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        }
+        if (prenomMoniteurColumn != null) {
+            prenomMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
+        }
+        if (specialiteColumn != null) {
+            specialiteColumn.setCellValueFactory(cellData ->
+                    new SimpleStringProperty(cellData.getValue().getSpecialites().stream()
+                            .map(TypePermis::toString)
+                            .collect(Collectors.joining(", "))));
+        }
+        if (candidatsColumn != null) {
+            candidatsColumn.setCellValueFactory(cellData ->
+                    new SimpleStringProperty(generateMockCandidats()));
+        }
+
+        // Only load mock data if table view is not null
+        if (moniteurTableView != null) {
+            loadMockMoniteurs();
         }
     }
-    
-    private void loadSessionIds() {
-        ObservableList<String> sessionIds = FXCollections.observableArrayList();
-        for (Seance seance : seanceList) {
-            sessionIds.add(String.valueOf(seance.getId()));
-        }
-        sessionIdCombo.setItems(sessionIds);
+
+    private String generateMockCandidats() {
+        // Generate a list of mock candidate names
+        List<String> candidats = new ArrayList<>();
+        candidats.add("Dupont Jean");
+        candidats.add("Martin Sophie");
+        candidats.add("Leroy Pierre");
+
+        return candidats.stream().collect(Collectors.joining(", "));
     }
-    
+
+    private void loadMockMoniteurs() {
+        List<Moniteur> mockMoniteurs = createMockMoniteurs();
+        moniteurTableView.getItems().clear();
+        moniteurTableView.getItems().addAll(mockMoniteurs);
+    }
+
+    private List<Moniteur> createMockMoniteurs() {
+        List<Moniteur> moniteurs = new ArrayList<>();
+
+        Moniteur moniteur1 = new Moniteur("Dupont", "Jean", "AB1234",
+                "123 Rue de Paris", "0601020304",
+                LocalDate.of(1985, 5, 15), "jean.dupont@example.com",
+                LocalDate.of(2015, 3, 1), 2500.0);
+        moniteur1.addSpecialite(TypePermis.B);
+
+        Moniteur moniteur2 = new Moniteur("Martin", "Sophie", "CD5678",
+                "456 Avenue Lyon", "0607080910",
+                LocalDate.of(1990, 8, 20), "sophie.martin@example.com",
+                LocalDate.of(2018, 6, 15), 2700.0);
+        moniteur2.addSpecialite(TypePermis.A);
+
+        moniteurs.add(moniteur1);
+        moniteurs.add(moniteur2);
+
+        return moniteurs;
+    }
+
     @FXML
-    public void handleConfirm(ActionEvent event) {
-        String sessionId = sessionIdCombo.getValue();
-        String status = presenceStatusCombo.getValue();
-        String comment = commentArea.getText();
-        
-        if (sessionId == null || sessionId.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Sélection requise", "Veuillez sélectionner une séance.");
+    private void handlePlanifier() {
+        // Validate inputs
+        if (!validateInputs()) {
             return;
         }
-        
-        if (status == null || status.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Sélection requise", "Veuillez sélectionner un statut de présence.");
-            return;
-        }
-        
-        try {
-            Long id = Long.parseLong(sessionId);
-            boolean success = seanceService.updateSessionStatus(id, status, comment);
-            
-            if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Statut de présence enregistré avec succès!");
-                clearForm();
-                loadSessions(); // Reload the list
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement du statut de présence.");
-            }
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "ID de séance invalide.");
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur s'est produite: " + e.getMessage());
-        }
+
+        // Placeholder for seance planning logic
+        showAlert("Planification", "Séance de code planifiée avec succès", Alert.AlertType.INFORMATION);
     }
-    
+
     @FXML
-    public void handleCancel(ActionEvent event) {
-        clearForm();
+    private void handleCancel() {
+        // Close the current window
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
-    
-    private void clearForm() {
-        sessionIdCombo.setValue(null);
-        presenceStatusCombo.setValue(null);
-        commentArea.clear();
-        sessionsTable.getSelectionModel().clearSelection();
+
+    private boolean validateInputs() {
+        // Basic input validation
+        if (capfield.getText().isEmpty()) {
+            showAlert("Validation", "Veuillez saisir la capacité de la séance", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (datefield.getValue() == null) {
+            showAlert("Validation", "Veuillez sélectionner une date", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        if (tempsfield.getText().isEmpty()) {
+            showAlert("Validation", "Veuillez saisir le temps de la séance", Alert.AlertType.WARNING);
+            return false;
+        }
+
+        return true;
     }
-    
-    private void showAlert(Alert.AlertType type, String title, String message) {
+
+    private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText(content);
         alert.showAndWait();
     }
-} 
+}
