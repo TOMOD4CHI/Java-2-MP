@@ -6,9 +6,10 @@
     -fx-border-radius: 16px;
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.15), 10, 0, 0, 4);
     -fx-pref-width: 600px;
-    -fx-pref-height: 650px;
+    -fx-pref-height: 1300px;
+    -fx-min-height: 1300px;
     -fx-max-width: 600px;
-    -fx-max-height: 650px;
+    -fx-max-height: 1300px;
     -fx-padding: 15px;
 }
 
@@ -96,4 +97,35 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 3, 0, 0, 1);
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
+}
+
+/* ScrollPane Styles */
+.transparent-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+    -fx-pref-height: 1300px;
+    -fx-min-height: 1300px;
+}
+
+.transparent-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.transparent-scroll-pane .scroll-bar:vertical,
+.transparent-scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.transparent-scroll-pane .scroll-bar:vertical .thumb,
+.transparent-scroll-pane .scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(49, 130, 206, 0.5);
+    -fx-background-radius: 5px;
+}
+
+.transparent-scroll-pane .scroll-bar:vertical .thumb:hover,
+.transparent-scroll-pane .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: rgba(49, 130, 206, 0.7);
 }

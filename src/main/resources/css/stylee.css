@@ -173,7 +173,7 @@
 }
 
 .form-label {
-    -fx-alignment: left;
+    -fx-alignment: center-left;
     -fx-font-family: "Poppins", "Segoe UI", sans-serif;
     -fx-font-size: 14px;
     -fx-font-weight: 600;

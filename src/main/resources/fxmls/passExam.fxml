@@ -10,12 +10,13 @@
 <BorderPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.cpi2.controllers.PassExam"
-           stylesheets="@/css/style3.css">
+           stylesheets="@/css/style3.css"
+           prefWidth="500" prefHeight="400">
 
     <!-- Main Content (Scrollable) -->
     <center>
-        <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" hbarPolicy="NEVER">
-            <VBox spacing="10" alignment="CENTER" styleClass="form-container">
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll-pane" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox spacing="10" alignment="CENTER" styleClass="form-container" maxWidth="450">
                 <padding>
                     <Insets top="5" right="15" bottom="10" left="15"/>
                 </padding>

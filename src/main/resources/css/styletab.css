@@ -60,6 +60,13 @@
     -fx-font-weight: bold;
     -fx-text-fill: #3182ce;
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 3, 0, 0, 1);
+    -fx-transition-duration: 0.3s;
+}
+
+.page-title:hover {
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.5), 4, 0, 0, 2);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
 }
 .background-pane {
     -fx-background-color: rgba(236, 246, 255, 0.6);

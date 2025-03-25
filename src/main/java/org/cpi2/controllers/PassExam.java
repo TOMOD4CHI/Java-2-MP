@@ -20,24 +20,6 @@ public class PassExam {
     private TextArea commentaireArea;
 
     @FXML
-    private TableView<Exam> examsTableView;
-
-    @FXML
-    private TableColumn<Exam, String> idExamenColumn;
-
-    @FXML
-    private TableColumn<Exam, String> typeExamenColumn;
-
-    @FXML
-    private TableColumn<Exam, String> dateExamenColumn;
-
-    @FXML
-    private TableColumn<Exam, String> candidatColumn;
-
-    @FXML
-    private TableColumn<Exam, String> resultatColumn;
-
-    @FXML
     private Button saveButton;
 
     @FXML
@@ -49,16 +31,8 @@ public class PassExam {
         if (resultatComboBox.getItems().isEmpty()) {
             resultatComboBox.getItems().addAll("Réussi", "Échoué");
         }
-
-        // Configure TableView columns
-        idExamenColumn.setCellValueFactory(new PropertyValueFactory<>("idExamen"));
-        typeExamenColumn.setCellValueFactory(new PropertyValueFactory<>("typeExamen"));
-        dateExamenColumn.setCellValueFactory(new PropertyValueFactory<>("dateExamen"));
-        candidatColumn.setCellValueFactory(new PropertyValueFactory<>("candidat"));
-        resultatColumn.setCellValueFactory(new PropertyValueFactory<>("resultat"));
-
-        // Load exams data (you would typically get this from a database or service)
-        // examsTableView.setItems(getExamsData());
+        
+        // TableView initialization removed as these components are not in the FXML file
     }
 
     @FXML
@@ -129,6 +103,45 @@ public class PassExam {
             this.resultat = resultat;
         }
 
-        // Getters and setters (omitted for brevity, but you should implement them)
+        // Getters and setters
+        public String getIdExamen() {
+            return idExamen;
+        }
+
+        public void setIdExamen(String idExamen) {
+            this.idExamen = idExamen;
+        }
+
+        public String getTypeExamen() {
+            return typeExamen;
+        }
+
+        public void setTypeExamen(String typeExamen) {
+            this.typeExamen = typeExamen;
+        }
+
+        public String getDateExamen() {
+            return dateExamen;
+        }
+
+        public void setDateExamen(String dateExamen) {
+            this.dateExamen = dateExamen;
+        }
+
+        public String getCandidat() {
+            return candidat;
+        }
+
+        public void setCandidat(String candidat) {
+            this.candidat = candidat;
+        }
+
+        public String getResultat() {
+            return resultat;
+        }
+
+        public void setResultat(String resultat) {
+            this.resultat = resultat;
+        }
     }
 }

@@ -23,7 +23,7 @@
         <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
             <VBox spacing="15">
                 <padding>
-                    <Insets top="5" right="20" bottom="5" left="20"/>
+                    <Insets top="5" right="20" bottom="0" left="20"/>
                 </padding>
 
                 <HBox spacing="10" alignment="CENTER_LEFT">

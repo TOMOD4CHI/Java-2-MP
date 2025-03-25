@@ -14,6 +14,16 @@
     -fx-text-fill: #2d3748;
     -fx-padding: 0 0 5 0;
     padding: 0 0 5px 0;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 2, 0, 0, 1);
+    -fx-alignment: center;
+    -fx-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.page-title:hover {
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.5), 3, 0, 0, 2);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
 }
 
 .section-title {
@@ -257,6 +267,9 @@
 .transparent-scroll-pane {
     -fx-background-color: transparent;
     background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-fit-to-height: true;
 }
 
 .transparent-scroll-pane > .viewport {
@@ -867,18 +880,17 @@
     color: white;
     -fx-font-weight: 500;
     -fx-padding: 4px 8px;
-    -fx-border-width: 0 1px 0 0;
-    -fx-border-color: transparent rgba(190, 227, 248, 0.5) transparent transparent;
     -fx-transition-duration: 0.2s;
 }
 
-/* Fix for the last menu item to remove the right border */
-.menu:last-child {
-    -fx-border-width: 0 !important;
+/* Only add separator between menu items, not after the last one */
+.menu:not(:last-child) {
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: transparent rgba(190, 227, 248, 0.5) transparent transparent;
 }
 
 .menu:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(43, 108, 176, 0.7);
     -fx-background-radius: 8px;
     -fx-cursor: hand;
     -fx-scale-x: 1.05;
@@ -896,11 +908,12 @@
 }
 
 .menu-item:focused, .menu-item:hover {
-    -fx-background-color: rgba(235, 248, 255, 0.8);
+    -fx-background-color: rgba(43, 108, 176, 0.7);
     -fx-background-radius: 8px;
     -fx-scale-x: 1.03;
     -fx-scale-y: 1.03;
     -fx-translate-x: 2px;
+    -fx-text-fill: white;
 }
 
 .menu-item:focused .label, .menu-item:hover .label {

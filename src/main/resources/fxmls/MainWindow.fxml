@@ -24,8 +24,8 @@
                     <effect>
                         <DropShadow color="#00000044" radius="5" spread="0.05"/>
                     </effect>
-                    <Menu text="🏫 Auto-école" styleClass="menu-item-with-icon">
-                        <MenuItem text="⚙️ Gérer mon auto-école" onAction="#loadAutoEcoleManagement" />
+                    <Menu text="🏫 Auto-école" styleClass="menu-item-with-icon" >
+                        <MenuItem text="⚙ Gérer mon auto-école" />
                     </Menu>
                     <Menu text="👥 Candidats" styleClass="menu-item-with-icon">
                         <MenuItem text="📝 Inscription" onAction="#loadAjouterCandidat" />
@@ -55,7 +55,7 @@
                     <Menu text="💰 Paiements" styleClass="menu-item-with-icon">
                         <MenuItem text="💳 Enregistrer un paiement" onAction="#loadPayment"/>
                         <MenuItem text="📃 Générer une facture" onAction="#loadInvoice"/>
-                        <MenuItem text="📜 Historique paiements" onAction="#loadPaymentHistory"/>
+                        <MenuItem text="📄 Historique paiements" onAction="#loadPaymentHistory"/>
                     </Menu>
                     <Menu text="📝 Examen" styleClass="menu-item-with-icon">
                         <MenuItem text="📅 Inscription à un examen" onAction="#loadExamRegistration" />
