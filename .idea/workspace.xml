@@ -5,35 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="many chages i guess">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/css/style1.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterCandidat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ConfirmPresence.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ConfirmPresence.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/PassExam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/PassExam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style2.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style2.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style3.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style3.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style4.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style4.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/stylee.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/stylee.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/styletab.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/styletab.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/AjouterCandidat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/AjouterCandidat.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/ConfirmPresence.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ConfirmPresence.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/ConfirmerSeance.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ConfirmerSeance.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/GestionVehicules.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/GestionVehicules.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MiseAJourKilometrage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MiseAJourKilometrage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/Notifications.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/Notifications.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Paiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Paiement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/Paiement.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/Paiement.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceCode.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceCode.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceConduite.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceConduite.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/SuiviEntretiens.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SuiviEntretiens.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/afficherCandidat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/afficherCandidat.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/afficherSeance.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/afficherSeance.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/ajouterEcole.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ajouterEcole.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/documents.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/documents.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/examRegistration.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/examRegistration.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/passExam.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/passExam.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/progression.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/progression.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,8 +20,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
-        <option value="CSS File" />
         <option value="Class" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -61,8 +37,12 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/TOMOD4CHI/Java-2-MP.git&quot;,
-    &quot;accountId&quot;: &quot;f8925d38-388a-4958-8fcb-723f1b35dbb4&quot;
+    &quot;accountId&quot;: &quot;93bd8dc2-d676-4594-a1ba-6aeac9d94f82&quot;
   }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
 }</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -140,8 +120,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
       </set>
     </attachedChunks>
   </component>
@@ -203,6 +183,7 @@
       <workItem from="1742642044387" duration="1176000" />
       <workItem from="1742644928526" duration="1859000" />
       <workItem from="1742647411469" duration="12063000" />
+      <workItem from="1742857845086" duration="4119000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />

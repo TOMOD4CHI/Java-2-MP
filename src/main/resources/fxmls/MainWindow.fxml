@@ -79,9 +79,7 @@
     
     <bottom>
         <HBox alignment="CENTER">
-            <padding>
-                <Insets bottom="15" top="5"/>
-            </padding>
+
             <Button text="Retour à l'accueil" onAction="#loadMain" fx:id="mainbttn" styleClass="main-return-button"/>
         </HBox>
     </bottom>

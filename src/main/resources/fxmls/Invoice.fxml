@@ -45,11 +45,12 @@
                           prefWidth="250"/>
                 
                 <Label text="Période:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <HBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                <VBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1">
+
                     <DatePicker fx:id="dateDebutPicker" promptText="Date début" styleClass="form-field" prefWidth="120"/>
                     <Label text="à" alignment="CENTER"/>
                     <DatePicker fx:id="dateFinPicker" promptText="Date fin" styleClass="form-field" prefWidth="120"/>
-                </HBox>
+                </VBox>
                 
                 <Label text="Montant total:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
                 <TextField fx:id="montantField" promptText="Montant (DT)" styleClass="form-field"

@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -20,8 +21,16 @@ import java.util.ResourceBundle;
 public class Paiement implements Initializable {
 
     // Form controls
+    @FXML
+    private ToggleGroup pageTabs;
+    @FXML private ToggleButton ajouterTab;
+    @FXML private ToggleButton afficherTab;
+    @FXML private VBox ajouterView;
+    @FXML private VBox afficherView;
     @FXML private ComboBox<String> typeComboBox;
     @FXML private ComboBox<String> candidatComboBox;
+    @FXML private ComboBox<String> modeComboBox;
+
     @FXML private TextField montantField;
     @FXML private DatePicker datePicker;
     @FXML private ComboBox<String> methodeComboBox;
@@ -46,9 +55,29 @@ public class Paiement implements Initializable {
     
     private ObservableList<PaiementEntry> paiementData = FXCollections.observableArrayList();
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    private void switchView(boolean isAjouter) {
+        ajouterView.setVisible(isAjouter);
+        ajouterView.setManaged(isAjouter);
+        afficherView.setVisible(!isAjouter);
+        afficherView.setManaged(!isAjouter);
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        pageTabs = new ToggleGroup();
+
+        // Assign ToggleGroup to buttons
+        ajouterTab.setToggleGroup(pageTabs);
+        afficherTab.setToggleGroup(pageTabs);
+
+        // Set initial selection
+        ajouterTab.setSelected(true);
+
+        // Rest of your existing initialization code...
+        ajouterTab.setOnAction(event -> switchView(true));
+        afficherTab.setOnAction(event -> switchView(false));
+        modeComboBox.getItems().addAll( "paiement mensuel",
+                 "paiement hebdomadaire",
+        "paiement quotidien");
         // Set up the ComboBox items
         typeComboBox.getItems().addAll(
             "Paiement leçon",
@@ -57,7 +86,7 @@ public class Paiement implements Initializable {
             "Examen de code",
             "Autre"
         );
-        
+
         methodeComboBox.getItems().addAll(
             "Espèces",
             "Carte Bancaire",

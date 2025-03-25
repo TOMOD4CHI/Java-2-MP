@@ -6,124 +6,120 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cpi2.controllers.Paiement"
-            stylesheets="@/css/style.css"
+            stylesheets="@/css/style1.css"
             styleClass="root"
-            prefWidth="1200"
-            prefHeight="800">
+            prefWidth="1400"
+            prefHeight="900">
 
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="20" right="20"  left="20"/>
     </padding>
 
     <top>
-        <VBox alignment="CENTER" spacing="10">
-            <Label text="Gestion des Paiements" styleClass="page-title"/>
-            <Separator />
-        </VBox>
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="header-container">
+            <Label text="Gestion des Paiements" styleClass="form-title" HBox.hgrow="ALWAYS"/>
+            <HBox alignment="CENTER_RIGHT" spacing="5" styleClass="navigation-tabs">
+                <ToggleButton fx:id="ajouterTab" text="Ajouter"
+                              selected="true"
+                              styleClass="button"/>
+                <ToggleButton fx:id="afficherTab" text="Afficher"
+                              styleClass="button"/>
+            </HBox>
+        </HBox>
     </top>
-
-    <left>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefWidth="500">
-            <VBox spacing="15" styleClass="form-container" maxWidth="400">
+    <center>
+        <StackPane fx:id="contentStack">
+            <VBox fx:id="ajouterView" styleClass="form-container" spacing="15">
                 <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
+                    <Insets top="20" right="20"  left="20"/>
                 </padding>
 
-                <Label text="Enregistrer un nouveau paiement" styleClass="form-section-title"/>
+                <GridPane hgap="15" vgap="10" styleClass="form-grid">
+                    <Label text="Type:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="typeComboBox" promptText="Sélectionner un type"
+                              styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                              GridPane.hgrow="ALWAYS"/>
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Type:" styleClass="form-label" prefWidth="100"/>
-                    <ComboBox fx:id="typeComboBox" promptText="Sélectionner un type" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-                </HBox>
+                    <Label text="Candidat:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <ComboBox fx:id="candidatComboBox" promptText="Sélectionner un candidat"
+                              styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                              GridPane.hgrow="ALWAYS"/>
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Candidat:" styleClass="form-label" prefWidth="100"/>
-                    <ComboBox fx:id="candidatComboBox" promptText="Sélectionner un candidat" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-                </HBox>
+                    <Label text="Montant:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <TextField fx:id="montantField" promptText="0.00 DT"
+                               styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                               GridPane.hgrow="ALWAYS"/>
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Montant:" styleClass="form-label" prefWidth="100"/>
-                    <TextField fx:id="montantField" promptText="0.00 DT" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-                </HBox>
+                    <Label text="Date:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <DatePicker fx:id="datePicker" promptText="Sélectionner une date"
+                                styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                GridPane.hgrow="ALWAYS"/>
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Date:" styleClass="form-label" prefWidth="100"/>
-                    <DatePicker fx:id="datePicker" promptText="Sélectionner une date" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-                </HBox>
+                    <Label text="Méthode:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <ComboBox fx:id="methodeComboBox" promptText="Sélectionner une méthode"
+                              styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4"
+                              GridPane.hgrow="ALWAYS"/>
+                    <Label text="Mode:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <ComboBox fx:id="modeComboBox" promptText="Sélectionner un mode "
+                              styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="5"
+                              GridPane.hgrow="ALWAYS"/>
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Méthode:" styleClass="form-label" prefWidth="100"/>
-                    <ComboBox fx:id="methodeComboBox" promptText="Sélectionner une méthode" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-                </HBox>
+                    <Label text="Description:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="6"
+                           GridPane.valignment="TOP"/>
+                    <TextArea fx:id="descriptionArea" promptText="Description du paiement"
+                              styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="6"
+                              GridPane.hgrow="ALWAYS" prefHeight="80"/>
+                </GridPane>
 
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Description:" styleClass="form-label" prefWidth="100"/>
-                    <TextArea fx:id="descriptionArea" promptText="Description du paiement" styleClass="form-field"
-                              wrapText="true" prefHeight="60" HBox.hgrow="ALWAYS"/>
-                </HBox>
-
-                <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
-                    <Button text="Annuler" onAction="#handleCancel" styleClass="button, cancel-button" prefWidth="120"/>
-                    <Button text="Enregistrer" onAction="#handleSave" styleClass="button, submit-button" prefWidth="120"/>
-                </HBox>
-
-                <Separator>
-                    <VBox.margin>
-                        <Insets top="20" bottom="20"/>
-                    </VBox.margin>
-                </Separator>
-
-                <Label text="Rechercher des paiements" styleClass="form-section-title"/>
-
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Période:" styleClass="form-label" prefWidth="100"/>
-                    <DatePicker fx:id="startDatePicker" promptText="Date début" styleClass="form-field" prefWidth="110"/>
-                    <Label text="à" styleClass="form-label" alignment="CENTER"/>
-                    <DatePicker fx:id="endDatePicker" promptText="Date fin" styleClass="form-field" prefWidth="110"/>
-                </HBox>
-
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Candidat:" styleClass="form-label" prefWidth="100"/>
-                    <ComboBox fx:id="searchCandidatComboBox" promptText="Tous les candidats" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-                </HBox>
-
-                <HBox spacing="10" alignment="CENTER">
-                    <Button text="Rechercher" onAction="#handleSearch" styleClass="button, action-button" prefWidth="150"/>
+                <HBox spacing="15" alignment="CENTER" styleClass="action-button-container">
+                    <Button text="Annuler" onAction="#handleCancel"
+                            styleClass="button, cancel-button" HBox.hgrow="ALWAYS"/>
+                    <Button text="Enregistrer" onAction="#handleSave"
+                            styleClass="button, submit-button" HBox.hgrow="ALWAYS"/>
                 </HBox>
             </VBox>
-        </ScrollPane>
-    </left>
 
-    <center>
-        <VBox spacing="10" styleClass="table-container" prefWidth="700">
-            <padding>
-                <Insets top="20" right="0" bottom="20" left="20"/>
-            </padding>
+            <VBox fx:id="afficherView" styleClass="table-container" spacing="15" visible="false" managed="false">
+                <padding>
+                    <Insets top="20" right="0" bottom="20" left="20"/>
+                </padding>
 
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="Historique des paiements" styleClass="table-title"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="totalLabel" text="Total: 0.00 DT" styleClass="total-label"/>
-            </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="Rechercher des paiements" styleClass="form-section-title" HBox.hgrow="ALWAYS"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="totalLabel" text="Total: 0.00 DT" styleClass="total-label"/>
+                </HBox>
 
-            <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
-                <TableView fx:id="paiementsTable" styleClass="custom-table-view">
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Label text="Période:" styleClass="form-label"/>
+                    <DatePicker fx:id="startDatePicker" promptText="Date début" styleClass="form-field"/>
+                    <Label text="à" styleClass="form-label"/>
+                    <DatePicker fx:id="endDatePicker" promptText="Date fin" styleClass="form-field"/>
+                    <ComboBox fx:id="searchCandidatComboBox" promptText="Tous les candidats"
+                              styleClass="form-field" HBox.hgrow="ALWAYS"/>
+                    <Button text="Rechercher" onAction="#handleSearch"
+                            styleClass="button, action-button"/>
+                </HBox>
+
+                <TableView fx:id="paiementsTable" styleClass="custom-table-view" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="dateColumn" text="Date" prefWidth="100" />
                         <TableColumn fx:id="candidatColumn" text="Candidat" prefWidth="150" />
                         <TableColumn fx:id="typeColumn" text="Type" prefWidth="150" />
                         <TableColumn fx:id="montantColumn" text="Montant" prefWidth="100" />
                         <TableColumn fx:id="methodeColumn" text="Méthode" prefWidth="100" />
-                        <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="100" />
-                        <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" />
+                        <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200" />
+                        <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="350" />
                     </columns>
                 </TableView>
-            </ScrollPane>
 
-            <HBox alignment="CENTER_RIGHT" spacing="10">
-                <Button fx:id="printButton" text="Imprimer" onAction="#handlePrint" styleClass="button, action-button"/>
-                <Button fx:id="exportButton" text="Exporter" onAction="#handleExport" styleClass="button, action-button"/>
-            </HBox>
-        </VBox>
+                <HBox alignment="CENTER_RIGHT" spacing="15">
+                    <Button fx:id="printButton" text="Imprimer" onAction="#handlePrint"
+                            styleClass="button, action-button" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="exportButton" text="Exporter" onAction="#handleExport"
+                            styleClass="button, action-button" HBox.hgrow="ALWAYS"/>
+                </HBox>
+            </VBox>
+        </StackPane>
     </center>
 </BorderPane>
