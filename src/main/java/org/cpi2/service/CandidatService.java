@@ -1,5 +1,6 @@
 package org.cpi2.service;
 
+import org.cpi2.Exceptions.DataNotFound;
 import org.cpi2.entities.*;
 import org.cpi2.repository.CandidatRepository;
 import org.cpi2.repository.InscriptionRepository;
@@ -12,10 +13,19 @@ import java.util.logging.Logger;
 public class CandidatService {
     private static final Logger LOGGER = Logger.getLogger(CandidatService.class.getName());
     private final CandidatRepository candidatRepository;
-    private final InscriptionRepository inscriptionRepository = new InscriptionRepository();
+    private final InscriptionRepository inscriptionRepository;
+    private final DossierService dossierService;
 
     public CandidatService() {
         this.candidatRepository = new CandidatRepository();
+        this.inscriptionRepository = new InscriptionRepository();
+        this.dossierService = new DossierService(this);
+    }
+
+    public CandidatService(DossierService dossierService) {
+        this.candidatRepository = new CandidatRepository();
+        this.inscriptionRepository = new InscriptionRepository();
+        this.dossierService = dossierService;
     }
 
     public List<Candidat> getAllCandidats() {
@@ -33,6 +43,13 @@ public class CandidatService {
         return -1;
     }
 
+    public String IdToCin(Long id) {
+        if(candidatRepository.findById(id).isPresent()){
+            return candidatRepository.findById(id).get().getCin();
+        }
+        return "";
+    }
+
     public boolean addCandidat(Candidat candidat) {
         if(!candidatRepository.findByCin(candidat.getCin()).isEmpty()) {
             LOGGER.info("Candidat already exists");
@@ -45,9 +62,11 @@ public class CandidatService {
         return candidatRepository.update(candidat);
     }
 
-    public List<Candidat> findCandidatsByTypePermis(TypePermis typePermis) {
-        //waiting until we implement the method in the repository of the dossier and document
-        return null;
+
+    public List<String> findCandidatsByTypePermis(String typePermis) {
+        return dossierService.getAllDossiers().stream()
+                .filter(dossier -> dossier.getDocuments().containsKey(TypeDocument.valueOf(typePermis)))
+                .map(dossier ->IdToCin(dossier.getCandidatId())).toList();
     }
 
     public List<Candidat> findCandidatsBySubscriptionStatus(String status) {

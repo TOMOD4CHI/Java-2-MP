@@ -7,6 +7,7 @@ import java.util.TreeSet;
 public class Dossier {
     private Long id;
     private Map<TypeDocument, TreeSet<Document>> documents;
+    private long candidatId;
 
     public Dossier() {
         this.documents = new HashMap<>();
@@ -28,4 +29,11 @@ public class Dossier {
         this.id = id;
     }
 
+    public long getCandidatId() {
+        return candidatId;
+    }
+
+    public void setCandidatId(long candidatId) {
+        this.candidatId = candidatId;
+    }
 }

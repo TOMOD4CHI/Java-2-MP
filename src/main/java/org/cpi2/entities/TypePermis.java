@@ -4,16 +4,10 @@ package org.cpi2.entities;
  * Enum representing different types of driving licenses
  */
 public enum TypePermis {
-    AM("Cyclomoteur"),
-    A1("Moto légère"),
-    A2("Moto intermédiaire"),
     A("Moto"),
     B("Voiture"),
-    BE("Voiture avec remorque"),
-    C("Poids lourd"),
-    CE("Poids lourd avec remorque"),
-    D("Autobus"),
-    DE("Autobus avec remorque");
+    C("Camion");
+
     
     private final String description;
     

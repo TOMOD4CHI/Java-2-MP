@@ -27,7 +27,7 @@ public class DocumentService {
     public DocumentService() {
         this.documentRepository = new DocumentRepository();
         this.typeDocumentRepository = new TypeDocumentRepository();
-        
+
         // Ensure upload directory exists
         createDirectoryIfNotExists(uploadDirectory);
     }
@@ -57,26 +57,26 @@ public class DocumentService {
             // Generate unique filename
             String uniqueFileName = generateUniqueFileName(document.getNomFichier());
             String subDirectory = String.valueOf(dossierId);
-            
+
             // Create specific directory for this dossier if it doesn't exist
             String dossierDirectory = uploadDirectory + subDirectory + "/";
             createDirectoryIfNotExists(dossierDirectory);
-            
+
             // Set full file path
             String filePath = dossierDirectory + uniqueFileName;
-            
+
             // Copy file to destination
             Path destination = Paths.get(filePath);
             Files.copy(fichierSource.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
-            
+
             // Update document with file path and upload date
             document.setCheminFichier(filePath);
             document.setDateUpload(LocalDateTime.now());
-            
+
             // Save document in database
             return documentRepository.save(document, dossierId);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error uploading document", e);
             return false;
         }
     }
@@ -87,33 +87,37 @@ public class DocumentService {
             Optional<Document> existingDocumentOpt = documentRepository.findById(document.getId());
             if (existingDocumentOpt.isPresent()) {
                 Document existingDocument = existingDocumentOpt.get();
-                
+
                 // Delete old file if it exists
                 File oldFile = new File(existingDocument.getCheminFichier());
                 if (oldFile.exists()) {
-                    oldFile.delete();
+                    try {
+                        oldFile.delete();
+                    } catch (Exception e) {
+                        LOGGER.log(Level.SEVERE, "Failed to delete file: " + oldFile.getPath(), e);
+                    }
                 }
-                
+
                 // Generate unique filename for new file
                 String uniqueFileName = generateUniqueFileName(document.getNomFichier());
                 String subDirectory = String.valueOf(dossierId);
                 String dossierDirectory = uploadDirectory + subDirectory + "/";
-                
+
                 // Copy new file to destination
                 String filePath = dossierDirectory + uniqueFileName;
                 Path destination = Paths.get(filePath);
                 Files.copy(nouveauFichier.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
-                
+
                 // Update document with new file path and upload date
                 document.setCheminFichier(filePath);
                 document.setDateUpload(LocalDateTime.now());
-                
+
                 // Update document in database
                 return documentRepository.update(document, dossierId);
             }
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error updating document", e);
             return false;
         }
     }
@@ -124,19 +128,23 @@ public class DocumentService {
             Optional<Document> documentOpt = documentRepository.findById(documentId);
             if (documentOpt.isPresent()) {
                 Document document = documentOpt.get();
-                
+
                 // Delete file if it exists
                 File file = new File(document.getCheminFichier());
                 if (file.exists()) {
-                    file.delete();
+                    try {
+                        file.delete();
+                    } catch (Exception e) {
+                        LOGGER.log(Level.SEVERE, "Failed to delete file: " + file.getPath(), e);
+                    }
                 }
-                
+
                 // Delete document from database
                 return documentRepository.delete(documentId);
             }
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error deleting document", e);
             return false;
         }
     }
@@ -152,17 +160,21 @@ public class DocumentService {
         if (i > 0) {
             extension = originalFileName.substring(i);
         }
-        
+
         // Generate UUID for uniqueness
         String uuid = UUID.randomUUID().toString();
-        
+
         return uuid + extension;
     }
 
     private void createDirectoryIfNotExists(String directoryPath) {
         File directory = new File(directoryPath);
         if (!directory.exists()) {
-            directory.mkdirs();
+            try {
+                directory.mkdirs();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Failed to create directory: " + directoryPath, e);
+            }
         }
     }
 
@@ -190,7 +202,7 @@ public class DocumentService {
 
         // Validate file size
         File file = new File(document.getCheminFichier());
-        long fileSizeInMB = file.length() / (1024 * 1024);
+        double fileSizeInMB = (double) file.length() / (1024 * 1024);
         return fileSizeInMB <= maxFileSizeMB;
     }
 
@@ -206,14 +218,14 @@ public class DocumentService {
                 return false;
             }
 
-            String backupPath = backupDirectory + "/" + 
-                               document.getId() + "_" + 
-                               LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + "_" +
-                               document.getNomFichier();
+            String backupPath = backupDirectory + "/" +
+                    document.getId() + "_" +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + "_" +
+                    document.getNomFichier();
 
-            Files.copy(sourceFile.toPath(), 
-                      Paths.get(backupPath), 
-                      StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(sourceFile.toPath(),
+                    Paths.get(backupPath),
+                    StandardCopyOption.REPLACE_EXISTING);
             return true;
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error backing up document", e);

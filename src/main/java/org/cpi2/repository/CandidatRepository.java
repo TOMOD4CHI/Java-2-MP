@@ -75,8 +75,8 @@ public class CandidatRepository {
     }
 
     public boolean save(Candidat candidat) {
-        String sql = "INSERT INTO candidat (nom, prenom, cin, adresse, telephone, email, date_naissance, type_permis) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO candidat (nom, prenom, cin, adresse, telephone, email, date_naissance) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -88,7 +88,7 @@ public class CandidatRepository {
             stmt.setString(5, candidat.getTelephone());
             stmt.setString(6, candidat.getEmail());
             stmt.setDate(7, Date.valueOf(candidat.getDateNaissance()));
-            stmt.setInt(8, candidat.getTypePermis().ordinal() + 1);
+            //stmt.setInt(8, candidat.getTypePermis().ordinal() + 1);
 
             int affectedRows = stmt.executeUpdate();
 
@@ -111,7 +111,7 @@ public class CandidatRepository {
 
     public boolean update(Candidat candidat) {
         String sql = "UPDATE candidat SET nom = ?, prenom = ?, cin = ?, adresse = ?, " +
-                    "telephone = ?, email = ?, date_naissance = ?, type_permis = ? WHERE id = ?";
+                    "telephone = ?, email = ?, date_naissance = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -154,7 +154,6 @@ public class CandidatRepository {
         candidat.setTelephone(rs.getString("telephone"));
         candidat.setEmail(rs.getString("email"));
         candidat.setDateNaissance(rs.getDate("date_naissance").toLocalDate());
-        candidat.setTypePermis(TypePermis.values()[rs.getInt("type_permis") - 1]);
         return candidat;
     }
 }
