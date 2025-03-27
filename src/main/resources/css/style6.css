@@ -45,11 +45,12 @@
     -fx-prompt-text-fill: #718096;
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
-    -fx-min-width: 200px;
-    -fx-min-height: 35px;
+    -fx-min-width: 220px;
+    -fx-min-height: 40px;
     -fx-border-color: rgba(203, 213, 224, 0.6);
     -fx-border-width: 1px;
-    -fx-padding: 8px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 14px;
 }
 
 #dateFilter:focused {
@@ -60,10 +61,13 @@
 #dateFilter > .arrow-button {
     -fx-background-color: rgba(144, 205, 244, 0.4);
     -fx-background-radius: 0 8px 8px 0;
+    -fx-min-width: 40px;
 }
 
 #dateFilter > .arrow-button > .arrow {
     -fx-background-color: #2b6cb0;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
 /* Tables section */

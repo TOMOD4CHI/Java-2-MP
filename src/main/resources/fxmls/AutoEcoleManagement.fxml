@@ -67,7 +67,7 @@
                         </GridPane>
 
                         <HBox fx:id="buttonContainer" spacing="15" alignment="CENTER">
-                            <Button fx:id="modifierButton" text="Modifier" onAction="#handleModifier" styleClass="primary-button"/>
+                            <Button fx:id="modifierButton" text="Modifier" onAction="#handleModifier" styleClass="button"/>
                         </HBox>
                     </VBox>
 
@@ -75,52 +75,52 @@
                     <VBox fx:id="editContainer" spacing="15" visible="false" managed="false" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-edit">
                         <Label text="Modifier les informations" styleClass="section-title"/>
 
-                        <GridPane hgap="15" vgap="5" alignment="CENTER">
+                        <GridPane hgap="15" vgap="10" alignment="CENTER">
                             <columnConstraints>
                                 <ColumnConstraints halignment="RIGHT" minWidth="120"/>
                                 <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
                             </columnConstraints>
 
                             <Label text="Nom:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" GridPane.rowIndex="0" GridPane.columnIndex="1">
-                                <TextField fx:id="nomField" promptText="Nom de l'auto-école" styleClass="form-field"/>
-                                <Label fx:id="nomError" styleClass="error-label"/>
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="0" GridPane.columnIndex="1" minHeight="50">
+                                <TextField fx:id="nomField" promptText="Entrez le nom complet de l'auto-école" styleClass="form-field"/>
+                                <Label fx:id="nomError" text="Le nom est requis" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Adresse:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" GridPane.rowIndex="1" GridPane.columnIndex="1">
-                                <TextField fx:id="adresseField" promptText="Adresse complète" styleClass="form-field"/>
-                                <Label fx:id="adresseError" styleClass="error-label"/>
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="1" GridPane.columnIndex="1" minHeight="50">
+                                <TextField fx:id="adresseField" promptText="Entrez l'adresse complète avec le code postal" styleClass="form-field"/>
+                                <Label fx:id="adresseError" text="L'adresse est requise" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Téléphone:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" GridPane.rowIndex="2" GridPane.columnIndex="1">
-                                <TextField fx:id="telephoneField" promptText="Numéro de téléphone" styleClass="form-field"/>
-                                <Label fx:id="telephoneError" styleClass="error-label"/>
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="2" GridPane.columnIndex="1" minHeight="50">
+                                <TextField fx:id="telephoneField" promptText="Entrez le numéro de téléphone (format: XX XX XX XX XX)" styleClass="form-field"/>
+                                <Label fx:id="telephoneError" text="Le numéro de téléphone est requis" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Email:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" GridPane.rowIndex="3" GridPane.columnIndex="1">
-                                <TextField fx:id="emailField" promptText="Adresse email" styleClass="form-field"/>
-                                <Label fx:id="emailError" styleClass="error-label"/>
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="3" GridPane.columnIndex="1" minHeight="50">
+                                <TextField fx:id="emailField" promptText="Entrez une adresse email valide" styleClass="form-field"/>
+                                <Label fx:id="emailError" text="L'adresse email est requise et doit être valide" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Directeur:" styleClass="form-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" GridPane.rowIndex="4" GridPane.columnIndex="1">
-                                <TextField fx:id="directeurField" promptText="Nom du directeur" styleClass="form-field"/>
-                                <Label fx:id="directeurError" styleClass="error-label"/>
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="4" GridPane.columnIndex="1" minHeight="50">
+                                <TextField fx:id="directeurField" promptText="Entrez le nom complet du directeur" styleClass="form-field"/>
+                                <Label fx:id="directeurError" text="Le nom du directeur est requis" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Mot de passe:" styleClass="form-label" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" GridPane.rowIndex="5" GridPane.columnIndex="1">
-                                <PasswordField fx:id="passwordField" promptText="Nouveau mot de passe" styleClass="form-field"/>
-                                <Label fx:id="passwordError" styleClass="error-label"/>
+                            <VBox spacing="2" GridPane.rowIndex="5" GridPane.columnIndex="1" minHeight="50">
+                                <PasswordField fx:id="passwordField" promptText="Entrez un mot de passe d'au moins 5 caractères" styleClass="form-field"/>
+                                <Label fx:id="passwordError" text="Le mot de passe est requis et doit contenir au moins 5 caractères" styleClass="error-label" visible="false" style="-fx-font-size: 10px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
                         </GridPane>
 
                         <HBox fx:id="editButtonsContainer" spacing="15" alignment="CENTER">
-                            <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="primary-button"/>
                             <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" styleClass="cancel-button"/>
+                            <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="primary-button"/>
                         </HBox>
                     </VBox>
 

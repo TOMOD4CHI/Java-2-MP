@@ -104,11 +104,13 @@ public class ModifierMoniteur {
             field.getStyleClass().add("field-valid");
             errorLabel.setText("");
             errorLabel.setVisible(false);
+            errorLabel.getStyleClass().remove("visible");
         } else {
             field.getStyleClass().remove("field-valid");
             field.getStyleClass().add("field-error");
             errorLabel.setText(errorMessage);
             errorLabel.setVisible(true);
+            errorLabel.getStyleClass().add("visible");
         }
     }
 
@@ -198,36 +200,42 @@ public class ModifierMoniteur {
         if (!isValidName(nom)) {
             nomError.setText("Le nom ne doit contenir que des lettres et des espaces.");
             nomError.setVisible(true);
+            nomError.getStyleClass().add("visible");
             isValid = false;
         }
 
         if (!isValidName(prenom)) {
             prenomError.setText("Le prénom ne doit contenir que des lettres et des espaces.");
             prenomError.setVisible(true);
+            prenomError.getStyleClass().add("visible");
             isValid = false;
         }
 
         if (!isValidAddress(adresse)) {
             adresseError.setText("L'adresse doit contenir au moins 10 caractères.");
             adresseError.setVisible(true);
+            adresseError.getStyleClass().add("visible");
             isValid = false;
         }
 
         if (!isValidPhone(telephone)) {
             telephoneError.setText("Le numéro de téléphone doit contenir exactement 8 chiffres.");
             telephoneError.setVisible(true);
+            telephoneError.getStyleClass().add("visible");
             isValid = false;
         }
 
         if (!isValidEmail(email)) {
             emailError.setText("L'adresse email n'est pas valide.");
             emailError.setVisible(true);
+            emailError.getStyleClass().add("visible");
             isValid = false;
         }
 
         if (dateEmbauche == null || dateEmbauche.isAfter(LocalDate.now())) {
             dateError.setText("La date d'embauche ne peut pas être dans le futur.");
             dateError.setVisible(true);
+            dateError.getStyleClass().add("visible");
             isValid = false;
         }
 
@@ -288,6 +296,16 @@ public class ModifierMoniteur {
         emailError.setVisible(false);
         dateError.setVisible(false);
         typePermisError.setVisible(false);
+        
+        // Remove visible class from error labels
+        cinError.getStyleClass().remove("visible");
+        nomError.getStyleClass().remove("visible");
+        prenomError.getStyleClass().remove("visible");
+        adresseError.getStyleClass().remove("visible");
+        telephoneError.getStyleClass().remove("visible");
+        emailError.getStyleClass().remove("visible");
+        dateError.getStyleClass().remove("visible");
+        typePermisError.getStyleClass().remove("visible");
         
         // Remove validation styles
         cinField.getStyleClass().removeAll("field-error", "field-valid");

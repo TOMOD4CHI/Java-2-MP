@@ -25,11 +25,12 @@
     -fx-border-color: #90CDF4;
     -fx-border-radius: 12px;
     -fx-background-radius: 12px;
-    -fx-font-size: 13px;
-    -fx-min-height: 40px;
+    -fx-font-size: 14px;
+    -fx-min-height: 45px;
     -fx-min-width: 300px;
     -fx-pref-width: 300px;
-    -fx-max-width: 300px;
+    -fx-max-width: 350px;
+    -fx-padding: 0 10px 0 10px;
     -fx-text-fill: #2D3748;
 }
 

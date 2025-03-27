@@ -8,8 +8,9 @@
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
     -fx-min-width: 250px;
-    -fx-max-width: 250px;
-    -fx-min-height: 35px;
+    -fx-max-width: 300px;
+    -fx-min-height: 40px;
+    -fx-padding: 0 10px 0 10px;
     -fx-border-color: rgba(203, 213, 224, 0.6);
 }
 
@@ -24,19 +25,25 @@
 .combo-box > .arrow-button {
     -fx-background-color: rgba(144, 205, 244, 0.4);
     -fx-background-radius: 0 8px 8px 0;
+    -fx-min-width: 40px;
 }
 
 .combo-box > .arrow-button > .arrow {
     -fx-background-color: #2b6cb0;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
 .date-picker > .arrow-button {
     -fx-background-color: rgba(144, 205, 244, 0.4);
     -fx-background-radius: 0 8px 8px 0;
+    -fx-min-width: 40px;
 }
 
 .date-picker > .arrow-button > .arrow {
     -fx-background-color: #2b6cb0;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
 /* Popup and dropdown styling */
@@ -44,6 +51,7 @@
 .combo-box-popup {
     -fx-background-color: rgba(235, 248, 255, 0.95);
     -fx-border-color: rgba(144, 205, 244, 0.6);
+    -fx-font-size: 14px;
 }
 
 .combo-box-popup .list-view,
@@ -51,8 +59,22 @@
     -fx-background-color: rgba(235, 248, 255, 0.95);
 }
 
+.combo-box-popup .list-cell {
+    -fx-padding: 8px 10px;
+    -fx-font-size: 14px;
+}
+
 .combo-box-popup .list-cell:hover {
     -fx-background-color: rgba(144, 205, 244, 0.3);
+}
+
+.date-picker-popup .day-cell {
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-padding: 10px;
 }
 .page-title {
     -fx-font-size: 55px;
@@ -116,15 +138,24 @@
 .glass-field .date-picker-popup {
     -fx-background-color: rgba(235, 248, 255, 0.95);
     -fx-border-color: rgba(144, 205, 244, 0.6);
+    -fx-font-size: 14px;
 }
 
 .glass-field .date-picker-popup .month-year-pane {
     -fx-background-color: rgba(186, 230, 253, 0.8);
+    -fx-padding: 10px;
+}
+
+.glass-field .date-picker-popup .day-cell {
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
 }
 
 .glass-field .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: #2d3748;
+    -fx-padding: 8px 10px;
+    -fx-font-size: 14px;
 }
 
 .glass-field .combo-box-popup .list-view {

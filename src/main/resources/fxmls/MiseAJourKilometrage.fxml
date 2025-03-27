@@ -70,7 +70,7 @@
                 <Button fx:id="annulerBtn" text="Annuler" minWidth="120"
                         onAction="#handleAnnuler" styleClass="cancel-button"/>
                 <Button fx:id="mettreAJourBtn" text="Mettre à jour" minWidth="120"
-                        onAction="#handleMettreAJour" styleClass="update-button"/>
+                        onAction="#handleMettreAJour" styleClass="button, submit-button"/>
             </HBox>
 
             <Label fx:id="messageLabel" styleClass="message-label"/>
