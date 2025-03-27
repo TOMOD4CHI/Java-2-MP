@@ -51,11 +51,11 @@ public class CandidatService {
     }
 
     public boolean addCandidat(Candidat candidat) {
-        if(!candidatRepository.findByCin(candidat.getCin()).isEmpty()) {
+        if(candidatRepository.findByCin(candidat.getCin()).isPresent()) {
             LOGGER.info("Candidat already exists");
             return false;
         }
-        return candidatRepository.save(candidat);
+        return candidatRepository.save(candidat) && dossierService.creerDossier(new Dossier(), candidat.getId());
     }
 
     public boolean updateCandidat(Candidat candidat) {
@@ -65,7 +65,7 @@ public class CandidatService {
 
     public List<String> findCandidatsByTypePermis(String typePermis) {
         return dossierService.getAllDossiers().stream()
-                .filter(dossier -> dossier.getDocuments().containsKey(TypeDocument.valueOf(typePermis)))
+                .filter(dossier -> dossier.getDocuments().containsKey(TypeDocument.valueOf("PERMIS_"+typePermis)))
                 .map(dossier ->IdToCin(dossier.getCandidatId())).toList();
     }
 

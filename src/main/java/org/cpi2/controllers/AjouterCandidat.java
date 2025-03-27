@@ -217,6 +217,7 @@ public class AjouterCandidat {
             }
             List<Inscription> activeinscriptions = inscriptionService.getActifInscirptionBycin(cin);
             if (activeinscriptions.isEmpty()) {
+                //can be paired with type of documents rather than type permis for more realistic scenarios
                 TypePermis requiredPermis = CoursePlan.requiredTypePermis(CoursePlan.valueOf(typePermis));
                 if(requiredPermis == null ||candidatService.findCandidatsByTypePermis(requiredPermis.name()).contains(cin)){
                     if(inscriptionService.saveInscription(inscription)){

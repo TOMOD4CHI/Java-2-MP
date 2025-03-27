@@ -57,6 +57,7 @@ public enum CoursePlan {
         return nbreSeanceConduite + getNbreSeanceCode;
     }
 
+    //can be paired with TyperDocument instead of typePermis for more realistic implementation
     public static TypePermis requiredTypePermis(CoursePlan plan) {
         return switch (plan) {
             case TRUCK_HEAVY -> TypePermis.B;

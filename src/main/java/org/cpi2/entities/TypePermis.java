@@ -4,9 +4,9 @@ package org.cpi2.entities;
  * Enum representing different types of driving licenses
  */
 public enum TypePermis {
-    A("Moto"),
-    B("Voiture"),
-    C("Camion");
+    A("Permis_Moto"),
+    B("Permis_Voiture"),
+    C("Permis_Camion");
 
     
     private final String description;

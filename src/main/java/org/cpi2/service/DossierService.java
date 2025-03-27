@@ -139,6 +139,11 @@ public class DossierService {
             return List.of();
         }
     }
+    public Optional<Document> dossierContientDocument(Long dossierId, TypeDocument documentType) {
+        return dossierRepository.findById(dossierId)
+            .
+    }
+
 
     public boolean dossierExiste(Long dossierId) {
         return dossierRepository.findById(dossierId).isPresent();

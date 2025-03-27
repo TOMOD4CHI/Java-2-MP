@@ -81,6 +81,8 @@ public class DocumentService {
         }
     }
 
+    //public boolean overrideDocument
+
     public boolean updateDocument(Document document, Long dossierId, File nouveauFichier) throws DataNotFound {
         try {
             // Get existing document to find its file path
