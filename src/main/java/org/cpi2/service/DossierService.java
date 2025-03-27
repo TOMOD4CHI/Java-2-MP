@@ -139,9 +139,10 @@ public class DossierService {
             return List.of();
         }
     }
-    public Optional<Document> dossierContientDocument(Long dossierId, TypeDocument documentType) {
+    public boolean dossierContientDocument(Long dossierId, TypeDocument documentType) {
         return dossierRepository.findById(dossierId)
-            .
+                .map(dossier -> dossier.getDocuments().containsKey(documentType))
+                .orElse(false);
     }
 
 
