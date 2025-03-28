@@ -135,6 +135,11 @@ public class InscriptionService {
                 .filter(Inscription::isPaymentStatus)
                 .toList();
     }
+    public List<Inscription> getUnpaidInscription() {
+        return getActifInscription().stream()
+                .filter(inscription -> !inscription.isPaymentStatus())
+                .toList();
+    }
     public List<Inscription> getActifInscirptionBycin(String cin) {
         return getActifInscription().stream()
                 .filter(inscription -> inscription.getCin().equals(cin))

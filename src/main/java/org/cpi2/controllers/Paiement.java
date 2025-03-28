@@ -63,7 +63,7 @@ public class Paiement implements Initializable {
     private void setupInscriptionForm() {
         // Initialize inscription payment type options
         inscriptionTypeCombo.setItems(FXCollections.observableArrayList(
-            "Journalier", "Hebdomadaire", "Mensuel", "Personnalisé"
+            "Journalier", "Hebdomadaire", "Mensuel"
         ));
         
         // Initialize payment modes
