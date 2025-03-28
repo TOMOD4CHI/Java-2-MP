@@ -6,28 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="more">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherEcole.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterCandidat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ManageEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ManageEcole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierCandidat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierEcole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierMoniteur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierMoniteur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/utils/ValidationUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/utils/ValidationUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Paiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Paiement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style1.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style1.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style6.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/style6.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/styletab.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/styletab.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/AjouterCandidat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/AjouterCandidat.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/AutoEcoleManagement.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/AutoEcoleManagement.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MiseAJourKilometrage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MiseAJourKilometrage.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/ModifierCandidat.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ModifierCandidat.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/afficherEcole.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/ajouterEcole.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/Paiement.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/Paiement.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/ajouterMoniteur.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/ajouterMoniteur.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/examRegistration.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/examRegistration.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/manageEcole.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/modifierEcole.fxml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/modifierMoniteur.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/modifierMoniteur.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -210,9 +195,10 @@
       <workItem from="1742758458898" duration="316000" />
       <workItem from="1742771614266" duration="8288000" />
       <workItem from="1742835865641" duration="3950000" />
-      <workItem from="1742860913122" duration="7727000" />
-      <workItem from="1742913743329" duration="15320000" />
-      <workItem from="1743003187533" duration="27620000" />
+      <workItem from="1742860913122" duration="7705000" />
+      <workItem from="1743125457660" duration="218000" />
+      <workItem from="1743125714141" duration="14000" />
+      <workItem from="1743126283580" duration="1727000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />
@@ -318,15 +304,7 @@
       <option name="project" value="LOCAL" />
       <updated>1742838412734</updated>
     </task>
-    <task id="LOCAL-00014" summary="more">
-      <option name="closed" value="true" />
-      <created>1742869098534</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1742869098534</updated>
-    </task>
-    <option name="localTasksCounter" value="15" />
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

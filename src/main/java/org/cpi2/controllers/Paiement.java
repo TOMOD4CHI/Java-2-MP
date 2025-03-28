@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.collections.FXCollections;
 import org.cpi2.entities.*;
-import org.cpi2.service.InscriptionService;
 import org.cpi2.service.PaiementService;
 import org.cpi2.service.CandidatService;
 import org.cpi2.service.ExamenService;
@@ -37,13 +36,11 @@ public class Paiement implements Initializable {
     private final PaiementService paiementService;
     private final CandidatService candidatService;
     private final ExamenService examenService;
-    private final InscriptionService inscriptionService;
     
     public Paiement() {
         this.paiementService = new PaiementService();
         this.candidatService = new CandidatService();
         this.examenService = new ExamenService();
-        this.inscriptionService = new InscriptionService();
     }
     
     @Override
