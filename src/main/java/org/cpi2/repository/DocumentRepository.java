@@ -5,6 +5,7 @@ import org.cpi2.entities.Document;
 import org.cpi2.entities.TypeDocument;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -55,21 +56,21 @@ public class DocumentRepository extends BaseRepository<Document> {
 
 
     private Document mapResultSetToDocument(ResultSet rs) throws SQLException {
+        long id = rs.getLong("id");
+        TypeDocument typeDocument;
+        String nomFichier = rs.getString("nom_fichier");
+        String cheminFichier = rs.getString("chemin_fichier");
+        Timestamp timestamp = rs.getTimestamp("date_upload");
         String typeDoc = typeDocumentRepository
-                .findById(rs.getInt("type_document_id"))
-                .orElse(null);
-        if(typeDoc == null) {
-            return null;
-        }
-        TypeDocument typeDocument = TypeDocument.valueOf(typeDoc);
+                .findById(rs.getInt("type_document_id")).get();
+
+        typeDocument = TypeDocument.valueOf(typeDoc);
 
         Document document = new Document();
-        document.setId(rs.getLong("id"));
+        document.setId(id);
         document.setTypeDocument(typeDocument);
-        document.setNomFichier(rs.getString("nom_fichier"));
-        document.setCheminFichier(rs.getString("chemin_fichier"));
-
-        Timestamp timestamp = rs.getTimestamp("date_upload");
+        document.setNomFichier(nomFichier);
+        document.setCheminFichier(cheminFichier);
         document.setDateUpload(timestamp != null ? timestamp.toLocalDateTime() : null);
 
         return document;

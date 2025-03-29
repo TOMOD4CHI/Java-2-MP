@@ -5,11 +5,8 @@ import org.cpi2.entities.Inscription;
 import org.cpi2.repository.InscriptionRepository;
 import org.cpi2.repository.PlanRepository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Calendar;
 
 public class InscriptionService {
     private final InscriptionRepository inscriptionRepository;
@@ -124,6 +121,42 @@ public class InscriptionService {
     public Optional<CoursePlan> getPlanById(Integer planId) {
         return planRepository.findById(planId);
     }
+
+    public List<Inscription> getActifInscription() {
+        List<Inscription> res = new ArrayList<>(getAllInscriptions().stream()
+                .filter(inscription -> inscription.getStatus().equals("En Cours"))
+                .toList());
+        res.sort(Comparator.comparing(Inscription::getInscriptioDate));
+        return res ;
+    }
+
+    public List<Inscription> getActifandPayedInscription() {
+        return getActifInscription().stream()
+                .filter(Inscription::isPaymentStatus)
+                .toList();
+    }
+    public List<Inscription> getUnpaidInscription() {
+        return getActifInscription().stream()
+                .filter(inscription -> !inscription.isPaymentStatus())
+                .toList();
+    }
+    public List<Inscription> getActifInscirptionBycin(String cin) {
+        return getActifInscription().stream()
+                .filter(inscription -> inscription.getCin().equals(cin))
+                .toList();
+    }
+
+    public List<Inscription> getActifandPayedInscriptionBycin(String cin) {
+        return getActifandPayedInscription().stream()
+                .filter(inscription -> inscription.getCin().equals(cin))
+                .toList();
+    }
+
+    public boolean haveActifInscription(String cin) {
+        return !getActifInscirptionBycin(cin).isEmpty();
+    }
+
+
 
     public boolean isValidPaymentCycle(String cycle) {
         if (cycle == null) return false;

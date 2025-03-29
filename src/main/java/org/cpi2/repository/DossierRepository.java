@@ -58,6 +58,7 @@ public class DossierRepository extends BaseRepository<Dossier> {
     private Dossier mapResultSetToDossier(ResultSet rs) throws SQLException {
         Dossier dossier = new Dossier();
         dossier.setId(rs.getLong("id"));
+        dossier.setCandidatId(rs.getLong("candidat_id"));
         return dossier;
     }
 

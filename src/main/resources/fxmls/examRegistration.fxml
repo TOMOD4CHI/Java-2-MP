@@ -84,8 +84,8 @@
 
                 <!-- Buttons -->
                 <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Button fx:id="annulerButton" text="Annuler" onAction="#annulerAction" styleClass="button"/>
-                    <Button fx:id="enregistrerButton" text="Enregistrer" onAction="#enregistrerAction" styleClass="button"/>
+                    <Button fx:id="annulerButton" text="Annuler" onAction="#annulerAction" styleClass="button, cancel-button"/>
+                    <Button fx:id="enregistrerButton" text="Enregistrer" onAction="#enregistrerAction" styleClass="button, submit-button"/>
                 </HBox>
             </VBox>
         </ScrollPane>

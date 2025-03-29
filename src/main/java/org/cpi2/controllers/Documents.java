@@ -43,7 +43,7 @@ public class Documents {
     public void initialize() {
         // Initialize the ComboBox with document types
         typeDocumentComboBox.getItems().addAll(
-                typeDocumentService.getAllTypeDocuments()
+                typeDocumentService.getAllTypeDocuments().stream().sorted().toList()
         );
         
         // Set current date as default for date picker
@@ -79,6 +79,13 @@ public class Documents {
                 TypeDocument typeDocument = TypeDocument.valueOf(typeDocumentComboBox.getValue());
                 org.cpi2.entities.Document document = new org.cpi2.entities.Document(typeDocument, selectedFile.getName(), selectedFile.getAbsolutePath());
                 dossierService.ajouterDocument(dossier.getId(), document, selectedFile);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText(null);
+                alert.setContentText("Document enregistré avec succès!");
+                alert.showAndWait();
+
+                clearForm();
             }
             else{
                 //Alert that the candidate does not exist
@@ -87,13 +94,7 @@ public class Documents {
                 return;
             }
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("Document enregistré avec succès!");
-            alert.showAndWait();
-            
-            clearForm();
+
         }
     }
 

@@ -20,7 +20,13 @@ public class DossierService {
     public DossierService() {
         this.dossierRepository = new DossierRepository();
         this.documentService = new DocumentService();
-        this.candidatService = new CandidatService();
+        this.candidatService = new CandidatService(this);
+    }
+
+    public DossierService(CandidatService candidatService) {
+        this.dossierRepository = new DossierRepository();
+        this.documentService = new DocumentService();
+        this.candidatService = candidatService;
     }
 
     public Optional<Dossier> getDossierById(Long id) {
@@ -133,6 +139,12 @@ public class DossierService {
             return List.of();
         }
     }
+    public boolean dossierContientDocument(Long dossierId, TypeDocument documentType) {
+        return dossierRepository.findById(dossierId)
+                .map(dossier -> dossier.getDocuments().containsKey(documentType))
+                .orElse(false);
+    }
+
 
     public boolean dossierExiste(Long dossierId) {
         return dossierRepository.findById(dossierId).isPresent();
@@ -146,9 +158,9 @@ public class DossierService {
     public boolean verifierExpirationDocuments(Long dossierId) {
         List<Document> documents = documentService.getDocumentsByDossierId(dossierId);
         LocalDate today = LocalDate.now();
-        
+
         for (Document doc : documents) {
-            if (doc.getDateExpiration() != null && 
+            if (doc.getDateExpiration() != null &&
                 doc.getDateExpiration().toLocalDate().isBefore(today)) {
                 return false;
             }
@@ -162,7 +174,7 @@ public class DossierService {
         LocalDate dateLimit = LocalDate.now().plusDays(joursAvantExpiration);
 
         for (Document doc : documents) {
-            if (doc.getDateExpiration() != null && 
+            if (doc.getDateExpiration() != null &&
                 doc.getDateExpiration().toLocalDate().isBefore(dateLimit)) {
                 documentsParType
                     .computeIfAbsent(doc.getTypeDocument(), k -> new ArrayList<>())
@@ -199,7 +211,7 @@ public class DossierService {
         rapport.append("\nDocuments expirés:\n");
         for (Map.Entry<String, TreeSet<Document>> entry : documents.entrySet()) {
             for (Document doc : entry.getValue()) {
-                if (doc.getDateExpiration() != null && 
+                if (doc.getDateExpiration() != null &&
                     doc.getDateExpiration().toLocalDate().isBefore(LocalDate.now())) {
                     rapport.append("- ").append(doc.getTypeDocument())
                           .append(" (Expiré le: ").append(doc.getDateExpiration().toLocalDate())

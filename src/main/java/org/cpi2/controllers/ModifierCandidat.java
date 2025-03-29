@@ -46,6 +46,8 @@ public class ModifierCandidat {
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
+
+    //This might be useless since we can't change the type of permit through the candidat itself
     @FXML private ComboBox<TypePermis> typeComboBox;
     
     // Error labels

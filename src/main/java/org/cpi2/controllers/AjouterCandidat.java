@@ -6,6 +6,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.cpi2.entities.CoursePlan;
 import org.cpi2.entities.Inscription;
 import org.cpi2.service.CandidatService;
 import org.cpi2.entities.Candidat;
@@ -15,6 +16,7 @@ import org.cpi2.utils.ValidationUtils;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class AjouterCandidat {
@@ -61,8 +63,8 @@ public class AjouterCandidat {
     private void initialize() {
         typeComboBox.setPrefWidth(200);
         typeComboBox.getItems().clear();
-        for (TypePermis type : TypePermis.values()) {
-            typeComboBox.getItems().add(type.getLibelle());
+        for (CoursePlan plan : CoursePlan.values()) {
+            typeComboBox.getItems().add(plan.name());
         }
         if (!typeComboBox.getItems().isEmpty()) {
             typeComboBox.getSelectionModel().selectFirst();
@@ -191,34 +193,21 @@ public class AjouterCandidat {
             candidat.setAdresse(address);
             candidat.setTelephone(phone);
             candidat.setEmail(email);
-            
-            // Set type permis from combo box selection
-            if (typePermis != null) {
-                // Find the TypePermis enum by its libelle
-                for (TypePermis type : TypePermis.values()) {
-                    if (type.getLibelle().equals(typePermis)) {
-                        candidat.setTypePermis(type);
-                        break;
-                    }
-                }
-            }
+
 
             inscription.setCin(candidat.getCin());
             inscription.setPaymentStatus(false);
             inscription.setStatus("En Cours");
             inscription.setPaymentCycle("Non défini");
             inscription.setInscriptioDate(Date.valueOf(LocalDate.now()));
-            //inscription.setPlan(typeComboBox.getSelectionModel().getSelectedIndex());
+            inscription.setPlan(CoursePlan.valueOf(typeComboBox.getValue()));
 
 
             if (candidatService.addCandidat(candidat)) {
-
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Succès");
                 alert.setHeaderText(null);
                 alert.setContentText("Le candidat a été ajouté avec succès!");
-                alert.showAndWait();
-                cancelAction(); // Clear the form
             } else {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Erreur");
@@ -226,11 +215,49 @@ public class AjouterCandidat {
                 alert.setContentText("Une erreur est survenue lors de l'ajout du candidat.");
                 alert.showAndWait();
             }
+            List<Inscription> activeinscriptions = inscriptionService.getActifInscirptionBycin(cin);
+            if (activeinscriptions.isEmpty()) {
+                //can be paired with type of documents rather than type permis for more realistic scenarios
+                TypePermis requiredPermis = CoursePlan.requiredTypePermis(CoursePlan.valueOf(typePermis));
+                if(requiredPermis == null ||candidatService.findCandidatsByTypePermis(requiredPermis.name()).contains(cin)){
+                    if(inscriptionService.saveInscription(inscription)){
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Succès");
+                        alert.setHeaderText(null);
+                        alert.setContentText("L'inscription a été ajoutée avec succès!");
+                        alert.showAndWait();
+                        cancelAction();
+                    } else {
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setTitle("Erreur");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Une erreur est survenue lors de l'ajout de l'inscription.");
+                        alert.showAndWait();
+                    }
+
+                }
+                else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Le candidat n'est pas eligible car il n'avais pas le document suivant : "+requiredPermis.getDescription()+".");
+                    alert.showAndWait();
+                }
+            }
+            else {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Le candidat a déjà une inscription en cours : \n "+activeinscriptions.get(0).getPlan().getDescription()+" .");
+                alert.showAndWait();
+            }
         } catch (Exception e) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur");
             alert.setHeaderText(null);
             alert.setContentText("Une erreur est survenue: " + e.getMessage());
+            //for debugging
+            e.printStackTrace();
             alert.showAndWait();
         }
     }
