@@ -167,6 +167,7 @@ public class ModifierCandidat {
     private void clearFields() {
         nomField.clear();
         prenomField.clear();
+        cinField.clear();
         addressField.clear();
         phoneField.clear();
         emailField.clear();
@@ -224,7 +225,18 @@ public class ModifierCandidat {
 
     @FXML
     private void cancelAction() {
-        ((Stage) nomField.getScene().getWindow()).close();
+        // Réinitialiser les champs
+        clearFields();
+        candidatToModify = null;
+        
+        // Effacer les validations
+        ValidationUtils.clearValidation(nomField);
+        ValidationUtils.clearValidation(prenomField);
+        ValidationUtils.clearValidation(cinField);
+        ValidationUtils.clearValidation(addressField);
+        ValidationUtils.clearValidation(phoneField);
+        ValidationUtils.clearValidation(emailField);
+        ValidationUtils.clearValidation(typeComboBox);
     }
 
     private boolean validateInput() {

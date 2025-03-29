@@ -49,7 +49,7 @@ public class ValidationUtils {
         // If not, create a new one and add it to the parent container
         if (errorLabel == null) {
             errorLabel = new Label();
-            errorLabel.getStyleClass().add("error-label");
+            errorLabel.getStyleClass().addAll("error-label", "visible");
             errorLabel.setVisible(false);
             errorLabel.setManaged(false);
             
@@ -83,20 +83,25 @@ public class ValidationUtils {
                 Integer currentPriority = errorPriorities.getOrDefault(finalErrorLabel, Integer.MAX_VALUE);
                 if (priority <= currentPriority) {
                     finalErrorLabel.setText(errorMessage);
-                    finalErrorLabel.setVisible(true);
-                    finalErrorLabel.setManaged(true);
+                    if (!finalErrorLabel.isVisible()) {
+                        finalErrorLabel.setVisible(true);
+                        finalErrorLabel.setManaged(true);
+                    }
                     field.getStyleClass().remove("valid-field");
-                    field.getStyleClass().add("error-field");
+                    if (!field.getStyleClass().contains("error-field")) {
+                        field.getStyleClass().add("error-field");
+                    }
                     errorPriorities.put(finalErrorLabel, priority);
                 }
             } else {
-
                 if (priority == errorPriorities.getOrDefault(finalErrorLabel, Integer.MAX_VALUE)) {
-                    finalErrorLabel.setVisible(false);
-                    finalErrorLabel.setManaged(false);
+                    if (finalErrorLabel.isVisible()) {
+                        finalErrorLabel.setVisible(false);
+                        finalErrorLabel.setManaged(false);
+                    }
                     field.getStyleClass().remove("error-field");
                     
-                    if (!hasErrors(field)) {
+                    if (!hasErrors(field) && !field.getStyleClass().contains("valid-field")) {
                         field.getStyleClass().add("valid-field");
                     }
                     
@@ -105,10 +110,8 @@ public class ValidationUtils {
             }
         });
         
-        boolean isInitiallyValid = validator.test(observable.getValue());
-        if (isInitiallyValid) {
-            field.getStyleClass().add("valid-field");
-        }
+        // We don't add valid-field class initially anymore
+        // The field will get the valid-field class only after user interaction
     }
     
     public static void clearValidation(Region field) {

@@ -134,6 +134,7 @@ public class AjouterCandidat {
 
     @FXML
     private void cancelAction() {
+        // Effacer les champs
         nomField.clear();
         prenomField.clear();
         cinField.clear();
@@ -141,6 +142,15 @@ public class AjouterCandidat {
         addressField.clear();
         phoneField.clear();
         emailField.clear();
+        
+        // Effacer les validations
+        ValidationUtils.clearValidation(nomField);
+        ValidationUtils.clearValidation(prenomField);
+        ValidationUtils.clearValidation(cinField);
+        ValidationUtils.clearValidation(typeComboBox);
+        ValidationUtils.clearValidation(addressField);
+        ValidationUtils.clearValidation(phoneField);
+        ValidationUtils.clearValidation(emailField);
     }
 
     @FXML

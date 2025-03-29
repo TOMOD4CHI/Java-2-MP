@@ -104,10 +104,16 @@ public class ManageEcole implements Initializable {
 
     private void validateField(TextField field, Label errorLabel, String fieldName, Pattern pattern) {
         String value = field.getText().trim();
-        boolean isValid = !value.isEmpty() && pattern.matcher(value).matches();
+        boolean isEmpty = value.isEmpty();
+        boolean isValid = !isEmpty && pattern.matcher(value).matches();
         
-        updateFieldValidation(field, errorLabel, isValid, 
-            isValid ? null : String.format("%s n'est pas valide", fieldName));
+        if (isEmpty) {
+            updateFieldValidation(field, errorLabel, false, 
+                String.format("%s ne peut pas être vide", fieldName));
+        } else {
+            updateFieldValidation(field, errorLabel, isValid, 
+                isValid ? null : String.format("%s n'est pas valide", fieldName));
+        }
     }
 
     private void validateNonEmpty(TextField field, Label errorLabel, String fieldName) {
@@ -131,9 +137,7 @@ public class ManageEcole implements Initializable {
         field.getStyleClass().removeAll("field-error", "field-valid");
         
         // Add appropriate style class
-        if (!field.getText().trim().isEmpty()) {
-            field.getStyleClass().add(isValid ? "field-valid" : "field-error");
-        }
+        field.getStyleClass().add(isValid ? "field-valid" : "field-error");
         
         // Update error label
         errorLabel.setText(errorMessage);

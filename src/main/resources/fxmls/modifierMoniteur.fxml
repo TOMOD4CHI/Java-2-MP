@@ -10,7 +10,7 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.cpi2.controllers.ModifierMoniteur"
       stylesheets="@/css/style.css"
-      alignment="CENTER" spacing="10" styleClass="form-container">
+      alignment="CENTER" spacing="20" styleClass="form-container">
 
     <padding>
         <Insets top="15" right="20" bottom="15" left="20"/>
@@ -18,7 +18,7 @@
 
     <Label text="Modifier un Moniteur" styleClass="page-title"/>
 
-    <GridPane hgap="10" vgap="5" alignment="CENTER" maxWidth="600">
+    <GridPane hgap="15" vgap="10" alignment="CENTER" maxWidth="600">
         <columnConstraints>
             <ColumnConstraints halignment="RIGHT" minWidth="120"/>
             <ColumnConstraints halignment="LEFT" minWidth="250" hgrow="ALWAYS"/>
@@ -26,51 +26,67 @@
 
         <!-- CIN with Search -->
         <Label text="CIN:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label"/>
-        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
-            <TextField fx:id="cinField" promptText="Entrez le CIN" HBox.hgrow="ALWAYS" styleClass="form-field"/>
-            <Button text="Rechercher" onAction="#searchMoniteur" styleClass="primary-button"/>
-        </HBox>
-        <Label fx:id="cinError" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <HBox spacing="10">
+                <TextField fx:id="cinField" promptText="Entrez le CIN" HBox.hgrow="ALWAYS" styleClass="form-field"/>
+                <Button text="Rechercher" onAction="#searchMoniteur" styleClass="primary-button"/>
+            </HBox>
+            <Label fx:id="cinError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
         <!-- Nom -->
-        <Label text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label"/>
-        <TextField fx:id="nomField" promptText="Entrez le nom" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="form-field"/>
-        <Label fx:id="nomError" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        <Label text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="nomField" promptText="Entrez le nom" styleClass="form-field"/>
+            <Label fx:id="nomError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
         <!-- Prénom -->
-        <Label text="Prénom:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="form-label"/>
-        <TextField fx:id="prenomField" promptText="Entrez le prénom" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="form-field"/>
-        <Label fx:id="prenomError" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        <Label text="Prénom:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="prenomField" promptText="Entrez le prénom" styleClass="form-field"/>
+            <Label fx:id="prenomError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
         <!-- Adresse -->
-        <Label text="Adresse:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="form-label"/>
-        <TextField fx:id="adresseField" promptText="Entrez l'adresse" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="form-field"/>
-        <Label fx:id="adresseError" GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        <Label text="Adresse:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField fx:id="adresseField" promptText="Entrez l'adresse" styleClass="form-field"/>
+            <Label fx:id="adresseError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
         <!-- Téléphone -->
-        <Label text="Téléphone:" GridPane.columnIndex="0" GridPane.rowIndex="8" styleClass="form-label"/>
-        <TextField fx:id="telephoneField" promptText="Entrez le numéro de téléphone" GridPane.columnIndex="1" GridPane.rowIndex="8" styleClass="form-field"/>
-        <Label fx:id="telephoneError" GridPane.columnIndex="1" GridPane.rowIndex="9" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        <Label text="Téléphone:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <TextField fx:id="telephoneField" promptText="Entrez le numéro de téléphone" styleClass="form-field"/>
+            <Label fx:id="telephoneError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
         <!-- Email -->
-        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="10" styleClass="form-label"/>
-        <TextField fx:id="emailField" promptText="Entrez l'email" GridPane.columnIndex="1" GridPane.rowIndex="10" styleClass="form-field"/>
-        <Label fx:id="emailError" GridPane.columnIndex="1" GridPane.rowIndex="11" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <TextField fx:id="emailField" promptText="Entrez l'email" styleClass="form-field"/>
+            <Label fx:id="emailError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
         <!-- Date d'embauche -->
-        <Label text="Date d'embauche:" GridPane.columnIndex="0" GridPane.rowIndex="12" styleClass="form-label"/>
-        <DatePicker fx:id="dateEmbaucheField" promptText="Sélectionnez la date" GridPane.columnIndex="1" GridPane.rowIndex="12" styleClass="form-field"/>
-        <Label fx:id="dateError" GridPane.columnIndex="1" GridPane.rowIndex="13" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        <Label text="Date d'embauche:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <DatePicker fx:id="dateEmbaucheField" promptText="Sélectionnez la date" styleClass="form-field"/>
+            <Label fx:id="dateError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
         <!-- Type de Permis -->
-        <Label text="Type de Permis:" GridPane.columnIndex="0" GridPane.rowIndex="14" styleClass="form-label"/>
-        <ComboBox fx:id="typePermisComboBox" GridPane.columnIndex="1" GridPane.rowIndex="14" styleClass="form-field"/>
-        <Label fx:id="typePermisError" GridPane.columnIndex="1" GridPane.rowIndex="15" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        <Label text="Type de Permis:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <ComboBox fx:id="typePermisComboBox" styleClass="form-field" maxWidth="Infinity"/>
+            <Label fx:id="typePermisError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
     </GridPane>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Modifier" onAction="#modifierAction" styleClass="primary-button"/>
         <Button text="Annuler" onAction="#cancelAction" styleClass="cancel-button"/>
+        <Button text="Modifier" onAction="#modifierAction" styleClass="primary-button"/>
     </HBox>
     
 

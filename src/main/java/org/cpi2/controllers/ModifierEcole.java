@@ -31,6 +31,12 @@ public class ModifierEcole implements Initializable {
     @FXML public TextField emailField;
     @FXML public ImageView logoImageView;
     @FXML public Label validationMessageLabel;
+    
+    // Error labels
+    @FXML public Label nomError;
+    @FXML public Label adresseError;
+    @FXML public Label telephoneError;
+    @FXML public Label emailError;
 
     private Image logoImage;
     private String logoPath;
@@ -74,6 +80,8 @@ public class ModifierEcole implements Initializable {
         ValidationUtils.addValidation(emailField,
             email -> email != null && EMAIL_PATTERN.matcher(email).matches(),
             "L'adresse email n'est pas valide", 1);
+        
+
     }
 
     private void showAlert(String title, String message) {
@@ -118,6 +126,12 @@ public class ModifierEcole implements Initializable {
         ValidationUtils.clearValidation(adresseField);
         ValidationUtils.clearValidation(telephoneField);
         ValidationUtils.clearValidation(emailField);
+        
+        // Clear error labels
+        if (nomError != null) nomError.setText("");
+        if (adresseError != null) adresseError.setText("");
+        if (telephoneError != null) telephoneError.setText("");
+        if (emailError != null) emailError.setText("");
         
         // Fill the fields with the current auto-ecole data
         nomField.setText(currentAutoEcole.getNom());
