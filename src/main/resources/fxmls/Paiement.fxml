@@ -63,8 +63,8 @@
                 </HBox>
 
                 <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
-                    <Button text="Annuler" onAction="#handleCancel" styleClass="button, cancel-button" prefWidth="120"/>
-                    <Button text="Enregistrer" onAction="#handleSave" styleClass="button, submit-button" prefWidth="120"/>
+                    <Button text="Annuler" styleClass="button, cancel-button" prefWidth="120"/>
+                    <Button text="Enregistrer"  styleClass="button, submit-button" prefWidth="120"/>
                 </HBox>
 
                 <Separator>
@@ -88,7 +88,7 @@
                 </HBox>
 
                 <HBox spacing="10" alignment="CENTER">
-                    <Button text="Rechercher" onAction="#handleSearch" styleClass="button, action-button" prefWidth="150"/>
+                    <Button text="Rechercher"  styleClass="button, action-button" prefWidth="150"/>
                 </HBox>
             </VBox>
         </ScrollPane>
@@ -121,8 +121,8 @@
             </ScrollPane>
 
             <HBox alignment="CENTER_RIGHT" spacing="10">
-                <Button fx:id="printButton" text="Imprimer" onAction="#handlePrint" styleClass="button, action-button"/>
-                <Button fx:id="exportButton" text="Exporter" onAction="#handleExport" styleClass="button, action-button"/>
+                <Button fx:id="printButton" text="Imprimer"  styleClass="button, action-button"/>
+                <Button fx:id="exportButton" text="Exporter"  styleClass="button, action-button"/>
             </HBox>
         </VBox>
     </center>

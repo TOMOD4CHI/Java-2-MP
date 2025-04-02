@@ -16,7 +16,7 @@ import javafx.scene.control.ProgressBar;
 
 public class Paiement implements Initializable {
     @FXML private TabPane paymentTabPane;
-    
+
     // Inscription payment controls
     @FXML private ComboBox<Candidat> inscriptionCandidatCombo;
     @FXML private TextField inscriptionMontantField;
@@ -27,27 +27,27 @@ public class Paiement implements Initializable {
     @FXML private Text inscriptionTotalText;
     @FXML private Text inscriptionPaidText;
     @FXML private Text inscriptionRemainingText;
-    
+
     // Exam payment controls
     @FXML private ComboBox<Examen> examenCombo;
     @FXML private TextField examenMontantField;
     @FXML private ComboBox<ModePaiement> examenModeCombo;
-    
+
     private final PaiementService paiementService;
     private final CandidatService candidatService;
     private final ExamenService examenService;
-    
+
     public Paiement() {
         this.paiementService = new PaiementService();
         this.candidatService = new CandidatService();
         this.examenService = new ExamenService();
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setupInscriptionForm();
         setupExamenForm();
-        
+
         // Add listeners for real-time updates
         inscriptionCandidatCombo.setOnAction(e -> updateInscriptionPaymentDetails());
         inscriptionMontantField.textProperty().addListener((obs, old, newValue) -> {
@@ -56,21 +56,20 @@ public class Paiement implements Initializable {
             }
         });
     }
-    
     private void setupInscriptionForm() {
         // Initialize inscription payment type options
         inscriptionTypeCombo.setItems(FXCollections.observableArrayList(
             "Journalier", "Hebdomadaire", "Mensuel"
         ));
-        
+
         // Initialize payment modes
         inscriptionModeCombo.setItems(FXCollections.observableArrayList(ModePaiement.values()));
-        
+
         // Load candidates
         inscriptionCandidatCombo.setItems(FXCollections.observableArrayList(
             candidatService.getAllCandidats()
         ));
-        
+
         // Set display format for candidate combo box
         inscriptionCandidatCombo.setCellFactory(lv -> new ListCell<Candidat>() {
             @Override
@@ -81,40 +80,40 @@ public class Paiement implements Initializable {
         });
         inscriptionCandidatCombo.setButtonCell(inscriptionCandidatCombo.getCellFactory().call(null));
     }
-    
+
     private void setupExamenForm() {
         /*
         // Initialize payment modes
         examenModeCombo.setItems(FXCollections.observableArrayList(ModePaiement.values()));
-        
+
         // Load exams
         examenCombo.setItems(FXCollections.observableArrayList(
             examenService.getPendingExams()
         ));
-        
+
         // Set display format for exam combo box
         examenCombo.setCellFactory(lv -> new ListCell<Examen>() {
             @Override
             protected void updateItem(Examen item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? "" : "Examen " + item.getTypeExamen() + " - " + 
+                setText(empty ? "" : "Examen " + item.getTypeExamen() + " - " +
                     item.getCandidat().getNom() + " " + item.getCandidat().getPrenom());
             }
 
 
         });
         examenCombo.setButtonCell(examenCombo.getCellFactory().call(null));
-        
+
         // Add listener for amount field validation
         examenMontantField.textProperty().addListener((obs, old, newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 examenMontantField.setText(old);
             }
         });
-        
+
          */
     }
-    
+
     private void updateInscriptionPaymentDetails() {
         /*
         Candidat selectedCandidat = inscriptionCandidatCombo.getValue();
@@ -128,17 +127,17 @@ public class Paiement implements Initializable {
                     .mapToDouble(Paiement::getMontant)
                     .sum();
                 double remainingAmount = totalAmount - paidAmount;
-                
+
                 inscriptionTotalText.setText(String.format("%.2f DT", totalAmount));
                 inscriptionPaidText.setText(String.format("%.2f DT", paidAmount));
                 inscriptionRemainingText.setText(String.format("%.2f DT", remainingAmount));
-                
+
                 // Update progress bar and status
                 double progress = paidAmount / totalAmount;
                 inscriptionProgressBar.setProgress(progress);
                 StatutPaiement status = paiementService.getPaymentStatus(totalAmount, paidAmount);
                 inscriptionStatusText.setText(status.name());
-                inscriptionStatusText.setStyle(status == StatutPaiement.PAID ? 
+                inscriptionStatusText.setStyle(status == StatutPaiement.PAID ?
                     "-fx-fill: green;" : "-fx-fill: orange;");
             }
         }
@@ -158,19 +157,19 @@ public class Paiement implements Initializable {
         if (!validateInscriptionForm()) {
             return;
         }
-        
+
         Candidat selectedCandidat = inscriptionCandidatCombo.getValue();
         double montant = Double.parseDouble(inscriptionMontantField.getText());
         String typePaiement = inscriptionTypeCombo.getValue();
         ModePaiement modePaiement = inscriptionModeCombo.getValue();
-        
+
         boolean success = paiementService.saveInscriptionPayment(
             selectedCandidat.getInscription(),
             montant,
             modePaiement,
             typePaiement
         );
-        
+
         if (success) {
             AlertUtil.showSuccess("Paiement effectué avec succès");
             clearInscriptionForm();
@@ -181,24 +180,24 @@ public class Paiement implements Initializable {
 
          */
     }
-    
+
     @FXML
     private void handleExamenPayment() {
         /*
         if (!validateExamenForm()) {
             return;
         }
-        
+
         Examen selectedExam = examenCombo.getValue();
         double montant = Double.parseDouble(examenMontantField.getText());
         ModePaiement modePaiement = examenModeCombo.getValue();
-        
+
         boolean success = paiementService.saveExamPayment(
             selectedExam,
             montant,
             modePaiement
         );
-        
+
         if (success) {
             AlertUtil.showSuccess("Paiement d'examen effectué avec succès");
             clearExamenForm();
@@ -206,7 +205,7 @@ public class Paiement implements Initializable {
             AlertUtil.showError("Erreur lors du paiement d'examen");
         }
     }
-    
+
     private boolean validateInscriptionForm() {
         if (inscriptionCandidatCombo.getValue() == null) {
             AlertUtil.showError("Veuillez sélectionner un candidat");
@@ -228,7 +227,7 @@ public class Paiement implements Initializable {
 
          */
     }
-    
+
     private boolean validateExamenForm() {
         /*
         if (examenCombo.getValue() == null) {
@@ -246,17 +245,18 @@ public class Paiement implements Initializable {
         */
         return true;
     }
-    
+
     private void clearInscriptionForm() {
         inscriptionCandidatCombo.setValue(null);
         inscriptionMontantField.clear();
         inscriptionTypeCombo.setValue(null);
         inscriptionModeCombo.setValue(null);
     }
-    
+
     private void clearExamenForm() {
         examenCombo.setValue(null);
         examenMontantField.clear();
         examenModeCombo.setValue(null);
     }
+
 }
