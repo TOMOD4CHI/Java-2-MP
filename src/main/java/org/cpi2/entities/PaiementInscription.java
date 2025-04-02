@@ -1,16 +1,16 @@
 package org.cpi2.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PaiementInscription extends Paiement {
     private Inscription inscription;
-    private String typePaiement; // Daily, Weekly, Monthly...
+    private String typePaiement;
 
 
-    public PaiementInscription(Long id, Double montant, LocalDateTime datePaiement, ModePaiement modePaiement, Inscription inscription, String typePaiement) {
-        super(id,montant,datePaiement,modePaiement);
+    public PaiementInscription(Long id, Candidat candidat, Double montant, LocalDate datePaiement, ModePaiement modePaiement, Inscription inscription, String typePaiement, String description) {
+        super(id,candidat,montant,datePaiement,modePaiement,(description == null || description.isEmpty())?"Paiement d'inscription pour "+inscription.getPlan().getDescription():description,typePaiement);
         this.inscription = inscription;
-        this.typePaiement = typePaiement;
     }
 
     public Inscription getInscription() {

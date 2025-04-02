@@ -14,12 +14,17 @@ import java.util.Optional;
 public class PaiementService {
     private final PaiementRepository paiementRepository;
     private final CandidatRepository candidatRepository;
+    private final InscriptionService inscriptionService;
 
     public PaiementService() {
         this.paiementRepository = new PaiementRepository();
         this.candidatRepository = new CandidatRepository();
+        this.inscriptionService = new InscriptionService();
     }
 
+    public List<Paiement> getAllPaiements() {
+        return paiementRepository.findAll();
+    }
 
     public Optional<Paiement> getPaiementById(Long id) {
         return paiementRepository.findById(id);
@@ -41,16 +46,12 @@ public class PaiementService {
                 .sum();
     }
 
-    public double calculerMontantRestant(int inscriptionId, double montantTotal) throws SQLException {
+    public double calculerMontantRestant(int inscriptionId) throws SQLException {
         double montantPaye = calculerMontantPayer(inscriptionId);
+        double montantTotal = inscriptionService.getInscriptionById(inscriptionId).get().getAmount();
         return montantTotal - montantPaye;
     }
 
-
-
-    public boolean verifierSiCandidatExiste(Long candidatId) {
-        return candidatRepository.findById(candidatId).isPresent();
-    }
 
     //Still many other other methods to implement based on the needs of the application
 }

@@ -5,6 +5,7 @@ import org.cpi2.entities.*;
 import org.cpi2.repository.CandidatRepository;
 import org.cpi2.repository.InscriptionRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,18 +15,21 @@ public class CandidatService {
     private static final Logger LOGGER = Logger.getLogger(CandidatService.class.getName());
     private final CandidatRepository candidatRepository;
     private final InscriptionRepository inscriptionRepository;
+    private final InscriptionService inscriptionService;
     private final DossierService dossierService;
 
     public CandidatService() {
         this.candidatRepository = new CandidatRepository();
         this.inscriptionRepository = new InscriptionRepository();
         this.dossierService = new DossierService(this);
+        this.inscriptionService = new InscriptionService();
     }
 
     public CandidatService(DossierService dossierService) {
         this.candidatRepository = new CandidatRepository();
         this.inscriptionRepository = new InscriptionRepository();
         this.dossierService = dossierService;
+        this.inscriptionService = new InscriptionService();
     }
 
     public List<Candidat> getAllCandidats() {
@@ -34,6 +38,9 @@ public class CandidatService {
 
     public Optional<Candidat> getCandidatById(Long id) {
         return candidatRepository.findById(id);
+    }
+    public Candidat getCandidatByCin(String cin) {
+        return candidatRepository.findByCin(cin).orElseThrow(() -> new DataNotFound("Candidat with cin "+cin+" not found"));
     }
 
     public long CinToId(String cin) {
@@ -98,5 +105,23 @@ public class CandidatService {
 
     public Optional<Candidat> findByCin(String cin) {
         return candidatRepository.findByCin(cin);
+    }
+    public List<Candidat> findByActifInscription(){
+        List<Candidat> candidats = new ArrayList<>();
+        for(Candidat candidat : candidatRepository.findAll()){
+            if(inscriptionService.haveActifInscription(candidat.getCin())){
+                candidats.add(candidat);
+            }
+        }
+        return candidats;
+    }
+    public List<Candidat> findByActifAndUnpayedInscription(){
+        List<Candidat> candidats = new ArrayList<>();
+        for(Candidat candidat : candidatRepository.findAll()){
+            if(inscriptionService.haveActifandUnpayedInscription(candidat.getCin())){
+                candidats.add(candidat);
+            }
+        }
+        return candidats;
     }
 }

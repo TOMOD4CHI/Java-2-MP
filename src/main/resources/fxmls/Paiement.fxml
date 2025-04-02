@@ -53,7 +53,7 @@
 
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Méthode:" styleClass="form-label" prefWidth="100"/>
-                    <ComboBox fx:id="methodeComboBox" promptText="Sélectionner une méthode" styleClass="form-field" HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="modeComboBox" promptText="Sélectionner une méthode" styleClass="form-field" HBox.hgrow="ALWAYS"/>
                 </HBox>
 
                 <HBox spacing="10" alignment="CENTER_LEFT">

@@ -10,6 +10,10 @@ import java.util.logging.Level;
 
 // Payment Repository
 public class PaiementRepository extends BaseRepository<Paiement> {
+    private final CandidatRepository candidatRepository = new CandidatRepository();
+    private final  ExamenRepository examenRepository = new ExamenRepository();
+    private final InscriptionRepository inscriptionRepository = new InscriptionRepository();
+
     public List<Paiement> findAll() {
         List<Paiement> paiements = new ArrayList<>();
         String sql = "SELECT * FROM paiement ORDER BY date_paiement DESC";
@@ -48,7 +52,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
 
     public List<Paiement> findAllByCandidat(Long candidatId) {
         List<Paiement> paiements = new ArrayList<>();
-        String sql = "SELECT * FROM paiement p inner join inscription i on p.inscription_id = i.id WHERE id_candidat = ? ORDER BY date_paiement DESC";
+        String sql = "SELECT * FROM paiement WHERE id_candidat = ? ORDER BY date_paiement DESC";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -68,24 +72,28 @@ public class PaiementRepository extends BaseRepository<Paiement> {
     }
 
     private Paiement mapResultSetToPaiement(ResultSet rs) throws SQLException {
+        ModePaiement modePaiement = ModePaiement.valueOf(rs.getString("mode_paiement"));
         if (rs.getObject("id_examen",Integer.class) == null){
-            ModePaiement modePaiement = ModePaiement.valueOf(rs.getString("mode_paiement"));
             return new PaiementInscription(
                 rs.getLong("id"),
+                candidatRepository.findById(rs.getLong("id_candidat")).orElseThrow(),
                 rs.getDouble("montant"),
-                rs.getTimestamp("date_paiement").toLocalDateTime(),
+                rs.getDate("date_paiement").toLocalDate(),
                 modePaiement,
-                new InscriptionRepository().findById(rs.getInt("id_inscription")).orElseThrow(),
-                rs.getString("type_paiement")
+                inscriptionRepository.findById(rs.getInt("id_inscription")).orElseThrow(),
+                rs.getString("type_paiement"),
+                rs.getString("notes")
         );
         }
         else{
             return new PaiementExamen(
                 rs.getLong("id"),
+                candidatRepository.findById(rs.getLong("id_candidat")).orElseThrow(),
                 rs.getDouble("montant"),
-                rs.getTimestamp("date_paiement").toLocalDateTime(),
-                null,
-                new ExamenRepository().findById((long) rs.getInt("id_examen")).orElseThrow()
+                    rs.getDate("date_paiement").toLocalDate(),
+                modePaiement,
+                examenRepository.findById((long) rs.getInt("id_examen")).orElseThrow(),
+                rs.getString("notes")
         );
         }
     }
@@ -117,25 +125,33 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             conn.setAutoCommit(false);
 
             String paiementSql = """
-                INSERT INTO paiement (inscription_id,id_examen,type_paiement, montant, date_paiement,mode_paiement)
-                VALUES (?, ?, ?, ?,?,?)
+                INSERT INTO paiement (id_candidat,inscription_id,id_examen,type_paiement, montant, date_paiement,mode_paiement,notes)
+                VALUES (?,?,?, ?, ?,?,?,?)
              """;
 
             try (PreparedStatement stmt = conn.prepareStatement(paiementSql, Statement.RETURN_GENERATED_KEYS)) {
                 if (paiement instanceof PaiementInscription) {
                     PaiementInscription paiementInscription = (PaiementInscription) paiement;
-                    stmt.setLong(1, paiementInscription.getInscription().getId());
-                    stmt.setNull(2, Types.INTEGER);
-                    stmt.setString(3, paiementInscription.getTypePaiement());
+                    stmt.setLong(2, paiementInscription.getInscription().getId());
+                    stmt.setNull(3, Types.INTEGER);
+                    if(paiementInscription.getTypePaiement() == null){
+                        stmt.setNull(4, Types.VARCHAR);
+                    }
+                    else {
+                        stmt.setString(4, paiementInscription.getTypePaiement());
+                    }
                 } else {
                     PaiementExamen paiementExamen = (PaiementExamen) paiement;
-                    stmt.setNull(1, Types.INTEGER);
-                    stmt.setLong(2, paiementExamen.getTypeExamen().getId());
-                    stmt.setNull(3, Types.VARCHAR);
+                    stmt.setNull(2, Types.INTEGER);
+                    stmt.setLong(3, paiementExamen.getTypeExamen().getId());
+                    stmt.setNull(4, Types.VARCHAR);
                 }
-                stmt.setDouble(4, paiement.getMontant());
-                stmt.setTimestamp(5, Timestamp.valueOf(paiement.getDatePaiement()));
-                stmt.setString(6, paiement.getModePaiement().name());
+                stmt.setLong(1, paiement.getCandidat().getId());
+                stmt.setDouble(5, paiement.getMontant());
+                stmt.setDate(6, Date.valueOf(paiement.getDatePaiement()));
+                stmt.setString(7, paiement.getModePaiement().name());
+                stmt.setString(8, paiement.getDescription());
+
 
                 if (stmt.executeUpdate() > 0) {
                     try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {

@@ -106,4 +106,7 @@ public class Inscription {
                 ", nextPaymentDate=" + nextPaymentDate +
                 '}';
     }
+    public double getAmount(){
+        return plan.getPrice();
+    }
 }
