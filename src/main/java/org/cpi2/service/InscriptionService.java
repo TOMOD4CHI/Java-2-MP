@@ -16,7 +16,12 @@ public class InscriptionService {
     public InscriptionService() {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
-        this.paiementService = new PaiementService();
+        this.paiementService = new PaiementService(this);
+    }
+    public InscriptionService(PaiementService paiementService) {
+        this.inscriptionRepository = new InscriptionRepository();
+        this.planRepository = new PlanRepository();
+        this.paiementService = paiementService;
     }
 
     public Optional<Inscription> getInscriptionById(Integer id) {
@@ -64,12 +69,14 @@ public class InscriptionService {
 
     private void updateNextPaymentDate(Inscription inscription) {
         // If not paid and has payment cycle, calculate next payment date
-        if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
-            Date nextPaymentDate = calculateNextPaymentDate(new Date(), inscription.getPaymentCycle());
-            inscription.setnextPaymentDate(nextPaymentDate);
-        } else if (inscription.isPaymentStatus()) {
-            // If fully paid, there's no next payment
-            inscription.setnextPaymentDate(null);
+        if (!Objects.equals(inscription.getPaymentCycle(), "Totale")) {
+            if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
+                Date nextPaymentDate = calculateNextPaymentDate(new Date(), inscription.getPaymentCycle());
+                inscription.setnextPaymentDate(nextPaymentDate);
+            } else if (inscription.isPaymentStatus()) {
+                // If fully paid, there's no next payment
+                inscription.setnextPaymentDate(null);
+            }
         }
     }
 

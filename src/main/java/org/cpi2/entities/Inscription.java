@@ -107,6 +107,6 @@ public class Inscription {
                 '}';
     }
     public double getAmount(){
-        return plan.getPrice();
+        return this.plan.getPrice();
     }
 }

@@ -99,7 +99,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
     }
     //Take in mind that its possible to pay with tranches only for inscription (so this method is safe)
     public List<PaiementInscription> getTranches(int inscriptionId) throws SQLException {
-        String sql = "SELECT * FROM tranche_paiement WHERE inscription_id = ? ORDER BY date_paiement ASC";
+        String sql = "SELECT * FROM paiement WHERE inscription_id = ? ORDER BY date_paiement ASC";
         List<PaiementInscription> tranchePaiements = new ArrayList<>();
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

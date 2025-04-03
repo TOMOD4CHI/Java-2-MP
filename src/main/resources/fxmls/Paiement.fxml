@@ -64,7 +64,7 @@
 
                 <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
                     <Button text="Annuler" styleClass="button, cancel-button" prefWidth="120"/>
-                    <Button text="Enregistrer"  styleClass="button, submit-button" prefWidth="120"/>
+                    <Button text="Enregistrer" onAction="#handleSavePayment" styleClass="button, submit-button" prefWidth="120"/>
                 </HBox>
 
                 <Separator>

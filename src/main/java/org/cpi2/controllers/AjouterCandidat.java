@@ -204,8 +204,6 @@ public class AjouterCandidat {
             inscription.setPaymentStatus(false);
             inscription.setStatus("En Cours");
             inscription.setPaymentCycle(cycle);
-            if(cycle == "Totale")
-                inscription.setPaymentCycle(null);
             inscription.setInscriptioDate(Date.valueOf(LocalDate.now()));
             inscription.setPlan(CoursePlan.valueOf(typeComboBox.getValue()));
 

@@ -97,7 +97,7 @@ public class Paiement implements Initializable {
         // Initialize mock candidates
         candidatComboBox.setItems(FXCollections.observableArrayList(
                 candidatService.getAllCandidats().stream()
-                        .map(c -> "("+c.getCin()+")"+c.getNom()+" "+c.getPrenom())
+                        .map(c -> "("+c.getCin()+") : "+c.getNom()+" "+c.getPrenom())
                         .toList()
         ));
 
@@ -215,11 +215,11 @@ public class Paiement implements Initializable {
                     double reste = paiementService.calculerMontantRestant(inscription.getId());
 
                     if (type.equals("Inscription"))
-                        type = null;
+                        type = "Totale";
                     else
                         type = inscription.getPaymentCycle();
                     if(!Objects.equals(type, inscription.getPaymentCycle())){
-                        showErrorDialog("Type de paiement incorrect vous avez choisit "+inscription.getPaymentCycle()+"lors de l'inscription");
+                        showErrorDialog("Type de paiement incorrect vous avez choisit "+inscription.getPaymentCycle()+" lors de l'inscription");
                         return;
                     }
                     if(montant>reste){
@@ -227,19 +227,18 @@ public class Paiement implements Initializable {
                             showErrorDialog("Le candidat a déjà payé la totalité de son inscription");//TODO: add the rest of the message
                         }
                         else
-                            showErrorDialog("Montant supérieur au montant restant ("+reste+")");//TODO: add the rest of the message
+                            showErrorDialog("Montant supérieur au montant restant ("+reste+")DT");//TODO: add the rest of the message
                         return;
                     }
-                    //type is null means paiement totale
-                    if(montant < reste && type == null){
-                        showErrorDialog("Montant inférieur au montant de l'inscription ("+inscription.getPlan().getPrice()+")");//TODO: add the rest of the message
+                    if(montant < reste && Objects.equals(type, "Totale")){
+                        showErrorDialog("Montant inférieur au montant de l'inscription ("+inscription.getPlan().getPrice()+")DT");//TODO: add the rest of the message
                         return;
                     }
 
 
                     paiementService.enregistrerPaiement(new PaiementInscription(null,
                             candidatService.getCandidatByCin(cin),
-                            montant, date, ModePaiement.valueOf(mode), inscription, description, type
+                            montant, date, ModePaiement.valueOf(mode), inscription, type, description
                     ));
                     if(montant==reste){
                         inscriptionService.updatePaymentStatus(inscription.getId(),true);

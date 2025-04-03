@@ -1,6 +1,8 @@
 package org.cpi2.service;
 
 
+import org.cpi2.Exceptions.DataNotFound;
+import org.cpi2.entities.Inscription;
 import org.cpi2.entities.Paiement;
 import org.cpi2.entities.PaiementInscription;
 import org.cpi2.repository.PaiementRepository;
@@ -19,9 +21,13 @@ public class PaiementService {
     public PaiementService() {
         this.paiementRepository = new PaiementRepository();
         this.candidatRepository = new CandidatRepository();
-        this.inscriptionService = new InscriptionService();
+        this.inscriptionService = new InscriptionService(this);
     }
-
+    public PaiementService(InscriptionService inscriptionService) {
+        this.paiementRepository = new PaiementRepository();
+        this.candidatRepository = new CandidatRepository();
+        this.inscriptionService = inscriptionService;
+    }
     public List<Paiement> getAllPaiements() {
         return paiementRepository.findAll();
     }
@@ -46,10 +52,15 @@ public class PaiementService {
                 .sum();
     }
 
-    public double calculerMontantRestant(int inscriptionId) throws SQLException {
+    public double calculerMontantRestant(int inscriptionId) throws SQLException, DataNotFound {
         double montantPaye = calculerMontantPayer(inscriptionId);
-        double montantTotal = inscriptionService.getInscriptionById(inscriptionId).get().getAmount();
-        return montantTotal - montantPaye;
+        Optional<Inscription> inscriptionOpt = inscriptionService.getInscriptionById(inscriptionId);
+        if (inscriptionOpt.isPresent()) {
+            double montantTotal = inscriptionOpt.get().getAmount();
+            return montantTotal - montantPaye;
+        } else {
+            throw new DataNotFound("Inscription not found for id: " + inscriptionId);
+        }
     }
 
 

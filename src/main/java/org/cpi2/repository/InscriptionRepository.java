@@ -13,11 +13,11 @@ import java.util.logging.Logger;
 
 public class InscriptionRepository extends BaseRepository<Inscription> {
     private static final Logger LOGGER = Logger.getLogger(InscriptionRepository.class.getName());
-    private final PlanRepository planRepository;
-    private HashMap<Integer, CoursePlan> plans = new HashMap<>();
+    private final HashMap<Integer, CoursePlan> plans;
 
     public InscriptionRepository() {
-        planRepository = new PlanRepository();
+        this.plans = new HashMap<>();
+        PlanRepository planRepository = new PlanRepository();
         for(CoursePlan plan : planRepository.findAll()) {
             plans.put(plan.getId(), plan);
         }
@@ -113,7 +113,7 @@ public class InscriptionRepository extends BaseRepository<Inscription> {
     public boolean update(Inscription inscription) {
         String sql = """
             UPDATE inscription 
-            SET cin = ?, plan_id = ?, statut = ?, staut_paiement = ?, 
+            SET cin = ?, plan_id = ?, statut = ?, statut_paiement = ?, 
                 cycle_paiement = ?, date_paiement_suivant = ?
             WHERE id = ?
         """;

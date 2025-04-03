@@ -21,11 +21,4 @@ public class PaiementInscription extends Paiement {
         this.inscription = inscription;
     }
 
-    public String getTypePaiement() {
-        return typePaiement;
-    }
-
-    public void setTypePaiement(String typePaiement) {
-        this.typePaiement = typePaiement;
-    }
 }
