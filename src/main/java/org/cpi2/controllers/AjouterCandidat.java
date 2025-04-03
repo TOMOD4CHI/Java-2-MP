@@ -171,6 +171,9 @@ public class AjouterCandidat {
         String phone = phoneField.getText().trim();
         String email = emailField.getText().trim();
         String typePermis = typeComboBox.getValue();
+        String cycle = "Mensuel";//this is the solution until the fields are added to the form
+        //String cycle = cycleComboBox.getValue();
+
 
         // Check required fields
         if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || 
@@ -194,11 +197,13 @@ public class AjouterCandidat {
             candidat.setTelephone(phone);
             candidat.setEmail(email);
 
+            //TODO: Add more fields to choose payment cycle obligatory
+            //these are the options : "Mensuel", "Trimestriel", "Hebdomadaire","Totale"
 
             inscription.setCin(candidat.getCin());
             inscription.setPaymentStatus(false);
             inscription.setStatus("En Cours");
-            inscription.setPaymentCycle("Non défini");
+            inscription.setPaymentCycle(cycle);
             inscription.setInscriptioDate(Date.valueOf(LocalDate.now()));
             inscription.setPlan(CoursePlan.valueOf(typeComboBox.getValue()));
 

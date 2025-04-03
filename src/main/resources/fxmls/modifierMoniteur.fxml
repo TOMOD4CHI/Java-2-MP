@@ -86,7 +86,7 @@
 
     <HBox spacing="10" alignment="CENTER">
         <Button text="Annuler" onAction="#cancelAction" styleClass="cancel-button"/>
-        <Button text="Modifier" onAction="#modifierAction" styleClass="button, submit-button"/>
+        <Button text="Modifier" onAction="#modifierAction" styleClass="primary-button"/>
     </HBox>
     
 

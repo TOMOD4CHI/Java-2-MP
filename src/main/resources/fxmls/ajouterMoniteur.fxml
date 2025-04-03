@@ -84,7 +84,7 @@
 
     <HBox spacing="10" alignment="CENTER">
         <Button text="Annuler" onAction="#cancelAction" styleClass="cancel-button"/>
-        <Button text="Ajouter" onAction="#ajouterAction" styleClass="button, submit-button"/>
+        <Button text="Ajouter" onAction="#ajouterAction" styleClass="primary-button"/>
     </HBox>
 
 </VBox>

@@ -1,13 +1,14 @@
 package org.cpi2.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PaiementExamen extends Paiement {
     private Examen examen;
 
 
-    public PaiementExamen(Long id,Double montant, LocalDateTime datePaiement, ModePaiement modePaiement,Examen examen) {
-        super(id,montant, datePaiement,modePaiement);
+    public PaiementExamen(Long id, Candidat candidat, Double montant, LocalDate datePaiement, ModePaiement modePaiement, Examen examen, String description) {
+        super(id,candidat,montant, datePaiement,modePaiement,(description == null || description.isEmpty())?"Paiement d'inscription pour "+examen.getTypeExamen():description,null);
         this.examen = examen;
     }
 

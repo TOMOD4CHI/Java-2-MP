@@ -11,10 +11,17 @@ import java.util.stream.Collectors;
 public class InscriptionService {
     private final InscriptionRepository inscriptionRepository;
     private final PlanRepository planRepository;
+    private final PaiementService paiementService;
 
     public InscriptionService() {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
+        this.paiementService = new PaiementService(this);
+    }
+    public InscriptionService(PaiementService paiementService) {
+        this.inscriptionRepository = new InscriptionRepository();
+        this.planRepository = new PlanRepository();
+        this.paiementService = paiementService;
     }
 
     public Optional<Inscription> getInscriptionById(Integer id) {
@@ -62,12 +69,14 @@ public class InscriptionService {
 
     private void updateNextPaymentDate(Inscription inscription) {
         // If not paid and has payment cycle, calculate next payment date
-        if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
-            Date nextPaymentDate = calculateNextPaymentDate(new Date(), inscription.getPaymentCycle());
-            inscription.setnextPaymentDate(nextPaymentDate);
-        } else if (inscription.isPaymentStatus()) {
-            // If fully paid, there's no next payment
-            inscription.setnextPaymentDate(null);
+        if (!Objects.equals(inscription.getPaymentCycle(), "Totale")) {
+            if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
+                Date nextPaymentDate = calculateNextPaymentDate(new Date(), inscription.getPaymentCycle());
+                inscription.setnextPaymentDate(nextPaymentDate);
+            } else if (inscription.isPaymentStatus()) {
+                // If fully paid, there's no next payment
+                inscription.setnextPaymentDate(null);
+            }
         }
     }
 
@@ -91,17 +100,14 @@ public class InscriptionService {
         calendar.setTime(currentDate);
 
         switch (paymentCycle.toLowerCase()) {
-            case "weekly":
+            case "hebdomadaire":
                 calendar.add(Calendar.WEEK_OF_YEAR, 1);
                 break;
-            case "monthly":
+            case "mensuel":
                 calendar.add(Calendar.MONTH, 1);
                 break;
-            case "quarterly":
+            case "trimestriel":
                 calendar.add(Calendar.MONTH, 3);
-                break;
-            case "annually":
-                calendar.add(Calendar.YEAR, 1);
                 break;
             default:
                 calendar.add(Calendar.MONTH, 1); // Default to monthly
@@ -135,6 +141,11 @@ public class InscriptionService {
                 .filter(Inscription::isPaymentStatus)
                 .toList();
     }
+    public List<Inscription> getUnpaidInscription() {
+        return getActifInscription().stream()
+                .filter(inscription -> !inscription.isPaymentStatus())
+                .toList();
+    }
     public List<Inscription> getActifInscirptionBycin(String cin) {
         return getActifInscription().stream()
                 .filter(inscription -> inscription.getCin().equals(cin))
@@ -151,6 +162,9 @@ public class InscriptionService {
         return !getActifInscirptionBycin(cin).isEmpty();
     }
 
+    public boolean haveActifandUnpayedInscription(String cin) {
+        return getUnpaidInscription().stream().anyMatch(inscription -> inscription.getCin().equals(cin) && inscription.getStatus().equals("En Cours"));
+    }
 
 
     public boolean isValidPaymentCycle(String cycle) {

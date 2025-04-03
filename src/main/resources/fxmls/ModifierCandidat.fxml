@@ -87,7 +87,7 @@
 
     <HBox spacing="10" alignment="CENTER">
         <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="cancel-button"/>
-        <Button fx:id="confirmButton" text="Modifier" onAction="#confirmAction" styleClass="button, submit-button"/>
+        <Button fx:id="confirmButton" text="Modifier" onAction="#confirmAction" styleClass="primary-button"/>
     </HBox>
 
 </VBox>

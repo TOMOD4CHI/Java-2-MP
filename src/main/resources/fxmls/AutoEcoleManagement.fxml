@@ -67,7 +67,7 @@
                         </GridPane>
 
                         <HBox fx:id="buttonContainer" spacing="15" alignment="CENTER">
-                            <Button fx:id="modifierButton" text="Modifier" onAction="#handleModifier" styleClass="button"/>
+                            <Button fx:id="modifierButton" text="Modifier" onAction="#handleModifier" styleClass="primary-button"/>
                         </HBox>
                     </VBox>
 
