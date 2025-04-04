@@ -6,6 +6,7 @@ import org.cpi2.entities.Vehicule;
 import org.cpi2.repository.VehiculeRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -20,6 +21,26 @@ public class VehiculeService {
 
     public VehiculeService() {
         this.vehiculeRepository = new VehiculeRepository();
+    }
+
+    public boolean ajouterVehicule(Vehicule vehicule) {
+        if (!validerVehicule(vehicule)) {
+            return false;
+        }
+
+        // Check if vehicle with same registration already exists
+        if (vehiculeRepository.findByImmatriculation(vehicule.getImmatriculation()).isPresent()) {
+            LOGGER.log(Level.WARNING, "Vehicle with registration " + vehicule.getImmatriculation() + " already exists");
+            return false;
+        }
+
+        try {
+            vehicule.setKilometrageProchainEntretien(getNextKilometrageByTypeVehicule(vehicule.getTypeVehicule()));
+            return vehiculeRepository.save(vehicule);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error adding vehicle", e);
+            return false;
+        }
     }
 
     /**
@@ -53,52 +74,30 @@ public class VehiculeService {
      * @param typePermis The license type
      * @return List of vehicles for the specified license type
      */
-    public List<Vehicule> getVehiculesByTypePermis(TypePermis typePermis) {
-        return vehiculeRepository.findByTypePermis(typePermis);
+    public List<Vehicule> findByTypePermis(TypePermis typePermis) {
+        List<Vehicule> vehicules = new ArrayList<>();
+        for (Vehicule vehicule : getAllVehicules()) {
+            if (vehicule.getTypePermis() == typePermis) {
+                vehicules.add(vehicule);
+            }
+        }
+        return vehicules;
     }
 
-    /**
-     * Adds a new vehicle
-     * @param vehicule The vehicle to add
-     * @return true if successful, false otherwise
-     */
-    public boolean ajouterVehicule(Vehicule vehicule) {
-        if (!validerVehicule(vehicule)) {
-            return false;
-        }
 
-        // Check if vehicle with same registration already exists
-        if (vehiculeRepository.findByImmatriculation(vehicule.getImmatriculation()).isPresent()) {
-            LOGGER.log(Level.WARNING, "Vehicle with registration " + vehicule.getImmatriculation() + " already exists");
-            return false;
-        }
-
-        try {
-            boolean savedVehicule = vehiculeRepository.save(vehicule);
-            return savedVehicule;
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error adding vehicle", e);
-            return false;
-        }
-    }
 
     /**
      * Updates an existing vehicle
      * @param vehicule The vehicle to update
      * @return true if successful, false otherwise
      */
-    public boolean modifierVehicule(Vehicule vehicule) {
+    public boolean modifierVehicule(Vehicule old,Vehicule vehicule) {
         if (!validerVehicule(vehicule)) {
             return false;
         }
 
         try {
-            // Check if vehicle exists
-            Optional<Vehicule> existingVehicule = vehiculeRepository.findById(vehicule.getId());
-            if (existingVehicule.isEmpty()) {
-                LOGGER.log(Level.WARNING, "Vehicle with ID " + vehicule.getId() + " not found");
-                return false;
-            }
+            Optional<Vehicule> existingVehicule = vehiculeRepository.findByImmatriculation(old.getImmatriculation());
 
             // Check if the immatriculation is unique (if changed)
             if (!existingVehicule.get().getImmatriculation().equals(vehicule.getImmatriculation())) {
@@ -204,6 +203,18 @@ public class VehiculeService {
             LOGGER.log(Level.WARNING, "Vehicle make cannot be null or empty");
             return false;
         }
+        if (vehicule.getAnnee() == null || vehicule.getAnnee() < 1886 || vehicule.getAnnee() > LocalDate.now().getYear()) {
+            LOGGER.log(Level.WARNING, "Vehicle year cannot be null or invalid");
+            return false;
+        }
+        if (vehicule.getKilometrageTotal() < 0) {
+            LOGGER.log(Level.WARNING, "Vehicle total mileage cannot be negative");
+            return false;
+        }
+        if (vehicule.getKilometrageProchainEntretien() < 0) {
+            LOGGER.log(Level.WARNING, "Vehicle next maintenance mileage cannot be negative");
+            return false;
+        }
 
         if (vehicule.getModele() == null || vehicule.getModele().trim().isEmpty()) {
             LOGGER.log(Level.WARNING, "Vehicle model cannot be null or empty");
@@ -265,5 +276,16 @@ public class VehiculeService {
         }
 
         return true;
+    }
+    public int getNextKilometrageByTypeVehicule(String typeVehicule) {
+        if (typeVehicule.equalsIgnoreCase("Voiture")) {
+            return 10000;
+        } else if (typeVehicule.equalsIgnoreCase("Camion")) {
+            return 20000;
+        } else if (typeVehicule.equalsIgnoreCase("Moto")) {
+            return 5000;
+        } else {
+            return 10000; // Default value for unknown vehicle types
+        }
     }
 }

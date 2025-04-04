@@ -20,7 +20,7 @@
             <HBox spacing="10" alignment="CENTER_LEFT" styleClass="search-container">
                 <TextField fx:id="rechercheField" promptText="Rechercher un véhicule..."
                            HBox.hgrow="ALWAYS" styleClass="search-field"/>
-                <Button text="Rechercher" styleClass="search-button"/>
+                <Button text="Rechercher" onAction="#handleRechercher" styleClass="search-button"/>
             </HBox>
         </VBox>
     </top>

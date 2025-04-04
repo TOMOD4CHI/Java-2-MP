@@ -12,6 +12,7 @@ import org.cpi2.entities.TypePermis;
 import org.cpi2.entities.Vehicule;
 import org.cpi2.service.VehiculeService;
 
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -98,7 +99,7 @@ public class GestionVehicule implements Initializable {
         
         typeVehiculeCombo.getItems().clear();
         for (TypePermis type : TypePermis.values()) {
-            typeVehiculeCombo.getItems().add(type.name());
+            typeVehiculeCombo.getItems().add(type.name()+" : ("+type.getTypeVehicule()+")");
         }
 
         activerBoutons(false);
@@ -115,7 +116,7 @@ public class GestionVehicule implements Initializable {
         immatriculationCol.setCellValueFactory(new PropertyValueFactory<>("immatriculation"));
         typeVehiculeCol.setCellValueFactory(cellData -> {
             TypePermis typePermis = cellData.getValue().getTypePermis();
-            return new SimpleStringProperty(typePermis != null ? typePermis.name() : "");
+            return new SimpleStringProperty(typePermis != null ? typePermis.getTypeVehicule() : "");
         });
         marqueModeleCol.setCellValueFactory(cellData -> cellData.getValue().marqueModeleProperty());
         kilometrageCol.setCellValueFactory(new PropertyValueFactory<>("kilometrageTotal"));
@@ -138,6 +139,7 @@ public class GestionVehicule implements Initializable {
         supprimerBtn.setDisable(!actif);
         detailsBtn.setDisable(!actif);
     }
+
 
     @FXML
     private void handleAjouterVehicule(ActionEvent event) {
@@ -203,25 +205,31 @@ public class GestionVehicule implements Initializable {
         }
 
         Vehicule vehicule;
-        boolean success;
+        boolean success = false;
         
         if (isEditMode && vehiculeSelected != null) {
-            vehicule = vehiculeSelected;
-            updateVehiculeFromForm(vehicule);
-            success = vehiculeService.modifierVehicule(vehicule);
-            if (success) {
-                statusLabel.setText("Véhicule modifié avec succès");
-                int index = vehiculesList.indexOf(vehiculeSelected);
-                if (index >= 0) {
-                    vehiculesList.set(index, vehicule);
+            if (validerFormulaire()) {
+                Vehicule oldVehicule = vehiculeSelected;
+                updateVehiculeFromForm(vehiculeSelected);
+                success = vehiculeService.modifierVehicule(oldVehicule,vehiculeSelected);
+                if (success) {
+                    vehiculesTable.refresh();
+                    statusLabel.setText("Véhicule modifié avec succès");
+                } else {
+                    showErrorAlert("Erreur de modification", "Impossible de modifier le véhicule. Vérifiez les données saisies.");
                 }
             }
         } else {
-            vehicule = createVehiculeFromForm();
-            success = vehiculeService.ajouterVehicule(vehicule);
-            if (success) {
-                vehiculesList.add(vehicule);
-                statusLabel.setText("Véhicule ajouté avec succès");
+            if(validerFormulaire()){
+                vehicule = createVehiculeFromForm();
+                success = vehiculeService.ajouterVehicule(vehicule);
+                if (success) {
+                    vehiculesList.add(vehicule);
+                    statusLabel.setText("Véhicule ajouté avec succès");
+                }
+                else {
+                    showErrorAlert("Erreur d'ajout", "Impossible d'ajouter le véhicule. Vérifiez les données saisies.");
+                }
             }
         }
 
@@ -252,8 +260,9 @@ public class GestionVehicule implements Initializable {
         }
         
         // Set default values for new vehicles
-        vehicule.setKilometrageProchainEntretien(vehicule.getKilometrageTotal() + 10000);
+        vehicule.setKilometrageProchainEntretien(vehicule.getKilometrageTotal() + vehiculeService.getNextKilometrageByTypeVehicule(typePermis.getTypeVehicule()));
         vehicule.setDateProchainEntretien(LocalDate.now().plusMonths(6));
+        vehicule.setAnnee(dateMiseServicePicker.getValue().getYear());
         vehicule.setStatut("Disponible");
         
         return vehicule;
@@ -264,6 +273,7 @@ public class GestionVehicule implements Initializable {
         vehicule.setTypePermis(getTypePermisFromCombo());
         vehicule.setMarque(marqueField.getText().trim());
         vehicule.setModele(modeleField.getText().trim());
+        vehicule.setAnnee(dateMiseServicePicker.getValue().getYear());
         
         try {
             vehicule.setKilometrageTotal(Integer.parseInt(kilometrageField.getText()));
@@ -275,13 +285,7 @@ public class GestionVehicule implements Initializable {
     }
     
     private TypePermis getTypePermisFromCombo() {
-        String typeCode = typeVehiculeCombo.getValue();
-        
-        try {
-            return TypePermis.valueOf(typeCode);
-        } catch (IllegalArgumentException e) {
-            return TypePermis.B; // Default to B if invalid
-        }
+        return TypePermis.valueOf(typeVehiculeCombo.getValue().substring(0,1));
     }
 
     private boolean validerFormulaire() {
@@ -359,5 +363,22 @@ public class GestionVehicule implements Initializable {
         modeleField.clear();
         kilometrageField.clear();
         dateMiseServicePicker.setValue(null);
+    }
+
+    public void handleRechercher() {
+        String recherche = rechercheField.getText().trim().toLowerCase();
+        if (recherche.isEmpty()) {
+            vehiculesTable.setItems(vehiculesList);
+        } else {
+            ObservableList<Vehicule> filteredList = FXCollections.observableArrayList();
+            for (Vehicule vehicule : vehiculesList) {
+                if (vehicule.getImmatriculation().toLowerCase().contains(recherche) ||
+                    vehicule.getMarque().toLowerCase().contains(recherche) ||
+                    vehicule.getModele().toLowerCase().contains(recherche)) {
+                    filteredList.add(vehicule);
+                }
+            }
+            vehiculesTable.setItems(filteredList);
+        }
     }
 }

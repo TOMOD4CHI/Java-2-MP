@@ -22,4 +22,20 @@ public enum TypePermis {
     public String getLibelle() {
         return this.name();
     }
+
+    public String getTypeVehicule() {
+        return switch (this) {
+            case A -> "Moto";
+            case B -> "Voiture";
+            case C -> "Camion";
+        };
+    }
+    public TypePermis getTypeByVehicule(String typeVehicule) {
+        return switch (typeVehicule) {
+            case "Moto" -> A;
+            case "Voiture" -> B;
+            case "Camion" -> C;
+            default -> null;
+        };
+    }
 }

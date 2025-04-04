@@ -6,11 +6,26 @@ import org.cpi2.entities.Vehicule;
 
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 // Vehicule Repository
 public class VehiculeRepository extends BaseRepository<Vehicule> {
+    private final TypePermisRepository typePermisRepository;
+    private static final Logger LOGGER = Logger.getLogger(VehiculeRepository.class.getName());
+    private HashMap<Integer, TypePermis> permis_mapper = new HashMap<>();
+
+    public VehiculeRepository() {
+        this.typePermisRepository = new TypePermisRepository();
+        List<String> permisList = typePermisRepository.findAll();
+        for (String permis : permisList) {
+            permis_mapper.put(typePermisRepository.findByCode(permis).get(),TypePermis.valueOf(permis));
+        }
+
+    }
+
 
     public List<Vehicule> findAll() {
         List<Vehicule> vehicules = new ArrayList<>();
@@ -67,12 +82,13 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
 
     public List<Vehicule> findAllByTypePermis(TypePermis typePermis) {
         List<Vehicule> vehicules = new ArrayList<>();
-        String sql = "SELECT * FROM vehicule WHERE id_type_permis = ?";
+        String sql = "SELECT * FROM vehicule WHERE type_permis_id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, typePermis.name());
+            int id = typePermisRepository.findByCode(typePermis.name()).get();
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -85,22 +101,38 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
     }
 
     private Vehicule mapResultSetToVehicule(ResultSet rs) throws SQLException {
-        String typePermisStr = rs.getString("id_type_permis");
-        TypePermis typePermis = Arrays.stream(TypePermis.values())
-                .filter(tp -> tp.name().equals(typePermisStr))
-                .findFirst()
-                .orElseThrow(() -> new SQLException("Invalid type_permis value: " + typePermisStr));
+        int permis_id = rs.getInt("type_permis_id");
+
+        String immatriculation = rs.getString("immatriculation");
+        String marque = rs.getString("marque");
+        String modele = rs.getString("modele");
+        int annee = rs.getInt("annee");
+        LocalDate dateMiseEnService = rs.getDate("date_mise_service").toLocalDate();
+        int kilometrageTotal = rs.getInt("kilometrage_total");
+        int kilometrageProchainEntretien = rs.getInt("kilometrage_prochain_entretien");
+        String statut = rs.getString("statut");
+        LocalDate dateProchainEntretien = rs.getDate("date_prochain_entretien") != null ? rs.getDate("date_prochain_entretien").toLocalDate() : null;
+        LocalDate dateDerniereVisiteTechnique = rs.getDate("date_derniere_visite_technique") != null ? rs.getDate("date_derniere_visite_technique").toLocalDate() : null;
+        LocalDate dateProchaineVisiteTechnique = rs.getDate("date_prochaine_visite_technique") != null ? rs.getDate("date_prochaine_visite_technique").toLocalDate() : null;
+        long id =  rs.getLong("id");
+        TypePermis typePermis = permis_mapper.get(permis_id);
+
 
         Vehicule vehicule = new Vehicule(
-                rs.getString("immatriculation"),
-                rs.getString("marque"),
-                rs.getString("modele"),
+                immatriculation,
+                marque,
+                modele,
+                annee,
                 typePermis,
-                rs.getDate("date_mise_en_service").toLocalDate(),
-                rs.getInt("kilometrage_avant_entretien")
+                dateMiseEnService,
+                kilometrageTotal,
+                kilometrageProchainEntretien
         );
-        vehicule.setId((int) rs.getLong("id"));
-        vehicule.setKilometrageTotal(rs.getInt("kilometrage_total"));
+        vehicule.setId((int) id);
+        vehicule.setDateProchainEntretien(dateProchainEntretien);
+        vehicule.setDateDerniereVisiteTechnique(dateDerniereVisiteTechnique);
+        vehicule.setDateProchaineVisiteTechnique(dateProchaineVisiteTechnique);
+        vehicule.setStatut(statut);
         return vehicule;
     }
 
@@ -161,12 +193,20 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
     }
 
     public boolean save(Vehicule vehicule) {
+        int typePermisId;
+        try {
+            typePermisId = typePermisRepository.findByCode(vehicule.getTypePermis().name()).get();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error getting type permis ID", e);
+            return false;
+        }
+
         String sql = """
-            INSERT INTO vehicule 
-            (immatriculation, marque, modele, id_type_permis, date_mise_en_service, 
-             kilometrage_total, kilometrage_avant_entretien)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """;
+        INSERT INTO vehicule 
+        (immatriculation, marque, modele, type_permis_id, date_mise_service, 
+         kilometrage_total, kilometrage_prochain_entretien, statut)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """;
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -174,10 +214,11 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setString(1, vehicule.getImmatriculation());
             stmt.setString(2, vehicule.getMarque());
             stmt.setString(3, vehicule.getModele());
-            stmt.setString(4, vehicule.getTypePermis().name());
+            stmt.setInt(4, typePermisId);  // Use the ID we retrieved earlier
             stmt.setDate(5, Date.valueOf(vehicule.getDateMiseEnService()));
             stmt.setInt(6, vehicule.getKilometrageTotal());
             stmt.setInt(7, vehicule.getKilometrageAvantEntretien());
+            stmt.setString(8, vehicule.getStatut());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -198,10 +239,17 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
     }
 
     public boolean update(Vehicule vehicule) {
+        int typePermisId;
+        try {
+            typePermisId = typePermisRepository.findByCode(vehicule.getTypePermis().name()).get();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error getting type permis ID", e);
+            return false;
+        }
         String sql = """
             UPDATE vehicule 
-            SET immatriculation = ?, marque = ?, modele = ?, id_type_permis = ?,
-                date_mise_en_service = ?, kilometrage_total = ?, kilometrage_avant_entretien = ?
+            SET immatriculation = ?, marque = ?, modele = ?, type_permis_id = ?,
+                date_mise_service = ?, kilometrage_total = ?, kilometrage_prochain_entretien = ?,statut = ?
             WHERE id = ?
         """;
 
@@ -211,11 +259,12 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setString(1, vehicule.getImmatriculation());
             stmt.setString(2, vehicule.getMarque());
             stmt.setString(3, vehicule.getModele());
-            stmt.setString(4, vehicule.getTypePermis().name());
+            stmt.setInt(4, typePermisId);
             stmt.setDate(5, Date.valueOf(vehicule.getDateMiseEnService()));
             stmt.setInt(6, vehicule.getKilometrageTotal());
             stmt.setInt(7, vehicule.getKilometrageAvantEntretien());
-            stmt.setLong(8, vehicule.getId());
+            stmt.setString(8, vehicule.getStatut());
+            stmt.setLong(9, vehicule.getId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -238,15 +287,6 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
         }
     }
 
-    public List<Vehicule> findByTypePermis(TypePermis typePermis) {
-        List<Vehicule> vehicules = new ArrayList<>();
-        for (Vehicule vehicule : findAll()) {
-            if (vehicule.getTypePermis() == typePermis) {
-                vehicules.add(vehicule);
-            }
-        }
-        return vehicules;
-    }
 
     public List<Entretien> getEntretiensByVehiculeId(Long vehiculeId) {
         List<Entretien> entretiens = new ArrayList<>();

@@ -25,7 +25,7 @@ public class TypePermisRepository extends BaseRepository<Object> {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(rs.getString("libelle"));
+                return Optional.of(rs.getString("code"));
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error finding type permis by ID", e);
@@ -42,7 +42,7 @@ public class TypePermisRepository extends BaseRepository<Object> {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                typePermis.add(rs.getString("libelle"));
+                typePermis.add(rs.getString("code"));
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error finding all type permis", e);

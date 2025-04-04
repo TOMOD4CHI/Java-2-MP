@@ -38,14 +38,15 @@ public class Vehicule {
     }
 
     // Constructor with required fields
-    public Vehicule(String immatriculation, String marque, String modele, TypePermis typePermis, 
-                   LocalDate dateMiseEnService, Integer kilometrageProchainEntretien) {
+    public Vehicule(String immatriculation, String marque, String modele,int annee, TypePermis typePermis,
+                   LocalDate dateMiseEnService,int kilometrageTotal, int kilometrageProchainEntretien) {
         this.immatriculation = immatriculation;
         this.marque = marque;
         this.modele = modele;
+        this.annee = annee;
         this.typePermis = typePermis;
         this.dateMiseEnService = dateMiseEnService;
-        this.kilometrageTotal = 0;
+        this.kilometrageTotal = kilometrageTotal ;
         this.kilometrageProchainEntretien = kilometrageProchainEntretien;
         this.statut = "Disponible";
         this.entretiens = new ArrayList<>();
@@ -233,6 +234,9 @@ public class Vehicule {
     public Integer getKilometrageAvantEntretien() {
         // TODO : add it
         return 0;
+    }
+    public String getTypeVehicule() {
+        return typePermis.getTypeVehicule();
     }
 }
 
