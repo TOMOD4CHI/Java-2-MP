@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2025 at 12:59 AM
+-- Generation Time: Apr 05, 2025 at 01:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -129,6 +129,8 @@ CREATE TABLE `entretien` (
   `type_entretien` varchar(100) NOT NULL,
   `description` text DEFAULT NULL,
   `cout` decimal(10,2) NOT NULL,
+  `entretien_suivant` date NOT NULL,
+  `maintenance` int(1) NOT NULL DEFAULT 0,
   `kilometrage` int(11) NOT NULL,
   `facture_path` varchar(255) DEFAULT NULL,
   `statut` varchar(50) DEFAULT 'Planifié',
@@ -166,7 +168,7 @@ CREATE TABLE `inscription` (
   `plan_id` int(10) NOT NULL,
   `statut` varchar(20) NOT NULL DEFAULT 'Actif',
   `statut_paiement` varchar(20) NOT NULL DEFAULT 'En attente',
-  `cycle_paiement` varchar(20) DEFAULT NULL,
+  `cycle_paiement` varchar(20) NOT NULL DEFAULT 'Totale',
   `date_inscription` date NOT NULL DEFAULT current_timestamp(),
   `date_paiement_suivant` date DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -177,7 +179,7 @@ CREATE TABLE `inscription` (
 --
 
 INSERT INTO `inscription` (`id`, `cin`, `plan_id`, `statut`, `statut_paiement`, `cycle_paiement`, `date_inscription`, `date_paiement_suivant`, `created_at`) VALUES
-(6, '78787878', 3, 'En Cours', 'unpaid', 'Non défini', '2025-03-27', '2025-04-27', '2025-03-27 19:58:07');
+(6, '78787878', 3, 'En Cours', 'paid', 'Totale', '2025-03-27', '2025-04-27', '2025-03-27 19:58:07');
 
 -- --------------------------------------------------------
 
@@ -225,7 +227,7 @@ CREATE TABLE `paiement` (
   `id_candidat` int(11) NOT NULL,
   `inscription_id` int(10) DEFAULT NULL,
   `id_examen` int(11) DEFAULT NULL,
-  `type_paiement` varchar(20) NOT NULL DEFAULT 'Mensualité',
+  `type_paiement` varchar(20) NOT NULL DEFAULT 'Totale',
   `montant` decimal(10,2) NOT NULL,
   `date_paiement` date NOT NULL,
   `mode_paiement` varchar(50) DEFAULT 'Espèces',
@@ -233,6 +235,13 @@ CREATE TABLE `paiement` (
   `notes` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `paiement`
+--
+
+INSERT INTO `paiement` (`id`, `id_candidat`, `inscription_id`, `id_examen`, `type_paiement`, `montant`, `date_paiement`, `mode_paiement`, `reference`, `notes`, `created_at`) VALUES
+(2, 13, 6, NULL, 'Totale', 349.99, '2025-04-03', 'CARTE_BANCAIRE', NULL, 'Test', '2025-04-03 20:18:14');
 
 -- --------------------------------------------------------
 
@@ -259,11 +268,7 @@ CREATE TABLE `plan` (
 
 INSERT INTO `plan` (`id`, `libelle`, `description`, `type_permis_id`, `prix`, `duree`, `heures_code`, `heures_conduite`, `actif`, `created_at`) VALUES
 (1, 'Basic Motorcycle Course', 'Fundamental motorcycle training for beginners', 1, 199.99, 2, 10, 10, 1, '2025-03-23 22:54:51'),
-(2, 'Advanced Motorcycle Course', 'Advanced motorcycle handling and safety techniques', 1, 299.99, 2, 10, 10, 1, '2025-03-23 22:54:51'),
 (3, 'Basic Car Driving Course', 'Essential car driving skills for new drivers', 2, 349.99, 3, 10, 10, 1, '2025-03-23 22:54:51'),
-(4, 'Defensive Driving Course', 'Safety-focused defensive driving techniques', 2, 299.99, 2, 10, 10, 1, '2025-03-23 22:54:51'),
-(5, 'Intensive Car Course', 'Accelerated program for quick licensing', 2, 599.99, 2, 10, 10, 1, '2025-03-23 22:54:51'),
-(6, 'Light Truck Course', 'Training for driving light commercial vehicles', 3, 499.99, 3, 10, 10, 1, '2025-03-23 22:54:51'),
 (7, 'Heavy Truck License Course', 'Complete training for heavy goods vehicle license', 3, 899.99, 4, 10, 10, 1, '2025-03-23 22:54:51');
 
 -- --------------------------------------------------------
@@ -480,6 +485,13 @@ CREATE TABLE `vehicule` (
   `statut` varchar(20) DEFAULT 'Disponible',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `vehicule`
+--
+
+INSERT INTO `vehicule` (`id`, `immatriculation`, `type_permis_id`, `marque`, `modele`, `annee`, `date_mise_service`, `kilometrage_total`, `kilometrage_prochain_entretien`, `date_prochain_entretien`, `date_derniere_visite_technique`, `date_prochaine_visite_technique`, `date_expiration_assurance`, `statut`, `created_at`) VALUES
+(2, '4564655', 2, 'TOYOTA', 'Supra', NULL, '2025-04-02', 120, 0, NULL, NULL, NULL, NULL, 'Disponible', '2025-04-04 23:29:43');
 
 --
 -- Indexes for dumped tables
@@ -714,7 +726,7 @@ ALTER TABLE `moniteur_specialite`
 -- AUTO_INCREMENT for table `paiement`
 --
 ALTER TABLE `paiement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `plan`
@@ -780,7 +792,7 @@ ALTER TABLE `type_permis`
 -- AUTO_INCREMENT for table `vehicule`
 --
 ALTER TABLE `vehicule`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

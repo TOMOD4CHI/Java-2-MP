@@ -7,13 +7,16 @@ import java.time.LocalDate;
  */
 public class Entretien {
     private int id;
-    private int vehiculeId;
+    private long vehiculeId;
     private LocalDate dateEntretien;
     private String typeEntretien;
     private String description;
     private int kilometrageActuel;
     private double cout;
-    private String prestataire;
+    private boolean maintenance;
+    private String cheminFacture;
+    private LocalDate dateProchainEntretien;
+    private boolean statut;
     private LocalDate createdAt;
 
     // Default constructor
@@ -22,15 +25,33 @@ public class Entretien {
         this.createdAt = LocalDate.now();
     }
 
+    public boolean isMaintenance() {
+        return maintenance;
+    }
+
+    public void setMaintenance(boolean maintenance) {
+        this.maintenance = maintenance;
+    }
+
+    public LocalDate getDateProchainEntretien() {
+        return dateProchainEntretien;
+    }
+
+    public void setDateProchainEntretien(LocalDate dateProchainEntretien) {
+        this.dateProchainEntretien = dateProchainEntretien;
+    }
+
     // Constructor with required fields
-    public Entretien(int vehiculeId, LocalDate dateEntretien, String typeEntretien, 
-                    int kilometrageActuel, double cout) {
+    public Entretien(long vehiculeId, LocalDate dateEntretien, String typeEntretien,
+                    int kilometrageActuel, double cout,String cheminFacture,boolean st) {
         this.vehiculeId = vehiculeId;
         this.dateEntretien = dateEntretien;
         this.typeEntretien = typeEntretien;
         this.kilometrageActuel = kilometrageActuel;
         this.cout = cout;
         this.createdAt = LocalDate.now();
+        this.cheminFacture = cheminFacture;
+        this.statut = st;
     }
 
     public Entretien(LocalDate dateEntretien, String typeEntretien, double cout) {
@@ -45,11 +66,11 @@ public class Entretien {
         this.id = id;
     }
 
-    public int getVehiculeId() {
+    public long getVehiculeId() {
         return vehiculeId;
     }
 
-    public void setVehiculeId(int vehiculeId) {
+    public void setVehiculeId(long vehiculeId) {
         this.vehiculeId = vehiculeId;
     }
 
@@ -93,12 +114,12 @@ public class Entretien {
         this.cout = cout;
     }
 
-    public String getPrestataire() {
-        return prestataire;
+    public boolean isDone() {
+        return statut;
     }
 
-    public void setPrestataire(String prestataire) {
-        this.prestataire = prestataire;
+    public void setStatut(boolean statut) {
+        this.statut = statut;
     }
 
     public LocalDate getCreatedAt() {
@@ -107,6 +128,14 @@ public class Entretien {
 
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getCheminFacture() {
+        return cheminFacture;
+    }
+
+    public void setCheminFacture(String cheminFacture) {
+        this.cheminFacture = cheminFacture;
     }
 
     @Override

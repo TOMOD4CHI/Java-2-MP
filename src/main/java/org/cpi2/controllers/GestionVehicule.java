@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class GestionVehicule implements Initializable {
+    //TODO: maybe add a button next to each vehicle to make it out of service if clicked
 
     @FXML
     private TableView<Vehicule> vehiculesTable;
@@ -208,7 +209,6 @@ public class GestionVehicule implements Initializable {
         boolean success = false;
         
         if (isEditMode && vehiculeSelected != null) {
-            if (validerFormulaire()) {
                 Vehicule oldVehicule = vehiculeSelected;
                 updateVehiculeFromForm(vehiculeSelected);
                 success = vehiculeService.modifierVehicule(oldVehicule,vehiculeSelected);
@@ -218,9 +218,7 @@ public class GestionVehicule implements Initializable {
                 } else {
                     showErrorAlert("Erreur de modification", "Impossible de modifier le véhicule. Vérifiez les données saisies.");
                 }
-            }
         } else {
-            if(validerFormulaire()){
                 vehicule = createVehiculeFromForm();
                 success = vehiculeService.ajouterVehicule(vehicule);
                 if (success) {
@@ -230,7 +228,6 @@ public class GestionVehicule implements Initializable {
                 else {
                     showErrorAlert("Erreur d'ajout", "Impossible d'ajouter le véhicule. Vérifiez les données saisies.");
                 }
-            }
         }
 
         if (success) {

@@ -277,6 +277,40 @@ public class VehiculeService {
 
         return true;
     }
+    public boolean updateNextKilometrage(long vehiculeId, int kilometrage) {
+        try {
+            Optional<Vehicule> vehicule = vehiculeRepository.findById((long) vehiculeId);
+            if (vehicule.isPresent()) {
+                Vehicule updatedVehicule = vehicule.get();
+                updatedVehicule.setKilometrageProchainEntretien(kilometrage);
+                return vehiculeRepository.update(updatedVehicule);
+            } else {
+                LOGGER.log(Level.WARNING, "Vehicle with ID " + vehiculeId + " not found");
+                return false;
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error updating vehicle mileage", e);
+            return false;
+        }
+    }
+
+    public boolean updateKilometrage(long vehiculeId, int kilometrage) {
+        try {
+            Optional<Vehicule> vehicule = vehiculeRepository.findById((long) vehiculeId);
+            if (vehicule.isPresent()) {
+                Vehicule updatedVehicule = vehicule.get();
+                updatedVehicule.setKilometrageTotal(kilometrage);
+                return vehiculeRepository.update(updatedVehicule);
+            } else {
+                LOGGER.log(Level.WARNING, "Vehicle with ID " + vehiculeId + " not found");
+                return false;
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error updating vehicle mileage", e);
+            return false;
+        }
+    }
+
     public int getNextKilometrageByTypeVehicule(String typeVehicule) {
         if (typeVehicule.equalsIgnoreCase("Voiture")) {
             return 10000;
