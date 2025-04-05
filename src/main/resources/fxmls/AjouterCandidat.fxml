@@ -7,79 +7,100 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="org.cpi2.controllers.AjouterCandidat"
-           stylesheets="@/css/style.css"
-           prefWidth="Infinity" prefHeight="Infinity">
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cpi2.controllers.AjouterCandidat"
+      stylesheets="@/css/style.css"
+      alignment="CENTER" spacing="20" styleClass="form-container">
 
-    <VBox spacing="15" alignment="CENTER" styleClass="form-container" maxWidth="500" StackPane.alignment="CENTER">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-        <Label text="Inscription" styleClass="form-title"/>
+    <Label text="Inscription" styleClass="form-title"/>
 
-        <GridPane hgap="10" vgap="15" alignment="CENTER" maxWidth="Infinity" GridPane.halignment="CENTER">
+    <GridPane hgap="15" vgap="10" alignment="CENTER" maxWidth="600">
 
             <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" minWidth="100"/>
                 <ColumnConstraints halignment="LEFT" minWidth="200" hgrow="ALWAYS"/>
             </columnConstraints>
 
-            <!-- Nom -->
-            <Label text="Nom:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-            <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                <TextField fx:id="nomField" promptText="Entrer le nom" styleClass="form-field"/>
-            </VBox>
+        <!-- Nom -->
+        <Label text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <TextField fx:id="nomField" promptText="Entrer le nom" styleClass="form-field"/>
+            <Label fx:id="nomError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
-            <!-- Prenom -->
-            <Label text="Prénom:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-            <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <TextField fx:id="prenomField" promptText="Entrer le prénom" styleClass="form-field"/>
-            </VBox>
+        <!-- Prenom -->
+        <Label text="Prénom:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="prenomField" promptText="Entrer le prénom" styleClass="form-field"/>
+            <Label fx:id="prenomError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
-            <!-- CIN -->
-            <Label text="Cin:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                <TextField fx:id="cinField" promptText="Entrer le CIN" styleClass="form-field"/>
-            </VBox>
+        <!-- CIN -->
+        <Label text="Cin:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="cinField" promptText="Entrer le CIN" styleClass="form-field"/>
+            <Label fx:id="cinError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
-            <!-- Type Permis -->
-            <Label text="Type de permis:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-            <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                <ComboBox fx:id="typeComboBox" styleClass="form-field" prefWidth="200">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Moto" />
-                            <String fx:value="Voiture" />
-                            <String fx:value="Camion" />
-                        </FXCollections>
-                    </items>
-                </ComboBox>
-            </VBox>
+        <!-- Type Permis -->
+        <Label text="Type de permis:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <ComboBox fx:id="typeComboBox" styleClass="form-field" maxWidth="Infinity">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Moto" />
+                        <String fx:value="Voiture" />
+                        <String fx:value="Camion" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <Label fx:id="typeError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
-            <!-- Adresse -->
-            <Label text="Adresse:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-            <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                <TextField fx:id="addressField" promptText="Entrer l'adresse" styleClass="form-field"/>
-            </VBox>
+        <!-- Adresse -->
+        <Label text="Adresse:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <TextField fx:id="addressField" promptText="Entrer l'adresse" styleClass="form-field"/>
+            <Label fx:id="addressError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
-            <!-- Téléphone -->
-            <Label text="Téléphone:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-            <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                <TextField fx:id="phoneField" promptText="Entrer le téléphone" styleClass="form-field"/>
-            </VBox>
+        <!-- Téléphone -->
+        <Label text="Téléphone:" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <TextField fx:id="phoneField" promptText="Entrer le téléphone" styleClass="form-field"/>
+            <Label fx:id="phoneError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
 
-            <!-- Email -->
-            <Label text="Email:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-            <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                <TextField fx:id="emailField" promptText="Entrer l'email" styleClass="form-field"/>
-            </VBox>
+        <!-- Email -->
+        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <TextField fx:id="emailField" promptText="Entrer l'email" styleClass="form-field"/>
+            <Label fx:id="emailError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
+        <Label text="Mode de paiement:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="form-label" />
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <ComboBox fx:id="modeComboBox" styleClass="form-field" maxWidth="Infinity">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Mensuel" />
+                        <String fx:value="Hebdomadaire " />
+                        <String fx:value="Trimestriel" />
+                        <String fx:value="Totale"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+        </VBox>
 
-        </GridPane>
+    </GridPane>
 
-        <HBox spacing="10" alignment="CENTER">
-            <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="cancel-button" />
-            <Button fx:id="confirmButton" text="Confirmer" onAction="#confirmAction" styleClass="confirm-button" />
-        </HBox>
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="cancel-button" />
+        <Button fx:id="confirmButton" text="Confirmer" onAction="#confirmAction" styleClass="button, submit-button" />
+    </HBox>
 
-    </VBox>
-</StackPane>
+</VBox>

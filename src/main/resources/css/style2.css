@@ -32,17 +32,14 @@
 }
 
 .form-field {
-    -fx-background-color: rgb(255, 255, 255);
-    -fx-border-color: rgba(99, 132, 159, 0.69);
-    -fx-border-width: 1px;
-    -fx-border-radius: 8px;
+    -fx-background-color: linear-gradient(to bottom, #edf2f7, #f7fafc);
     -fx-background-radius: 8px;
-    -fx-font-size: 16px;
-    -fx-min-height: 45px;
-    -fx-pref-height: 45px;
-    -fx-pref-width: 250px;
-    -fx-font-family: "Poppins", "Segoe UI", sans-serif;
-    -fx-text-fill: #3f4e6c;
+    -fx-border-radius: 8px;
+    -fx-border-color: transparent;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #a0aec0;
+    -fx-transition-duration: 0.2s;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 4, 0, 0, 1);
 }
 
 .form-field:focused {

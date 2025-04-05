@@ -5,39 +5,35 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.cpi2.controllers.ExamRegistration"
-      stylesheets="@/css/style2.css" styleClass="root">
-    
-    <!-- Header -->
+            fx:controller="org.cpi2.controllers.ExamRegistration"
+            stylesheets="@/css/style2.css" styleClass="root">
+
     <top>
-        <VBox spacing="15">
+        <VBox spacing="10" styleClass="header">
             <padding>
-                <Insets top="10" right="20" bottom="5" left="20"/>
+                <Insets top="20" right="30" bottom="10" left="30"/>
             </padding>
-            <Label text="Inscription à un Examen" styleClass="page-title"/>
+            <Label text="📝 Inscription à un Examen" styleClass="page-title"/>
+            <Separator/>
         </VBox>
     </top>
-    
-    <!-- Main Content (Scrollable) -->
+
     <center>
         <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-            <VBox spacing="15">
-                <padding>
-                    <Insets top="5" right="20" bottom="0" left="20"/>
-                </padding>
+            <VBox spacing="25" >
 
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="ID Candidat:" styleClass="form-label"/>
-                    <TextField fx:id="candidatIdField" prefWidth="150" styleClass="form-field"/>
+                    <TextField fx:id="candidatIdField" prefWidth="180" styleClass="form-field"/>
                     <Button text="Rechercher" onAction="#rechercheCandidatAction" styleClass="button"/>
                 </HBox>
 
-                <TitledPane text="Informations Candidat" expanded="true" styleClass="form-title">
-                    <GridPane hgap="10" vgap="10">
+                <TitledPane text="👤 Informations du Candidat" expanded="true" styleClass="form-title">
+                    <GridPane hgap="15" vgap="10" >
                         <columnConstraints>
-                            <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                            <ColumnConstraints minWidth="120"/>
                             <ColumnConstraints hgrow="ALWAYS"/>
-                            <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                            <ColumnConstraints minWidth="120"/>
                             <ColumnConstraints hgrow="ALWAYS"/>
                         </columnConstraints>
 
@@ -52,12 +48,11 @@
                     </GridPane>
                 </TitledPane>
 
-                <!-- Exam Registration -->
-                <TitledPane text="Détails de l'Examen" expanded="true" styleClass="form-title">
-                    <VBox spacing="10">
-                        <GridPane hgap="10" vgap="10">
+                <TitledPane text="📋 Détails de l'Examen" expanded="true" styleClass="form-title">
+                    <VBox spacing="15" >
+                        <GridPane hgap="15" vgap="12">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                <ColumnConstraints minWidth="150"/>
                                 <ColumnConstraints hgrow="ALWAYS"/>
                             </columnConstraints>
 
@@ -71,42 +66,36 @@
                             <TextField fx:id="fraisField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" editable="false"/>
 
                             <Label text="Frais payés:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-                            <CheckBox fx:id="fraisPaiementCheckBox" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field"/>
+                            <CheckBox fx:id="fraisPaiementCheckBox" GridPane.rowIndex="3" GridPane.columnIndex="1" />
 
                             <Label text="Éligibilité:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
                             <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="4" GridPane.columnIndex="1">
-                                <Label fx:id="eligibiliteLabel" text="Eligibilité non vérifiée" styleClass="form-label"/>
+                                <Label fx:id="eligibiliteLabel" text="Éligibilité non vérifiée" styleClass="form-label"/>
                                 <Button fx:id="verifierEligibiliteButton" text="Vérifier Éligibilité" onAction="#verifierEligibiliteAction" styleClass="button"/>
                             </HBox>
                         </GridPane>
                     </VBox>
                 </TitledPane>
 
-                <!-- Buttons -->
-                <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Button fx:id="annulerButton" text="Annuler" onAction="#annulerAction" styleClass="button, cancel-button"/>
-                    <Button fx:id="enregistrerButton" text="Enregistrer" onAction="#enregistrerAction" styleClass="button, submit-button"/>
+                <HBox spacing="15" alignment="CENTER_RIGHT" >
+                    <Button fx:id="annulerButton" text="Annuler" onAction="#annulerAction" styleClass="button cancel-button"/>
+                    <Button fx:id="enregistrerButton" text="Enregistrer" onAction="#enregistrerAction" styleClass="button submit-button"/>
                 </HBox>
             </VBox>
         </ScrollPane>
     </center>
-    
-    <!-- Footer -->
+
     <bottom>
-        <HBox styleClass="footer" alignment="CENTER_LEFT" spacing="15">
-            <padding>
-                <Insets top="0" right="20" left="20"/>
-            </padding>
-
-            <!-- Left side: Auto-école info -->
-            <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" spacing="5">
-                <Label styleClass="footer-text" text="🏫 Inscription à l'examen"/>
-            </VBox>
-
-            <!-- Right side: Contact info -->
-            <VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" spacing="5">
-                <Label styleClass="footer-text" text="📅 Date: " fx:id="dateFooterLabel"/>
-            </VBox>
-        </HBox>
+        <VBox styleClass="footer" >
+            <Separator/>
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                    <Label styleClass="footer-text" text="🏫 Auto-école SmartRoads"/>
+                </VBox>
+                <VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                    <Label styleClass="footer-text" text="📅 Date:" fx:id="dateFooterLabel"/>
+                </VBox>
+            </HBox>
+        </VBox>
     </bottom>
 </BorderPane>

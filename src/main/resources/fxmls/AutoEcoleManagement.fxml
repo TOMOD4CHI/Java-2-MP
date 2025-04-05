@@ -38,10 +38,10 @@
                 
                 <!-- Auto-école info section -->
                 <HBox spacing="30" alignment="CENTER">
-                    <VBox fx:id="infoContainer" spacing="15" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-info">
+                    <VBox fx:id="infoContainer" spacing="18" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-info">
                         <Label text="Informations de l'Auto-École" styleClass="section-title"/>
 
-                        <GridPane hgap="15" vgap="10" alignment="CENTER">
+                        <GridPane hgap="15" vgap="15" alignment="CENTER">
                             <columnConstraints>
                                 <ColumnConstraints halignment="RIGHT" minWidth="120"/>
                                 <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
@@ -75,7 +75,7 @@
                     <VBox fx:id="editContainer" spacing="15" visible="false" managed="false" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-edit">
                         <Label text="Modifier les informations" styleClass="section-title"/>
 
-                        <GridPane hgap="15" vgap="10" alignment="CENTER">
+                        <GridPane hgap="15" vgap="15" alignment="CENTER">
                             <columnConstraints>
                                 <ColumnConstraints halignment="RIGHT" minWidth="120"/>
                                 <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
