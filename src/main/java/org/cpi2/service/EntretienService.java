@@ -6,6 +6,7 @@ import org.cpi2.repository.EntretienRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class for managing vehicle maintenance records
@@ -106,7 +107,25 @@ public class EntretienService {
         if(entretienRepository.save(entretien)&& entretien.isDone()){
                 return scheduleNextMaintenance(entretien.getVehiculeId(), entretien.getTypeEntretien(),
                         entretien.getKilometrageActuel(), entretien.getDateEntretien(),entretien.getCout());
+
+        } else if (entretienRepository.save(entretien) && !entretien.isDone()) {
+            Vehicule vehicule = vehiculeService.getVehiculeById(entretien.getVehiculeId()).orElseThrow();
+            if(Objects.equals(entretien.getTypeEntretien(), "Visite Technique")){
+                if (vehicule.getDateProchaineVisiteTechnique() == null || vehicule.getDateProchaineVisiteTechnique().isAfter(entretien.getDateEntretien())) {
+                    vehicule.setDateProchainEntretien(entretien.getDateEntretien());
+                    vehiculeService.modifierVehicule(vehicule, vehicule);
+                }
+            }
+            else {
+                if (vehicule.getDateProchainEntretien() == null || vehicule.getDateProchainEntretien().isAfter(entretien.getDateEntretien())) {
+                    vehicule.setDateProchainEntretien(entretien.getDateEntretien());
+                    vehiculeService.modifierVehicule(vehicule, vehicule);
+                }
+            }
+            return true;
+
         } else {
+
             return false;
         }
     }
@@ -177,12 +196,21 @@ public class EntretienService {
         nextEntretien.setDescription("Planifié: " + typeEntretien);
 
         if(entretienRepository.save(nextEntretien)) {
-            if(vehicule.getDateProchainEntretien()!=null && vehicule.getDateProchainEntretien().isAfter(nextMaintenanceDate)){
-                vehicule.setDateProchainEntretien(nextMaintenanceDate);
-                vehiculeService.modifierVehicule(vehicule,vehicule);
+            if(typeEntretien.equals("Visite Technique")){
+                if(vehicule.getDateProchaineVisiteTechnique()!=null && vehicule.getDateProchaineVisiteTechnique().isAfter(nextMaintenanceDate)){
+                    vehicule.setDateProchaineVisiteTechnique(nextMaintenanceDate);
+                    vehiculeService.modifierVehicule(vehicule,vehicule);
+                }
+            }
+            else
+            {
+                if(vehicule.getDateProchainEntretien()!=null && vehicule.getDateProchainEntretien().isAfter(nextMaintenanceDate)){
+                    vehicule.setDateProchainEntretien(nextMaintenanceDate);
+                    vehiculeService.modifierVehicule(vehicule,vehicule);
+                }
             }
             return vehiculeService.updateNextKilometrage(vehiculeId, estimatedKilometrage);
-        } else {
+        }else {
             return false;
         }
     }
