@@ -207,7 +207,6 @@ public class MainWindow implements Initializable {
     @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/Documents.fxml"); }
     @FXML public void loadRemplirSeance() { loadViewWithTransition("/fxmls/RemplirSeance.fxml"); }
     @FXML public void loadAfficherSeance() { loadViewWithTransition("/fxmls/AfficherSeance.fxml"); }
-    @FXML public void loadConfirmPresence() { loadViewWithTransition("/fxmls/ConfirmPresence.fxml"); }
     @FXML public void loadProgression() { loadViewWithTransition("/fxmls/Progression.fxml"); }
     @FXML public void loadExamRegistration() { loadViewWithTransition("/fxmls/ExamRegistration.fxml"); }
     @FXML public void loadExam() { loadViewWithTransition("/fxmls/passExam.fxml"); }

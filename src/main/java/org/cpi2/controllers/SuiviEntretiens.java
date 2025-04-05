@@ -21,4 +21,7 @@ public class SuiviEntretiens {
     public void handleEnregistrerEntretien(ActionEvent actionEvent) {
     }
     public void handleSupprimerEntretien(ActionEvent actionEvent) {}
+
+    public void handleMarquerTermine(ActionEvent actionEvent) {
+    }
 }

@@ -6,47 +6,41 @@
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.cpi2.controllers.Documents"
-      spacing="8" stylesheets="@/css/style2.css">
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+      spacing="16" alignment="CENTER" stylesheets="@/css/style2.css"
+      styleClass="form-container">
+    <GridPane hgap="20" vgap="16">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="80"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="80"/>
+        </columnConstraints>
 
-    <HBox spacing="16" HBox.hgrow="ALWAYS">
-        <VBox HBox.hgrow="SOMETIMES"  spacing="8">
-            <Label text="Gestion des Documents" styleClass="form-title" alignment="CENTER" HBox.hgrow="ALWAYS"/>
+        <!-- Left Form Section -->
+        <VBox spacing="16" styleClass="card" GridPane.columnIndex="0">
+            <GridPane hgap="12" vgap="12" maxWidth="600">
+                <Label text="ID Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0"  GridPane.columnSpan="2" styleClass="form-label" />
+                <TextField fx:id="candidatIdField" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-field" prefWidth="250"/>
 
-            <GridPane hgap="8" vgap="8" HBox.hgrow="ALWAYS">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="NEVER" minWidth="120"/>
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                </columnConstraints>
+                <Label text="Nom du document:" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" styleClass="form-label"/>
+                <TextField fx:id="nomDocumentField" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="form-field" prefWidth="250"/>
 
-                <Label text="ID Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
-                <TextField fx:id="candidatIdField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field"/>
+                <Label text="Type de document:" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2" styleClass="form-label"/>
+                <ComboBox fx:id="typeDocumentComboBox" GridPane.rowIndex="2" GridPane.columnIndex="2" styleClass="form-field" prefWidth="250"/>
 
-                <Label text="Nom du document:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-                <TextField fx:id="nomDocumentField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field"/>
+                <Label text="Date d'ajout:" GridPane.rowIndex="3" GridPane.columnIndex="0"  GridPane.columnSpan="2" styleClass="form-label"/>
+                <DatePicker fx:id="dateAjoutPicker" GridPane.rowIndex="3" GridPane.columnIndex="2" styleClass="form-field" prefWidth="250"/>
 
-                <Label text="Type de document:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
-                <ComboBox fx:id="typeDocumentComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity" styleClass="form-field"/>
-
-                <Label text="Date d'ajout:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-                <DatePicker fx:id="dateAjoutPicker" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity" styleClass="datepick"/>
-
-                <Label text="Fichier:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
-                <HBox spacing="8" GridPane.rowIndex="4" GridPane.columnIndex="1">
-                    <Label fx:id="selectedFileLabel" text="Aucun fichier sélectionné"/>
-                    <Button fx:id="browseButton" text="Parcourir..." onAction="#browseFile" styleClass="button"/>
+                <Label text="Fichier:" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" styleClass="form-label"/>
+                <HBox spacing="8" GridPane.rowIndex="4" GridPane.columnIndex="2">
+                    <Label fx:id="selectedFileLabel" text="Aucun fichier sélectionné" styleClass="form-label"/>
+                    <Button fx:id="browseButton" text="..." onAction="#browseFile" styleClass="button-small"/>
                 </HBox>
             </GridPane>
         </VBox>
 
-        <Separator orientation="VERTICAL" HBox.hgrow="NEVER"/>
+        <VBox spacing="16" styleClass="card" GridPane.columnIndex="1" alignment="TOP_CENTER">
+            <Label text="Documents enregistrés" styleClass="form-title"/>
 
-        <VBox HBox.hgrow="SOMETIMES"  spacing="8">
-            <Label text="Documents enregistrés" styleClass="form-title" alignment="CENTER" HBox.hgrow="ALWAYS"/>
-
-            <TableView fx:id="documentsTableView" VBox.vgrow="ALWAYS">
+            <TableView fx:id="documentsTableView" VBox.vgrow="ALWAYS" prefHeight="300" prefWidth="450">
                 <columns>
                     <TableColumn fx:id="nomColumn" text="Nom" prefWidth="150"/>
                     <TableColumn fx:id="typeColumn" text="Type" prefWidth="150"/>
@@ -54,10 +48,11 @@
                 </columns>
             </TableView>
 
-            <HBox spacing="8" alignment="CENTER_RIGHT">
-                <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="button" id="cancelButton"/>
-                <Button fx:id="submitButton" text="Enregistrer" onAction="#saveDocument" styleClass="button" id="submitButton"/>
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="button cancel"/>
+                <Button fx:id="submitButton" text="Enregistrer" onAction="#saveDocument" styleClass="button"/>
             </HBox>
         </VBox>
-    </HBox>
+    </GridPane>
+
 </VBox>
