@@ -249,7 +249,8 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
         String sql = """
             UPDATE vehicule 
             SET immatriculation = ?, marque = ?, modele = ?, type_permis_id = ?,
-                date_mise_service = ?, kilometrage_total = ?, kilometrage_prochain_entretien = ?,statut = ?
+                date_mise_service = ?, kilometrage_total = ?, kilometrage_prochain_entretien = ?,statut = ?,
+        date_prochaine_visite_technique=?,date_derniere_visite_technique=?,date_prochain_entretien=?
             WHERE id = ?
         """;
 
@@ -262,9 +263,24 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setInt(4, typePermisId);
             stmt.setDate(5, Date.valueOf(vehicule.getDateMiseEnService()));
             stmt.setInt(6, vehicule.getKilometrageTotal());
-            stmt.setInt(7, vehicule.getKilometrageAvantEntretien());
+            stmt.setInt(7, vehicule.getKilometrageAvantEntretien().intValue());
             stmt.setString(8, vehicule.getStatut());
-            stmt.setLong(9, vehicule.getId());
+            if(vehicule.getDateDerniereVisiteTechnique() != null) {
+                stmt.setDate(10, Date.valueOf(vehicule.getDateDerniereVisiteTechnique()));
+            } else {
+                stmt.setNull(10, Types.DATE);
+            }
+            if(vehicule.getDateProchaineVisiteTechnique() != null) {
+                stmt.setDate(9, Date.valueOf(vehicule.getDateProchaineVisiteTechnique()));
+            } else {
+                stmt.setNull(9, Types.DATE);
+            }
+            if(vehicule.getDateProchainEntretien() != null) {
+                stmt.setDate(11, Date.valueOf(vehicule.getDateProchainEntretien()));
+            } else {
+                stmt.setNull(11, Types.DATE);
+            }
+            stmt.setLong(12, vehicule.getId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

@@ -330,7 +330,7 @@ public class EntretienRepository extends BaseRepository<Entretien> {
         if (!rs.wasNull()) {
             entretien.setDescription(description);
         }
-        entretien.setCheminFacture(rs.getString("chemin_facture"));
+        entretien.setCheminFacture(rs.getString("facture_path"));
         entretien.setCout(rs.getDouble("cout"));
         entretien.setMaintenance(rs.getInt("maintenance") == 1);
 

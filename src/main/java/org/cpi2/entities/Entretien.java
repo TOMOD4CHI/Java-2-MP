@@ -43,7 +43,7 @@ public class Entretien {
 
     // Constructor with required fields
     public Entretien(long vehiculeId, LocalDate dateEntretien, String typeEntretien,
-                    int kilometrageActuel, double cout,String cheminFacture,boolean st) {
+                    int kilometrageActuel, double cout,String cheminFacture,boolean st,String description) {
         this.vehiculeId = vehiculeId;
         this.dateEntretien = dateEntretien;
         this.typeEntretien = typeEntretien;
@@ -52,6 +52,7 @@ public class Entretien {
         this.createdAt = LocalDate.now();
         this.cheminFacture = cheminFacture;
         this.statut = st;
+        this.description = description;
     }
 
     public Entretien(LocalDate dateEntretien, String typeEntretien, double cout) {

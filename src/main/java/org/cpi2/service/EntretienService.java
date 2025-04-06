@@ -105,6 +105,7 @@ public class EntretienService {
         entretien.setKilometrageActuel(vehiculeService.getVehiculeById(entretien.getVehiculeId()).get().getKilometrageTotal());
 
         if(entretienRepository.save(entretien)&& entretien.isDone()){
+
                 return scheduleNextMaintenance(entretien.getVehiculeId(), entretien.getTypeEntretien(),
                         entretien.getKilometrageActuel(), entretien.getDateEntretien(),entretien.getCout());
 
@@ -129,6 +130,18 @@ public class EntretienService {
             return false;
         }
     }
+    public boolean markEntretienAsDone(int id) {
+        Entretien entretien = entretienRepository.findById(id);
+        if (entretien != null) {
+            entretien.setStatut(true);
+            entretien.setDateEntretien(LocalDate.now());
+            entretien.setKilometrageActuel(vehiculeService.getVehiculeById(entretien.getVehiculeId()).get().getKilometrageTotal());
+            vehiculeService.updateDernierEntretien(entretien.getVehiculeId(), entretien.getDateEntretien());
+            return updateEntretien(entretien);
+        }
+        return false;
+    }
+
 
     /**
      * Update an existing maintenance record
@@ -141,8 +154,11 @@ public class EntretienService {
         if (existingEntretien == null) {
             return false;
         }
-
-        return entretienRepository.update(entretien);
+        if(entretienRepository.update(entretien) && entretien.isDone()){
+            return scheduleNextMaintenance(entretien.getVehiculeId(), entretien.getTypeEntretien(),
+                    entretien.getKilometrageActuel(), entretien.getDateEntretien(),entretien.getCout());
+        }
+        return false;
     }
 
     /**

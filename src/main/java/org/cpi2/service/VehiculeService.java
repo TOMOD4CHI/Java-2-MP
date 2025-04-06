@@ -277,6 +277,22 @@ public class VehiculeService {
 
         return true;
     }
+    public boolean updateDernierEntretien(long vehiculeId, LocalDate dateEntretien) {
+        try {
+            Optional<Vehicule> vehicule = vehiculeRepository.findById((long) vehiculeId);
+            if (vehicule.isPresent()) {
+                Vehicule updatedVehicule = vehicule.get();
+                updatedVehicule.setDateDerniereVisiteTechnique(dateEntretien);
+                return vehiculeRepository.update(updatedVehicule);
+            } else {
+                LOGGER.log(Level.WARNING, "Vehicle with ID " + vehiculeId + " not found");
+                return false;
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error updating vehicle maintenance date", e);
+            return false;
+        }
+    }
     public boolean updateNextKilometrage(long vehiculeId, int kilometrage) {
         try {
             Optional<Vehicule> vehicule = vehiculeRepository.findById((long) vehiculeId);
