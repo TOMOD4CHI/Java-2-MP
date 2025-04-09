@@ -82,13 +82,9 @@ public class MainWindow implements Initializable {
                 return;
             }
             
-            // Set window properties for 1920x1080 screen
-            stage.setResizable(true);
-            stage.setMinWidth(800);
-            stage.setMinHeight(600);
-            stage.setMaximized(false);
-            
-            stage.setHeight(825); 
+            stage.setFullScreen(true);
+            stage.setResizable(false);
+
             
             // Set application icon
             setApplicationIcon(stage);
@@ -240,8 +236,6 @@ public class MainWindow implements Initializable {
             
             // Get the current stage
             Stage stage = (Stage) logoutButton.getScene().getWindow();
-            
-            // Create a new scene with the login screen
             Scene scene = new Scene(loginRoot, stage.getWidth(), stage.getHeight());
             stage.setTitle("Login");
             stage.setScene(scene);

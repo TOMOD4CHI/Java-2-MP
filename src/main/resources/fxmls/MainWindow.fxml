@@ -10,7 +10,7 @@
             fx:controller="org.cpi2.controllers.MainWindow"
             stylesheets="@/css/style.css">
     <!-- Logout button positioned above the footer -->
-    <Button fx:id="logoutButton" text="🔒 Déconnexion" onAction="#logout" styleClass="main-return-button"
+    <Button fx:id="logoutButton" text="🔒 Déconnexion" onAction="#logout" styleClass="button"
             AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0" style="-fx-z-index: 1000;" />
             
     <BorderPane prefHeight="600" prefWidth="1000" AnchorPane.topAnchor="25.0" 
@@ -103,7 +103,7 @@
             </VBox>
 
             <!-- Center: Return button -->
-            <Button text="🏠 Retour à l'accueil" onAction="#loadMain" fx:id="mainbttn" styleClass="main-return-button"/>
+            <Button text="🏠 Retour à l'accueil" onAction="#loadMain" fx:id="mainbttn" styleClass="button"/>
 
             <!-- Right side: Contact info -->
             <VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" spacing="5">

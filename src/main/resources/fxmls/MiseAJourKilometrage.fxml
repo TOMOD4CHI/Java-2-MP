@@ -1,89 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Pos?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            stylesheets="@/css/stylee.css"
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cpi2.controllers.MiseAJourKilometrage"
-            styleClass="main-container">
+            stylesheets="@/css/style.css" styleClass="root"
+            prefWidth="1200" prefHeight="700">
 
-    <top>
-        <VBox spacing="10" styleClass="header-container">
-            <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
-            </padding>
-            <Label text="Mise à jour du Kilométrage" styleClass="title-label"/>
-            <Separator styleClass="separator"/>
-        </VBox>
-    </top>
-
-    <center>
-        <VBox spacing="20" alignment="CENTER" styleClass="odometer-container">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
-
-
-
-            <VBox spacing="10" maxWidth="450" styleClass="selector-container">
-                <Label text="Sélectionner un véhicule" styleClass="form-header"/>
-                <ComboBox fx:id="vehiculeComboBox" maxWidth="Infinity" promptText="Sélectionner un véhicule"
-                          styleClass="form-field"/>
-            </VBox>
-
-            <VBox fx:id="infoContainer" spacing="10" maxWidth="450" styleClass="info-container">
-                <HBox styleClass="info-box">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="Immatriculation" styleClass="form-label"/>
-                        <Label fx:id="immatriculationLabel" text="--" styleClass="form-label"/>
-                    </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="Marque / Modèle" styleClass="form-label"/>
-                        <Label fx:id="marqueModeleLabel" text="--" styleClass="form-label"/>
-                    </VBox>
+    <VBox spacing="20" alignment="center">
+        <Label text="Mise à Jour Kilométrage" styleClass="form-title"/>
+        <Separator/>
+        
+        <HBox spacing="30" alignment="center">
+            <!-- Left Container - Vehicle Details -->
+            <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="500" prefWidth="500">
+                <Label text="Détails du Véhicule" styleClass="form-title"/>
+                <Separator/>
+                
+                <GridPane hgap="15" vgap="12" alignment="center" minWidth="450" prefWidth="450">
+                    <Label text="ID Véhicule:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                    <TextField fx:id="idVehiculeField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
+                    
+                    <Label text="Nouveau Kilométrage:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                    <TextField fx:id="kilometrageField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
+                    
+                    <Label text="Date:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                    <DatePicker fx:id="dateField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
+                </GridPane>
+                
+                <Separator/>
+                
+                <HBox spacing="15" alignment="center">
+                    <Button fx:id="annulerButton" text="Annuler" onAction="#annulerAction" styleClass="button" minWidth="120" prefWidth="120"/>
+                    <Button fx:id="enregistrerButton" text="Enregistrer" onAction="#enregistrerAction" styleClass="button" minWidth="120" prefWidth="120"/>
                 </HBox>
-
-                <VBox spacing="5" styleClass="current-km-box">
-                    <Label text="Kilométrage actuel" styleClass="form-label"/>
-                    <Label fx:id="kilometrageActuelLabel" text="--" styleClass="form-label"/>
-                </VBox>
             </VBox>
-
-            <VBox spacing="10" maxWidth="450" styleClass="update-container">
-                <Label text="Nouveau kilométrage" styleClass="form-header"/>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <TextField fx:id="nouveauKilometrageField" promptText="Entrez le nouveau kilométrage"
-                               HBox.hgrow="ALWAYS" styleClass="form-field"/>
-                    <Label text="km" styleClass="form-label"/>
-                </HBox>
-                <Label fx:id="infoKilometrageLabel"
-                       text="Le nouveau kilométrage doit être supérieur à l'ancien"
-                       styleClass="info-note"/>
+            
+            <!-- Right Container - Vehicles List -->
+            <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="600" prefWidth="600">
+                <Label text="Liste des Véhicules" styleClass="form-title"/>
+                <Separator/>
+                
+                <TableView fx:id="vehiculesTable" VBox.vgrow="ALWAYS" styleClass="table-view" minWidth="550" prefWidth="550">
+                    <columns>
+                        <TableColumn fx:id="idColumn" text="ID" prefWidth="80"/>
+                        <TableColumn fx:id="marqueColumn" text="Marque" prefWidth="150"/>
+                        <TableColumn fx:id="modeleColumn" text="Modèle" prefWidth="150"/>
+                        <TableColumn fx:id="kilometrageColumn" text="Kilométrage" prefWidth="170"/>
+                    </columns>
+                </TableView>
             </VBox>
-
-            <HBox spacing="15" alignment="CENTER" styleClass="button-container">
-                <Button fx:id="annulerBtn" text="Annuler" minWidth="120"
-                        onAction="#handleAnnuler" styleClass="cancel-button"/>
-                <Button fx:id="mettreAJourBtn" text="Mettre à jour" minWidth="120"
-                        onAction="#handleMettreAJour" styleClass="button, submit-button"/>
-            </HBox>
-
-            <Label fx:id="messageLabel" styleClass="message-label"/>
-        </VBox>
-    </center>
-
-    <bottom>
-        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="status-bar">
-            <padding>
-                <Insets top="5" right="15" bottom="5" left="15"/>
-            </padding>
-            <Label fx:id="lastUpdateLabel" text="Dernière mise à jour: Jamais" styleClass="status-label"/>
         </HBox>
-    </bottom>
-
-</BorderPane>
+        
+        <HBox alignment="center" spacing="15">
+            <Label styleClass="footer-text" text="📅 Date:" fx:id="dateFooterLabel"/>
+        </HBox>
+    </VBox>
+</StackPane>

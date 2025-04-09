@@ -4,17 +4,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1000.0" styleClass="background-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.AfficherSeance"
-            stylesheets="@/css/styletab.css">
+<AnchorPane prefHeight="700.0" prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cpi2.controllers.AfficherSeance"
+            stylesheets="@/css/style.css">
     <children>
         <VBox layoutX="14.0" layoutY="14.0" spacing="15.0"
               AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0"
               >
             <children>
-                <Label styleClass="title" text="Liste des Séances" />
+                <Label styleClass="form-title" text="Liste des Séances" />
 
 
-                <GridPane hgap="10" vgap="10" styleClass="glass-panel">
+                <GridPane hgap="15" vgap="20" styleClass="glass-panel">
 
 
                     <columnConstraints>
@@ -31,22 +34,22 @@
                     </rowConstraints>
 
                     <!-- First row -->
-                    <Label text="Type de séance:" styleClass="filter-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <ComboBox fx:id="typeSessionFilter" promptText="Tous les types" styleClass="glass-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label text="Type de séance:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <ComboBox fx:id="typeSessionFilter" promptText="Tous les types" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                    <Label text="ID du moniteur:" styleClass="filter-label" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <Label text="ID du moniteur:" styleClass="form-label" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                     <TextField fx:id="moniteurIdFilter"
                                minHeight="35"
                                promptText="Entrer ID moniteur"
-                               styleClass="glass-field, text-field"
+                               styleClass="form-field"
                                GridPane.columnIndex="3"
                                GridPane.rowIndex="0" />
                     <!-- Second row -->
-                    <Label text="Date de début:" styleClass="filter-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                    <DatePicker fx:id="dateDebutFilter" promptText="Date de début" styleClass="glass-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label text="Date de début:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <DatePicker fx:id="dateDebutFilter" promptText="Date de début" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                    <Label text="Date de fin:" styleClass="filter-label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                    <DatePicker fx:id="dateFinFilter" promptText="Date de fin" styleClass="glass-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <Label text="Date de fin:" styleClass="form-label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <DatePicker fx:id="dateFinFilter" promptText="Date de fin" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                     <!-- Third row - Action buttons -->
                     <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="2">
