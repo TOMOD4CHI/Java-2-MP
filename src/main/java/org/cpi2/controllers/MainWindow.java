@@ -197,7 +197,7 @@ public class MainWindow implements Initializable {
 
     @FXML public void loadAutoEcoleManagement() {loadViewWithTransition("/fxmls/AutoEcoleManagement.fxml"); }
 
-
+@FXML public void loadAjouterSalle() { loadViewWithTransition("/fxmls/ajoutersalle.fxml"); }
     @FXML public void loadAjouterCandidat() { loadViewWithTransition("/fxmls/AjouterCandidat.fxml"); }
     @FXML public void loadModifierCandidat() { loadViewWithTransition("/fxmls/ModifierCandidat.fxml"); }
     @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/Documents.fxml"); }
