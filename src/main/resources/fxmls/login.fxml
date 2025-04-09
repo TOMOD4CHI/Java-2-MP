@@ -4,82 +4,162 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.cpi2.controllers.login"
-            fx:id="loginScreenRoot"
-            styleClass="login-screen-root"
-            stylesheets="@/css/stylel.css" >
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="org.cpi2.controllers.login"
+           fx:id="loginScreenRoot"
+           styleClass="login-screen-root"
+           stylesheets="@/css/stylel.css">
 
-    <center>
-        <StackPane styleClass="login-stack-pane">
-            <BorderPane styleClass="login-border-pane">
-                <left>
-                    <VBox alignment="CENTER" spacing="20" styleClass="login-logo-container">
-                        <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
-                        <Pane fx:id="logoContainer" styleClass="login-logo-pane">
-                            <ImageView styleClass="login-logo-image" fx:id="logoImageView" fitWidth="400" fitHeight="400" >
-                                <Image url="@/images/logo1.png"/>
-                            </ImageView>
-                        </Pane>
-                    </VBox>
-                </left>
+    <!-- Background fluid shapes -->
+    <Pane>
+        <Path styleClass="login-bg-shape1">
+            <elements>
+                <MoveTo x="0" y="200"/>
+                <CubicCurveTo x="100" y="150"/>
+                <CubicCurveTo x="250" y="50"/>
+                <CubicCurveTo x="400" y="100"/>
+                <CubicCurveTo x="500" y="200"/>
+                <LineTo x="0" y="200"/>
+                <ClosePath/>
+            </elements>
+        </Path>
 
-                <center>
-                    <GridPane alignment="center" hgap="15" vgap="15" styleClass="login-form-grid">
-                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+        <Path styleClass="login-bg-shape2">
+            <elements>
+                <MoveTo x="800" y="0"/>
+                <CubicCurveTo x="600" y="100"/>
+                <CubicCurveTo x="500" y="150"/>
+                <CubicCurveTo x="400" y="250"/>
+                <CubicCurveTo x="400" y="400"/>
+                <LineTo x="800" y="400"/>
+                <LineTo x="800" y="0"/>
+                <ClosePath/>
+            </elements>
+        </Path>
 
-                        <Label styleClass="title-text" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"
-                               GridPane.columnSpan="2">SmartRoad</Label>
+        <Path styleClass="login-bg-shape3">
+            <elements>
+                <MoveTo x="0" y="400"/>
+                <CubicCurveTo x="200" y="350"/>
+                <CubicCurveTo x="300" y="400"/>
+                <LineTo x="0" y="600"/>
+                <ClosePath/>
+            </elements>
+        </Path>
 
-                        <Text text="Connexion"
+        <Circle styleClass="login-bg-circle" centerX="100" centerY="100" radius="10"/>
+        <Circle styleClass="login-bg-circle" centerX="650" centerY="250" radius="15"/>
+        <Circle styleClass="login-bg-dot" centerX="150" centerY="350" radius="5"/>
+        <Circle styleClass="login-bg-dot" centerX="700" centerY="150" radius="6"/>
+        <Circle styleClass="login-bg-dot" centerX="400" centerY="100" radius="4"/>
+
+        <Path styleClass="login-bg-shape1">
+            <elements>
+                <MoveTo x="200" y="50"/>
+                <HLineTo x="260"/>
+                <LineTo x="260" y="35"/>
+                <LineTo x="200" y="35"/>
+                <ClosePath/>
+            </elements>
+        </Path>
+
+        <Path styleClass="login-bg-shape1">
+            <elements>
+                <MoveTo x="500" y="150"/>
+                <HLineTo x="550"/>
+                <LineTo x="550" y="135"/>
+                <LineTo x="500" y="135"/>
+                <ClosePath/>
+            </elements>
+        </Path>
+    </Pane>
+
+    <!-- Main container -->
+    <BorderPane styleClass="login-container">
+        <center>
+            <HBox alignment="CENTER" spacing="30">
+
+                <!-- Illustration à gauche -->
+                <VBox alignment="CENTER" styleClass="login-illustration-container">
+                    <StackPane fx:id="illustrationContainer" maxWidth="550" maxHeight="400">
+                        <ImageView fitWidth="550" preserveRatio="true">
+                            <Image fx:id="logo" url="@/images/logo4.png"/>
+                        </ImageView>
+                    </StackPane>
+                </VBox>
+
+                <!-- Formulaire de connexion carré à droite -->
+                <VBox alignment="CENTER" spacing="10" styleClass="login-panel">
+                    <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
+
+                    <!-- Logo -->
+                    <Pane fx:id="logoContainer" styleClass="login-logo-pane">
+                        <ImageView styleClass="login-logo-image" fx:id="logoImageView" fitWidth="200" fitHeight="200">
+                            <Image url="@/images/logo1.png"/>
+                        </ImageView>
+                    </Pane>
+
+                    <!-- Titre -->
+                    <Label styleClass="title-text" alignment="CENTER">SmartRoads</Label>
+
+                    <!-- Formulaire -->
+                    <GridPane alignment="CENTER" styleClass="login-form-grid" maxWidth="300" maxHeight="300">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES"/>
+                        </columnConstraints>
+
+                        <Text text="CONNEXION"
                               textAlignment="CENTER"
-                              GridPane.columnIndex="0" GridPane.rowIndex="1"
-                              GridPane.columnSpan="2"
+                              GridPane.columnIndex="0"
+                              GridPane.rowIndex="0"
+                              GridPane.halignment="CENTER"
                               styleClass="login-welcome-text"/>
 
                         <Label text="Nom d'utilisateur"
-                               GridPane.columnIndex="0" GridPane.rowIndex="2"
-                               GridPane.columnSpan="2"
+                               GridPane.columnIndex="0"
+                               GridPane.rowIndex="1"
                                styleClass="login-label"/>
 
                         <TextField fx:id="usernameField"
-                                   GridPane.columnIndex="0" GridPane.rowIndex="3"
-                                   GridPane.columnSpan="2"
-                                   promptText="Enter your username"
+                                   promptText="Entrez votre nom d'utilisateur"
+                                   GridPane.columnIndex="0"
+                                   GridPane.rowIndex="2"
                                    styleClass="login-text-field"/>
 
                         <Label text="Mot de passe"
-                               GridPane.columnIndex="0" GridPane.rowIndex="4"
-                               GridPane.columnSpan="2"
+                               GridPane.columnIndex="0"
+                               GridPane.rowIndex="3"
                                styleClass="login-label"/>
 
                         <PasswordField fx:id="passwordField"
-                                       GridPane.columnIndex="0" GridPane.rowIndex="5"
-                                       GridPane.columnSpan="2"
-                                       promptText="Enter your password"
+                                       promptText="Entrez votre mot de passe"
+                                       GridPane.columnIndex="0"
+                                       GridPane.rowIndex="4"
                                        styleClass="login-password-field"/>
 
-                        <HBox spacing="10" alignment="CENTER_RIGHT"
-                              GridPane.columnIndex="0" GridPane.rowIndex="7"
-                              GridPane.columnSpan="2">
-                            <padding><Insets top="25" right="0" bottom="0" left="0"/></padding>
-                            <Button text="Se connecter"
-                                    styleClass="login-button"
-                                    onAction="#handleLoginButtonAction"/>
-                        </HBox>
+                        <Button text="se connecter"
+                                GridPane.columnIndex="0"
+                                GridPane.rowIndex="6"
+                                GridPane.halignment="CENTER"
+                                styleClass="login-button"
+                                onAction="#handleLoginButtonAction">
+                            <GridPane.margin>
+                                <Insets top="20" bottom="10"/>
+                            </GridPane.margin>
+                        </Button>
 
                         <Text fx:id="actionTarget"
-                              GridPane.columnIndex="0" GridPane.rowIndex="9"
-                              GridPane.columnSpan="2"
+                              GridPane.columnIndex="0"
+                              GridPane.rowIndex="7"
+                              GridPane.halignment="CENTER"
                               styleClass="login-error-message"/>
                     </GridPane>
-                </center>
-            </BorderPane>
-        </StackPane>
-    </center>
-</BorderPane>
+                </VBox>
+            </HBox>
+        </center>
+    </BorderPane>
+</StackPane>

@@ -14,7 +14,6 @@ public class Main extends Application {
         primaryStage.setTitle("System Auto-École");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 

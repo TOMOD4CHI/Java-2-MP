@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -28,13 +29,33 @@ public class login  {
     @FXML private PasswordField passwordField;
     @FXML private Text actionTarget;
     @FXML private Pane logoContainer;
+    @FXML private Pane illustrationContainer;
     
     private final AuthenticationService authService = new AuthenticationService();
 
 
     public void initialize() {
-        setupLogoAnimation();
-        
+        ImageView logoImageView = (ImageView) illustrationContainer.getChildren().get(0);
+
+        // Set initial properties
+        logoImageView.setOpacity(0);
+        logoImageView.setRotate(-90);
+
+        // Create fade transition
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.5), logoImageView);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1);
+
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1.5), logoImageView);
+        rotateTransition.setFromAngle(-90);
+        rotateTransition.setToAngle(0);
+
+        // Combine transitions
+        ParallelTransition parallelTransition = new ParallelTransition();
+        parallelTransition.getChildren().addAll(fadeTransition, rotateTransition);
+
+        // Play the animation when the scene is shown
+        parallelTransition.play();
         // Set up input validation listeners
         if (usernameField != null) {
             usernameField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -109,17 +130,17 @@ public class login  {
         
         // Validate inputs
         if (username.isEmpty()) {
-            actionTarget.setText("Username cannot be empty");
+            actionTarget.setText("Le nom d'utilisateur ne peut pas etre vide");
             return;
         }
         
         if (password.isEmpty()) {
-            actionTarget.setText("Password cannot be empty");
+            actionTarget.setText("le mot de passe ne peut pas etre vide ");
             return;
         }
         
         if (password.length() < 4) {
-            actionTarget.setText("Password must be at least 4 characters");
+            actionTarget.setText("mot de passe doit contenir au moins 4 caractéres");
             return;
         }
 
@@ -149,7 +170,7 @@ public class login  {
                 actionTarget.setText("Error loading main window");
             }
         } else {
-            actionTarget.setText("Invalid username or password");
+            actionTarget.setText("mot de passe ou nom d'utilisateur incorrecte");
         }
     }
 }
