@@ -64,10 +64,6 @@ public class ExamenRepository extends BaseRepository<Examen> {
                     switch (libelle.toUpperCase()) {
                         case "CODE":
                             typeExamenMap.put(rs.getInt("id"), TypeExamen.CODE);
-                        case "CIRCUIT":
-                            typeExamenMap.put(rs.getInt("id"), TypeExamen.CIRCUIT);
-                        case "CRÉNEAUX":
-                            typeExamenMap.put(rs.getInt("id"), TypeExamen.CRENEAUX);
                         case "CONDUITE ":
                             typeExamenMap.put(rs.getInt("id"), TypeExamen.CONDUITE);
                         default:

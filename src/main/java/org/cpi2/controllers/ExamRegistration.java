@@ -8,8 +8,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
+import org.cpi2.entities.Candidat;
+import org.cpi2.service.CandidatService;
+import org.cpi2.service.ExamenService;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 
 public class ExamRegistration {
 
@@ -26,11 +30,15 @@ public class ExamRegistration {
     @FXML private Button enregistrerButton;
     @FXML private Button annulerButton;
     @FXML private Label dateFooterLabel;
+    private final ExamenService examenService = new ExamenService();
+    private final HashMap<String,Double> examTypePrices = examenService.getType_Price();
+    private final CandidatService candidatService = new CandidatService();
+
 
     @FXML
-    public void initialize() {
+    public void initialize() {;
         // Initialize the exam types
-        typeExamenComboBox.getItems().addAll("CODE", "CONDUITE");
+        typeExamenComboBox.getItems().addAll(examTypePrices.keySet());
         
         // Set default date to next week
         dateExamenPicker.setValue(LocalDate.now().plusWeeks(1));
@@ -38,11 +46,7 @@ public class ExamRegistration {
         // Default exam fees
         typeExamenComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                if (newVal.equals("CODE")) {
-                    fraisField.setText("80.00");
-                } else if (newVal.equals("CONDUITE")) {
-                    fraisField.setText("120.00");
-                }
+                fraisField.setText(examTypePrices.get(newVal).toString());
             }
         });
         
@@ -54,15 +58,24 @@ public class ExamRegistration {
     private void rechercheCandidatAction() {
         // les informations vont etre recuperer de base de donnee
         if (!candidatIdField.getText().isEmpty()) {
-            // Mock data for example
-            nomField.setText("Dupont");
-            prenomField.setText("Jean");
-            cinField.setText("AB123456");
-            
-            // Reset eligibility message
-            eligibiliteLabel.setText("Eligibilité non vérifiée");
-            eligibiliteLabel.getStyleClass().clear();
-            eligibiliteLabel.getStyleClass().add("label");
+            if(candidatService.findByCin(candidatIdField.getText()).isPresent()){
+                Candidat candidat = candidatService.findByCin(candidatIdField.getText()).get();
+                nomField.setText(candidat.getNom());
+                prenomField.setText(candidat.getPrenom());
+                cinField.setText(candidat.getCin());
+
+                // Reset eligibility message
+                eligibiliteLabel.setText("Eligibilité non vérifiée");
+                eligibiliteLabel.getStyleClass().clear();
+                eligibiliteLabel.getStyleClass().add("label");
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Candidat non trouvé.");
+                alert.showAndWait();
+            }
         }
     }
     

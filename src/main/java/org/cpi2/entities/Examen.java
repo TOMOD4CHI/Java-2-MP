@@ -7,7 +7,7 @@ public class Examen {
     private TypeExamen type;
     private LocalDate date;
     private Double frais;
-    private Boolean resultat;
+    private Boolean resultat;//if result is null this means not yet taken
     private Candidat candidat;
 
     public Examen() {
@@ -70,7 +70,11 @@ public class Examen {
         this.type = type;
     }
 
-    public String getTypeExamen() {
-        return "fix this part of the code";
+    public TypeExamen getTypeExamen() {
+        return type;
+    }
+
+    public boolean isSuccess() {
+        return resultat != null && resultat;
     }
 }

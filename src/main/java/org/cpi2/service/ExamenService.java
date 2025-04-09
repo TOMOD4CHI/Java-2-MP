@@ -9,6 +9,7 @@ import org.cpi2.repository.ExamenRepository;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -17,12 +18,14 @@ import java.util.logging.Logger;
 public class ExamenService {
     private static final Logger LOGGER = Logger.getLogger(ExamenService.class.getName());
     private final ExamenRepository examenRepository;
-    private final CandidatRepository candidatRepository;
+    private final CandidatService candidatService; ;
     private final InscriptionService inscriptionService;
+    private final TypeExamenService typeExamenService;
 
     public ExamenService() {
         this.examenRepository = new ExamenRepository();
-        this.candidatRepository = new CandidatRepository();
+        this.candidatService = new CandidatService();
+        this.typeExamenService = new TypeExamenService();
         this.inscriptionService = new InscriptionService();
     }
 
@@ -123,7 +126,7 @@ public class ExamenService {
     }
 
     public List<Examen> getExamensByCandidat(String cin) {
-        Optional<Candidat> candidat = candidatRepository.findByCin(cin);
+        Optional<Candidat> candidat = candidatService.findByCin(cin);
         if (candidat.isEmpty()) {
             return List.of();
         }
@@ -137,7 +140,7 @@ public class ExamenService {
     }
 
     public double calculateSuccessRate(TypeExamen typeExamen) {
-        try{
+        try {
             int typeExamenId = examenRepository.getTypeExamenId(typeExamen);
             List<Examen> examens = examenRepository.findByTypeExamen(typeExamenId);
             if (examens.isEmpty()) {
@@ -148,11 +151,18 @@ public class ExamenService {
                     .count();
 
             return (double) passedCount / examens.size() * 100;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting type examen id", e);
             return -1;
         }
-        //More methods can be added here base on the application needs
+    }
+    public HashMap<String,Double> getType_Price() {
+        HashMap<String,Double> type_price = new HashMap<>();
+        List<String> typeExamenList = typeExamenService.getAllTypeExamens();
+        for (String typeExamen : typeExamenList) {
+            type_price.put(typeExamen,typeExamenService.getExamenCostByLibelle(typeExamen));
+        }
+        return type_price;
     }
 
 }
