@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -49,6 +50,13 @@ public class RemplirSeance {
     private FilteredList<SessionCode> filteredSeances;
     private ObservableList<CandidatWrapper> candidats;
     private SessionCode selectedSeance;
+
+    public void handleCancel(ActionEvent actionEvent) {
+    }
+
+    public void handleSave(ActionEvent actionEvent) {
+
+    }
 
     // Wrapper class for Candidat to add checkbox functionality
     public class CandidatWrapper {

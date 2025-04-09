@@ -30,45 +30,51 @@
                 </left>
 
                 <center>
+                    <GridPane alignment="center" hgap="15" vgap="15" styleClass="login-form-grid">
+                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-                    <GridPane alignment="center" hgap="10" vgap="10" styleClass="login-form-grid">
-                        <Label styleClass="title-text"  alignment="CENTER"  GridPane.columnIndex="0" GridPane.rowIndex="0"
-                               GridPane.columnSpan="4">SmartRoads</Label>
+                        <Label styleClass="title-text" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                               GridPane.columnSpan="2">SmartRoad</Label>
 
-
-                        <Text text="LOGIN"
+                        <Text text="Connexion"
                               textAlignment="CENTER"
                               GridPane.columnIndex="0" GridPane.rowIndex="1"
-                              GridPane.columnSpan="4"
+                              GridPane.columnSpan="2"
                               styleClass="login-welcome-text"/>
 
-                        <Label text="Username:"
+                        <Label text="Nom d'utilisateur"
                                GridPane.columnIndex="0" GridPane.rowIndex="2"
+                               GridPane.columnSpan="2"
                                styleClass="login-label"/>
 
                         <TextField fx:id="usernameField"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                   GridPane.columnIndex="0" GridPane.rowIndex="3"
+                                   GridPane.columnSpan="2"
+                                   promptText="Enter your username"
                                    styleClass="login-text-field"/>
 
-                        <Label text="Password:"
-                               GridPane.columnIndex="0" GridPane.rowIndex="3"
+                        <Label text="Mot de passe"
+                               GridPane.columnIndex="0" GridPane.rowIndex="4"
+                               GridPane.columnSpan="2"
                                styleClass="login-label"/>
 
                         <PasswordField fx:id="passwordField"
-                                       GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="5"
+                                       GridPane.columnSpan="2"
+                                       promptText="Enter your password"
                                        styleClass="login-password-field"/>
 
-                        <HBox spacing="10" alignment="BOTTOM_RIGHT"
-                              GridPane.columnIndex="1" GridPane.rowIndex="5">
-                            <Button text="Sign in"
+                        <HBox spacing="10" alignment="CENTER_RIGHT"
+                              GridPane.columnIndex="0" GridPane.rowIndex="7"
+                              GridPane.columnSpan="2">
+                            <padding><Insets top="25" right="0" bottom="0" left="0"/></padding>
+                            <Button text="Se connecter"
                                     styleClass="login-button"
                                     onAction="#handleLoginButtonAction"/>
                         </HBox>
 
-
-
                         <Text fx:id="actionTarget"
-                              GridPane.columnIndex="0" GridPane.rowIndex="8"
+                              GridPane.columnIndex="0" GridPane.rowIndex="9"
                               GridPane.columnSpan="2"
                               styleClass="login-error-message"/>
                     </GridPane>

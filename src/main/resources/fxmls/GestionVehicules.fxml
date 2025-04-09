@@ -33,11 +33,11 @@
 
             <TableView fx:id="vehiculesTable" VBox.vgrow="ALWAYS" styleClass="vehicles-table">
                 <columns>
-                    <TableColumn fx:id="immatriculationCol" text="Immatriculation" styleClass="table-column"/>
-                    <TableColumn fx:id="typeVehiculeCol" text="Type de véhicule" styleClass="table-column"/>
-                    <TableColumn fx:id="marqueModeleCol" text="Marque / Modèle" styleClass="table-column"/>
-                    <TableColumn fx:id="kilometrageCol" text="Kilométrage actuel" styleClass="table-column"/>
-                    <TableColumn fx:id="prochainEntretienCol" text="Prochain entretien" styleClass="table-column"/>
+                    <TableColumn fx:id="immatriculationCol" minWidth="150" text="Immatriculation" styleClass="table-column"/>
+                    <TableColumn fx:id="typeVehiculeCol" minWidth="150" text="Type de véhicule" styleClass="table-column"/>
+                    <TableColumn fx:id="marqueModeleCol" minWidth="150" text="Marque / Modèle" styleClass="table-column"/>
+                    <TableColumn fx:id="kilometrageCol" minWidth="150" text="Kilométrage actuel" styleClass="table-column"/>
+                    <TableColumn fx:id="prochainEntretienCol" minWidth="150" text="Prochain entretien" styleClass="table-column"/>
                 </columns>
             </TableView>
         </VBox>

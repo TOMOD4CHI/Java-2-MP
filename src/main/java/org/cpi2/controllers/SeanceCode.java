@@ -1,6 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -115,4 +116,6 @@ public class SeanceCode {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+
 }

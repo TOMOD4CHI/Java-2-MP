@@ -86,6 +86,13 @@ public class PassExam {
         alert.showAndWait();
     }
 
+    public void rechercherExamens(ActionEvent actionEvent) {
+    }
+
+    public void resetFilters(ActionEvent actionEvent) {
+
+    }
+
     // Model class for Exam (you would typically have this in a separate file)
     public static class Exam {
         private String idExamen;
