@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.AjouterSalle"
+            styleClass="ajouter-salle-container"
+            stylesheets="@/css/style.css">
+
+    <!-- En-tête -->
+    <top>
+        <VBox styleClass="header-container">
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="header-title-container">
+                <Label text="Ajouter une Nouvelle Salle" styleClass="form-title"/>
+
+                <Region HBox.hgrow="ALWAYS" />
+
+
+            </HBox>
+
+        </VBox>
+    </top>
+
+    <!-- Contenu Principal -->
+    <center>
+            <VBox spacing="25" styleClass="form-container">
+                <padding><Insets top="20" right="40" bottom="40" left="40"/></padding>
+
+                <VBox spacing="15">
+                    <Label text="Informations de la Salle"  alignment="CENTER" styleClass="form-title"/>
+
+                    <GridPane hgap="20" vgap="15">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50" />
+                            <ColumnConstraints percentWidth="50" />
+                        </columnConstraints>
+
+                        <!-- Nom de la Salle -->
+                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Nom de la Salle *" styleClass="form-label"/>
+                            <TextField fx:id="nomSalleField"
+                                       promptText="Entrez le nom de la salle"
+                                       styleClass="form-text-field"/>
+                        </VBox>
+
+                        <!-- Numéro de la Salle -->
+                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Numéro de Salle *" styleClass="form-label"/>
+                            <TextField fx:id="numeroSalleField"
+                                       promptText="Entrez le numéro de salle"
+                                       styleClass="form-text-field"/>
+                        </VBox>
+
+                        <!-- Étage -->
+
+
+
+
+                        <!-- Capacité -->
+                        <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Capacité" styleClass="form-label"/>
+                            <TextField fx:id="capaciteField"
+                                       promptText="Entrez la capacité de la salle"
+                                       styleClass="form-text-field"/>
+                        </VBox>
+
+
+
+                    </GridPane>
+                </VBox>
+
+                <!-- Section Équipements -->
+
+
+
+
+
+
+
+
+
+
+
+
+                <VBox spacing="5">
+                    <Label text="Notes Supplémentaires" styleClass="form-label"/>
+                    <TextArea fx:id="notesTextArea"
+                              promptText="Entrez toute information supplémentaire concernant la salle"
+                              styleClass="form-text-area"
+                              wrapText="true"
+                            />
+                </VBox>
+
+
+
+                <!-- Boutons d'Action -->
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <Button fx:id="annulerButton"
+                            text="Annuler"
+                            styleClass="secondary-button"
+                            onAction="#handleAnnulerButtonAction"/>
+
+                    <Button fx:id="enregistrerButton"
+                            text="Enregistrer"
+                            styleClass="primary-button"
+                            onAction="#handleEnregistrerButtonAction"/>
+                </HBox>
+            </VBox>
+    </center>
+</BorderPane>
