@@ -253,7 +253,23 @@ public class Paiement implements Initializable {
                 //TODO: May need some tweaks t3bt :(
 
             } else {
-               //TODO: handle exam payments
+                if(!examenService.hasPendingExamens(cin)){
+                    showErrorDialog("Le candidat n'a pas d'examen actif");
+                    return;
+                }
+                Examen examen = examenService.getPendingExamen(cin);
+                if(montant > examen.getFrais()){
+                    showErrorDialog("Montant supérieur au montant de l'examen ("+examen.getFrais()+")DT");
+                    return;
+                }
+                if(montant < examen.getFrais() ){
+                    showErrorDialog("Montant inférieur au montant de l'examen ("+examen.getFrais()+")DT");
+                    return;
+                }
+                paiementService.enregistrerPaiement(new PaiementExamen(null,
+                        candidatService.getCandidatByCin(cin),
+                        montant, date, ModePaiement.valueOf(mode), examen, "Payement d'examen du "+examen.getType()
+                ));
                 return;
             }
 

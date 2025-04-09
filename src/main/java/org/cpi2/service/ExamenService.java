@@ -164,5 +164,19 @@ public class ExamenService {
         }
         return type_price;
     }
+    public boolean hasPendingExamens(String cin) {
+        return getExamensByCandidat(cin).stream().anyMatch(examen -> examen.getResultat() == null);
+    }
 
+    public Examen getPendingExamen(String cin) {
+        return getExamensByCandidat(cin).stream()
+                .filter(examen -> examen.getResultat() == null)
+                .findFirst()
+                .orElse(null);
+    }
+    public List<Examen> getAllPendingExamens() {
+        return examenRepository.findAll().stream()
+                .filter(examen -> examen.getResultat() == null)
+                .toList();
+    }
 }

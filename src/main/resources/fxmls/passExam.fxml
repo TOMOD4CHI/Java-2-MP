@@ -70,7 +70,7 @@
                     <TableColumn fx:id="idColumn" text="ID" prefWidth="80"/>
                     <TableColumn fx:id="typeColumn" text="Type" prefWidth="120"/>
                     <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
-                    <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200"/>
+                    <TableColumn fx:id="candidatColumn" text="Candidat" prefWidth="200"/>
                 </columns>
             </TableView>
 

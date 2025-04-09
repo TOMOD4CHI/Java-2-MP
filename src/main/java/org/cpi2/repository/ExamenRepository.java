@@ -148,7 +148,7 @@ public class ExamenRepository extends BaseRepository<Examen> {
         String sql = """
             UPDATE examen 
             SET candidat_id = ?, type_examen_id = ?, date_examen = ?, 
-                frais = ?, resultat = ?
+                frais = ?, resultat = ?,commentaire = ?
             WHERE id = ?
         """;
         try (Connection conn = getConnection();
@@ -164,8 +164,13 @@ public class ExamenRepository extends BaseRepository<Examen> {
             } else {
                 stmt.setNull(5, Types.BOOLEAN);
             }
+            if(examen.getCommentaire() == null) {
+                stmt.setNull(6, Types.VARCHAR);
+            } else {
+                stmt.setString(6, examen.getCommentaire());
+            }
 
-            stmt.setLong(6, examen.getId());
+            stmt.setLong(7, examen.getId());
 
             return stmt.executeUpdate() > 0;
 

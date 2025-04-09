@@ -3,6 +3,7 @@ package org.cpi2.repository;
 import org.cpi2.entities.*;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
                 Paiement paiement = mapResultSetToPaiement(rs);
                 paiements.add(paiement);
             }
+
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error finding all paiements", e);
         }
@@ -72,29 +74,41 @@ public class PaiementRepository extends BaseRepository<Paiement> {
     }
 
     private Paiement mapResultSetToPaiement(ResultSet rs) throws SQLException {
+
+        long id = rs.getLong("id");
+        LocalDate datePaiement = rs.getDate("date_paiement").toLocalDate();
+        double montant = rs.getDouble("montant");
+        String typePaiement = rs.getString("type_paiement");
+        String notes = rs.getString("notes");
+        long candidatId = rs.getLong("id_candidat");
         ModePaiement modePaiement = ModePaiement.valueOf(rs.getString("mode_paiement"));
-        if (rs.getObject("id_examen",Integer.class) == null){
+
+        Integer idExamen = rs.getObject("id_examen", Integer.class);
+        Integer idInscription = rs.getObject("inscription_id", Integer.class);
+
+        Candidat candidat = candidatRepository.findById(candidatId).orElseThrow();
+
+        if (idExamen == null) {
             return new PaiementInscription(
-                rs.getLong("id"),
-                candidatRepository.findById(rs.getLong("id_candidat")).orElseThrow(),
-                rs.getDouble("montant"),
-                rs.getDate("date_paiement").toLocalDate(),
-                modePaiement,
-                inscriptionRepository.findById(rs.getInt("id_inscription")).orElseThrow(),
-                rs.getString("type_paiement"),
-                rs.getString("notes")
-        );
-        }
-        else{
+                    id,
+                    candidat,
+                    montant,
+                    datePaiement,
+                    modePaiement,
+                    inscriptionRepository.findById(idInscription).orElseThrow(),
+                    typePaiement,
+                    notes
+            );
+        } else {
             return new PaiementExamen(
-                rs.getLong("id"),
-                candidatRepository.findById(rs.getLong("id_candidat")).orElseThrow(),
-                rs.getDouble("montant"),
-                    rs.getDate("date_paiement").toLocalDate(),
-                modePaiement,
-                examenRepository.findById((long) rs.getInt("id_examen")).orElseThrow(),
-                rs.getString("notes")
-        );
+                    id,
+                    candidat,
+                    montant,
+                    datePaiement,
+                    modePaiement,
+                    examenRepository.findById((long) idExamen).orElseThrow(),
+                    notes
+            );
         }
     }
     //Take in mind that its possible to pay with tranches only for inscription (so this method is safe)

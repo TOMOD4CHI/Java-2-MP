@@ -56,6 +56,8 @@ public class ExamRegistration {
 
     @FXML
     private void rechercheCandidatAction() {
+        //TODO : Further check this method
+        //need the sessions to be completed :)
         // les informations vont etre recuperer de base de donnee
         if (!candidatIdField.getText().isEmpty()) {
             if(candidatService.findByCin(candidatIdField.getText()).isPresent()){
@@ -109,12 +111,18 @@ public class ExamRegistration {
     private void enregistrerAction() {
         if (validateForm()) {
             //l enregistrement dans la  base de donnee
+            //Note every Candidat should have only one examen (Active) at a time
+            if(examenService.hasPendingExamens(cinField.getText())){
+                showErrorDialog("Le candidat a déjà un examen en cours.");
+                return;
+            }
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Succès");
             alert.setHeaderText(null);
             alert.setContentText("Inscription à l'examen enregistrée avec succès!");
             alert.showAndWait();
-            
+
             clearForm();
         }
     }
@@ -166,5 +174,12 @@ public class ExamRegistration {
         eligibiliteLabel.setText("Eligibilité non vérifiée");
         eligibiliteLabel.getStyleClass().clear();
         eligibiliteLabel.getStyleClass().add("label");
+    }
+    private void showErrorDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

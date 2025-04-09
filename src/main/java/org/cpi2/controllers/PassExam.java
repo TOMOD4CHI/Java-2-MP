@@ -1,9 +1,19 @@
 package org.cpi2.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.cpi2.entities.Examen;
+import org.cpi2.service.CandidatService;
+import org.cpi2.service.ExamenService;
+
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PassExam {
 
@@ -17,6 +27,18 @@ public class PassExam {
     private ComboBox<String> resultatComboBox;
 
     @FXML
+    private DatePicker dateFilter;
+
+    @FXML private TableView<Exam> examensTable;
+    @FXML private TableColumn<Exam, String> idColumn;
+    @FXML private TableColumn<Exam, String> typeColumn;
+    @FXML private TableColumn<Exam, LocalDate> dateColumn;
+    @FXML private TableColumn<Exam, String> candidatColumn;
+
+    @FXML
+    private Label selectedExamLabel;
+
+    @FXML
     private TextArea commentaireArea;
 
     @FXML
@@ -25,15 +47,60 @@ public class PassExam {
     @FXML
     private Button cancelButton;
 
+    private final ExamenService examenService = new ExamenService();
+    private final CandidatService candidatService = new CandidatService();
+    private ObservableList<Exam> examensList;
+
     @FXML
     public void initialize() {
         // Populate ComboBox if not already populated
         if (resultatComboBox.getItems().isEmpty()) {
             resultatComboBox.getItems().addAll("Réussi", "Échoué");
         }
+
+        addListeners();
         
-        // TableView initialization removed as these components are not in the FXML file
+        loadExamens();
+        setupTableView();
     }
+    public void loadExamens() {
+        examensList = FXCollections.observableArrayList();
+        for (Examen examen : examenService.getAllPendingExamens()) {
+            examensList.add(new Exam(
+                    examen.getCandidat().getCin(),
+                    examen.getId().toString(),
+                    examen.getType().name(),
+                    examen.getDate().toString(),
+                    examen.getCandidat().getNom() + " " + examen.getCandidat().getPrenom(),
+                    examen.getResultat() != null ? examen.getResultat().toString() : "En Cours"
+            ));
+
+        }
+    }
+    private void setupTableView() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("typeExamen"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        candidatColumn.setCellValueFactory(new PropertyValueFactory<>("candidat"));
+    }
+
+    private void addListeners() {
+        examensTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                updateExameninfo(newSelection);
+            }
+        });
+    }
+
+
+    public void updateExameninfo(Exam selectedExamen) {
+        if (selectedExamen != null) {
+            idCandidatField.setText(selectedExamen.getCin());
+            idExamenField.setText(selectedExamen.getIdExamen());
+            selectedExamLabel.setText("Sélectionné: " + selectedExamen.getTypeExamen());
+        }
+    }
+
 
     @FXML
     public void handleSave(ActionEvent event) {
@@ -49,20 +116,32 @@ public class PassExam {
             showAlert("Erreur", "Veuillez remplir tous les champs obligatoires");
             return;
         }
+        if (candidatService.findByCin(candidatId).isEmpty()) {
+            showAlert("Erreur", "Candidat non trouvé");
+            return;
+        }
+        if (examenService.getExamenById(Long.parseLong(examenId)).isEmpty()) {
+            showAlert("Erreur", "Examen non trouvé");
+            return;
+        }
+        if (commentaire.length() > 255) {
+            showAlert("Erreur", "Le commentaire ne doit pas dépasser 255 caractères");
+            return;
+        }
 
-        // Process the form data
-        System.out.println("Enregistrement: " +
-                "Candidat=" + candidatId +
-                ", Examen=" + examenId +
-                ", Résultat=" + resultat +
-                ", Commentaire=" + commentaire);
+        Examen examen = examenService.getExamenById(Long.parseLong(examenId)).get();
+        examen.setResultat(resultat.equals("Réussi"));
+        examen.setCommentaire(commentaire);
+        if(examenService.updateExamen(examen)) {
+            showAlert("Succès", "Examen mis à jour avec succès");
+            loadExamens();
+            examensTable.setItems(examensList);
+        } else {
+            showAlert("Erreur", "Échec de la mise à jour de l'examen");
+            return;
+        }
 
-        // Here you would typically:
-        // 1. Validate input
-        // 2. Save to database
-        // 3. Refresh the TableView
-        // 4. Clear fields
-
+        //TODO : if anything further  needed can ba added here
         clearFields();
     }
 
@@ -85,24 +164,37 @@ public class PassExam {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    public void rechercherExamens(ActionEvent actionEvent) {
+    @FXML
+    public void rechercherExamens() {
+        LocalDate selectedDate = dateFilter.getValue();
+        if (selectedDate != null) {
+            ObservableList<Exam> filteredList = FXCollections.observableArrayList();
+            filteredList = examensList.stream().filter(
+                    examen -> examen.getDateExamen().equals(selectedDate.toString())
+            ).collect(Collectors.toCollection(FXCollections::observableArrayList));
+            filteredList.sort(Comparator.comparing(Exam::getDateExamen));
+            examensTable.setItems(filteredList);
+        } else {
+            examensList.sort(Comparator.comparing(Exam::getDateExamen));
+            examensTable.setItems(examensList);
+        }
     }
 
-    public void resetFilters(ActionEvent actionEvent) {
-
+    public void resetFilters() {
+        dateFilter.setValue(null);
+        examensTable.setItems(null);
     }
 
-    // Model class for Exam (you would typically have this in a separate file)
     public static class Exam {
         private String idExamen;
         private String typeExamen;
         private String dateExamen;
         private String candidat;
         private String resultat;
-
+        private String cin;
         // Constructor
-        public Exam(String idExamen, String typeExamen, String dateExamen, String candidat, String resultat) {
+        public Exam(String cin,String idExamen, String typeExamen, String dateExamen, String candidat, String resultat) {
+            this.cin = cin;
             this.idExamen = idExamen;
             this.typeExamen = typeExamen;
             this.dateExamen = dateExamen;
@@ -149,6 +241,12 @@ public class PassExam {
 
         public void setResultat(String resultat) {
             this.resultat = resultat;
+        }
+        public String getCin() {
+            return cin;
+        }
+        public void setCin(String cin) {
+            this.cin = cin;
         }
     }
 }

@@ -9,6 +9,7 @@ public class Examen {
     private Double frais;
     private Boolean resultat;//if result is null this means not yet taken
     private Candidat candidat;
+    private String commentaire;
 
     public Examen() {
         this.resultat = false;
@@ -66,6 +67,10 @@ public class Examen {
         return type;
     }
 
+    public String getTypeLibelle() {
+        return type.name();
+    }
+
     public void setType(TypeExamen type) {
         this.type = type;
     }
@@ -76,5 +81,11 @@ public class Examen {
 
     public boolean isSuccess() {
         return resultat != null && resultat;
+    }
+    public String getCommentaire() {
+        return commentaire;
+    }
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
     }
 }
