@@ -82,8 +82,7 @@ public class MainWindow implements Initializable {
                 return;
             }
             
-            stage.setHeight(800);
-            stage.setWidth(1550);
+            stage.setFullScreen(true);
             stage.setResizable(false);
 
             
