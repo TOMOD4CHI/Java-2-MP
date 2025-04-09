@@ -240,8 +240,8 @@ public class MainWindow implements Initializable {
             
             // Get the current stage
             Stage stage = (Stage) logoutButton.getScene().getWindow();
-            
-            // Create a new scene with the login screen
+            stage.setResizable(false);
+            stage.setFullScreen(true);
             Scene scene = new Scene(loginRoot, stage.getWidth(), stage.getHeight());
             stage.setTitle("Login");
             stage.setScene(scene);

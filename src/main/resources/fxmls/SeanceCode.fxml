@@ -1,51 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="org.cpi2.controllers.SeanceCode"
-           stylesheets="@/css/style.css"
-           prefWidth="800" prefHeight="500">
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.SeanceCode"
+            stylesheets="@/css/style.css" styleClass="root"
+            prefWidth="1200" prefHeight="700">
 
-    <HBox spacing="20" alignment="center">
-        <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" maxWidth="400">
-            <Label text="Planifier une Séance de Code" styleClass="form-title"/>
-
-            <HBox spacing="10" alignment="center_left">
-                <Label text="Capacite du Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="capfield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-            </HBox>
-            <HBox spacing="10" alignment="center_left">
-                <Label text="Date du Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                <DatePicker fx:id="datefield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-            </HBox>
-            <HBox spacing="10" alignment="center_left">
-                <Label text="Temps du Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="tempsfield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-            </HBox>
-
-            <HBox spacing="10" alignment="center_left">
-                <Label text="Id du Moniteur :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="moniteurfield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-            </HBox>
-
-            <HBox spacing="15" alignment="center">
-                <Button text="Annuler" fx:id="cancelButton" onAction="#handleCancel" styleClass="button, cancel-button"/>
-                <Button text="Planifier" fx:id="planifierButton" onAction="#handlePlanifier" styleClass="button, submit-button"/>
-            </HBox>
-        </VBox>
-
-        <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="form-container">
-            <Label text="Liste des Moniteurs" styleClass="form-title"/>
-            <TableView fx:id="moniteurTableView" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="idMoniteurColumn" text="ID" prefWidth="100"/>
-                    <TableColumn fx:id="nomMoniteurColumn" text="Nom" prefWidth="150"/>
-                    <TableColumn fx:id="prenomMoniteurColumn" text="Prénom" prefWidth="150"/>
-                    <TableColumn fx:id="specialiteColumn" text="Spécialité" prefWidth="150"/>
-                </columns>
-            </TableView>
-        </VBox>
-    </HBox>
+    <VBox spacing="20" alignment="center">
+        <Label text="Planifier une Séance de Code" styleClass="form-title"/>
+        <Separator/>
+        
+        <HBox spacing="30" alignment="center">
+            <!-- Left Container - Session Details -->
+            <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="500" prefWidth="500">
+                <Label text="Détails de la Séance" styleClass="form-title"/>
+                <Separator/>
+                
+                <GridPane hgap="15" vgap="12" alignment="center" minWidth="450" prefWidth="450">
+                    <Label text="Date:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                    <DatePicker fx:id="datePicker" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
+                    
+                    <Label text="Heure:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                    <TextField fx:id="heureField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
+                    
+                    <Label text="Nombre de places:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                    <TextField fx:id="placesField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
+                    
+                    <Label text="Moniteur:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                    <ComboBox fx:id="moniteurComboBox" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
+                </GridPane>
+                
+                <Separator/>
+                
+                <HBox spacing="15" alignment="center">
+                    <Button fx:id="annulerButton" text="Annuler" onAction="#handleCancel" styleClass="button" minWidth="120" prefWidth="120"/>
+                    <Button fx:id="enregistrerButton" text="Enregistrer" onAction="#handlePlanifier" styleClass="button" minWidth="120" prefWidth="120"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Right Container - Monitors List -->
+            <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="600" prefWidth="600">
+                <Label text="Liste des Moniteurs" styleClass="form-title"/>
+                <Separator/>
+                
+                <TableView fx:id="moniteurTableView" VBox.vgrow="ALWAYS" styleClass="table-view" minWidth="550" prefWidth="550">
+                    <columns>
+                        <TableColumn fx:id="idMoniteurColumn" text="ID" prefWidth="80"/>
+                        <TableColumn fx:id="nomMoniteurColumn" text="Nom" prefWidth="150"/>
+                        <TableColumn fx:id="prenomMoniteurColumn" text="Prénom" prefWidth="150"/>
+                        <TableColumn fx:id="specialiteColumn" text="Spécialité" prefWidth="170"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </HBox>
+        
+        <HBox alignment="center" spacing="15">
+            <Label styleClass="footer-text" text="🏫 Auto-école SmartRoads"/>
+            <Label styleClass="footer-text" text="📅 Date:" fx:id="dateFooterLabel"/>
+        </HBox>
+    </VBox>
 </StackPane>

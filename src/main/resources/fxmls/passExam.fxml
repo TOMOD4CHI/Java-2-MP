@@ -7,66 +7,78 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
+<StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.cpi2.controllers.PassExam"
-           stylesheets="@/css/style3.css"
-           prefWidth="500" prefHeight="400">
+           stylesheets="@/css/style.css"
+           prefWidth="1200" prefHeight="700">
 
-    <!-- Main Content (Scrollable) -->
-    <center>
-        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="transparent-scroll-pane" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-            <VBox spacing="10" alignment="CENTER" styleClass="form-container" maxWidth="450">
-                <padding>
-                    <Insets top="5" right="15" bottom="10" left="15"/>
-                </padding>
+    <HBox spacing="30" alignment="center">
+        <!-- Left Container - Passer un Examen Form -->
+        <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="500" prefWidth="500">
+            <Label text="Passer un Examen" styleClass="form-title"/>
+            <Separator/>
 
-        <Label text="Passer un Examen" styleClass="form-title"/>
-        <Separator/>
+            <GridPane hgap="10" vgap="10" alignment="center" minWidth="450" prefWidth="450">
+                <Label text="ID Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                <TextField fx:id="idCandidatField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
 
-        <GridPane hgap="10" vgap="10" alignment="CENTER">
+                <Label text="ID Examen:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                <TextField fx:id="idExamenField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250"/>
 
-            <Label text="ID Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextField fx:id="idCandidatField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field"/>
+                <Label text="Résultat:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                <ComboBox fx:id="resultatComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field" minWidth="250" prefWidth="250">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Réussi"/>
+                            <String fx:value="Échoué"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
 
-            <Label text="ID Examen:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextField fx:id="idExamenField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-field"/>
+                <Label text="Commentaires:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                <TextArea fx:id="commentaireArea" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field" prefRowCount="3" minWidth="250" prefWidth="250"/>
+            </GridPane>
 
-            <Label text="Résultat:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
-            <ComboBox fx:id="resultatComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Réussi"/>
-                        <String fx:value="Échoué"/>
-                    </FXCollections>
-                </items>
-            </ComboBox>
+            <Separator/>
 
-            <Label text="Commentaires:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
-            <TextArea fx:id="commentaireArea" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="comment" prefRowCount="3"/>
+            <HBox spacing="15" alignment="center">
+                <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="button" minWidth="120" prefWidth="120"/>
+                <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" styleClass="button" minWidth="120" prefWidth="120"/>
+            </HBox>
+        </VBox>
 
-        </GridPane>
+        <!-- Right Container - Table of Exams -->
+        <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="600" prefWidth="600">
+            <Label text="Examens Disponibles" styleClass="form-title"/>
+            <Separator/>
 
-        <Separator/>
+            <!-- Filter Section -->
+            <HBox spacing="10" alignment="center_left" minWidth="550" prefWidth="550">
+                <Label text="Filtrer par date:" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                <DatePicker fx:id="dateFilter" styleClass="form-field" minWidth="200" prefWidth="200"/>
+            </HBox>
+            
+            <HBox spacing="15" alignment="center">
+                <Button fx:id="searchBtn" text="Rechercher" onAction="#rechercherExamens" styleClass="button" minWidth="120" prefWidth="120"/>
+                <Button fx:id="resetBtn" text="Réinitialiser" onAction="#resetFilters" styleClass="button" minWidth="120" prefWidth="120"/>
+            </HBox>
 
-        <HBox spacing="15" alignment="CENTER">
-            <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" styleClass="button"/>
-            <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" styleClass="button"/>
-        </HBox>
-        
-        <Region VBox.vgrow="ALWAYS"/>
+            <!-- Table of Exams -->
+            <TableView fx:id="examensTable" VBox.vgrow="ALWAYS" styleClass="table-view" minWidth="550" prefWidth="550">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="80"/>
+                    <TableColumn fx:id="typeColumn" text="Type" prefWidth="120"/>
+                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
+                    <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200"/>
+                </columns>
+            </TableView>
 
-            </VBox>
-        </ScrollPane>
-    </center>
-    
-    <!-- Footer -->
-    <bottom>
-        <HBox alignment="CENTER" styleClass="footer">
-            <padding>
-                <Insets top="5" right="20" bottom="5" left="20"/>
-            </padding>
-            <Label text="© 2023 Auto-École. Tous droits réservés." styleClass="footer-text"/>
-        </HBox>
-    </bottom>
-</BorderPane>
+            <!-- Selected Exam Info -->
+            <HBox spacing="10" alignment="center_left" minWidth="550" prefWidth="550">
+                <Label text="Examen sélectionné:" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                <Label fx:id="selectedExamLabel" text="Aucun examen sélectionné" styleClass="info-text" minWidth="200" prefWidth="200"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</StackPane>

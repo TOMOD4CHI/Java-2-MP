@@ -67,7 +67,7 @@
                             <TableColumn fx:id="typeColumn" prefWidth="120" text="Type" />
                             <TableColumn fx:id="methodeColumn" prefWidth="100" text="Méthode" />
                             <TableColumn fx:id="statutColumn" prefWidth="80" text="Statut" />
-                            <TableColumn fx:id="actionsColumn" prefWidth="181.60009765625" text="Actions" />
+                            <TableColumn fx:id="actionsColumn" prefWidth="250" text="Actions" />
                         </columns>
                     </TableView>
                 </VBox>
