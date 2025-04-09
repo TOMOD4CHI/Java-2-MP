@@ -48,6 +48,7 @@
                     <Menu text="🕒 Séances" styleClass="menu-item-with-icon">
                         <MenuItem text="🚗 Planifier une séance de conduite" onAction="#loadSessionConduite" />
                         <MenuItem text="📚 Planifier une séance de code" onAction="#loadSessionCode" />
+                        <MenuItem  text="➕Ajouter une salle de code" onAction="#loadAjouterSalle"/>
                         <MenuItem text="👤 Affecter candidat à une séance" onAction="#loadRemplirSeance" />
                         <MenuItem text="📋 Afficher toutes les séances" onAction="#loadAfficherSeance"/>
                     </Menu>
