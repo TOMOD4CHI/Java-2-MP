@@ -238,7 +238,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
         }
     }
 
-    public boolean update(Vehicule vehicule) {
+    public boolean update(long id , Vehicule vehicule) {
         int typePermisId;
         try {
             typePermisId = typePermisRepository.findByCode(vehicule.getTypePermis().name()).get();
@@ -280,7 +280,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             } else {
                 stmt.setNull(11, Types.DATE);
             }
-            stmt.setLong(12, vehicule.getId());
+            stmt.setLong(12, id);
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

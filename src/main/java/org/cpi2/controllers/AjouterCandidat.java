@@ -17,6 +17,7 @@ import org.cpi2.utils.ValidationUtils;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class AjouterCandidat {
@@ -45,8 +46,8 @@ public class AjouterCandidat {
         return cin != null && CIN_PATTERN.matcher(cin).matches();
     }
     
-    private boolean isValidAddress(String address, int minLength) {
-        return address != null && address.length() >= minLength;
+    private boolean isValidAddress(String address) {
+        return address != null && address.length() >= 10;
     }
 
     @FXML private TextField nomField;
@@ -56,6 +57,7 @@ public class AjouterCandidat {
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
+    @FXML private ComboBox<String> modeComboBox;
     @FXML private Button cancelButton;
     @FXML private Button confirmButton;
 
@@ -108,16 +110,16 @@ public class AjouterCandidat {
             "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres", 2);
             
         // Type permis validation
-        ValidationUtils.<String>addValidation(typeComboBox, 
-            value -> value != null, 
+        ValidationUtils.<String>addValidation(typeComboBox,
+                Objects::nonNull,
             "Veuillez sélectionner un type de permis", 1);
             
         // Address validation
         ValidationUtils.addValidation(addressField, 
             text -> !text.trim().isEmpty(), 
             "L'adresse est obligatoire", 1);
-        ValidationUtils.addValidation(addressField, 
-            text -> isValidAddress(text, 10), 
+        ValidationUtils.addValidation(addressField,
+                this::isValidAddress,
             "L'adresse doit contenir au moins 10 caractères", 2);
             
         // Phone validation
@@ -165,8 +167,7 @@ public class AjouterCandidat {
         String phone = phoneField.getText().trim();
         String email = emailField.getText().trim();
         String typePermis = typeComboBox.getValue();
-        String cycle = "Mensuel";//this is the solution until the fields are added to the form
-        //String cycle = cycleComboBox.getValue();
+        String cycle = modeComboBox.getValue();
 
 
         // Check required fields
@@ -191,8 +192,6 @@ public class AjouterCandidat {
             candidat.setTelephone(phone);
             candidat.setEmail(email);
 
-            //TODO: Add more fields to choose payment cycle obligatory
-            //these are the options : "Mensuel", "Trimestriel", "Hebdomadaire","Totale"
 
             inscription.setCin(candidat.getCin());
             inscription.setPaymentStatus(false);

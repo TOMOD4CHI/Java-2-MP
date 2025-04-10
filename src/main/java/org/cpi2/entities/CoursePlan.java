@@ -1,9 +1,9 @@
 package org.cpi2.entities;
 
 public enum CoursePlan {
-    MOTO_BASIC(1, "Basic Motorcycle Course",199.99, "Fundamental motorcycle training for beginners", 10, 10),
-    CAR_BASIC(3, "Basic Car Driving Course", 349.99, "Essential car driving skills for new drivers", 10, 10),
-    TRUCK_HEAVY(7, "Heavy Truck License Course", 899.99, "Complete training for heavy goods vehicle license", 10, 10);
+    MOTO_BASIC(1, "Basic Motorcycle Course",200, "Fundamental motorcycle training for beginners", 10, 10),
+    CAR_BASIC(3, "Basic Car Driving Course", 350, "Essential car driving skills for new drivers", 10, 10),
+    TRUCK_HEAVY(7, "Heavy Truck License Course", 900, "Complete training for heavy goods vehicle license", 10, 10);
 
     private final int id;
     private final String name;
@@ -53,11 +53,10 @@ public enum CoursePlan {
 
     //can be paired with TyperDocument instead of typePermis for more realistic implementation
     public static TypePermis requiredTypePermis(CoursePlan plan) {
-        return switch (plan) {
-            case TRUCK_HEAVY -> TypePermis.B;
-            case CAR_BASIC  -> TypePermis.A;
-            default -> null;
-        };
+        if (plan == CoursePlan.TRUCK_HEAVY){
+            return TypePermis.B;
+        }
+        return null;
     }
 
     public static CoursePlan getById(int id) {

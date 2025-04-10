@@ -107,8 +107,7 @@ public class VehiculeService {
                     return false;
                 }
             }
-
-            return vehiculeRepository.update(vehicule);
+            return vehiculeRepository.update(old.getId(), vehicule);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error updating vehicle", e);
             return false;
@@ -164,7 +163,7 @@ public class VehiculeService {
                 updatedVehicule.setKilometrageProchainEntretien(entretien.getKilometrageActuel() + 10000);
                 updatedVehicule.setDateProchainEntretien(LocalDate.now().plusMonths(6));
                 
-                return vehiculeRepository.update(updatedVehicule);
+                return vehiculeRepository.update(updatedVehicule.getId(),updatedVehicule);
             }
             
             return false;
@@ -283,7 +282,7 @@ public class VehiculeService {
             if (vehicule.isPresent()) {
                 Vehicule updatedVehicule = vehicule.get();
                 updatedVehicule.setDateDerniereVisiteTechnique(dateEntretien);
-                return vehiculeRepository.update(updatedVehicule);
+                return vehiculeRepository.update(updatedVehicule.getId(),updatedVehicule);
             } else {
                 LOGGER.log(Level.WARNING, "Vehicle with ID " + vehiculeId + " not found");
                 return false;
@@ -299,7 +298,7 @@ public class VehiculeService {
             if (vehicule.isPresent()) {
                 Vehicule updatedVehicule = vehicule.get();
                 updatedVehicule.setKilometrageProchainEntretien(kilometrage);
-                return vehiculeRepository.update(updatedVehicule);
+                return vehiculeRepository.update(updatedVehicule.getId(),updatedVehicule);
             } else {
                 LOGGER.log(Level.WARNING, "Vehicle with ID " + vehiculeId + " not found");
                 return false;
@@ -316,7 +315,7 @@ public class VehiculeService {
             if (vehicule.isPresent()) {
                 Vehicule updatedVehicule = vehicule.get();
                 updatedVehicule.setKilometrageTotal(kilometrage);
-                return vehiculeRepository.update(updatedVehicule);
+                return vehiculeRepository.update(updatedVehicule.getId(),updatedVehicule);
             } else {
                 LOGGER.log(Level.WARNING, "Vehicle with ID " + vehiculeId + " not found");
                 return false;

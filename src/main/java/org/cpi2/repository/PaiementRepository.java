@@ -96,6 +96,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
 
         if (idExamen == null) {
             return new PaiementInscription(
+                    StatutPaiement.COMPLETE,
                     id,
                     candidat,
                     montant,
@@ -110,6 +111,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             );
         } else {
             return new PaiementExamen(
+                    StatutPaiement.COMPLETE,
                     id,
                     candidat,
                     montant,
@@ -151,8 +153,8 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             conn.setAutoCommit(false);
 
             String paiementSql = """
-                INSERT INTO paiement (id_candidat,inscription_id,id_examen,type_paiement, montant, date_paiement,mode_paiement,notes)
-                VALUES (?,?,?, ?, ?,?,?,?)
+                INSERT INTO paiement (id_candidat,inscription_id,id_examen,type_paiement, montant, date_paiement,mode_paiement,notes,statut)
+                VALUES (?,?,?, ?, ?,?,?,?,?)
              """;
 
             try (PreparedStatement stmt = conn.prepareStatement(paiementSql, Statement.RETURN_GENERATED_KEYS)) {
@@ -176,6 +178,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
                 stmt.setDouble(5, paiement.getMontant());
                 stmt.setDate(6, Date.valueOf(paiement.getDatePaiement()));
                 stmt.setString(7, paiement.getModePaiement().name());
+                stmt.setString(9,paiement.getStatut().name());
                 stmt.setString(8, paiement.getDescription());
 
 
@@ -209,7 +212,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
         }
     }
     public boolean update(Paiement paiement) {
-        String sql = "UPDATE paiement SET montant = ?, date_paiement = ?, mode_paiement = ?, notes = ? WHERE id = ?";
+        String sql = "UPDATE paiement SET montant = ?, date_paiement = ?, mode_paiement = ?, notes = ? statut=? WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -217,7 +220,8 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             stmt.setDate(2, Date.valueOf(paiement.getDatePaiement()));
             stmt.setString(3, paiement.getModePaiement().name());
             stmt.setString(4, paiement.getDescription());
-            stmt.setLong(5, paiement.getId());
+            stmt.setString(5,paiement.getStatut().name());
+            stmt.setLong(6, paiement.getId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

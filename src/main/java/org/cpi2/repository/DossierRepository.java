@@ -50,7 +50,6 @@ public class DossierRepository extends BaseRepository<Dossier> {
                 dossiers.add(dossier);
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error finding all dossiers", e);
         }
         return dossiers;
     }

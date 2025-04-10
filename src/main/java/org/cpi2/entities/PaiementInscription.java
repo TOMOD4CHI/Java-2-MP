@@ -8,8 +8,8 @@ public class PaiementInscription extends Paiement {
     private String typePaiement;
 
 
-    public PaiementInscription(Long id, Candidat candidat, Double montant, LocalDate datePaiement, ModePaiement modePaiement, Inscription inscription, String typePaiement, String description) {
-        super(id,candidat,montant,datePaiement,modePaiement,(description == null || description.isEmpty())?"Paiement d'inscription pour "+inscription.getPlan().getDescription():description,typePaiement);
+    public PaiementInscription(StatutPaiement statutPaiement,Long id, Candidat candidat, Double montant, LocalDate datePaiement, ModePaiement modePaiement, Inscription inscription, String typePaiement, String description) {
+        super(statutPaiement,id,candidat,montant,datePaiement,modePaiement,(description == null || description.isEmpty())?"Paiement d'inscription pour "+inscription.getPlan().getDescription():description,typePaiement);
         this.inscription = inscription;
     }
 

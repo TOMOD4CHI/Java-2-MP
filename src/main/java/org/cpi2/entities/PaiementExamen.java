@@ -7,8 +7,8 @@ public class PaiementExamen extends Paiement {
     private Examen examen;
 
 
-    public PaiementExamen(Long id, Candidat candidat, Double montant, LocalDate datePaiement, ModePaiement modePaiement, Examen examen, String description) {
-        super(id,candidat,montant, datePaiement,modePaiement,(description == null || description.isEmpty())?"Paiement d'inscription pour "+examen.getTypeExamen():description,null);
+    public PaiementExamen(StatutPaiement statutPaiement,Long id, Candidat candidat, Double montant, LocalDate datePaiement, ModePaiement modePaiement, Examen examen, String description) {
+        super(statutPaiement,id,candidat,montant, datePaiement,modePaiement,(description == null || description.isEmpty())?"Paiement d'inscription pour "+examen.getTypeExamen():description,null);
         this.examen = examen;
     }
 

@@ -71,7 +71,7 @@ public class InscriptionService {
     public void updateNextPaymentDate(Inscription inscription) {
         if (!Objects.equals(inscription.getPaymentCycle(), "Totale")) {
             if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
-                Date nextPaymentDate = calculateNextPaymentDate(new Date(), inscription.getPaymentCycle());
+                Date nextPaymentDate = calculateNextPaymentDate(inscription.getnextPaymentDate()==null ? java.sql.Date.valueOf(LocalDate.now()):inscription.getnextPaymentDate(), inscription.getPaymentCycle());
                 inscription.setnextPaymentDate(nextPaymentDate);
             } else if (inscription.isPaymentStatus() ) {
                 inscription.setnextPaymentDate(null);
@@ -83,6 +83,7 @@ public class InscriptionService {
                 inscription.setnextPaymentDate(java.sql.Date.valueOf(LocalDate.now()));
             }
         }
+        inscriptionRepository.update(inscription);
     }
 
     public List<Inscription> getInscriptionsWithUpcomingPayments(int daysThreshold) {
@@ -104,7 +105,7 @@ public class InscriptionService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
 
-        switch (paymentCycle.toLowerCase()) {
+        switch (paymentCycle.toLowerCase().trim()) {
             case "hebdomadaire":
                 calendar.add(Calendar.WEEK_OF_YEAR, 1);
                 break;

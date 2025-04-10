@@ -13,15 +13,15 @@ public abstract class Paiement {
     protected String description;
     protected String typePaiement;
 
-    protected Paiement(Long id,Candidat candidat ,Double montant, LocalDate datePaiement, ModePaiement modePaiement,String description,String typePaiement) {
+    protected Paiement(StatutPaiement statut,Long id,Candidat candidat ,Double montant, LocalDate datePaiement, ModePaiement modePaiement,String description,String typePaiement) {
         this.id = id;
         this.candidat = candidat;
         this.datePaiement = datePaiement;
         this.montant = montant;
         this.modePaiement = modePaiement;
-        this.statut = StatutPaiement.EN_ATTENTE;
         this.description = description;
         this.typePaiement = typePaiement;
+        this.statut = statut;
     }
 
     public String getTypePaiement() {

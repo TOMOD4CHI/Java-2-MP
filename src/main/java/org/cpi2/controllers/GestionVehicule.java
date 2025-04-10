@@ -187,7 +187,7 @@ public class GestionVehicule implements Initializable {
     @FXML
     private void handleVoirDetails(ActionEvent event) {
         if (vehiculeSelected == null) return;
-        
+        showErrorAlert("Erreur", "Fonctionnalité non implémentée :) ");
         statusLabel.setText("Affichage des détails du véhicule " + vehiculeSelected.getImmatriculation());
         // TODO: Navigate to details view or open details dialog
     }
@@ -210,8 +210,9 @@ public class GestionVehicule implements Initializable {
         
         if (isEditMode && vehiculeSelected != null) {
                 Vehicule oldVehicule = vehiculeSelected;
-                updateVehiculeFromForm(vehiculeSelected);
-                success = vehiculeService.modifierVehicule(oldVehicule,vehiculeSelected);
+                Vehicule newVehicule = new Vehicule();
+                updateVehiculeFromForm(newVehicule);
+                success = vehiculeService.modifierVehicule(oldVehicule,newVehicule);
                 if (success) {
                     vehiculesTable.refresh();
                     statusLabel.setText("Véhicule modifié avec succès");
@@ -235,8 +236,6 @@ public class GestionVehicule implements Initializable {
             viderChamps();
             vehiculesTable.refresh();
             mettreAJourTotal();
-        } else {
-            showErrorAlert("Erreur", "Impossible d'enregistrer le véhicule. Vérifiez les données saisies.");
         }
     }
 

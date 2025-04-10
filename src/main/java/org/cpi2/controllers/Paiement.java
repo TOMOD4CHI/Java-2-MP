@@ -179,6 +179,7 @@ public class Paiement implements Initializable {
                     try{
                     if(data.type.equals("Examen")){
                         paiementService.update(new PaiementExamen(
+                                StatutPaiement.COMPLETE,
                                 data.getId(),
                                 candidatService.getCandidatByCin(data.getCin()),
                                 montantField.getText().isEmpty() ? data.getMontant() : Double.parseDouble(montantField.getText()),
@@ -202,6 +203,7 @@ public class Paiement implements Initializable {
                             }
                         }
                         paiementService.update(new PaiementInscription(
+                                StatutPaiement.COMPLETE,
                                 data.getId(),
                                 candidatService.getCandidatByCin(data.getCin()),
                                 montantField.getText().isEmpty() ? data.getMontant() : Double.parseDouble(montantField.getText()),
@@ -227,15 +229,17 @@ public class Paiement implements Initializable {
                     PaiementData data = getTableView().getItems().get(getIndex());
                     if(!data.type.equals("Examen")) {
                         PaiementInscription paiement = (PaiementInscription) paiementService.getPaiementById(data.getId()).orElseThrow();
+                        paiement.setStatut(StatutPaiement.ANNULEE);
                         if (paiement.getInscription().isActive()) {
                             inscriptionService.updatePaymentStatus(paiement.getInscription().getId(), false);
+                            paiementService.cancelPiament(data.getId());
                         }
                         else{
                             showErrorDialog("Impossible de supprimer le paiement d'inscription car l'inscription n'est pas active");
                             return;
                         }
+
                     }
-                    paiementService.delete(data.getId());
                     showSuccessDialog("Paiement supprimé avec succès");
                     getTableView().getItems().remove(getIndex());
                     updateTotalLabel();
@@ -326,7 +330,7 @@ public class Paiement implements Initializable {
                     }
 
 
-                    paiementService.enregistrerPaiement(new PaiementInscription(null,
+                    paiementService.enregistrerPaiement(new PaiementInscription(StatutPaiement.COMPLETE,null,
                             candidatService.getCandidatByCin(cin),
                             montant, date, ModePaiement.valueOf(mode), inscription, type, description
                     ));
@@ -340,7 +344,6 @@ public class Paiement implements Initializable {
                     showErrorDialog("Le candidat n'a pas d'inscription active");
                     return;
                 }
-                //TODO: May need some tweaks t3bt :(
 
             } else {
                 if(!examenService.hasPendingExamens(cin)){
@@ -356,7 +359,7 @@ public class Paiement implements Initializable {
                     showErrorDialog("Montant inférieur au montant de l'examen ("+examen.getFrais()+")DT");
                     return;
                 }
-                paiementService.enregistrerPaiement(new PaiementExamen(null,
+                paiementService.enregistrerPaiement(new PaiementExamen(StatutPaiement.COMPLETE  ,null,
                         candidatService.getCandidatByCin(cin),
                         montant, date, ModePaiement.valueOf(mode), examen, "Payement d'examen du "+examen.getType()
                 ));
@@ -386,15 +389,26 @@ public class Paiement implements Initializable {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
         String candidat = searchCandidatComboBox.getValue();
-        if (startDate == null || endDate == null || candidat == null) {
-            showErrorDialog("Veuillez remplir tous les champs de recherche");
+        if (startDate == null && (endDate == null || candidat == null)) {
+            paiementsTable.getItems().clear();
+            paiementService.getAllPaiements()
+                    .forEach(p -> paiementsTable.getItems().add(new PaiementData(
+                            p.getDatePaiement(),
+                            p.getCandidat().getNom()+" "+p.getCandidat().getPrenom(),
+                            p instanceof PaiementInscription ? ((p.getTypePaiement() == null) ? "Inscription" : p.getTypePaiement()): "Examen",
+                            p.getMontant(),
+                            p.getModePaiement().toString(),
+                            p.getDescription()
+                    )));
             return;
         }
         if (startDate.isAfter(endDate)) {
             showErrorDialog("La date de début ne peut pas être après la date de fin");
             return;
         }
-        if(candidat.equals("Sélectionner un candidat")){
+        System.out.println(searchCandidatComboBox.getValue());
+        if(searchCandidatComboBox.getValue() == null || searchCandidatComboBox.getValue().isEmpty()){
+            paiementsTable.getItems().clear();
             paiementService.getAllPaiements().stream().filter(p -> !p.getDatePaiement().isBefore(startDate) && !p.getDatePaiement().isAfter(endDate))
                     .forEach(p -> paiementsTable.getItems().add(new PaiementData(
                             p.getDatePaiement(),
@@ -406,6 +420,7 @@ public class Paiement implements Initializable {
                     )));
         }
         else {
+            paiementsTable.getItems().clear();
             String cin = candidat.substring(1, candidat.indexOf(")"));
             paiementService.getAllPaiements().stream().filter(p -> p.getCandidat().getCin().equals(cin) && !p.getDatePaiement().isBefore(startDate) && !p.getDatePaiement().isAfter(endDate))
                     .forEach(p -> paiementsTable.getItems().add(new PaiementData(
@@ -417,7 +432,6 @@ public class Paiement implements Initializable {
                             p.getDescription()
                     )));
         }
-        showSuccessDialog("Recherche effectuée");
     }
 
     private boolean validatePaymentForm() {

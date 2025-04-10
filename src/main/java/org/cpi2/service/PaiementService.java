@@ -2,10 +2,7 @@ package org.cpi2.service;
 
 
 import org.cpi2.Exceptions.DataNotFound;
-import org.cpi2.entities.Inscription;
-import org.cpi2.entities.Paiement;
-import org.cpi2.entities.PaiementExamen;
-import org.cpi2.entities.PaiementInscription;
+import org.cpi2.entities.*;
 import org.cpi2.repository.PaiementRepository;
 import org.cpi2.repository.CandidatRepository;
 
@@ -43,18 +40,27 @@ public class PaiementService {
         return paiementRepository.update(paiement);
     }
 
+    public boolean cancelPiament(Long id) {
+        Optional<Paiement> paiementOpt = paiementRepository.findById(id);
+        if (paiementOpt.isPresent()) {
+            Paiement paiement = paiementOpt.get();
+
+            paiement.setStatut(StatutPaiement.ANNULEE);
+            return paiementRepository.update(paiement);
+        }
+        return false;
+    }
     public boolean delete(Long id) {
         return paiementRepository.delete(id);
     }
 
     public List<Paiement> getAllPaiements() {
-        return paiementRepository.findAll();
+        return paiementRepository.findAll().stream().filter(p -> p.getStatut() != StatutPaiement.ANNULEE).toList();
     }
 
     public Optional<Paiement> getPaiementById(Long id) {
-        return paiementRepository.findById(id);
+        return paiementRepository.findById(id).stream().filter(p -> p.getStatut() != StatutPaiement.ANNULEE).findFirst();
     }
-
 
     public List<Paiement> getPaiementsByCandidatId(Long candidatId) {
         return paiementRepository.findAllByCandidat(candidatId);

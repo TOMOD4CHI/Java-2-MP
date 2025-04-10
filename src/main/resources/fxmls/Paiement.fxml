@@ -88,7 +88,7 @@
                 </HBox>
 
                 <HBox spacing="10" alignment="CENTER">
-                    <Button text="Rechercher"  styleClass="button, action-button" prefWidth="150"/>
+                    <Button text="Rechercher" onAction="#handleSearch" styleClass="button, action-button" prefWidth="150"/>
                 </HBox>
             </VBox>
         </ScrollPane>

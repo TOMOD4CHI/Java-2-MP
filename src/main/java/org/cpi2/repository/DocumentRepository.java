@@ -61,8 +61,9 @@ public class DocumentRepository extends BaseRepository<Document> {
         String nomFichier = rs.getString("nom_fichier");
         String cheminFichier = rs.getString("chemin_fichier");
         Timestamp timestamp = rs.getTimestamp("date_upload");
+        int typeDocumentId = rs.getInt("type_document_id");
         String typeDoc = typeDocumentRepository
-                .findById(rs.getInt("type_document_id")).get();
+                .findById(typeDocumentId).get();
 
         typeDocument = TypeDocument.valueOf(typeDoc);
 
@@ -161,13 +162,13 @@ public class DocumentRepository extends BaseRepository<Document> {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, dossierId);
-            ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                documents.add(mapResultSetToDocument(rs));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    documents.add(mapResultSetToDocument(rs));
+                }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error finding documents by dossier ID", e);
         }
         return documents;
     }

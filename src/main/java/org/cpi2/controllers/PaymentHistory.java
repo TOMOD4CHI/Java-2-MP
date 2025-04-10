@@ -17,12 +17,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.cpi2.entities.Candidat;
+import org.cpi2.entities.Paiement;
+import org.cpi2.entities.PaiementInscription;
+import org.cpi2.service.CandidatService;
+import org.cpi2.service.InscriptionService;
+import org.cpi2.service.PaiementService;
 import org.cpi2.utils.AlertUtil;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class PaymentHistory implements Initializable {
@@ -81,6 +89,10 @@ public class PaymentHistory implements Initializable {
     @FXML
     private BarChart<String, Number> typeDistributionChart;
 
+    private final CandidatService candidatService = new CandidatService();
+    private final PaiementService paiementService = new PaiementService();
+    private final InscriptionService inscriptionService = new InscriptionService();
+
     private ObservableList<PaymentEntry> paymentsList = FXCollections.observableArrayList();
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -113,10 +125,7 @@ public class PaymentHistory implements Initializable {
         ObservableList<String> types = FXCollections.observableArrayList(
                 "Tous les types",
                 "Inscription",
-                "Séance de conduite",
-                "Séance de code",
-                "Examen",
-                "Autre"
+                "Examen"
         );
         typeComboBox.setItems(types);
         typeComboBox.getSelectionModel().select(0);
@@ -125,28 +134,8 @@ public class PaymentHistory implements Initializable {
     private void loadCandidates() {
         // This would be replaced with actual database call
         ObservableList<Candidat> candidats = FXCollections.observableArrayList();
-        
-        // Sample data - in a real app, fetch from database
-        Candidat c0 = new Candidat();
-        c0.setId(0L);
-        c0.setNom("Tous les candidats");
-        c0.setPrenom("");
-        candidats.add(c0);
-        
-        Candidat c1 = new Candidat();
-        c1.setId(1L);
-        c1.setNom("Ben Salem");
-        c1.setPrenom("Ahmed");
-        c1.setCin("12345678");
-        candidats.add(c1);
-        
-        Candidat c2 = new Candidat();
-        c2.setId(2L);
-        c2.setNom("Mejri");
-        c2.setPrenom("Sarra");
-        c2.setCin("87654321");
-        candidats.add(c2);
-        
+
+        candidats.addAll(candidatService.getAllCandidats());
         candidatComboBox.setItems(candidats);
         candidatComboBox.setCellFactory(lv -> new ListCell<Candidat>() {
             @Override
@@ -211,11 +200,11 @@ public class PaymentHistory implements Initializable {
                     setStyle("");
                 } else {
                     setText(statut);
-                    if (statut.equals("Payé")) {
+                    if (statut.equals("COMPLETE")) {
                         setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-                    } else if (statut.equals("En attente")) {
+                    } else if (statut.equals("En EN_ATTENTE")) {
                         setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
-                    } else if (statut.equals("Annulé")) {
+                    } else if (statut.equals("ANNULEE")) {
                         setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
                     }
                 }
@@ -265,20 +254,29 @@ public class PaymentHistory implements Initializable {
     private void loadPaymentData() {
         // This would be replaced with actual database call
         paymentsList.clear();
+        List<PaymentEntry> payments = new ArrayList<>();
+        for(Paiement p : paiementService.getAllPaiements()) {
+            String type = p.getTypePaiement();
+            if (type.equals("Totale")) {
+                type = "Inscription Totale";
+            } else if (type.equals("Examen")) {
+                type = "Examen";
+            } else {
+                type = "Tranches d'Inscription";
+            }
+            payments.add(new PaymentEntry(
+                    p.getId(),
+                    p.getDatePaiement(),
+                    p.getCandidat().getNom() + " " + p.getCandidat().getPrenom(),
+                    p.getCandidat().getCin(),
+                    p.getMontant(),
+                    type,
+                    p.getModePaiement().name(),
+                    p.getStatut().name().toLowerCase()));
+        }
         
         // Sample data
-        paymentsList.addAll(
-            new PaymentEntry(1, "15/03/2023", "Ben Salem Ahmed", 250.00, "Inscription", "Espèces", "Payé"),
-            new PaymentEntry(2, "22/03/2023", "Mejri Sarra", 120.00, "Séance de conduite", "Chèque", "Payé"),
-            new PaymentEntry(3, "25/03/2023", "Ben Salem Ahmed", 80.00, "Séance de code", "Virement", "Payé"),
-            new PaymentEntry(4, "01/04/2023", "Trabelsi Mohamed", 250.00, "Inscription", "Carte", "Payé"),
-            new PaymentEntry(5, "05/04/2023", "Mejri Sarra", 150.00, "Examen", "Espèces", "En attente"),
-            new PaymentEntry(6, "12/04/2023", "Ben Salem Ahmed", 120.00, "Séance de conduite", "Virement", "Payé"),
-            new PaymentEntry(7, "15/04/2023", "Trabelsi Mohamed", 80.00, "Séance de code", "Espèces", "Payé"),
-            new PaymentEntry(8, "20/04/2023", "Mejri Sarra", 120.00, "Séance de conduite", "Chèque", "Annulé"),
-            new PaymentEntry(9, "25/04/2023", "Ben Salem Ahmed", 150.00, "Examen", "Carte", "En attente"),
-            new PaymentEntry(10, "01/05/2023", "Trabelsi Mohamed", 120.00, "Séance de conduite", "Espèces", "Payé")
-        );
+        paymentsList.addAll(payments);
         
         paymentsTable.setItems(paymentsList);
         
@@ -289,14 +287,14 @@ public class PaymentHistory implements Initializable {
     private void updateSummary() {
         int total = paymentsList.size();
         double totalAmount = paymentsList.stream()
-                .filter(p -> !p.getStatut().equals("Annulé"))
+                .filter(p -> !p.getStatut().equals("annulee"))
                 .mapToDouble(PaymentEntry::getMontant)
                 .sum();
         long completed = paymentsList.stream()
-                .filter(p -> p.getStatut().equals("Payé"))
+                .filter(p -> p.getStatut().equals("complete"))
                 .count();
-        long pending = paymentsList.stream()
-                .filter(p -> p.getStatut().equals("En attente"))
+        long pending = inscriptionService.getAllInscriptions().stream()
+                .filter(i -> i.getnextPaymentDate()!=null && i.getnextPaymentDate().after(Date.valueOf(LocalDate.now())))
                 .count();
         
         totalPaymentsLabel.setText(String.valueOf(total));
@@ -314,27 +312,15 @@ public class PaymentHistory implements Initializable {
         
         // Count payments by type (excluding cancelled)
         long inscriptions = paymentsList.stream()
-                .filter(p -> p.getType().equals("Inscription") && !p.getStatut().equals("Annulé"))
-                .count();
-        long seancesConduite = paymentsList.stream()
-                .filter(p -> p.getType().equals("Séance de conduite") && !p.getStatut().equals("Annulé"))
-                .count();
-        long seancesCode = paymentsList.stream()
-                .filter(p -> p.getType().equals("Séance de code") && !p.getStatut().equals("Annulé"))
+                .filter(p -> (p.getType().equals("Inscription Totale") || p.getType().equals("Tranches d'Inscription") )&& !p.getStatut().equals("annulee"))
                 .count();
         long examens = paymentsList.stream()
-                .filter(p -> p.getType().equals("Examen") && !p.getStatut().equals("Annulé"))
-                .count();
-        long autres = paymentsList.stream()
-                .filter(p -> p.getType().equals("Autre") && !p.getStatut().equals("Annulé"))
+                .filter(p -> p.getType().equals("Examen") && !p.getStatut().equals("annulee"))
                 .count();
         
         // Add data to series
         series.getData().add(new XYChart.Data<>("Inscription", inscriptions));
-        series.getData().add(new XYChart.Data<>("Conduite", seancesConduite));
-        series.getData().add(new XYChart.Data<>("Code", seancesCode));
         series.getData().add(new XYChart.Data<>("Examen", examens));
-        series.getData().add(new XYChart.Data<>("Autre", autres));
         
         // Add series to chart
         typeDistributionChart.getData().add(series);
@@ -365,26 +351,58 @@ public class PaymentHistory implements Initializable {
 
     @FXML
     void handleFilter(ActionEvent event) {
-        // Apply filters and reload data
-        // In a real app, this would query the database with the selected filters
+        //TODO : Complete this shit
+        Candidat selectedCandidat = candidatComboBox.getSelectionModel().getSelectedItem();
+        String selectedType = typeComboBox.getSelectionModel().getSelectedItem();
+        LocalDate dateDebut = dateDebutPicker.getValue();
+        LocalDate dateFin = dateFinPicker.getValue();
+
+        if (dateDebut.isAfter(dateFin)) {
+            AlertUtil.showError("Erreur de date", "La date de début ne peut pas être après la date de fin.");
+            return;
+        }
+
+        paymentsList.clear();
+        List<PaymentEntry> filteredPayments = new ArrayList<>();
+        for (PaymentEntry payment : paymentsList) {
+            boolean matches = selectedCandidat == null || selectedCandidat.getCin().equals(payment.getCin());
+
+            if (!selectedType.equals("Tous les types") && !selectedType.equals(payment.getType())) {
+                matches = false;
+            }
+
+            if (dateDebut != null && payment.getD().isBefore(dateDebut)) {
+                matches = false;
+            }
+
+            if (dateFin != null && payment.getD().isAfter(dateFin)) {
+                matches = false;
+            }
+
+            if (matches) {
+                filteredPayments.add(payment);
+            }
+        }
         AlertUtil.showInfo("Filtres Appliqués", "Les filtres ont été appliqués avec succès.");
-        
-        // Simulate reloading data
-        loadPaymentData();
+
+        paymentsList= FXCollections.observableArrayList(filteredPayments);
+        paymentsTable.setItems(paymentsList);
+        updateSummary();
         updateChartData();
     }
 
     // Payment Entry class to hold table data
     public static class PaymentEntry {
-        private final int id;
-        private final String date;
+        private final long id;
+        private final LocalDate date;
         private final String candidat;
         private final double montant;
         private final String type;
         private final String methode;
         private final String statut;
+        private final String cin;
         
-        public PaymentEntry(int id, String date, String candidat, double montant, 
+        public PaymentEntry(long  id, LocalDate date, String candidat,String cin, double montant,
                           String type, String methode, String statut) {
             this.id = id;
             this.date = date;
@@ -393,10 +411,16 @@ public class PaymentHistory implements Initializable {
             this.type = type;
             this.methode = methode;
             this.statut = statut;
+            this.cin = cin;
         }
-        
-        public int getId() { return id; }
-        public String getDate() { return date; }
+        public LocalDate getD(){
+            return date;
+        }
+        public String getCin() {
+            return cin;
+        }
+        public long getId() { return id; }
+        public String getDate() { return date.toString(); }
         public String getCandidat() { return candidat; }
         public double getMontant() { return montant; }
         public String getType() { return type; }
