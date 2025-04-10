@@ -31,6 +31,12 @@ public class CandidatService {
         this.dossierService = dossierService;
         this.inscriptionService = new InscriptionService();
     }
+    public CandidatService(InscriptionService inscriptionService){
+        this.candidatRepository = new CandidatRepository();
+        this.inscriptionRepository = new InscriptionRepository();
+        this.dossierService = new DossierService(this);
+        this.inscriptionService = inscriptionService;
+    }
 
     public List<Candidat> getAllCandidats() {
         return candidatRepository.findAll();

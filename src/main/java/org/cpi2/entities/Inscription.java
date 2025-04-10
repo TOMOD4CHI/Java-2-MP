@@ -92,7 +92,7 @@ public class Inscription {
 
     //Can make Enum if needed
     public boolean isActive() {
-        return status.equalsIgnoreCase("ACTIVE");
+        return status.equalsIgnoreCase("En cours");
     }
 
     @Override

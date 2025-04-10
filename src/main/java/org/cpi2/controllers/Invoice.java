@@ -7,6 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.cpi2.entities.Candidat;
+import org.cpi2.service.AutoEcoleService;
+import org.cpi2.service.CandidatService;
+import org.cpi2.service.InscriptionService;
+import org.cpi2.service.PaiementService;
 import org.cpi2.utils.AlertUtil;
 
 import java.net.URL;
@@ -33,6 +37,11 @@ public class Invoice implements Initializable {
     @FXML
     private TextArea noteTextArea;
 
+    private final InscriptionService inscriptionService = new InscriptionService();
+    private final CandidatService candidatService = new CandidatService(inscriptionService);
+    private final PaiementService paiementService = new PaiementService();
+    private final AutoEcoleService autoEcoleService = new AutoEcoleService();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize date pickers with default values
@@ -42,8 +51,6 @@ public class Invoice implements Initializable {
         // Load types de facture
         ObservableList<String> typesFacture = FXCollections.observableArrayList(
                 "Facture complète",
-                "Facture de séances de conduite",
-                "Facture de séances de code",
                 "Facture d'inscription");
         typeFactureComboBox.setItems(typesFacture);
         
@@ -68,34 +75,10 @@ public class Invoice implements Initializable {
     }
     
     private void loadCandidates() {
-        // This would be replaced with actual database call
         ObservableList<Candidat> candidats = FXCollections.observableArrayList();
-        
-        // Sample data - in a real app, fetch from database
-        Candidat c1 = new Candidat();
-        c1.setId(1L);
-        c1.setNom("Ben Salem");
-        c1.setPrenom("Ahmed");
-        c1.setCin("12345678");
-        c1.setTelephone("12345678");
-        candidats.add(c1);
-        
-        Candidat c2 = new Candidat();
-        c2.setId(2L);
-        c2.setNom("Mejri");
-        c2.setPrenom("Sarra");
-        c2.setCin("87654321");
-        c2.setTelephone("87654321");
-        candidats.add(c2);
-        
-        Candidat c3 = new Candidat();
-        c3.setId(3L);
-        c3.setNom("Trabelsi");
-        c3.setPrenom("Mohamed");
-        c3.setCin("13579246");
-        c3.setTelephone("13579246");
-        candidats.add(c3);
-        
+        candidats.addAll(candidatService.getAllCandidats());
+
+
         candidatComboBox.setItems(candidats);
         candidatComboBox.setCellFactory(lv -> new ListCell<Candidat>() {
             @Override
@@ -118,10 +101,15 @@ public class Invoice implements Initializable {
         // This would be replaced with actual calculation based on database queries
         if (candidatComboBox.getValue() != null && typeFactureComboBox.getValue() != null &&
                 dateDebutPicker.getValue() != null && dateFinPicker.getValue() != null) {
-            
-            // Dummy calculation for demonstration
-            double montant = Math.random() * 1000 + 100;
-            montantField.setText(String.format("%.2f DT", montant));
+            Candidat candidat = candidatComboBox.getValue();
+            String typeFacture = typeFactureComboBox.getValue();
+            if(typeFacture.equals("Facture complète")) {
+                double montant = paiementService.calculateTotalPayments(candidat.getCin(), dateDebutPicker.getValue(), dateFinPicker.getValue());
+                montantField.setText(String.valueOf(montant));
+            } else if (typeFacture.equals("Facture d'inscription")) {
+                double montant = paiementService.calculateRegistrationFees(candidat.getCin(), dateDebutPicker.getValue(), dateFinPicker.getValue());
+                montantField.setText(String.valueOf(montant));
+            }
         }
     }
 
@@ -141,6 +129,7 @@ public class Invoice implements Initializable {
             AlertUtil.showError("Dates Invalides", "La date de début doit être antérieure à la date de fin.");
             return;
         }
+
         
         // This would load payments from database
         updateMontantTotal();

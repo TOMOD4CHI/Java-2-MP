@@ -6,6 +6,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -14,6 +15,9 @@ public class PaiementRepository extends BaseRepository<Paiement> {
     private final CandidatRepository candidatRepository = new CandidatRepository();
     private final  ExamenRepository examenRepository = new ExamenRepository();
     private final InscriptionRepository inscriptionRepository = new InscriptionRepository();
+    private  List<Candidat> candidats = candidatRepository.findAll();
+    private List<Inscription> inscriptions = inscriptionRepository.findAll();
+    private List<Examen> examens = examenRepository.findAll();
 
     public List<Paiement> findAll() {
         List<Paiement> paiements = new ArrayList<>();
@@ -68,7 +72,6 @@ public class PaiementRepository extends BaseRepository<Paiement> {
                 paiements.add(paiement);
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error finding paiements by candidat", e);
         }
         return paiements;
     }
@@ -83,10 +86,13 @@ public class PaiementRepository extends BaseRepository<Paiement> {
         long candidatId = rs.getLong("id_candidat");
         ModePaiement modePaiement = ModePaiement.valueOf(rs.getString("mode_paiement"));
 
-        Integer idExamen = rs.getObject("id_examen", Integer.class);
+        Long idExamen = rs.getObject("id_examen", Long.class);
         Integer idInscription = rs.getObject("inscription_id", Integer.class);
 
-        Candidat candidat = candidatRepository.findById(candidatId).orElseThrow();
+        Candidat candidat = candidats.stream()
+                .filter(c -> c.getId() == candidatId)
+                .findFirst()
+                .orElseThrow();
 
         if (idExamen == null) {
             return new PaiementInscription(
@@ -95,7 +101,10 @@ public class PaiementRepository extends BaseRepository<Paiement> {
                     montant,
                     datePaiement,
                     modePaiement,
-                    inscriptionRepository.findById(idInscription).orElseThrow(),
+                    inscriptions.stream()
+                            .filter(inscription -> inscription.getId() == idInscription)
+                            .findFirst()
+                            .orElseThrow(),
                     typePaiement,
                     notes
             );
@@ -106,7 +115,10 @@ public class PaiementRepository extends BaseRepository<Paiement> {
                     montant,
                     datePaiement,
                     modePaiement,
-                    examenRepository.findById((long) idExamen).orElseThrow(),
+                    examens.stream()
+                            .filter(examen -> Objects.equals(examen.getId(), idExamen))
+                            .findFirst()
+                            .orElseThrow(),
                     notes
             );
         }
@@ -194,6 +206,35 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             return false;
         } finally {
             closeQuietly(conn);
+        }
+    }
+    public boolean update(Paiement paiement) {
+        String sql = "UPDATE paiement SET montant = ?, date_paiement = ?, mode_paiement = ?, notes = ? WHERE id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDouble(1, paiement.getMontant());
+            stmt.setDate(2, Date.valueOf(paiement.getDatePaiement()));
+            stmt.setString(3, paiement.getModePaiement().name());
+            stmt.setString(4, paiement.getDescription());
+            stmt.setLong(5, paiement.getId());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating paiement", e);
+            return false;
+        }
+    }
+    public boolean delete(long  id) {
+        String sql = "DELETE FROM paiement WHERE id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting paiement", e);
+            return false;
         }
     }
 

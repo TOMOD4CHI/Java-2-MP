@@ -5,23 +5,26 @@ import org.cpi2.entities.Inscription;
 import org.cpi2.repository.InscriptionRepository;
 import org.cpi2.repository.PlanRepository;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class InscriptionService {
     private final InscriptionRepository inscriptionRepository;
     private final PlanRepository planRepository;
-    private final PaiementService paiementService;
+    //causes circular dependencies in invoice.java
+
+    //private final PaiementService paiementService;
 
     public InscriptionService() {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
-        this.paiementService = new PaiementService(this);
+        //this.paiementService = new PaiementService(this);
     }
     public InscriptionService(PaiementService paiementService) {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
-        this.paiementService = paiementService;
+        //this.paiementService = paiementService;
     }
 
     public Optional<Inscription> getInscriptionById(Integer id) {
@@ -45,12 +48,10 @@ public class InscriptionService {
     }
 
     public boolean saveInscription(Inscription inscription) {
-        updateNextPaymentDate(inscription);
         return inscriptionRepository.save(inscription);
     }
 
     public boolean updateInscription(Inscription inscription) {
-        updateNextPaymentDate(inscription);
         return inscriptionRepository.update(inscription);
     }
 
@@ -67,15 +68,19 @@ public class InscriptionService {
         return false;
     }
 
-    private void updateNextPaymentDate(Inscription inscription) {
-        // If not paid and has payment cycle, calculate next payment date
+    public void updateNextPaymentDate(Inscription inscription) {
         if (!Objects.equals(inscription.getPaymentCycle(), "Totale")) {
             if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
                 Date nextPaymentDate = calculateNextPaymentDate(new Date(), inscription.getPaymentCycle());
                 inscription.setnextPaymentDate(nextPaymentDate);
-            } else if (inscription.isPaymentStatus()) {
-                // If fully paid, there's no next payment
+            } else if (inscription.isPaymentStatus() ) {
                 inscription.setnextPaymentDate(null);
+            }
+        } else {
+            if(inscription.isPaymentStatus()) {
+                inscription.setnextPaymentDate(null);
+            } else {
+                inscription.setnextPaymentDate(java.sql.Date.valueOf(LocalDate.now()));
             }
         }
     }

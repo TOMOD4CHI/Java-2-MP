@@ -55,8 +55,10 @@ public class Paiement implements Initializable {
 
     // Mock data class for table
     public static class PaiementData {
+        private long id;
         private LocalDate date;
         private String candidat;
+        private String cin;
         private String type;
         private Double montant;
         private String methode;
@@ -64,6 +66,17 @@ public class Paiement implements Initializable {
 
         public PaiementData(LocalDate date, String candidat, String type, Double montant, String methode, String description) {
             this.date = date;
+            this.cin=cin;
+            this.candidat = candidat;
+            this.type = type;
+            this.montant = montant;
+            this.methode = methode;
+            this.description = description;
+        }
+        public PaiementData(long id, LocalDate date,String cin, String candidat, String type, Double montant, String methode, String description) {
+            this.id = id;
+            this.date = date;
+            this.cin=cin;
             this.candidat = candidat;
             this.type = type;
             this.montant = montant;
@@ -71,7 +84,13 @@ public class Paiement implements Initializable {
             this.description = description;
         }
 
-
+        public long getId() {
+            return id;
+        }
+        public void setId(long id) {
+            this.id = id;
+        }
+        public String getCin() { return cin; }
         public LocalDate getDate() { return date; }
         public String getCandidat() { return candidat; }
         public String getType() { return type; }
@@ -141,13 +160,82 @@ public class Paiement implements Initializable {
 
                 editButton.setOnAction(event -> {
                     PaiementData data = getTableView().getItems().get(getIndex());
-                    // Handle edit action
-                    showSuccessDialog("Fonction de modification en développement");
+                    if(datePicker.getValue() == null && montantField.getText().isEmpty() && descriptionArea.getText().isEmpty()){
+                        showErrorDialog("Veuillez remplir au moine un champ pour la modification");
+                        return;
+                    }
+                    if(candidatComboBox.getValue() != null && !candidatComboBox.getValue().substring(1, candidatComboBox.getValue().indexOf(")")).equals(data.candidat.substring(1, data.candidat.indexOf(")")))){
+                        showErrorDialog("Vous ne pouvez pas modifier le candidat");
+                        return;
+                    }
+                    if(typeComboBox.getValue() != null && !typeComboBox.getValue().equals(data.type)){
+                        showErrorDialog("Vous ne pouvez pas modifier le type de paiement");
+                        return;
+                    }
+                    if(data.type.equals("Examen") && !montantField.getText().equals(data.montant.toString())){
+                        showErrorDialog("Vous ne pouvez pas modifier montant du paiement d'examen");
+                        return;
+                    }
+                    try{
+                    if(data.type.equals("Examen")){
+                        paiementService.update(new PaiementExamen(
+                                data.getId(),
+                                candidatService.getCandidatByCin(data.getCin()),
+                                montantField.getText().isEmpty() ? data.getMontant() : Double.parseDouble(montantField.getText()),
+                                datePicker.getValue()==null ? data.date : datePicker.getValue(),
+                                modeComboBox.getValue() == null ? ModePaiement.valueOf(data.methode) : ModePaiement.valueOf(modeComboBox.getValue()),
+                                examenService.getPendingExamen(data.getCin()),
+                                descriptionArea.getText().isEmpty() ? data.description : descriptionArea.getText()
+                        ));
+                    }
+                    else{
+                        Inscription inscription = inscriptionService.getActifInscirptionBycin(data.getCin()).get(0);
+                        double reste = paiementService.calculerMontantRestant(inscription.getId());
+                        if(!montantField.getText().isEmpty()) {
+                            if (Double.parseDouble(montantField.getText()) > reste) {
+                                showErrorDialog("Montant supérieur au montant restant (" + reste + ")DT");
+                                return;
+                            }
+                            if (Double.parseDouble(montantField.getText()) < reste && typeComboBox.getValue().equals("Totale")) {
+                                showErrorDialog("Montant inférieur au montant de l'inscription Totale (" + inscription.getPlan().getPrice() + ")DT");
+                                return;
+                            }
+                        }
+                        paiementService.update(new PaiementInscription(
+                                data.getId(),
+                                candidatService.getCandidatByCin(data.getCin()),
+                                montantField.getText().isEmpty() ? data.getMontant() : Double.parseDouble(montantField.getText()),
+                                datePicker.getValue()==null ? data.date : datePicker.getValue(),
+                                modeComboBox.getValue() == null ? ModePaiement.valueOf(data.methode) : ModePaiement.valueOf(modeComboBox.getValue()),
+                                inscription,
+                                typeComboBox.getValue() == null ? data.type : typeComboBox.getValue(),
+                                descriptionArea.getText().isEmpty() ? data.description : descriptionArea.getText()
+                        ));
+                    }
+                    }catch (Exception e){
+                        showErrorDialog("Erreur lors de la modification du paiement");
+                        e.printStackTrace();
+                        return;
+                    }
+                    showSuccessDialog("Paiement modifié avec succès");
+                    loadMockData();
+                    updateTotalLabel();
                 });
 
                 deleteButton.setOnAction(event -> {
+                    //need to check the dates updates in the inscription :'(
                     PaiementData data = getTableView().getItems().get(getIndex());
-                    // Handle delete action
+                    if(!data.type.equals("Examen")) {
+                        PaiementInscription paiement = (PaiementInscription) paiementService.getPaiementById(data.getId()).orElseThrow();
+                        if (paiement.getInscription().isActive()) {
+                            inscriptionService.updatePaymentStatus(paiement.getInscription().getId(), false);
+                        }
+                        else{
+                            showErrorDialog("Impossible de supprimer le paiement d'inscription car l'inscription n'est pas active");
+                            return;
+                        }
+                    }
+                    paiementService.delete(data.getId());
                     showSuccessDialog("Paiement supprimé avec succès");
                     getTableView().getItems().remove(getIndex());
                     updateTotalLabel();
@@ -178,7 +266,9 @@ public class Paiement implements Initializable {
         ObservableList<PaiementData> paiements = FXCollections.observableArrayList(
                 paiementService.getAllPaiements().stream()
                         .map(p -> new PaiementData(
+                                p.getId(),
                                 p.getDatePaiement(),
+                                p.getCandidat().getCin(),
                                 p.getCandidat().getNom()+" "+p.getCandidat().getPrenom(),
                                 p instanceof PaiementInscription ? ((p.getTypePaiement() == null) ? "Inscription" : p.getTypePaiement()): "Examen",//TODO: need to determine if its a monthly payment or not
                                 p.getMontant(),
@@ -274,11 +364,8 @@ public class Paiement implements Initializable {
             }
 
 
+            loadMockData();
 
-            // Add the new payment to the table
-            paiementsTable.getItems().add(new PaiementData(
-                    date, candidat, type, montant, mode, description
-            ));
             }catch(Exception e){
                 showErrorDialog("Erreur lors de l'enregistrement du paiement");
                 e.printStackTrace();//for debugging
@@ -293,10 +380,43 @@ public class Paiement implements Initializable {
         }
     }
 
+
     @FXML
     private void handleSearch() {
-        // This would typically involve a database query
-        // Here we'll just show a message
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+        String candidat = searchCandidatComboBox.getValue();
+        if (startDate == null || endDate == null || candidat == null) {
+            showErrorDialog("Veuillez remplir tous les champs de recherche");
+            return;
+        }
+        if (startDate.isAfter(endDate)) {
+            showErrorDialog("La date de début ne peut pas être après la date de fin");
+            return;
+        }
+        if(candidat.equals("Sélectionner un candidat")){
+            paiementService.getAllPaiements().stream().filter(p -> !p.getDatePaiement().isBefore(startDate) && !p.getDatePaiement().isAfter(endDate))
+                    .forEach(p -> paiementsTable.getItems().add(new PaiementData(
+                            p.getDatePaiement(),
+                            p.getCandidat().getNom()+" "+p.getCandidat().getPrenom(),
+                            p instanceof PaiementInscription ? ((p.getTypePaiement() == null) ? "Inscription" : p.getTypePaiement()): "Examen",
+                            p.getMontant(),
+                            p.getModePaiement().toString(),
+                            p.getDescription()
+                    )));
+        }
+        else {
+            String cin = candidat.substring(1, candidat.indexOf(")"));
+            paiementService.getAllPaiements().stream().filter(p -> p.getCandidat().getCin().equals(cin) && !p.getDatePaiement().isBefore(startDate) && !p.getDatePaiement().isAfter(endDate))
+                    .forEach(p -> paiementsTable.getItems().add(new PaiementData(
+                            p.getDatePaiement(),
+                            p.getCandidat().getNom()+" "+p.getCandidat().getPrenom(),
+                            p instanceof PaiementInscription ? ((p.getTypePaiement() == null) ? "Inscription" : p.getTypePaiement()): "Examen",
+                            p.getMontant(),
+                            p.getModePaiement().toString(),
+                            p.getDescription()
+                    )));
+        }
         showSuccessDialog("Recherche effectuée");
     }
 
