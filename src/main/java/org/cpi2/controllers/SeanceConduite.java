@@ -8,11 +8,13 @@ import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
+import org.cpi2.entities.Candidat;
 import org.cpi2.entities.Seance;
 import org.cpi2.service.SeanceService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class SeanceConduite {
 
@@ -51,33 +53,74 @@ public class SeanceConduite {
     }
     
     private void loadCandidats() {
-        // This would normally come from a database
-        ObservableList<String> candidats = FXCollections.observableArrayList(
-            "1 - Ahmed Ben Ali",
-            "2 - Salma Mansour",
-            "3 - Mohamed Khelifi",
-            "4 - Nadia Salhi"
-        );
+        // Charger les candidats depuis la base de données
+        org.cpi2.service.CandidatService candidatService = new org.cpi2.service.CandidatService();
+        List<Candidat> candidatsList = candidatService.getAllCandidats();
+        
+        ObservableList<String> candidats = FXCollections.observableArrayList();
+        
+        if (candidatsList.isEmpty()) {
+            // Afficher un message d'avertissement si aucun candidat n'est trouvé
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucun candidat");
+            alert.setHeaderText(null);
+            alert.setContentText("Aucun candidat n'est disponible dans la base de données. Veuillez ajouter des candidats avant de planifier des séances.");
+            alert.show();
+        } else {
+            // Ajouter les candidats à la liste déroulante
+            for (org.cpi2.entities.Candidat candidat : candidatsList) {
+                candidats.add(candidat.getId() + " - " + candidat.getNom() + " " + candidat.getPrenom());
+            }
+        }
+        
         candidatCombo.setItems(candidats);
     }
     
     private void loadMoniteurs() {
-        // This would normally come from a database
-        ObservableList<String> moniteurs = FXCollections.observableArrayList(
-            "1 - Hichem Bouaziz",
-            "2 - Sonia Trabelsi",
-            "3 - Karim Lahmar"
-        );
+        // Charger les moniteurs depuis la base de données
+        org.cpi2.service.MoniteurService moniteurService = new org.cpi2.service.MoniteurService();
+        List<org.cpi2.entities.Moniteur> moniteursList = moniteurService.getAllMoniteurs();
+        
+        ObservableList<String> moniteurs = FXCollections.observableArrayList();
+        
+        if (moniteursList.isEmpty()) {
+            // Afficher un message d'avertissement si aucun moniteur n'est trouvé
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucun moniteur");
+            alert.setHeaderText(null);
+            alert.setContentText("Aucun moniteur n'est disponible dans la base de données. Veuillez ajouter des moniteurs avant de planifier des séances.");
+            alert.show();
+        } else {
+            // Ajouter les moniteurs à la liste déroulante
+            for (org.cpi2.entities.Moniteur moniteur : moniteursList) {
+                moniteurs.add(moniteur.getId() + " - " + moniteur.getNom() + " " + moniteur.getPrenom());
+            }
+        }
+        
         moniteurCombo.setItems(moniteurs);
     }
     
     private void loadVehicules() {
-        // This would normally come from a database
-        ObservableList<String> vehicules = FXCollections.observableArrayList(
-            "1 - Peugeot 208 (123 TU 456)",
-            "2 - Renault Clio (789 AB 012)",
-            "3 - Volkswagen Golf (345 CD 678)"
-        );
+        // Charger les véhicules depuis la base de données
+        org.cpi2.service.VehiculeService vehiculeService = new org.cpi2.service.VehiculeService();
+        List<org.cpi2.entities.Vehicule> vehiculesList = vehiculeService.getAllVehicules();
+        
+        ObservableList<String> vehicules = FXCollections.observableArrayList();
+        
+        if (vehiculesList.isEmpty()) {
+            // Afficher un message d'avertissement si aucun véhicule n'est trouvé
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucun véhicule");
+            alert.setHeaderText(null);
+            alert.setContentText("Aucun véhicule n'est disponible dans la base de données. Veuillez ajouter des véhicules avant de planifier des séances.");
+            alert.show();
+        } else {
+            // Ajouter les véhicules à la liste déroulante
+            for (org.cpi2.entities.Vehicule vehicule : vehiculesList) {
+                vehicules.add(vehicule.getId() + " - " + vehicule.getMarque() + " " + vehicule.getModele() + " (" + vehicule.getImmatriculation() + ")");
+            }
+        }
+        
         vehiculeCombo.setItems(vehicules);
     }
 
@@ -189,6 +232,32 @@ public class SeanceConduite {
             seance.setKilometrage(km);
             seance.setLatitude(Double.parseDouble(latitudeField.getText()));
             seance.setLongitude(Double.parseDouble(longitudeField.getText()));
+            
+            // Vérifier si le moniteur existe avant de sauvegarder
+            org.cpi2.service.MoniteurService moniteurService = new org.cpi2.service.MoniteurService();
+            if (!moniteurService.getMoniteurById(moniteurId).isPresent()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                        "Le moniteur sélectionné n'existe pas dans la base de données. Veuillez ajouter le moniteur avant de planifier une séance.");
+                return;
+            }
+            
+            // Vérifier si le candidat existe avant de sauvegarder
+            org.cpi2.service.CandidatService candidatService = new org.cpi2.service.CandidatService();
+            if (!candidatService.getCandidatById(candidatId).isPresent()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                        "Le candidat sélectionné n'existe pas dans la base de données. Veuillez ajouter le candidat avant de planifier une séance.");
+                return;
+            }
+            
+            // Vérifier si le véhicule existe avant de sauvegarder
+            if (vehiculeId != null) {
+                org.cpi2.service.VehiculeService vehiculeService = new org.cpi2.service.VehiculeService();
+                if (!vehiculeService.getVehiculeById(vehiculeId).isPresent()) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", 
+                            "Le véhicule sélectionné n'existe pas dans la base de données. Veuillez ajouter le véhicule avant de planifier une séance.");
+                    return;
+                }
+            }
             
             // Save to database
             boolean success = seanceService.saveSeance(seance);

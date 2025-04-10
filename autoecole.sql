@@ -339,6 +339,8 @@ CREATE TABLE `seance` (
   `commentaire` text DEFAULT NULL,
   `kilometrage_debut` int(11) DEFAULT NULL,
   `kilometrage_fin` int(11) DEFAULT NULL,
+  `latitude` double DEFAULT NULL,
+  `longitude` double DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -360,6 +362,7 @@ CREATE TABLE `session_code` (
   `nombre_inscrits` int(11) DEFAULT 0,
   `statut` varchar(20) NOT NULL DEFAULT 'Planifiée',
   `notes` text DEFAULT NULL,
+  `prix` decimal(10,2) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

@@ -24,6 +24,14 @@ public class SessionCode extends Session {
     }
 
     public SessionCode(LocalDate dateSession, LocalTime heureDebut, long minutes, Moniteur moniteur, int planId, int capaciteMax) {
+        super(dateSession, heureDebut, moniteur, null, TypeSession.CODE);
+        this.capaciteMax = capaciteMax;
+        this.salle = "Salle par défaut";
+        this.participants = new ArrayList<>();
+        // Stocker le planId dans la classe parent
+        this.setPlanId(planId);
+        // Définir la durée dans la classe parent
+        this.setDuree(minutes);
     }
 
     public Integer getCapaciteMax() {

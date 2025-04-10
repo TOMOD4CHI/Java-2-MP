@@ -13,7 +13,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setTitle("System Auto-École");
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 

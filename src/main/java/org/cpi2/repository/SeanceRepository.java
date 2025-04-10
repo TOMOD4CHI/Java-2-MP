@@ -38,13 +38,22 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 seance.setVehiculeId(rs.getLong("vehicule_id"));
                 seance.setVehiculeName(rs.getString("vehicule_marque") + " " + rs.getString("vehicule_modele"));
                 seance.setDate(rs.getString("date"));
-                seance.setTemps(rs.getString("temps"));
-                seance.setKilometrage(rs.getDouble("kilometrage"));
-                seance.setStatus(rs.getString("status"));
+                // Map heure to temps
+                seance.setTemps(rs.getString("heure"));
+                // Map kilometrage_debut to kilometrage
+                seance.setKilometrage(getDoubleFromInt(rs, "kilometrage_debut"));
+                // Map statut to status
+                seance.setStatus(rs.getString("statut"));
                 seance.setCommentaire(rs.getString("commentaire"));
-                seance.setLatitude(rs.getDouble("latitude"));
-                seance.setLongitude(rs.getDouble("longitude"));
                 
+                // Gérer correctement les valeurs NULL pour latitude et longitude
+                if (rs.getObject("latitude") != null) {
+                    seance.setLatitude(rs.getDouble("latitude"));
+                }
+                if (rs.getObject("longitude") != null) {
+                    seance.setLongitude(rs.getDouble("longitude"));
+                }
+
                 return Optional.of(seance);
             }
         } catch (SQLException e) {
@@ -80,13 +89,22 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 seance.setVehiculeId(rs.getLong("vehicule_id"));
                 seance.setVehiculeName(rs.getString("vehicule_marque") + " " + rs.getString("vehicule_modele"));
                 seance.setDate(rs.getString("date"));
-                seance.setTemps(rs.getString("temps"));
-                seance.setKilometrage(rs.getDouble("kilometrage"));
-                seance.setStatus(rs.getString("status"));
+                // Map heure to temps
+                seance.setTemps(rs.getString("heure"));
+                // Map kilometrage_debut to kilometrage
+                seance.setKilometrage(getDoubleFromInt(rs, "kilometrage_debut"));
+                // Map statut to status
+                seance.setStatus(rs.getString("statut"));
                 seance.setCommentaire(rs.getString("commentaire"));
-                seance.setLatitude(rs.getDouble("latitude"));
-                seance.setLongitude(rs.getDouble("longitude"));
                 
+                // Gérer correctement les valeurs NULL pour latitude et longitude
+                if (rs.getObject("latitude") != null) {
+                    seance.setLatitude(rs.getDouble("latitude"));
+                }
+                if (rs.getObject("longitude") != null) {
+                    seance.setLongitude(rs.getDouble("longitude"));
+                }
+
                 seances.add(seance);
             }
         } catch (SQLException e) {
@@ -96,8 +114,9 @@ public class SeanceRepository extends BaseRepository<Seance> {
     }
 
     public boolean save(Seance seance) {
-        String sql = "INSERT INTO seance (type, candidat_id, moniteur_id, vehicule_id, date, temps, kilometrage, latitude, longitude) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO seance (type, candidat_id, moniteur_id, vehicule_id, date, heure, duree, " +
+                "kilometrage_debut, statut, commentaire, latitude, longitude) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -105,26 +124,40 @@ public class SeanceRepository extends BaseRepository<Seance> {
             stmt.setString(1, seance.getType());
             stmt.setLong(2, seance.getCandidatId());
             stmt.setLong(3, seance.getMoniteurId());
-            stmt.setLong(4, seance.getVehiculeId());
+
+            if (seance.getVehiculeId() != null) {
+                stmt.setLong(4, seance.getVehiculeId());
+            } else {
+                stmt.setNull(4, Types.INTEGER);
+            }
+
             stmt.setString(5, seance.getDate());
+            // Map temps to heure
             stmt.setString(6, seance.getTemps());
-            
+            // Default duree value of 60 minutes
+            stmt.setInt(7, 60);
+
+            // Map kilometrage to kilometrage_debut and convert Double to Integer
             if (seance.getKilometrage() != null) {
-                stmt.setDouble(7, seance.getKilometrage());
+                stmt.setInt(8, seance.getKilometrage().intValue());
             } else {
-                stmt.setNull(7, Types.DOUBLE);
+                stmt.setNull(8, Types.INTEGER);
             }
-            
+
+            // Map status to statut with default "Planifiée"
+            stmt.setString(9, seance.getStatus() != null ? seance.getStatus() : "Planifiée");
+            stmt.setString(10, seance.getCommentaire());
+
             if (seance.getLatitude() != null) {
-                stmt.setDouble(8, seance.getLatitude());
+                stmt.setDouble(11, seance.getLatitude());
             } else {
-                stmt.setNull(8, Types.DOUBLE);
+                stmt.setNull(11, Types.DOUBLE);
             }
-            
+
             if (seance.getLongitude() != null) {
-                stmt.setDouble(9, seance.getLongitude());
+                stmt.setDouble(12, seance.getLongitude());
             } else {
-                stmt.setNull(9, Types.DOUBLE);
+                stmt.setNull(12, Types.DOUBLE);
             }
 
             int affectedRows = stmt.executeUpdate();
@@ -138,15 +171,15 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error saving seance", e);
+            LOGGER.log(Level.SEVERE, "Error saving seance: " + e.getMessage(), e);
         }
         return false;
     }
 
     public boolean update(Seance seance) {
         String sql = "UPDATE seance SET type = ?, candidat_id = ?, moniteur_id = ?, vehicule_id = ?, " +
-                "date = ?, temps = ?, kilometrage = ?, status = ?, commentaire = ?, latitude = ?, longitude = ? " +
-                "WHERE id = ?";
+                "date = ?, heure = ?, kilometrage_debut = ?, statut = ?, commentaire = ?, " +
+                "latitude = ?, longitude = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -154,42 +187,52 @@ public class SeanceRepository extends BaseRepository<Seance> {
             stmt.setString(1, seance.getType());
             stmt.setLong(2, seance.getCandidatId());
             stmt.setLong(3, seance.getMoniteurId());
-            stmt.setLong(4, seance.getVehiculeId());
-            stmt.setString(5, seance.getDate());
-            stmt.setString(6, seance.getTemps());
-            
-            if (seance.getKilometrage() != null) {
-                stmt.setDouble(7, seance.getKilometrage());
+
+            if (seance.getVehiculeId() != null) {
+                stmt.setLong(4, seance.getVehiculeId());
             } else {
-                stmt.setNull(7, Types.DOUBLE);
+                stmt.setNull(4, Types.INTEGER);
             }
-            
+
+            stmt.setString(5, seance.getDate());
+            // Map temps to heure
+            stmt.setString(6, seance.getTemps());
+
+            // Map kilometrage to kilometrage_debut and convert Double to Integer
+            if (seance.getKilometrage() != null) {
+                stmt.setInt(7, seance.getKilometrage().intValue());
+            } else {
+                stmt.setNull(7, Types.INTEGER);
+            }
+
+            // Map status to statut
             stmt.setString(8, seance.getStatus());
             stmt.setString(9, seance.getCommentaire());
-            
+
             if (seance.getLatitude() != null) {
                 stmt.setDouble(10, seance.getLatitude());
             } else {
                 stmt.setNull(10, Types.DOUBLE);
             }
-            
+
             if (seance.getLongitude() != null) {
                 stmt.setDouble(11, seance.getLongitude());
             } else {
                 stmt.setNull(11, Types.DOUBLE);
             }
-            
+
             stmt.setLong(12, seance.getId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error updating seance", e);
+            LOGGER.log(Level.SEVERE, "Error updating seance: " + e.getMessage(), e);
             return false;
         }
     }
-    
+
     public boolean updateStatus(Long id, String status, String commentaire) {
-        String sql = "UPDATE seance SET status = ?, commentaire = ? WHERE id = ?";
+        // Note: status in code maps to statut in DB
+        String sql = "UPDATE seance SET statut = ?, commentaire = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -200,7 +243,7 @@ public class SeanceRepository extends BaseRepository<Seance> {
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error updating seance status", e);
+            LOGGER.log(Level.SEVERE, "Error updating seance status: " + e.getMessage(), e);
             return false;
         }
     }
@@ -217,4 +260,16 @@ public class SeanceRepository extends BaseRepository<Seance> {
             return false;
         }
     }
-} 
+
+    /**
+     * Helper method to convert Integer to Double from ResultSet
+     * Used for kilometrage_debut column which is INTEGER in DB but Double in Java model
+     */
+    private Double getDoubleFromInt(ResultSet rs, String columnName) throws SQLException {
+        int value = rs.getInt(columnName);
+        if (rs.wasNull()) {
+            return null;
+        }
+        return (double) value;
+    }
+}

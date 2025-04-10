@@ -81,11 +81,22 @@ public abstract class Session {
         this.typeSession = typeSession;
     }
 
+    private long planId;
+    private long duree;
+    
     public long getPlanId() {
-        return 0;
+        return planId;
+    }
+    
+    public void setPlanId(long planId) {
+        this.planId = planId;
     }
 
     public long getDuree() {
-        return 0;
+        return duree;
+    }
+    
+    public void setDuree(long duree) {
+        this.duree = duree;
     }
 }

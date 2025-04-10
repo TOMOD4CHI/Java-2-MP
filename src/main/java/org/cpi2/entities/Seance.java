@@ -2,7 +2,7 @@ package org.cpi2.entities;
 
 public class Seance {
     private Long id;
-    private String type; // "Conduite" or "Code"
+    private String type;
     private Long candidatId;
     private String candidatName;
     private Long moniteurId;
@@ -12,7 +12,7 @@ public class Seance {
     private String date;
     private String temps;
     private Double kilometrage;
-    private String status; // "Présent", "Absent", "Retard", "Excusé"
+    private String status;
     private String commentaire;
     private Double latitude;
     private Double longitude;
@@ -20,23 +20,9 @@ public class Seance {
     public Seance() {
     }
 
-    public Seance(Long id, String type, Long candidatId, Long moniteurId, Long vehiculeId, 
-                  String date, String temps, Double kilometrage) {
-        this.id = id;
-        this.type = type;
-        this.candidatId = candidatId;
-        this.moniteurId = moniteurId;
-        this.vehiculeId = vehiculeId;
-        this.date = date;
-        this.temps = temps;
-        this.kilometrage = kilometrage;
-    }
-
-    // Full constructor with all fields
-    public Seance(Long id, String type, Long candidatId, String candidatName, Long moniteurId, 
-                  String moniteurName, Long vehiculeId, String vehiculeName, String date, 
-                  String temps, Double kilometrage, String status, String commentaire, 
-                  Double latitude, Double longitude) {
+    public Seance(Long id, String type, Long candidatId, String candidatName, Long moniteurId, String moniteurName,
+                 Long vehiculeId, String vehiculeName, String date, String temps, Double kilometrage,
+                 String status, String commentaire, Double latitude, Double longitude) {
         this.id = id;
         this.type = type;
         this.candidatId = candidatId;
@@ -54,7 +40,6 @@ public class Seance {
         this.longitude = longitude;
     }
 
-    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -180,14 +165,11 @@ public class Seance {
         return "Seance{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
-                ", candidatId=" + candidatId +
-                ", moniteurId=" + moniteurId +
+                ", candidatName='" + candidatName + '\'' +
+                ", moniteurName='" + moniteurName + '\'' +
                 ", date='" + date + '\'' +
                 ", temps='" + temps + '\'' +
+                ", status='" + status + '\'' +
                 '}';
-    }
-
-    public CharSequence getStatut() {
-        return null;
     }
 }
