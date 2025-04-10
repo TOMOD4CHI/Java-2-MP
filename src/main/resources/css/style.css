@@ -846,7 +846,7 @@
     -fx-border-color: #BEE3F8;
     -fx-border-radius: 12px;
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.15), 5, 0, 0, 2);
-    -fx-padding: 15px;
+    -fx-padding: 10px;
     -fx-alignment: center;
     -fx-spacing: 15;
     -fx-transition-duration: 0.3s;

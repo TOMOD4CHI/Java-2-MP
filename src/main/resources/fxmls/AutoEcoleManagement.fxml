@@ -11,15 +11,10 @@
             stylesheets="@/css/style.css"
             styleClass="root">
 
-    <padding>
-        <Insets top="10" right="20" bottom="10" left="20"/>
-    </padding>
+
 
     <top>
-        <VBox alignment="CENTER" spacing="5">
-            <padding>
-                <Insets bottom="10"/>
-            </padding>
+        <VBox alignment="TOP_CENTER" >
             <Label text="Gestion de Mon Auto-École" styleClass="page-title"/>
             <Separator/>
         </VBox>
@@ -27,13 +22,11 @@
 
     <center>
         <VBox alignment="CENTER" spacing="10">
-            <padding>
-                <Insets top="10" right="20" bottom="10" left="20"/>
-            </padding>
+
             
-            <VBox styleClass="form-container" maxWidth="600" alignment="CENTER">
+            <VBox styleClass="form-container" maxWidth="600" maxHeight="580" alignment="CENTER">
                 <padding>
-                    <Insets top="20" right="30" bottom="20" left="30"/>
+                    <Insets top="5" right="30" bottom="20" left="30"/>
                 </padding>
                 
                 <!-- Auto-école info section -->
@@ -72,7 +65,7 @@
                     </VBox>
 
                     <!-- Édition inline form -->
-                    <VBox fx:id="editContainer" spacing="15" visible="false" managed="false" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-edit">
+                    <VBox fx:id="editContainer" spacing="15" visible="false" managed="false" alignment="CENTER"  styleClass="auto-ecole-edit">
                         <Label text="Modifier les informations" styleClass="section-title"/>
 
                         <GridPane hgap="15" vgap="15" alignment="CENTER">
