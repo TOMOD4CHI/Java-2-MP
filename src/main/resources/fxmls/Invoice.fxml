@@ -14,7 +14,7 @@
     </padding>
 
     <top>
-        <VBox alignment="CENTER" spacing="10">
+        <VBox alignment="CENTER" spacing="5">
             <Label text="Génération de Facture" styleClass="page-title"/>
             <Separator />
         </VBox>

@@ -82,37 +82,37 @@
                             </columnConstraints>
 
                             <Label text="Nom:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="0" GridPane.columnIndex="1" minHeight="50">
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="0" GridPane.columnIndex="1" minHeight="60">
                                 <TextField fx:id="nomField" promptText="Entrez le nom complet de l'auto-école" styleClass="form-field"/>
                                 <Label fx:id="nomError" text="Le nom est requis" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Adresse:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="1" GridPane.columnIndex="1" minHeight="50">
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="1" GridPane.columnIndex="1" minHeight="60">
                                 <TextField fx:id="adresseField" promptText="Entrez l'adresse complète avec le code postal" styleClass="form-field"/>
                                 <Label fx:id="adresseError" text="L'adresse est requise" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Téléphone:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="2" GridPane.columnIndex="1" minHeight="50">
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="2" GridPane.columnIndex="1" minHeight="60">
                                 <TextField fx:id="telephoneField" promptText="Entrez le numéro de téléphone (format: XX XX XX XX XX)" styleClass="form-field"/>
                                 <Label fx:id="telephoneError" text="Le numéro de téléphone est requis" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Email:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="3" GridPane.columnIndex="1" minHeight="50">
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="3" GridPane.columnIndex="1" minHeight="60">
                                 <TextField fx:id="emailField" promptText="Entrez une adresse email valide" styleClass="form-field"/>
                                 <Label fx:id="emailError" text="L'adresse email est requise et doit être valide" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Directeur:" styleClass="form-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="4" GridPane.columnIndex="1" minHeight="50">
+                            <VBox spacing="2" styleClass="field-container" GridPane.rowIndex="4" GridPane.columnIndex="1" minHeight="60">
                                 <TextField fx:id="directeurField" promptText="Entrez le nom complet du directeur" styleClass="form-field"/>
                                 <Label fx:id="directeurError" text="Le nom du directeur est requis" styleClass="error-label" visible="false" style="-fx-font-size: 11px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>
 
                             <Label text="Mot de passe:" styleClass="form-label" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                            <VBox spacing="2" GridPane.rowIndex="5" GridPane.columnIndex="1" minHeight="50">
+                            <VBox spacing="2" GridPane.rowIndex="5" GridPane.columnIndex="1" minHeight="60">
                                 <PasswordField fx:id="passwordField" promptText="Entrez un mot de passe d'au moins 5 caractères" styleClass="form-field"/>
                                 <Label fx:id="passwordError" text="Le mot de passe est requis et doit contenir au moins 5 caractères" styleClass="error-label" visible="false" style="-fx-font-size: 10px; -fx-padding: 2 0 0 0; -fx-text-fill: red;"/>
                             </VBox>

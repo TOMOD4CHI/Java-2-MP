@@ -55,16 +55,16 @@ public class ManageEcole implements Initializable {
     @FXML private Label emailError;
     @FXML private Label directeurError;
     @FXML private Label passwordError;
-    
+
     private final AutoEcoleService autoEcoleService = new AutoEcoleService();
     private AutoEcole currentAutoEcole;
     private File selectedLogoFile;
-    
+
     // Validation patterns
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Apply drop shadow effect to the logo
@@ -74,20 +74,20 @@ public class ManageEcole implements Initializable {
         dropShadow.setOffsetY(3.0);
         dropShadow.setColor(Color.color(0, 0, 0, 0.3));
         logoImageView.setEffect(dropShadow);
-        
+
         // Center all buttons
         buttonContainer.setAlignment(Pos.CENTER);
         editButtonsContainer.setAlignment(Pos.CENTER);
-        
+
         // Setup real-time validation
         setupValidation();
-        
+
         // Apply styling to form fields
         applyFormStyling();
-        
+
         // Initially show info container and hide edit container
         showEditMode(false);
-        
+
         // Load auto-école data
         loadAutoEcoleData();
     }
@@ -106,12 +106,12 @@ public class ManageEcole implements Initializable {
         String value = field.getText().trim();
         boolean isEmpty = value.isEmpty();
         boolean isValid = !isEmpty && pattern.matcher(value).matches();
-        
+
         if (isEmpty) {
-            updateFieldValidation(field, errorLabel, false, 
+            updateFieldValidation(field, errorLabel, false,
                 String.format("%s ne peut pas être vide", fieldName));
         } else {
-            updateFieldValidation(field, errorLabel, isValid, 
+            updateFieldValidation(field, errorLabel, isValid,
                 isValid ? null : String.format("%s n'est pas valide", fieldName));
         }
     }
@@ -119,39 +119,39 @@ public class ManageEcole implements Initializable {
     private void validateNonEmpty(TextField field, Label errorLabel, String fieldName) {
         String value = field.getText().trim();
         boolean isValid = !value.isEmpty();
-        
+
         updateFieldValidation(field, errorLabel, isValid,
             isValid ? null : String.format("%s ne peut pas être vide", fieldName));
     }
 
     private void validatePassword(PasswordField field, Label errorLabel) {
         String value = field.getText();
-        boolean isValid = value.length() >= 5;
-        
+        boolean isValid = value.length() >= 4;
+
         updateFieldValidation(field, errorLabel, isValid,
-            isValid ? null : "Le mot de passe doit contenir au moins 5 caractères");
+            isValid ? null : "Le mot de passe doit contenir au moins 4 caractères");
     }
 
     private void updateFieldValidation(TextInputControl field, Label errorLabel, boolean isValid, String errorMessage) {
-        // Remove existing style classes
+            // Remove existing style classes
         field.getStyleClass().removeAll("field-error", "field-valid");
-        
+
         // Add appropriate style class
         field.getStyleClass().add(isValid ? "field-valid" : "field-error");
-        
+
         // Update error label
         errorLabel.setText(errorMessage);
         errorLabel.setVisible(errorMessage != null);
         errorLabel.setManaged(errorMessage != null);
     }
-    
+
     private void applyFormStyling() {
         // Apply styling to text fields
         TextField[] fields = {nomField, adresseField, telephoneField, emailField, directeurField};
         for (TextField field : fields) {
             if (field != null) {
                 field.getStyleClass().add("form-field");
-                
+
                 // Add focus effect
                 field.focusedProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue) {
@@ -162,11 +162,11 @@ public class ManageEcole implements Initializable {
                 });
             }
         }
-        
+
         // Apply styling to password field
         if (passwordField != null) {
             passwordField.getStyleClass().add("form-field");
-            
+
             // Add focus effect
             passwordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
@@ -176,14 +176,14 @@ public class ManageEcole implements Initializable {
                 }
             });
         }
-        
+
         // Apply styling to buttons
         saveButton.getStyleClass().add("submit-button");
         cancelButton.getStyleClass().add("cancel-button");
         modifierButton.getStyleClass().add("action-button");
         changeLogoButton.getStyleClass().add("small-button");
     }
-    
+
     private void loadAutoEcoleData() {
         // Load auto-école data from database
         try {
@@ -191,7 +191,7 @@ public class ManageEcole implements Initializable {
             if (currentAutoEcole != null) {
                 updateInfoLabels();
                 populateEditFields();
-                
+
                 // Load logo if it exists
                 loadLogo();
             } else {
@@ -202,7 +202,7 @@ public class ManageEcole implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les informations de l'auto-école", e.getMessage());
         }
     }
-    
+
     private void loadLogo() {
         if (currentAutoEcole != null && currentAutoEcole.getLogo() != null && !currentAutoEcole.getLogo().isEmpty()) {
             try {
@@ -216,7 +216,7 @@ public class ManageEcole implements Initializable {
             }
         }
     }
-    
+
     private void updateInfoLabels() {
         if (currentAutoEcole != null) {
             nomLabel.setText(currentAutoEcole.getNom());
@@ -227,7 +227,7 @@ public class ManageEcole implements Initializable {
             passwordLabel.setText("********"); // Hide actual password for security
         }
     }
-    
+
     private void populateEditFields() {
         if (currentAutoEcole != null) {
             nomField.setText(currentAutoEcole.getNom());
@@ -238,64 +238,64 @@ public class ManageEcole implements Initializable {
             passwordField.setText(currentAutoEcole.getPassword());
         }
     }
-    
+
     private void showEditMode(boolean editMode) {
         infoContainer.setVisible(!editMode);
         infoContainer.setManaged(!editMode);
-        
+
         editContainer.setVisible(editMode);
         editContainer.setManaged(editMode);
-        
+
         modifierButton.setVisible(!editMode);
         modifierButton.setManaged(!editMode);
-        
+
         // If entering edit mode, populate fields
         if (editMode && currentAutoEcole != null) {
             populateEditFields();
         }
-        
+
         // Apply fade transition for smooth transition
         javafx.animation.FadeTransition fadeTransition = new javafx.animation.FadeTransition(
-                javafx.util.Duration.millis(300), 
+                javafx.util.Duration.millis(300),
                 editMode ? editContainer : infoContainer);
         fadeTransition.setFromValue(0.0);
         fadeTransition.setToValue(1.0);
         fadeTransition.play();
     }
-    
+
     @FXML
     void handleModifier() {
         showEditMode(true);
     }
-    
+
     @FXML
     private void handleCancel() {
         showEditMode(false);
         selectedLogoFile = null;
     }
-    
+
     @FXML
     private void handleSave() {
         // Clear previous error messages
         clearErrorMessages();
-        
+
         // Validate input
         if (!validateInput()) {
             return;
         }
-        
+
         try {
             // Update or create auto-école
             if (currentAutoEcole == null) {
                 currentAutoEcole = new AutoEcole();
             }
-            
+
             currentAutoEcole.setNom(nomField.getText().trim());
             currentAutoEcole.setAdresse(adresseField.getText().trim());
             currentAutoEcole.setTelephone(telephoneField.getText().trim());
             currentAutoEcole.setEmail(emailField.getText().trim());
             currentAutoEcole.setUsername(directeurField.getText().trim());
-            
+
             // Update password if provided
             if (passwordField.getText() != null && !passwordField.getText().isEmpty()) {
                 currentAutoEcole.setPassword(passwordField.getText().trim());
@@ -305,30 +305,30 @@ public class ManageEcole implements Initializable {
             if (selectedLogoFile != null) {
                 currentAutoEcole.setLogo(selectedLogoFile.getAbsolutePath());
             }
-            
+
             // Save to database
-            boolean success = currentAutoEcole.getId() == 0 ? 
-                    autoEcoleService.saveAutoEcole(currentAutoEcole) : 
+            boolean success = currentAutoEcole.getId() == 0 ?
+                    autoEcoleService.saveAutoEcole(currentAutoEcole) :
                     autoEcoleService.updateAutoEcole(currentAutoEcole);
-            
+
             if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Auto-école enregistrée", 
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Auto-école enregistrée",
                           "Les informations ont été enregistrées avec succès.");
-                
+
                 showEditMode(false);
                 updateInfoLabels();
-                
+
                 // Publish event to update the footer in MainWindow
                 EventBus.publish("AUTO_ECOLE_UPDATED", currentAutoEcole);
             } else {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement", 
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement",
                           "Impossible d'enregistrer les informations de l'auto-école.");
             }
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement", e.getMessage());
         }
     }
-    
+
     @FXML
     private void handleChangeLogo() {
         FileChooser fileChooser = new FileChooser();
@@ -336,13 +336,13 @@ public class ManageEcole implements Initializable {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
-        
+
         // Get the Stage
         Stage stage = (Stage) logoImageView.getScene().getWindow();
-        
+
         // Show open file dialog
         selectedLogoFile = fileChooser.showOpenDialog(stage);
-        
+
         if (selectedLogoFile != null) {
             try {
                 Image logoImage = new Image(selectedLogoFile.toURI().toString());
@@ -352,28 +352,28 @@ public class ManageEcole implements Initializable {
             }
         }
     }
-    
+
     @FXML
     private void handleExport() {
         if (currentAutoEcole == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Aucune information", 
+            showAlert(Alert.AlertType.WARNING, "Attention", "Aucune information",
                       "Il n'y a pas d'informations à sauvegarder.");
             return;
         }
-        
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sauvegarder les informations");
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Fichiers texte", "*.txt")
         );
         fileChooser.setInitialFileName("AutoEcole_" + currentAutoEcole.getNom().replace(" ", "_") + ".txt");
-        
+
         // Get the Stage
         Stage stage = (Stage) logoImageView.getScene().getWindow();
-        
+
         // Show save file dialog
         File file = fileChooser.showSaveDialog(stage);
-        
+
         if (file != null) {
             try (PrintWriter writer = new PrintWriter(file)) {
                 writer.println("Informations de l'Auto-École");
@@ -383,21 +383,21 @@ public class ManageEcole implements Initializable {
                 writer.println("Téléphone: " + currentAutoEcole.getTelephone());
                 writer.println("Email: " + currentAutoEcole.getEmail());
 
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Sauvegarde réussie", 
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Sauvegarde réussie",
                           "Les informations ont été sauvegardées dans " + file.getName());
             } catch (Exception e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la sauvegarde", e.getMessage());
             }
         }
     }
-    
+
     @FXML
     private void handlePrint() {
         // In a real application, this would use PrinterJob to print the information
-        showAlert(Alert.AlertType.INFORMATION, "Impression", "Fonctionnalité d'impression", 
+        showAlert(Alert.AlertType.INFORMATION, "Impression", "Fonctionnalité d'impression",
                  "L'impression sera implémentée dans une future version.");
     }
-    
+
     // Validation methods
     private boolean isValidEmail(String email) {
         return email != null && EMAIL_PATTERN.matcher(email).matches();
@@ -410,7 +410,7 @@ public class ManageEcole implements Initializable {
     private boolean isValidName(String name) {
         return name != null && NAME_PATTERN.matcher(name).matches();
     }
-    
+
     private void clearErrorMessages() {
         // Hide all error labels
         Label[] errorLabels = {nomError, adresseError, telephoneError, emailError, directeurError, passwordError};
@@ -422,10 +422,10 @@ public class ManageEcole implements Initializable {
             }
         }
     }
-    
+
     private boolean validateInput() {
         boolean isValid = true;
-        
+
         // Validate nom
         if (nomField.getText().trim().isEmpty()) {
             showError(nomError, "Le nom est obligatoire");
@@ -434,7 +434,7 @@ public class ManageEcole implements Initializable {
             showError(nomError, "Le nom doit contenir uniquement des lettres et des espaces");
             isValid = false;
         }
-        
+
         // Validate adresse
         if (adresseField.getText().trim().isEmpty()) {
             showError(adresseError, "L'adresse est obligatoire");
@@ -443,7 +443,7 @@ public class ManageEcole implements Initializable {
             showError(adresseError, "L'adresse doit contenir au moins 10 caractères");
             isValid = false;
         }
-        
+
         // Validate telephone
         if (telephoneField.getText().trim().isEmpty()) {
             showError(telephoneError, "Le numéro de téléphone est obligatoire");
@@ -452,7 +452,7 @@ public class ManageEcole implements Initializable {
             showError(telephoneError, "Le numéro de téléphone doit contenir 8 chiffres");
             isValid = false;
         }
-        
+
         // Validate email
         if (emailField.getText().trim().isEmpty()) {
             showError(emailError, "L'adresse email est obligatoire");
@@ -461,27 +461,27 @@ public class ManageEcole implements Initializable {
             showError(emailError, "L'adresse email n'est pas valide");
             isValid = false;
         }
-        
+
         // Validate directeur
         if (directeurField.getText().trim().isEmpty()) {
             showError(directeurError, "Le nom du directeur est obligatoire");
             isValid = false;
         }
-        
+
         // Validate password if it's a new auto-école or if the field is not empty
-        if ((currentAutoEcole == null || currentAutoEcole.getId() == 0) && 
+        if ((currentAutoEcole == null || currentAutoEcole.getId() == 0) &&
             (passwordField.getText() == null || passwordField.getText().isEmpty())) {
             showError(passwordError, "Le mot de passe est obligatoire");
             isValid = false;
-        } else if (passwordField.getText() != null && !passwordField.getText().isEmpty() && 
+        } else if (passwordField.getText() != null && !passwordField.getText().isEmpty() &&
                    passwordField.getText().length() < 5) {
             showError(passwordError, "Le mot de passe doit contenir au moins 5 caractères");
             isValid = false;
         }
-        
+
         return isValid;
     }
-    
+
     private void showError(Label errorLabel, String message) {
         if (errorLabel != null) {
             errorLabel.setText(message);
@@ -489,7 +489,7 @@ public class ManageEcole implements Initializable {
             errorLabel.setManaged(true);
         }
     }
-    
+
     // Alert utility methods directly integrated
     private void showAlert(Alert.AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);

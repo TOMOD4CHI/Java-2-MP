@@ -1,4 +1,4 @@
-/* ====== ROOT STYLES ====== */
+/* ====== STYLES RACINE ====== */
 .root {
     -fx-background-color: linear-gradient(to bottom right, #f5f7fa 0%, #e6e9f0 100%);
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
@@ -16,7 +16,7 @@
     -fx-padding: 20px;
 }
 
-/* ====== TYPOGRAPHY STYLES ====== */
+/* ====== STYLES DE TYPOGRAPHIE ====== */
 .page-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
@@ -85,14 +85,14 @@
     -fx-padding: 0 0 10 0;
 }
 
-/* ====== CONTAINER STYLES ====== */
+/* ====== STYLES DE CONTENEUR ====== */
 .form-container {
     -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.98), rgba(245, 248, 255, 0.98));
     -fx-background-radius: 16px;
     -fx-border-color: rgba(190, 227, 248, 0.7);
     -fx-border-radius: 16px;
     -fx-padding: 32px;
-    -fx-spacing: 22;
+    -fx-spacing: 12;
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 14, 0, 0, 6);
     -fx-transition-duration: 0.3s;
     -fx-max-width: 650px;
@@ -116,9 +116,10 @@
     -fx-pref-height: 45px;
     -fx-alignment: center-left;
     -fx-stack-pane-alignment: top-left;
+    -fx-position-shape: fixed;
 }
 
-/* ====== FORM ELEMENT STYLES ====== */
+/* ====== STYLES D'ÉLÉMENTS DE FORMULAIRE ====== */
 .form-label {
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 14px;
@@ -143,6 +144,7 @@
     -fx-prompt-text-fill: #a0aec0;
     -fx-transition-duration: 0.2s;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 4, 0, 0, 1);
+    -fx-position-shape: fixed;
 }
 
 .form-field:focused {
@@ -160,7 +162,7 @@
     -fx-font-size: 14px;
     -fx-min-height: 38px;
     -fx-transition-duration: 0.2s;
-    -fx-position-shape: absolute;
+    -fx-position-shape: fixed;
 }
 
 .text-field:hover {
@@ -198,7 +200,7 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.25), 4, 0, 0, 1);
 }
 
-/* ====== ERROR STYLES ====== */
+/* ====== STYLES D'ERREUR ====== */
 .field-error, .error-field {
     -fx-border-color: #e53e3e;
     -fx-border-width: 2px;
@@ -218,14 +220,13 @@
     -fx-font-size: 10px;
     -fx-font-weight: bold;
     -fx-wrap-text: true;
-    -fx-max-height: 12px;
-    -fx-min-height: 12px;
     -fx-opacity: 1;
     -fx-transition-duration: 0.2s;
     -fx-padding: 1px 0 0 4px;
     -fx-animation: error-label-fade 0.6s ease-in-out;
-    -fx-z-index: 100;
-    -fx-view-order: -100;
+    -fx-view-order: 1;
+    -fx-translate-y: 2px;
+    -fx-stack-pane-alignment: bottom-left;
 }
 
 .error-field {
@@ -257,6 +258,7 @@
     -fx-padding: 2px 0 0 0;
     -fx-opacity: 0.95;
     -fx-animation: error-label-fade 0.6s ease-in-out;
+    -fx-view-order: 1;
 }
 
 .field-error {
@@ -265,7 +267,7 @@
     -fx-background-color: rgba(254, 215, 215, 0.3);
 }
 
-/* ====== BUTTON STYLES ====== */
+/* ====== STYLES DE BOUTON ====== */
 .button {
     -fx-background-color: linear-gradient(to bottom, rgba(49, 130, 206, 0.8), rgba(44, 122, 196, 0.9));
     -fx-text-fill: white;
@@ -472,7 +474,7 @@
     -fx-scale-y: 0.98;
 }
 
-/* ====== TABLE STYLES ====== */
+/* ====== STYLES DE TABLEAU ====== */
 .custom-table-view {
     -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(252, 253, 255, 0.8));
     -fx-background-radius: 10px;
@@ -572,7 +574,7 @@
     -fx-font-weight: bold;
 }
 
-/* ====== MENU STYLES ====== */
+/* ====== STYLES DE MENU ====== */
 .context-menu {
     -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(250, 252, 255, 0.95));
     -fx-border-color: #BEE3F8;
@@ -597,11 +599,12 @@
     -fx-border-width: 1px;
     -fx-border-radius: 15px;
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.25), 8, 0, 0, 3);
-    -fx-min-height: 50px;
-    -fx-pref-height: 50px;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
     -fx-max-width: 1050px;
     -fx-padding: 0 40px;
     -fx-transition-duration: 0.3s;
+    -fx-translate-y: -5px;
 }
 
 .main-menu-bar:hover {
@@ -612,7 +615,7 @@
     -fx-border-color: #63B3ED;
 }
 
-/* ====== SCROLL PANE STYLES ====== */
+/* ====== STYLES DE PANNEAU DE DÉFILEMENT ====== */
 .transparent-scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -674,7 +677,7 @@
     -fx-pref-height: 1px;
 }
 
-/* ====== LOGO STYLES ====== */
+/* ====== STYLES DE LOGO ====== */
 .logo-image {
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.45), 11, 0, 0, 3);
     -fx-background-radius: 12px;
@@ -712,12 +715,13 @@
 }
 
 .header-container {
-    -fx-padding: 15px;
+    -fx-padding: 10px;
     -fx-background-color: linear-gradient(to bottom, rgba(144, 205, 244, 0.2), rgba(155, 210, 245, 0.25));
     -fx-background-radius: 12px;
     -fx-border-color: rgba(144, 205, 244, 0.4);
     -fx-border-radius: 12px;
     -fx-transition-duration: 0.3s;
+    -fx-translate-y: -10px;
 }
 
 .header-container:hover {
@@ -746,7 +750,7 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.18), 4, 0, 0, 2);
 }
 
-/* ====== INFO CARD STYLES ====== */
+/* ====== STYLES DE CARTE D'INFORMATION ====== */
 .info-card {
     -fx-background-color: linear-gradient(to bottom, rgba(235, 248, 255, 0.6), rgba(240, 250, 255, 0.7));
     -fx-background-radius: 15px;
@@ -819,7 +823,7 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.18), 3, 0, 0, 1);
 }
 
-/* ====== SCHOOL DISPLAY STYLES ====== */
+/* ====== STYLES D'AFFICHAGE D'ÉCOLE ====== */
 .school-display-card {
     -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.85), rgba(252, 253, 255, 0.9));
     -fx-background-radius: 20px;
@@ -852,7 +856,7 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.18), 5, 0, 0, 2);
 }
 
-/* ====== AUTO ECOLE STYLES ====== */
+/* ====== STYLES D'AUTO ÉCOLE ====== */
 .auto-ecole-info, .auto-ecole-edit {
     -fx-background-color: linear-gradient(to bottom right, rgba(240, 247, 255, 0.7), rgba(245, 250, 255, 0.75));
     -fx-background-radius: 12px;
@@ -883,7 +887,21 @@
     -fx-spacing: 15;
 }
 
-/* ====== PAYMENT STYLES ====== */
+/* First page inputs with reduced spacing */
+.first-page-form .field-container {
+    -fx-spacing: 0;
+    -fx-padding: 0;
+    -fx-min-height: 40px;
+    -fx-max-height: 40px;
+    -fx-pref-height: 40px;
+    -fx-margin-bottom: 5px;
+}
+
+.first-page-form .form-field {
+    -fx-margin-bottom: 5px;
+}
+
+/* ====== STYLES DE PAIEMENT ====== */
 .payment-container {
     -fx-background-color: linear-gradient(to bottom right, #ffffff, #f7faff);
     -fx-background-radius: 20px;
@@ -939,7 +957,7 @@
     -fx-effect: dropshadow(gaussian, rgba(72, 187, 120, 0.35), 8, 0, 0, 2);
 }
 
-/* ====== DASHBOARD STYLES ====== */
+/* ====== STYLES DE TABLEAU DE BORD ====== */
 .dashboard-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
@@ -1025,7 +1043,7 @@
     -fx-font-weight: bold;
 }
 
-/* ====== CHART STYLES ====== */
+/* ====== STYLES DE GRAPHIQUE ====== */
 .chart {
     -fx-padding: 10;
     -fx-background-color: transparent;
@@ -1081,7 +1099,7 @@
 .default-color0.chart-series-area-line { -fx-stroke: #3498db; }
 .default-color0.chart-series-area-fill { -fx-fill: linear-gradient(to bottom, #3498db33, #3498db11); }
 
-/* ====== FOOTER STYLES ====== */
+/* ====== STYLES DE PIED DE PAGE ====== */
 .footer {
     -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(250, 252, 255, 0.75));
     -fx-background-radius: 12px 12px 0 0;
@@ -1105,7 +1123,7 @@
     -fx-text-fill: #4A5568;
 }
 
-/* ====== ICON STYLES ====== */
+/* ====== STYLES D'ICÔNE ====== */
 .icon-3d-text {
     -fx-font-family: "FontAwesome", "Material Icons", "Segoe UI", sans-serif;
     -fx-font-size: 16px;
@@ -1130,7 +1148,7 @@
     -fx-graphic-text-gap: 10;
 }
 
-/* ====== DROPDOWN STYLES ====== */
+/* ====== STYLES DE LISTE DÉROULANTE ====== */
 .combo-box {
     -fx-min-height: 40px;
     -fx-background-color: linear-gradient(to bottom, rgba(235, 248, 255, 0.6), rgba(240, 250, 255, 0.7));
@@ -1214,7 +1232,7 @@
     -fx-padding: 15px;
 }
 
-/* ====== MENU ITEM STYLES ====== */
+/* ====== STYLES D'ÉLÉMENT DE MENU ====== */
 .menu {
     -fx-font-size: 14px;
     -fx-background-color: transparent;
@@ -1239,7 +1257,6 @@
     -fx-background-color: rgba(255, 255, 255, 0.95);
     -fx-background-radius: 8px;
     -fx-cursor: hand;
-    -fx-transition-duration: 0.2s;
     -fx-z-index: 1000;
 }
 
@@ -1271,7 +1288,7 @@
     -fx-scale-y: 1.05;
 }
 
-/* ====== ANIMATION KEYFRAMES ====== */
+/* ====== ANIMATIONS KEYFRAMES ====== */
 @keyframes form-entry {
     0% { -fx-opacity: 0; -fx-translate-y: 20; }
     100% { -fx-opacity: 1; -fx-translate-y: 0; }
