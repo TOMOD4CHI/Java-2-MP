@@ -12,6 +12,7 @@ import org.cpi2.service.CandidatService;
 import org.cpi2.service.InscriptionService;
 import org.cpi2.service.PaiementService;
 import org.cpi2.utils.AlertUtil;
+import org.cpi2.utils.InvoiceGenerator;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -140,16 +141,28 @@ public class Invoice implements Initializable {
     void handlePreview(ActionEvent event) {
         if (!validateInputs()) return;
         
-        // This would show a preview of the invoice
-        AlertUtil.showInfo("Prévisualisation", "Fonctionnalité de prévisualisation à implémenter.");
+        Candidat candidat = candidatComboBox.getValue();
+        String typeFacture = typeFactureComboBox.getValue();
+        LocalDate dateDebut = dateDebutPicker.getValue();
+        LocalDate dateFin = dateFinPicker.getValue();
+        double montant = Double.parseDouble(montantField.getText().replace(" DT", "").replace(",", "."));
+        String note = noteTextArea.getText();
+        
+        InvoiceGenerator.previewInvoice(candidat, typeFacture, dateDebut, dateFin, montant, note);
     }
 
     @FXML
     void handleGeneratePDF(ActionEvent event) {
         if (!validateInputs()) return;
         
-        // This would generate a PDF of the invoice
-        AlertUtil.showInfo("PDF Généré", "La facture a été générée avec succès et enregistrée dans le dossier 'Documents'.");
+        Candidat candidat = candidatComboBox.getValue();
+        String typeFacture = typeFactureComboBox.getValue();
+        LocalDate dateDebut = dateDebutPicker.getValue();
+        LocalDate dateFin = dateFinPicker.getValue();
+        double montant = Double.parseDouble(montantField.getText().replace(" DT", "").replace(",", "."));
+        String note = noteTextArea.getText();
+        
+        InvoiceGenerator.generatePDF(candidat, typeFacture, dateDebut, dateFin, montant, note);
     }
     
     private boolean validateInputs() {

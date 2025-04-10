@@ -157,12 +157,6 @@ public class AjouterCandidat {
 
     @FXML
     private void confirmAction() {
-        // Validate all fields first
-        if (ValidationUtils.hasAnyErrors()) {
-            // If there are validation errors, don't proceed
-            return;
-        }
-        
         // Retrieve all form field values
         String nom = nomField.getText().trim();
         String prenom = prenomField.getText().trim();
