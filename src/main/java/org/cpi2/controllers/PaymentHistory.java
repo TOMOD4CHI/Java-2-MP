@@ -200,11 +200,11 @@ public class PaymentHistory implements Initializable {
                     setStyle("");
                 } else {
                     setText(statut);
-                    if (statut.equals("COMPLETE")) {
+                    if (statut.equals("complete")) {
                         setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-                    } else if (statut.equals("En EN_ATTENTE")) {
+                    } else if (statut.equals("en_attente")) {
                         setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
-                    } else if (statut.equals("ANNULEE")) {
+                    } else if (statut.equals("annulee")) {
                         setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
                     }
                 }
