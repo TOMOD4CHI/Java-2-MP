@@ -4,8 +4,11 @@ import org.cpi2.Exceptions.DataNotFound;
 import org.cpi2.entities.*;
 import org.cpi2.repository.CandidatRepository;
 import org.cpi2.repository.InscriptionRepository;
+import org.cpi2.utils.InvoiceGenerator;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -129,5 +132,38 @@ public class CandidatService {
             }
         }
         return candidats;
+    }
+
+    public void generateInvoice(String cin, String typeFacture, LocalDate dateDebut, 
+                              LocalDate dateFin, double montant, String note) {
+        try {
+            Candidat candidat = getCandidatByCin(cin);
+            
+            // Get the latest inscription for this candidate
+            List<Inscription> inscriptions = inscriptionRepository.findByCin(cin);
+            Inscription latestInscription = inscriptions.stream()
+                .max(Comparator.comparing(Inscription::getInscriptioDate))
+                .orElseThrow(() -> new DataNotFound("No inscription found for candidate " + cin));
+            
+            // Get course plan details
+            CoursePlan coursePlan = latestInscription.getPlan();
+            
+            // Generate PDF
+            InvoiceGenerator.generatePDF(
+                candidat,
+                typeFacture,
+                dateDebut,
+                dateFin,
+                montant,
+                note
+            );
+            
+
+            
+            LOGGER.info("Invoice generated successfully for candidate: " + cin);
+        } catch (Exception e) {
+            LOGGER.severe("Error generating invoice: " + e.getMessage());
+            throw new RuntimeException("Error generating invoice", e);
+        }
     }
 }

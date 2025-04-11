@@ -2,10 +2,12 @@ package org.cpi2.utils;
 
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
@@ -14,7 +16,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import org.cpi2.entities.AutoEcole;
 import org.cpi2.entities.Candidat;
+import org.cpi2.service.AutoEcoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,83 +28,65 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.nio.file.Paths;
 
 public class InvoiceGenerator {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceGenerator.class);
     private static final String FONT_PATH = "src/main/resources/fonts/arial.ttf";
-    private static final float MARGIN = 50f;
+    private static final float MARGIN = 40f;
     private static final float LINE_SPACING = 1.5f;
-    private static final float TITLE_FONT_SIZE = 24f;
+    private static final float TITLE_FONT_SIZE = 20f;
     private static final float HEADER_FONT_SIZE = 14f;
     private static final float BODY_FONT_SIZE = 12f;
     private static final float FOOTER_FONT_SIZE = 10f;
     
     // Custom colors
-    private static final DeviceRgb DARK_BLUE = new DeviceRgb(0, 51, 102);
-    private static final DeviceRgb LIGHT_BLUE = new DeviceRgb(173, 216, 230);
+    private static final DeviceRgb PRIMARY_COLOR = new DeviceRgb(0, 51, 102);
+    private static final DeviceRgb SECONDARY_COLOR = new DeviceRgb(0, 102, 204);
+    private static final DeviceRgb LIGHT_BLUE = new DeviceRgb(204, 229, 255);
     private static final DeviceRgb GRAY = new DeviceRgb(128, 128, 128);
+    private static final DeviceRgb LIGHT_GRAY = new DeviceRgb(240, 240, 240);
+    private static final DeviceRgb TEXT_COLOR = new DeviceRgb(51, 51, 51);
+
+    private static AutoEcole autoEcole;
+    private static AutoEcoleService autoEcoleService;
+    
+    static {
+        autoEcoleService = new AutoEcoleService();
+        autoEcole = autoEcoleService.getAutoEcoleData();
+    }
 
     public static void generatePDF(Candidat candidat, String typeFacture, LocalDate dateDebut, 
-                                 LocalDate dateFin, double montant, String note) {
+                                  LocalDate dateFin, double montant, String note) {
         try {
             logger.info("Début de la génération du PDF pour le candidat: {}", candidat.getNom());
             
-            String documentsPath = System.getProperty("user.home") + "/Documents";
-            File documentsDir = new File(documentsPath);
-            if (!documentsDir.exists()) {
-                logger.info("Création du dossier Documents");
-                documentsDir.mkdirs();
-            }
-
-            String invoicesPath = documentsPath + "/Factures";
-            File invoicesDir = new File(invoicesPath);
-            if (!invoicesDir.exists()) {
-                logger.info("Création du dossier Factures");
-                invoicesDir.mkdirs();
-            }
-
-            String fileName = invoicesPath + "/Facture_" + candidat.getNom().replace(" ", "_") + "_" + 
-                            LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + ".pdf";
-            
-            logger.info("Création du fichier PDF: {}", fileName);
-            PdfWriter writer = new PdfWriter(fileName);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
-            
-            // Set margins
+            // Create PDF document
+            PdfDocument pdf = new PdfDocument(new PdfWriter("facture_" + candidat.getCin() + 
+                    "_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + 
+                    ".pdf"));
+            Document document = new Document(pdf, PageSize.A4);
             document.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
             
-            // Add header with logo and company info
+            // Add content
             addHeader(document, candidat);
-            
-            // Add client information
             addClientInfo(document, candidat);
-            
-            // Add invoice details
             addInvoiceDetails(document, typeFacture, dateDebut, dateFin, montant);
-            
-            // Add payment information
             addPaymentInfo(document, montant);
-            
-            // Add note if exists
-            if (note != null && !note.trim().isEmpty()) {
-                addNote(document, note);
-            }
-            
-            // Add footer
+            addNote(document, note);
             addFooter(document);
             
+            // Close document
             document.close();
             
-            logger.info("PDF généré avec succès: {}", fileName);
+            System.out.println("Invoice generated successfully at: " + 
+                Paths.get("facture_" + candidat.getCin() + "_" + 
+                LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + 
+                ".pdf").toAbsolutePath());
             
-            AlertUtil.showInfo("Succès", "La facture a été générée avec succès dans le dossier Documents/Factures");
-        } catch (FileNotFoundException e) {
-            logger.error("Erreur lors de la création du fichier PDF", e);
-            AlertUtil.showError("Erreur", "Impossible de générer le PDF : " + e.getMessage());
         } catch (Exception e) {
-            logger.error("Erreur inattendue lors de la génération du PDF", e);
-            AlertUtil.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
+            logger.error("Error generating invoice: " + e.getMessage(), e);
+            throw new RuntimeException("Error generating invoice", e);
         }
     }
 
@@ -114,15 +100,16 @@ public class InvoiceGenerator {
                 LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .setTextAlignment(TextAlignment.RIGHT))
                 .setBorder(null));
+        
         document.add(headerTable);
         
-        // Logo and company info
+        // Company header
         Paragraph header = new Paragraph()
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFontSize(TITLE_FONT_SIZE)
-                .setFontColor(DARK_BLUE)
-                .add("Auto-École Excellence")
-                .setMarginBottom(20);
+                .setFontColor(PRIMARY_COLOR)
+                .add(autoEcole.getNom())
+                .setMarginBottom(10);
         
         document.add(header);
         
@@ -130,25 +117,24 @@ public class InvoiceGenerator {
         Paragraph companyDetails = new Paragraph()
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFontSize(BODY_FONT_SIZE)
-                .add("123 Avenue Habib Bourguiba, Tunis\n")
-                .add("Tél: +216 71 123 456\n")
-                .add("Email: contact@autoecole-excellence.tn\n")
-                .add("R.C.: 12345678/A/M/000\n")
-                .add("Matricule Fiscale: 12345678\n")
+                .setFontColor(SECONDARY_COLOR)
+                .add(autoEcole.getAdresse() + "\n")
+                .add("Tél: " + autoEcole.getTelephone() + "\n")
+                .add("Email: " + autoEcole.getEmail() + "\n")
                 .setMarginBottom(20);
         
         document.add(companyDetails);
         
         // Separator
-        document.add(new LineSeparator(new SolidLine())
-                .setStrokeColor(DARK_BLUE)
+        document.add(new LineSeparator(new SolidLine(1f))
+                .setStrokeColor(SECONDARY_COLOR)
                 .setMarginBottom(20));
     }
 
     private static void addClientInfo(Document document, Candidat candidat) {
         Paragraph clientInfo = new Paragraph()
                 .setFontSize(HEADER_FONT_SIZE)
-                .setFontColor(DARK_BLUE)
+                .setFontColor(PRIMARY_COLOR)
                 .add("Informations du client :\n")
                 .setMarginBottom(10);
         
@@ -170,98 +156,154 @@ public class InvoiceGenerator {
     }
 
     private static void addInvoiceDetails(Document document, String typeFacture, 
-                                        LocalDate dateDebut, LocalDate dateFin, double montant) {
-        Paragraph details = new Paragraph()
-                .setFontSize(HEADER_FONT_SIZE)
-                .setFontColor(DARK_BLUE)
-                .add("Détails de la facture :\n")
-                .setMarginBottom(10);
+                                    LocalDate dateDebut, LocalDate dateFin, double montant) {
+        Table detailsTable = new Table(UnitValue.createPercentArray(new float[]{30, 70}));
+        detailsTable.setWidth(UnitValue.createPercentValue(100));
         
-        details.add(new Text("Type : " + typeFacture + "\n")
-                .setFontSize(BODY_FONT_SIZE));
-        details.add(new Text("Période : " + dateDebut.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + 
-                          " - " + dateFin.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n")
-                .setFontSize(BODY_FONT_SIZE));
-        details.add(new Text("Date d'émission : " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n")
-                .setFontSize(BODY_FONT_SIZE));
-        details.add(new Text("Date limite de paiement : " + 
-                          LocalDate.now().plusDays(30).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n")
-                .setFontSize(BODY_FONT_SIZE));
+        // Add header row
+        Cell headerCell = new Cell()
+                .add(new Paragraph("Détails de la facture")
+                        .setFontSize(HEADER_FONT_SIZE)
+                        .setFontColor(PRIMARY_COLOR)
+                        .setBold())
+                .setBackgroundColor(LIGHT_BLUE)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginBottom(5);
         
-        document.add(details);
+        detailsTable.addCell(headerCell);
+        detailsTable.addCell(headerCell);
+        
+        // Add content rows
+        Cell labelCell = new Cell().add(new Paragraph("Type :")
+                .setFontSize(BODY_FONT_SIZE))
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        Cell valueCell = new Cell().add(new Paragraph(typeFacture)
+                .setFontSize(BODY_FONT_SIZE))
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        detailsTable.addCell(labelCell);
+        detailsTable.addCell(valueCell);
+        
+        labelCell = new Cell().add(new Paragraph("Période :")
+                .setFontSize(BODY_FONT_SIZE))
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        valueCell = new Cell().add(new Paragraph(dateDebut.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + 
+                      " - " + dateFin.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .setFontSize(BODY_FONT_SIZE)
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        detailsTable.addCell(labelCell);
+        detailsTable.addCell(valueCell);
+        
+        labelCell = new Cell().add(new Paragraph("Date d'émission :")
+                .setFontSize(BODY_FONT_SIZE))
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        valueCell = new Cell().add(new Paragraph(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .setFontSize(BODY_FONT_SIZE)
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        detailsTable.addCell(labelCell);
+        detailsTable.addCell(valueCell);
+        
+        document.add(detailsTable);
         document.add(new Paragraph().setMarginBottom(20));
     }
 
     private static void addPaymentInfo(Document document, double montant) {
-        Table paymentTable = new Table(UnitValue.createPercentArray(2)).useAllAvailableWidth();
+        Table paymentTable = new Table(UnitValue.createPercentArray(new float[]{30, 70}));
+        paymentTable.setWidth(UnitValue.createPercentValue(100));
         
-        // Net amount
-        paymentTable.addCell(new Cell().add(new Paragraph("Montant net :"))
-                .setBackgroundColor(LIGHT_BLUE));
-        paymentTable.addCell(new Cell().add(new Paragraph(String.format("%.2f DT", montant)))
-                .setTextAlignment(TextAlignment.RIGHT));
-        
-        // VAT
-        double tva = montant * 0.19; // 19% VAT
-        paymentTable.addCell(new Cell().add(new Paragraph("TVA (19%) :"))
-                .setBackgroundColor(LIGHT_BLUE));
-        paymentTable.addCell(new Cell().add(new Paragraph(String.format("%.2f DT", tva)))
-                .setTextAlignment(TextAlignment.RIGHT));
-        
-        // Total amount
-        paymentTable.addCell(new Cell().add(new Paragraph("Montant total TTC :"))
+        // Add header row
+        Cell headerCell = new Cell()
+                .add(new Paragraph("Détails du paiement")
+                        .setFontSize(HEADER_FONT_SIZE)
+                        .setFontColor(PRIMARY_COLOR)
+                        .setBold())
                 .setBackgroundColor(LIGHT_BLUE)
-                .setBold());
-        paymentTable.addCell(new Cell().add(new Paragraph(String.format("%.2f DT", montant + tva)))
-                .setTextAlignment(TextAlignment.RIGHT)
-                .setBold());
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginBottom(5);
+        
+        paymentTable.addCell(headerCell);
+        paymentTable.addCell(headerCell);
+        
+        // Add content rows
+        Cell labelCell = new Cell().add(new Paragraph("Montant total :")
+                .setFontSize(BODY_FONT_SIZE))
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        Cell valueCell = new Cell().add(new Paragraph(String.format("%.2f DT", montant))
+                .setFontSize(BODY_FONT_SIZE))
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        paymentTable.addCell(labelCell);
+        paymentTable.addCell(valueCell);
         
         document.add(paymentTable);
         document.add(new Paragraph().setMarginBottom(20));
     }
 
     private static void addNote(Document document, String note) {
-        Paragraph noteParagraph = new Paragraph()
-                .setFontSize(HEADER_FONT_SIZE)
-                .setFontColor(DARK_BLUE)
-                .add("Note :\n")
-                .setMarginBottom(10);
-        
-        noteParagraph.add(new Text(note)
-                .setFontSize(BODY_FONT_SIZE));
-        
-        document.add(noteParagraph);
-        document.add(new Paragraph().setMarginBottom(20));
+        if (note != null && !note.trim().isEmpty()) {
+            Table noteTable = new Table(UnitValue.createPercentArray(1));
+            noteTable.setWidth(UnitValue.createPercentValue(100));
+            
+            Cell headerCell = new Cell()
+                    .add(new Paragraph("Note")
+                            .setFontSize(HEADER_FONT_SIZE)
+                            .setFontColor(PRIMARY_COLOR)
+                            .setBold())
+                    .setBackgroundColor(LIGHT_BLUE)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(5);
+            
+            noteTable.addCell(headerCell);
+            
+            Cell noteCell = new Cell()
+                    .add(new Paragraph(note)
+                            .setFontSize(BODY_FONT_SIZE))
+                    .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+            
+            noteTable.addCell(noteCell);
+            document.add(noteTable);
+            document.add(new Paragraph().setMarginBottom(20));
+        }
     }
 
     private static void addFooter(Document document) {
         // Payment conditions
-        Paragraph conditions = new Paragraph()
-                .setFontSize(BODY_FONT_SIZE)
-                .setFontColor(DARK_BLUE)
-                .add("Conditions de paiement :\n")
-                .add("Le paiement doit être effectué dans les 30 jours suivant la date d'émission de la facture.\n")
-                .add("En cas de retard, des frais de retard de 1% par mois seront appliqués.\n")
-                .setMarginBottom(20);
+        Table conditionsTable = new Table(UnitValue.createPercentArray(1));
+        conditionsTable.setWidth(UnitValue.createPercentValue(100));
         
-        document.add(conditions);
+        Cell conditionsCell = new Cell()
+                .add(new Paragraph("Conditions de paiement")
+                        .setFontSize(HEADER_FONT_SIZE)
+                        .setFontColor(PRIMARY_COLOR)
+                        .setBold())
+                .setBackgroundColor(LIGHT_BLUE)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginBottom(5);
+        
+        conditionsTable.addCell(conditionsCell);
+        
+        Cell conditionsContent = new Cell()
+                .add(new Paragraph("• Le paiement doit être effectué dans les 30 jours suivant la date d'émission de la facture.\n" +
+                                  "• En cas de retard, des frais de retard de 1% par mois seront appliqués.")
+                        .setFontSize(BODY_FONT_SIZE))
+                .setBorder(new SolidBorder(LIGHT_GRAY, 0.5f));
+        
+        conditionsTable.addCell(conditionsContent);
+        document.add(conditionsTable);
         
         // Separator
-        document.add(new LineSeparator(new SolidLine())
-                .setStrokeColor(DARK_BLUE)
+        document.add(new LineSeparator(new SolidLine(1f))
+                .setStrokeColor(SECONDARY_COLOR)
                 .setMarginTop(20)
                 .setMarginBottom(10));
         
+        // Footer information
         Paragraph footer = new Paragraph()
                 .setFontSize(FOOTER_FONT_SIZE)
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFontColor(GRAY)
-                .add("Auto-École Excellence\n")
-                .add("123 Avenue Habib Bourguiba, Tunis\n")
-                .add("Tél: +216 71 123 456\n")
-                .add("Email: contact@autoecole-excellence.tn\n")
-                .add("R.C.: 12345678/A/M/000\n")
-                .add("Matricule Fiscale: 12345678\n")
+                .add(autoEcole.getNom() + "\n")
+                .add(autoEcole.getAdresse() + "\n")
+                .add("Tél: " + autoEcole.getTelephone() + "\n")
+                .add("Email: " + autoEcole.getEmail() + "\n")
                 .add("Date d'émission: " + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         
         document.add(footer);
@@ -273,19 +315,16 @@ public class InvoiceGenerator {
         previewBox.setStyle("-fx-padding: 20; -fx-background-color: white;");
         
         // Header
-        Label header = new Label("Auto-École Excellence");
+        Label header = new Label(autoEcole.getNom());
         header.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         header.setTextFill(javafx.scene.paint.Color.rgb(0, 51, 102));
         header.setStyle("-fx-alignment: center;");
         
         // Company details
         Label companyDetails = new Label(
-            "123 Avenue Habib Bourguiba, Tunis\n" +
-            "Tél: +216 71 123 456\n" +
-            "Email: contact@autoecole-excellence.tn\n" +
-            "R.C.: 12345678/A/M/000\n" +
-            "Matricule Fiscale: 12345678"
-        );
+            autoEcole.getAdresse() + "\n" +
+            "Tél: " + autoEcole.getTelephone() + "\n" +
+            "Email: " + autoEcole.getEmail() + "\n" );
         companyDetails.setFont(Font.font("Arial", 12));
         companyDetails.setStyle("-fx-alignment: center;");
         
