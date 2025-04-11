@@ -24,6 +24,7 @@ public class VehiculeService {
     }
 
     public boolean ajouterVehicule(Vehicule vehicule) {
+        vehicule.setAnnee(vehicule.getDateMiseEnService().getYear());
         if (!validerVehicule(vehicule)) {
             return false;
         }
@@ -92,6 +93,7 @@ public class VehiculeService {
      * @return true if successful, false otherwise
      */
     public boolean modifierVehicule(Vehicule old,Vehicule vehicule) {
+        vehicule.setAnnee(vehicule.getDateMiseEnService().getYear());
         if (!validerVehicule(vehicule)) {
             return false;
         }

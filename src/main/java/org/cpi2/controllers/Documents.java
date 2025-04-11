@@ -16,7 +16,6 @@ import org.cpi2.entities.Dossier;
 import org.cpi2.entities.TypeDocument;
 import org.cpi2.service.DossierService;
 import org.cpi2.service.TypeDocumentService;
-import org.cpi2.utils.AlertUtil;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -80,12 +79,18 @@ public class Documents {
                 TypeDocument typeDocument = TypeDocument.valueOf(typeDocumentComboBox.getValue());
                 org.cpi2.entities.Document document = new org.cpi2.entities.Document(typeDocument, selectedFile.getName(), selectedFile.getAbsolutePath());
                 dossierService.ajouterDocument(dossier.getId(), document, selectedFile);
-                AlertUtil.showSuccess("success!","Document enregistré avec succès!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText(null);
+                alert.setContentText("Document enregistré avec succès!");
+                alert.showAndWait();
 
                 clearForm();
             }
             else{
-                AlertUtil.showError("Erreur", "Aucun dossier trouvé pour cet ID de candidat.");
+                //Alert that the candidate does not exist
+                //RIP l UI hay 3al CLI for now 7ta someone fix it
+                System.out.println("Candidat does not exist");
                 return;
             }
 

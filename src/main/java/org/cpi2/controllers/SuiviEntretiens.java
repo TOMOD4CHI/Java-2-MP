@@ -216,7 +216,6 @@ public class SuiviEntretiens implements Initializable {
      * Loads maintenance records for the selected vehicle.
      */
     private void loadEntretiens(Vehicule vehicule) {
-        // In a real application, this would load from a database
         entretiens.clear();
         for(org.cpi2.entities.Entretien entretien: entretienService.getEntretienByVehiculeImm(vehicule.getImmatriculation())) {
             Entretien entretien_table = new Entretien(entretien.getDateEntretien(), entretien.getTypeEntretien(), entretien.getDescription(), entretien.getCout(), entretien.isDone());
@@ -402,7 +401,7 @@ public class SuiviEntretiens implements Initializable {
                     AlertUtil.showError("Erreur", "Impossible d'ajouter l'entretien.");
                     return;
                 }
-                entretiens.add(nouvelEntretien);
+                //entretiens.add(nouvelEntretien);
                 statusEntretienLabel.setText("Nouvel entretien ajouté");
             } else if (entretienEnCours != null) {
                 Entretien selectedEntretien = entretiensTable.getSelectionModel().getSelectedItem();
@@ -419,6 +418,7 @@ public class SuiviEntretiens implements Initializable {
             }
 
             // Update statistics and reset UI
+            refreshData();
             updateStatistics();
             totalEntretiensLabel.setText("Total: " + entretiens.size() + " entretiens");
             resetFormFields();
@@ -494,6 +494,8 @@ public class SuiviEntretiens implements Initializable {
             }
             updateStatistics();
             updateVehiculeInfo(Vehicule.from(vehiculeService.getVehiculeByImmatriculation(selectedVehicule.getImmatriculation()).get()));
+        }else{
+            showError("Erreur","Veuillez sélectionner un entretien à marquer comme terminé.");
         }
     }
 
