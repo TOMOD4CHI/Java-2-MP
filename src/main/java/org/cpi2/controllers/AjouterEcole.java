@@ -3,7 +3,7 @@ package org.cpi2.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import org.cpi2.utils.AlertManager;
+import org.cpi2.utils.AlertUtil;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -111,7 +111,7 @@ public class AjouterEcole implements Initializable {
                 // Apply dropshadow effect
                 logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
             } catch (Exception e) {
-                showAlert("Erreur", "Impossible de charger l'image: " + e.getMessage());
+                AlertUtil.showError("Erreur", "Impossible de charger l'image: " + e.getMessage());
             }
         }
     }
@@ -131,7 +131,7 @@ public class AjouterEcole implements Initializable {
 
         // Validate required fields
         if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty()) {
-            showAlert("Erreur de validation", "Tous les champs sont obligatoires.");
+            AlertUtil.showError("Erreur de validation", "Tous les champs sont obligatoires.");
             return;
         }
 
@@ -147,26 +147,21 @@ public class AjouterEcole implements Initializable {
         boolean success = autoEcoleService.saveAutoEcole(autoEcole);
 
         if (success) {
-            AlertManager.showSuccess("Succès", "L'école a été ajoutée avec succès!");
+            AlertUtil.showSuccess("Succès", "L'école a été ajoutée avec succès!");
             
             // Clear the form
             clearForm();
         } else {
-            showAlert("Erreur", "Échec de l'ajout de l'école.");
+            AlertUtil.showError("Erreur", "Échec de l'ajout de l'école.");
         }
     }
 
-    private void showAlert(String title, String message) {
-        AlertManager.showError(title, message);
-    }
 
-    // Handle cancelling the operation
     public void handleCancel(ActionEvent event) {
         clearForm();
     }
     
     private void clearForm() {
-        // Clear all fields
         nomField.clear();
         adresseField.clear();
         telephoneField.clear();
@@ -174,7 +169,6 @@ public class AjouterEcole implements Initializable {
         logoImageView.setImage(null);
         logoPath = null;
         
-        // Clear validation styles
         ValidationUtils.clearValidation(nomField);
         ValidationUtils.clearValidation(adresseField);
         ValidationUtils.clearValidation(telephoneField);

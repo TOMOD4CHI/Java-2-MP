@@ -9,6 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.cpi2.entities.Examen;
 import org.cpi2.service.CandidatService;
 import org.cpi2.service.ExamenService;
+import org.cpi2.utils.AlertUtil;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -113,19 +114,19 @@ public class PassExam {
         if (candidatId == null || candidatId.trim().isEmpty() ||
                 examenId == null || examenId.trim().isEmpty() ||
                 resultat == null) {
-            showAlert("Erreur", "Veuillez remplir tous les champs obligatoires");
+            AlertUtil.showError("Erreur", "Veuillez remplir tous les champs obligatoires");
             return;
         }
         if (candidatService.findByCin(candidatId).isEmpty()) {
-            showAlert("Erreur", "Candidat non trouvé");
+            AlertUtil.showError("Erreur", "Candidat non trouvé");
             return;
         }
         if (examenService.getExamenById(Long.parseLong(examenId)).isEmpty()) {
-            showAlert("Erreur", "Examen non trouvé");
+            AlertUtil.showError("Erreur", "Examen non trouvé");
             return;
         }
         if (commentaire.length() > 255) {
-            showAlert("Erreur", "Le commentaire ne doit pas dépasser 255 caractères");
+            AlertUtil.showError("Erreur", "Le commentaire ne doit pas dépasser 255 caractères");
             return;
         }
 
@@ -133,11 +134,11 @@ public class PassExam {
         examen.setResultat(resultat.equals("Réussi"));
         examen.setCommentaire(commentaire);
         if(examenService.updateExamen(examen)) {
-            showAlert("Succès", "Examen mis à jour avec succès");
+            AlertUtil.showSuccess( "Success", "Examen mis à jour avec succès");
             loadExamens();
             examensTable.setItems(examensList);
         } else {
-            showAlert("Erreur", "Échec de la mise à jour de l'examen");
+            AlertUtil.showError("Erreur", "Échec de la mise à jour de l'examen");
             return;
         }
 

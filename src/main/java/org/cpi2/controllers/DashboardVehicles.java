@@ -10,9 +10,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.cpi2.repository.DatabaseConfig;
 
 public class DashboardVehicles implements Initializable {
 
@@ -50,6 +55,7 @@ public class DashboardVehicles implements Initializable {
     @FXML private TableColumn<MaintenanceAlertEntry, Void> alertActionsColumn;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private String currentFilter = "Tous les véhicules";
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,15 +73,182 @@ public class DashboardVehicles implements Initializable {
         setupAlertTableColumns();
         
         // Load data
-        loadChartData();
-        loadTableData();
+        loadDashboardData();
     }
     
     @FXML
     private void handleApplyFilter() {
         // Get filter value and reload data
-        String filter = filterCombo.getValue();
-        loadTableData();
+        currentFilter = filterCombo.getValue();
+        loadDashboardData();
+    }
+    
+    private void loadDashboardData() {
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            // Load KPI data
+            loadKPIData(conn);
+            
+            // Load chart data
+            loadVehicleUsageChart(conn);
+            loadMaintenanceHistoryChart(conn);
+            
+            // Load table data
+            loadVehiclesTableData(conn);
+            loadMaintenanceAlertsData(conn);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
+        }
+    }
+    
+    private void loadKPIData(Connection conn) throws SQLException {
+        // Total vehicles count
+        String totalSql = "SELECT COUNT(*) as total FROM vehicule";
+        
+        // Available vehicles count
+        String availableSql = "SELECT COUNT(*) as available FROM vehicule WHERE statut = 'Disponible'";
+        
+        // Maintenance due count (vehicles with maintenance soon due)
+        String maintenanceDueSql = "SELECT COUNT(*) as due FROM vehicule " +
+                                 "WHERE kilometrage_total >= (kilometrage_prochain_entretien - 500) " +
+                                 "OR (date_prochain_entretien IS NOT NULL AND date_prochain_entretien <= DATE_ADD(CURDATE(), INTERVAL 30 DAY))";
+        
+        // Total kilometers
+        String totalKmSql = "SELECT SUM(kilometrage_total) as total_km FROM vehicule";
+        
+        // Execute queries
+        try (Statement stmt = conn.createStatement()) {
+            // Total vehicles
+            try (ResultSet rs = stmt.executeQuery(totalSql)) {
+                if (rs.next()) {
+                    int total = rs.getInt("total");
+                    totalVehiclesLabel.setText(String.valueOf(total));
+                } else {
+                    totalVehiclesLabel.setText("0");
+                }
+            }
+            
+            // Available vehicles
+            try (ResultSet rs = stmt.executeQuery(availableSql)) {
+                if (rs.next()) {
+                    int available = rs.getInt("available");
+                    availableVehiclesLabel.setText(String.valueOf(available));
+                } else {
+                    availableVehiclesLabel.setText("0");
+                }
+            }
+            
+            // Maintenance due
+            try (ResultSet rs = stmt.executeQuery(maintenanceDueSql)) {
+                if (rs.next()) {
+                    int due = rs.getInt("due");
+                    maintenanceDueLabel.setText(String.valueOf(due));
+                } else {
+                    maintenanceDueLabel.setText("0");
+                }
+            }
+            
+            // Total kilometers
+            try (ResultSet rs = stmt.executeQuery(totalKmSql)) {
+                if (rs.next()) {
+                    int totalKm = rs.getInt("total_km");
+                    totalKmLabel.setText(String.format("%,d km", totalKm));
+                } else {
+                    totalKmLabel.setText("0 km");
+                }
+            }
+        }
+    }
+    
+    private void loadVehicleUsageChart(Connection conn) throws SQLException {
+        // Query to get vehicle status distribution
+        String sql = "SELECT statut, COUNT(*) as count FROM vehicule GROUP BY statut";
+        
+        Map<String, Integer> statusCounts = new HashMap<>();
+        statusCounts.put("Disponible", 0);
+        statusCounts.put("En entretien", 0);
+        statusCounts.put("Hors service", 0);
+        
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                String status = rs.getString("statut");
+                int count = rs.getInt("count");
+                statusCounts.put(status, count);
+            }
+        }
+        
+        // Prepare pie chart data
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        
+        for (Map.Entry<String, Integer> entry : statusCounts.entrySet()) {
+            if (entry.getValue() > 0) {
+                String label = entry.getKey();
+                int count = entry.getValue();
+                
+                // Change label for pie chart
+                if (label.equals("Disponible")) {
+                    label = "Conduite";
+                } else if (label.equals("En entretien")) {
+                    label = "Entretien";
+                } else if (label.equals("Hors service")) {
+                    label = "Inactif";
+                }
+                
+                pieChartData.add(new PieChart.Data(label, count));
+            }
+        }
+        
+        // If no data, add placeholder data
+        if (pieChartData.isEmpty()) {
+            pieChartData.add(new PieChart.Data("Conduite", 65));
+            pieChartData.add(new PieChart.Data("Entretien", 15));
+            pieChartData.add(new PieChart.Data("Inactif", 20));
+        }
+        
+        vehicleUsageChart.setData(pieChartData);
+    }
+    
+    private void loadMaintenanceHistoryChart(Connection conn) throws SQLException {
+        // Get maintenance history by month
+        String sql = "SELECT DATE_FORMAT(date_entretien, '%b') as month, COUNT(*) as count " +
+                   "FROM entretien " +
+                   "WHERE date_entretien >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) " +
+                   "GROUP BY DATE_FORMAT(date_entretien, '%b') " +
+                   "ORDER BY date_entretien";
+        
+        XYChart.Series<String, Number> maintenanceSeries = new XYChart.Series<>();
+        maintenanceSeries.setName("Entretiens");
+        
+        Map<String, Integer> monthCounts = new HashMap<>();
+        
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                String month = rs.getString("month");
+                int count = rs.getInt("count");
+                monthCounts.put(month, count);
+            }
+        }
+        
+        // If data was found, add it to the series
+        if (!monthCounts.isEmpty()) {
+            for (Map.Entry<String, Integer> entry : monthCounts.entrySet()) {
+                maintenanceSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+            }
+        } else {
+            // Otherwise use placeholder data
+            maintenanceSeries.getData().add(new XYChart.Data<>("Jan", 4));
+            maintenanceSeries.getData().add(new XYChart.Data<>("Fév", 3));
+            maintenanceSeries.getData().add(new XYChart.Data<>("Mar", 5));
+            maintenanceSeries.getData().add(new XYChart.Data<>("Avr", 2));
+            maintenanceSeries.getData().add(new XYChart.Data<>("Mai", 6));
+            maintenanceSeries.getData().add(new XYChart.Data<>("Juin", 3));
+        }
+        
+        maintenanceHistoryChart.getData().clear();
+        maintenanceHistoryChart.getData().add(maintenanceSeries);
     }
     
     private void setupVehicleTableColumns() {
@@ -199,58 +372,121 @@ public class DashboardVehicles implements Initializable {
         });
     }
     
-    private void loadChartData() {
-        // Vehicle usage chart data
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-            new PieChart.Data("Conduite", 65),
-            new PieChart.Data("Entretien", 15),
-            new PieChart.Data("Inactif", 20)
-        );
-        vehicleUsageChart.setData(pieChartData);
+    private void loadVehiclesTableData(Connection conn) throws SQLException {
+        ObservableList<VehicleEntry> vehicleData = FXCollections.observableArrayList();
         
-        // Maintenance history chart data
-        XYChart.Series<String, Number> maintenanceSeries = new XYChart.Series<>();
-        maintenanceSeries.setName("Entretiens");
+        // SQL query depends on filter
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT v.id, CONCAT(v.marque, ' ', v.modele) as vehicle_name, ")
+                 .append("v.immatriculation, v.kilometrage_total, v.statut, ")
+                 .append("(SELECT DATE_FORMAT(MAX(e.date_entretien), '%d/%m/%Y') ")
+                 .append("FROM entretien e WHERE e.vehicule_id = v.id) as last_maintenance, ")
+                 .append("DATE_FORMAT(v.date_prochain_entretien, '%d/%m/%Y') as next_maintenance ")
+                 .append("FROM vehicule v");
         
-        maintenanceSeries.getData().add(new XYChart.Data<>("Jan", 4));
-        maintenanceSeries.getData().add(new XYChart.Data<>("Fév", 3));
-        maintenanceSeries.getData().add(new XYChart.Data<>("Mar", 5));
-        maintenanceSeries.getData().add(new XYChart.Data<>("Avr", 2));
-        maintenanceSeries.getData().add(new XYChart.Data<>("Mai", 6));
-        maintenanceSeries.getData().add(new XYChart.Data<>("Juin", 3));
+        // Add filter condition if needed
+        if (!currentFilter.equals("Tous les véhicules")) {
+            if (currentFilter.equals("Véhicules disponibles")) {
+                sqlBuilder.append(" WHERE v.statut = 'Disponible'");
+            } else if (currentFilter.equals("Véhicules en entretien")) {
+                sqlBuilder.append(" WHERE v.statut = 'En entretien'");
+            } else if (currentFilter.equals("Véhicules hors service")) {
+                sqlBuilder.append(" WHERE v.statut = 'Hors service'");
+            }
+        }
         
-        maintenanceHistoryChart.getData().clear();
-        maintenanceHistoryChart.getData().add(maintenanceSeries);
+        sqlBuilder.append(" ORDER BY v.id");
         
-        // Update KPI labels with sample data
-        totalVehiclesLabel.setText("12");
-        availableVehiclesLabel.setText("8");
-        maintenanceDueLabel.setText("3");
-        totalKmLabel.setText("157,340 km");
-    }
-    
-    private void loadTableData() {
-        // Sample vehicle data
-        ObservableList<VehicleEntry> vehicleData = FXCollections.observableArrayList(
-            new VehicleEntry(1L, "Peugeot 208", "134 TU 1234", 45231.0, "Disponible", "15/04/2023", "15/04/2024"),
-            new VehicleEntry(2L, "Renault Clio", "134 TU 5678", 78562.0, "Disponible", "22/03/2023", "22/03/2024"),
-            new VehicleEntry(3L, "Citroën C3", "134 TU 9012", 32145.0, "En entretien", "10/01/2023", "10/01/2024"),
-            new VehicleEntry(4L, "Peugeot 308", "134 TU 3456", 92345.0, "Disponible", "05/02/2023", "05/02/2024"),
-            new VehicleEntry(5L, "Renault Mégane", "134 TU 7890", 48732.0, "Hors service", "18/06/2023", "18/06/2024"),
-            new VehicleEntry(6L, "Citroën C4", "134 TU 1357", 65432.0, "Disponible", "30/05/2023", "30/05/2024")
-        );
+        // Execute the query
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sqlBuilder.toString())) {
+            
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                String model = rs.getString("vehicle_name");
+                String plate = rs.getString("immatriculation");
+                double km = rs.getDouble("kilometrage_total");
+                String status = rs.getString("statut");
+                String lastMaintenance = rs.getString("last_maintenance");
+                String nextMaintenance = rs.getString("next_maintenance");
+                
+                // Handle null values
+                if (lastMaintenance == null) lastMaintenance = "Non disponible";
+                if (nextMaintenance == null) nextMaintenance = "Non planifié";
+                
+                vehicleData.add(new VehicleEntry(id, model, plate, km, status, lastMaintenance, nextMaintenance));
+            }
+        }
+        
+        // If no data found, add sample data
+        if (vehicleData.isEmpty()) {
+            vehicleData.add(new VehicleEntry(1L, "Peugeot 208", "134 TU 1234", 45231.0, "Disponible", "15/04/2023", "15/04/2024"));
+            vehicleData.add(new VehicleEntry(2L, "Renault Clio", "134 TU 5678", 78562.0, "Disponible", "22/03/2023", "22/03/2024"));
+            vehicleData.add(new VehicleEntry(3L, "Citroën C3", "134 TU 9012", 32145.0, "En entretien", "10/01/2023", "10/01/2024"));
+        }
         
         vehiclesTable.setItems(vehicleData);
+    }
+    
+    private void loadMaintenanceAlertsData(Connection conn) throws SQLException {
+        ObservableList<MaintenanceAlertEntry> alertData = FXCollections.observableArrayList();
         
-        // Sample maintenance alerts data
-        ObservableList<MaintenanceAlertEntry> alertData = FXCollections.observableArrayList(
-            new MaintenanceAlertEntry("Peugeot 308", "Vidange", "03/06/2023", "En attente", "Haute"),
-            new MaintenanceAlertEntry("Renault Clio", "Freins", "10/06/2023", "En attente", "Moyenne"),
-            new MaintenanceAlertEntry("Citroën C3", "Pneus", "15/06/2023", "Planifié", "Moyenne"),
-            new MaintenanceAlertEntry("Peugeot 208", "Filtre à air", "20/06/2023", "En attente", "Basse")
-        );
+        // Query for upcoming maintenance alerts
+        String sql = "SELECT CONCAT(v.marque, ' ', v.modele) as vehicle_name, " +
+                   "CASE " +
+                   "  WHEN v.kilometrage_total >= (v.kilometrage_prochain_entretien - 500) THEN 'Vidange' " +
+                   "  WHEN v.date_prochaine_visite_technique <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) THEN 'Visite technique' " +
+                   "  WHEN v.date_expiration_assurance <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) THEN 'Assurance' " +
+                   "  ELSE 'Maintenance générale' " +
+                   "END as alert_type, " +
+                   "CASE " +
+                   "  WHEN v.date_prochain_entretien IS NOT NULL THEN DATE_FORMAT(v.date_prochain_entretien, '%d/%m/%Y') " +
+                   "  WHEN v.date_prochaine_visite_technique IS NOT NULL THEN DATE_FORMAT(v.date_prochaine_visite_technique, '%d/%m/%Y') " +
+                   "  WHEN v.date_expiration_assurance IS NOT NULL THEN DATE_FORMAT(v.date_expiration_assurance, '%d/%m/%Y') " +
+                   "  ELSE 'Non défini' " +
+                   "END as due_date, " +
+                   "'En attente' as status, " +
+                   "CASE " +
+                   "  WHEN v.kilometrage_total >= v.kilometrage_prochain_entretien THEN 'Haute' " +
+                   "  WHEN v.kilometrage_total >= (v.kilometrage_prochain_entretien - 300) THEN 'Moyenne' " +
+                   "  ELSE 'Basse' " +
+                   "END as priority " +
+                   "FROM vehicule v " +
+                   "WHERE v.kilometrage_total >= (v.kilometrage_prochain_entretien - 500) " +
+                   "OR (v.date_prochain_entretien IS NOT NULL AND v.date_prochain_entretien <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)) " +
+                   "OR (v.date_prochaine_visite_technique IS NOT NULL AND v.date_prochaine_visite_technique <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)) " +
+                   "OR (v.date_expiration_assurance IS NOT NULL AND v.date_expiration_assurance <= DATE_ADD(CURDATE(), INTERVAL 30 DAY))";
+        
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                String vehicle = rs.getString("vehicle_name");
+                String type = rs.getString("alert_type");
+                String dueDate = rs.getString("due_date");
+                String status = rs.getString("status");
+                String priority = rs.getString("priority");
+                
+                alertData.add(new MaintenanceAlertEntry(vehicle, type, dueDate, status, priority));
+            }
+        }
+        
+        // If no data found, add sample data
+        if (alertData.isEmpty()) {
+            alertData.add(new MaintenanceAlertEntry("Peugeot 308", "Vidange", "03/06/2023", "En attente", "Haute"));
+            alertData.add(new MaintenanceAlertEntry("Renault Clio", "Freins", "10/06/2023", "En attente", "Moyenne"));
+            alertData.add(new MaintenanceAlertEntry("Citroën C3", "Pneus", "15/06/2023", "Planifié", "Moyenne"));
+        }
         
         maintenanceAlertsTable.setItems(alertData);
+    }
+    
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
     
     // Inner class for vehicle table entries

@@ -14,6 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.cpi2.entities.AutoEcole;
 import org.cpi2.service.AutoEcoleService;
+import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.EventBus;
 
 import java.io.*;
@@ -199,7 +200,7 @@ public class ManageEcole implements Initializable {
                 showEditMode(true);
             }
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les informations de l'auto-école", e.getMessage());
+            AlertUtil.showError( "Erreur", "Impossible de charger les informations de l'auto-école \n"+ e.getMessage());
         }
     }
 
@@ -312,8 +313,8 @@ public class ManageEcole implements Initializable {
                     autoEcoleService.updateAutoEcole(currentAutoEcole);
 
             if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Auto-école enregistrée",
-                          "Les informations ont été enregistrées avec succès.");
+                AlertUtil.showSuccess("Succès", "Auto-école enregistrée \nLes informations ont été enregistrées avec succès.");
+
 
                 showEditMode(false);
                 updateInfoLabels();
@@ -321,11 +322,10 @@ public class ManageEcole implements Initializable {
                 // Publish event to update the footer in MainWindow
                 EventBus.publish("AUTO_ECOLE_UPDATED", currentAutoEcole);
             } else {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement",
-                          "Impossible d'enregistrer les informations de l'auto-école.");
+                AlertUtil.showError("Erreur", "Échec de l'enregistrement \nImpossible d'enregistrer les informations de l'auto-école.");
             }
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement", e.getMessage());
+            AlertUtil.showError("Erreur", "Échec de l'enregistrement\n" + e.getMessage());
         }
     }
 
@@ -348,7 +348,7 @@ public class ManageEcole implements Initializable {
                 Image logoImage = new Image(selectedLogoFile.toURI().toString());
                 logoImageView.setImage(logoImage);
             } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'image", e.getMessage());
+                AlertUtil.showError("Erreur", "Impossible de charger l'image \n" + e.getMessage());
             }
         }
     }
@@ -356,8 +356,7 @@ public class ManageEcole implements Initializable {
     @FXML
     private void handleExport() {
         if (currentAutoEcole == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Aucune information",
-                      "Il n'y a pas d'informations à sauvegarder.");
+            AlertUtil.showWarning("Attention", "Aucune information \nIl n'y a pas d'informations à sauvegarder.");
             return;
         }
 
@@ -383,10 +382,9 @@ public class ManageEcole implements Initializable {
                 writer.println("Téléphone: " + currentAutoEcole.getTelephone());
                 writer.println("Email: " + currentAutoEcole.getEmail());
 
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Sauvegarde réussie",
-                          "Les informations ont été sauvegardées dans " + file.getName());
+                AlertUtil.showInfo("Succès", "Sauvegarde réussie \nLes informations ont été sauvegardées dans " + file.getName());
             } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la sauvegarde", e.getMessage());
+                AlertUtil.showError("Erreur", "Échec de la sauvegarde \n" + e.getMessage());
             }
         }
     }
@@ -394,8 +392,7 @@ public class ManageEcole implements Initializable {
     @FXML
     private void handlePrint() {
         // In a real application, this would use PrinterJob to print the information
-        showAlert(Alert.AlertType.INFORMATION, "Impression", "Fonctionnalité d'impression",
-                 "L'impression sera implémentée dans une future version.");
+        AlertUtil.showInfo("Impression", "Fonctionnalité d'impression \nL'impression sera implémentée dans une future version.");
     }
 
     // Validation methods
@@ -490,12 +487,4 @@ public class ManageEcole implements Initializable {
         }
     }
 
-    // Alert utility methods directly integrated
-    private void showAlert(Alert.AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 }

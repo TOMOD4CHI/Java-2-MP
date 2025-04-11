@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
+import org.cpi2.utils.AlertUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -62,24 +63,24 @@ public class AfficherSeance {
 
     private ObservableList<Session> sessionList = FXCollections.observableArrayList();
 
-    // Service to fetch session data
+    
     private org.cpi2.service.SessionService sessionService = new org.cpi2.service.SessionService();
     
-    // Service to fetch moniteur data
+    
     private org.cpi2.service.MoniteurService moniteurService = new org.cpi2.service.MoniteurService();
 
 
 
 
     public void initialize() {
-        // Initialiser d'abord les colonnes du tableau
+        
         setupTableColumns();
-        // Puis configurer les filtres
+        
         setupFilters();
-        // Enfin charger les données
+        
         loadSessions();
         
-        // Ajouter un écouteur pour détecter les changements dans la liste des sessions
+        
         sessionList.addListener((javafx.collections.ListChangeListener.Change<? extends Session> c) -> {
             System.out.println("Liste des sessions modifiée, nouvelle taille: " + sessionList.size());
         });
@@ -97,7 +98,7 @@ public class AfficherSeance {
         statutColumn.setCellValueFactory(new PropertyValueFactory<>("statut"));
         typeSessionColumn.setCellValueFactory(new PropertyValueFactory<>("typeSession"));
 
-        // Custom column to show type-specific details
+        
         detailsColumn.setCellValueFactory(cellData -> {
             Session session = cellData.getValue();
             String details = "";
@@ -121,7 +122,6 @@ public class AfficherSeance {
             return new javafx.beans.property.SimpleStringProperty(details);
         });
 
-        // Custom cell factory for date formatting
         dateSessionColumn.setCellFactory(column -> new TableCell<>() {
             private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -136,7 +136,6 @@ public class AfficherSeance {
             }
         });
 
-        // Custom cell factory for time formatting
         heureSessionColumn.setCellFactory(column -> new TableCell<>() {
             private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -151,7 +150,7 @@ public class AfficherSeance {
             }
         });
 
-        // Custom cell factory for price formatting
+        
         prixColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Double price, boolean empty) {
@@ -164,7 +163,7 @@ public class AfficherSeance {
             }
         });
 
-        // Custom cell factory for session type formatting
+        
         typeSessionColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(TypeSession type, boolean empty) {
@@ -180,9 +179,9 @@ public class AfficherSeance {
 
     private void setupFilters() {
         try {
-            // Setup type session filter
+            
             ObservableList<TypeSession> typesList = FXCollections.observableArrayList(TypeSession.values());
-            typesList.add(0, null); // Add null for "All types"
+            typesList.add(0, null); 
             typeSessionFilter.setItems(typesList);
             
             typeSessionFilter.setConverter(new StringConverter<TypeSession>() {
@@ -196,18 +195,18 @@ public class AfficherSeance {
 
                 @Override
                 public TypeSession fromString(String string) {
-                    return null; // Not needed for ComboBox
+                    return null; 
                 }
             });
-            typeSessionFilter.setValue(null); // Default to all types
+            typeSessionFilter.setValue(null); 
 
-            // Setup date filters with current date as default for date fin
+            
             dateFinFilter.setValue(LocalDate.now());
             
-            // Load moniteurs into the ComboBox
+            
             loadMoniteurs();
 
-            // Setup action handlers
+            
             applyFiltersButton.setOnAction(this::applyFilters);
             resetFiltersButton.setOnAction(this::resetFilters);
         } catch (Exception e) {
@@ -218,26 +217,26 @@ public class AfficherSeance {
     
     private void loadMoniteurs() {
         try {
-            // Charger les moniteurs depuis la base de données
+            
             List<Moniteur> moniteursList = moniteurService.getAllMoniteurs();
             
             ObservableList<String> moniteurs = FXCollections.observableArrayList();
-            moniteurs.add("Tous les moniteurs"); // Option pour afficher tous les moniteurs
+            moniteurs.add("Tous les moniteurs"); 
             
             if (moniteursList != null && !moniteursList.isEmpty()) {
-                // Ajouter les moniteurs à la liste déroulante
+                
                 for (Moniteur moniteur : moniteursList) {
                     moniteurs.add(moniteur.getId() + " - " + moniteur.getNom() + " " + moniteur.getPrenom());
                 }
             }
             
             moniteurIdFilter.setItems(moniteurs);
-            moniteurIdFilter.setValue("Tous les moniteurs"); // Valeur par défaut
+            moniteurIdFilter.setValue("Tous les moniteurs"); 
         } catch (Exception e) {
             System.err.println("Erreur lors du chargement des moniteurs: " + e.getMessage());
             e.printStackTrace();
             
-            // Créer une liste par défaut en cas d'erreur
+            
             ObservableList<String> defaultList = FXCollections.observableArrayList();
             defaultList.add("Tous les moniteurs");
             moniteurIdFilter.setItems(defaultList);
@@ -255,34 +254,33 @@ public class AfficherSeance {
         Long moniteurId = null;
         if (moniteurSelection != null && !moniteurSelection.equals("Tous les moniteurs")) {
             try {
-                // Extraire l'ID du format "ID - Nom Prénom"
+                
                 moniteurId = Long.parseLong(moniteurSelection.split(" - ")[0]);
             } catch (Exception e) {
-                // En cas d'erreur, ignorer le filtre de moniteur
-                showAlert(Alert.AlertType.WARNING, "Avertissement",
-                        "Problème avec la sélection du moniteur",
-                        "Le filtre de moniteur sera ignoré.");
+                AlertUtil.showWarning( "Problème avec la sélection du moniteur",
+                        "Le filtre de moniteur sera ignoré." );
+
             }
         }
 
-        // Clear previous data
+        
         sessionList.clear();
         
-        // Apply filters based on selected criteria
+        
         List<Session> filteredSessions = new java.util.ArrayList<>();
         
-        // Get sessions based on type
+        
         if (typeSelected == TypeSession.CODE) {
             filteredSessions.addAll(sessionService.viewAllSessionCode());
         } else if (typeSelected == TypeSession.CONDUITE) {
             filteredSessions.addAll(sessionService.viewAllSessionConduite());
         } else {
-            // If no type selected, get all sessions
+            
             filteredSessions.addAll(sessionService.viewAllSessionCode());
             filteredSessions.addAll(sessionService.viewAllSessionConduite());
         }
         
-        // Filter by date range
+        
         if (dateDebut != null || dateFin != null) {
             filteredSessions = filteredSessions.stream()
                 .filter(session -> {
@@ -294,7 +292,7 @@ public class AfficherSeance {
                 .collect(java.util.stream.Collectors.toList());
         }
         
-        // Filter by moniteur
+        
         if (moniteurId != null) {
             Long finalMoniteurId = moniteurId;
             filteredSessions = filteredSessions.stream()
@@ -303,13 +301,12 @@ public class AfficherSeance {
                 .collect(java.util.stream.Collectors.toList());
         }
         
-        // Update the table
+        
         sessionList.addAll(filteredSessions);
         
-        // Si aucune session n'est trouvée, afficher un message
+        
         if (filteredSessions.isEmpty()) {
-            showAlert(Alert.AlertType.INFORMATION, "Information", 
-                    "Aucune séance trouvée", 
+            AlertUtil.showInfo("Aucune séance trouvée",
                     "Aucune séance ne correspond aux critères de recherche.");
         }
     }
@@ -326,18 +323,18 @@ public class AfficherSeance {
 
     @FXML
     public void loadSessions() {
-        // Clear previous data
+        
         sessionList.clear();
         
         try {
-            // Fetch all sessions (both code and conduite)
+            
             List<SessionCode> codeSessions = sessionService.viewAllSessionCode();
             System.out.println("Sessions code récupérées: " + (codeSessions != null ? codeSessions.size() : "null"));
             
             List<SessionConduite> conduiteSessions = sessionService.viewAllSessionConduite();
             System.out.println("Sessions conduite récupérées: " + (conduiteSessions != null ? conduiteSessions.size() : "null"));
             
-            // Vérifier si les listes sont nulles
+            
             if (codeSessions == null) {
                 System.err.println("La liste des sessions code est nulle");
                 codeSessions = new ArrayList<>();
@@ -348,39 +345,29 @@ public class AfficherSeance {
                 conduiteSessions = new ArrayList<>();
             }
             
-            // Add all sessions to the list
+            
             sessionList.addAll(codeSessions);
             sessionList.addAll(conduiteSessions);
             
-            // Set items to table
+            
             sessionTable.setItems(sessionList);
             
-            // Log the number of sessions loaded for debugging
+            
             System.out.println("Sessions chargées: " + sessionList.size() + 
                               " (Code: " + codeSessions.size() + ", Conduite: " + conduiteSessions.size() + ")");
             
-            // If no sessions are loaded, show a message
+            
             if (sessionList.isEmpty()) {
-                showAlert(Alert.AlertType.INFORMATION, "Information", 
+                AlertUtil.showInfo(
                         "Aucune séance disponible", 
                         "Aucune séance n'est disponible dans la base de données.");
             }
         } catch (Exception e) {
             System.err.println("Erreur lors du chargement des séances: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
+            AlertUtil.showError(
                     "Erreur lors du chargement des séances", 
                     "Une erreur s'est produite lors du chargement des séances: " + e.getMessage());
         }
     }
-
-    private void showAlert(Alert.AlertType alertType, String title, String header, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    // No internal service class needed as we use the external service directly
 }

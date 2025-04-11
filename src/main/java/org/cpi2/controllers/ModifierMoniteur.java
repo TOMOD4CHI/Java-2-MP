@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import org.cpi2.entities.Moniteur;
 import org.cpi2.entities.TypePermis;
 import org.cpi2.service.MoniteurService;
+import org.cpi2.utils.AlertUtil;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -119,12 +120,12 @@ public class ModifierMoniteur {
         String cin = cinField.getText().trim();
         
         if (cin.isEmpty()) {
-            showAlert("Erreur de validation", "Veuillez entrer un CIN pour rechercher.");
+            AlertUtil.showError("Erreur de validation", "Veuillez entrer un CIN pour rechercher.");
             return;
         }
 
         if (!isValidCIN(cin)) {
-            showAlert("Erreur de validation", "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres.");
+            AlertUtil.showError("Erreur de validation", "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres.");
             return;
         }
 
@@ -145,7 +146,7 @@ public class ModifierMoniteur {
                 typePermisComboBox.setValue(TypePermis.B);
             }
         } else {
-            showAlert("Erreur", "Aucun moniteur trouvé avec ce CIN.");
+            AlertUtil.showError("Erreur", "Aucun moniteur trouvé avec ce CIN.");
             clearForm();
         }
     }
@@ -170,18 +171,11 @@ public class ModifierMoniteur {
         return address != null && address.trim().length() >= 10;
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
     @FXML
     public void modifierAction(ActionEvent event) {
         if (currentMoniteur == null) {
-            showAlert("Erreur", "Veuillez d'abord rechercher un moniteur à modifier.");
+            AlertUtil.showError("Erreur", "Veuillez d'abord rechercher un moniteur à modifier.");
             return;
         }
 
@@ -260,14 +254,11 @@ public class ModifierMoniteur {
         boolean success = moniteurService.updateMoniteur(currentMoniteur);
 
         if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("Les informations du moniteur ont été modifiées avec succès!");
-            alert.showAndWait();
+            AlertUtil.showSuccess("Succès", "Les informations du moniteur ont été modifiées avec succès!");
             clearForm();
+
         } else {
-            showAlert("Erreur", "Échec de la modification des informations du moniteur.");
+            AlertUtil.showError("Erreur", "Échec de la modification des informations du moniteur.");
         }
     }
 

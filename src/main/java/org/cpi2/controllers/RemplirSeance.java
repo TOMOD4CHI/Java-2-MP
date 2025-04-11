@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import org.cpi2.entities.Candidat;
 import org.cpi2.entities.Moniteur;
 import org.cpi2.entities.SessionCode;
+import org.cpi2.utils.AlertUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -295,7 +296,7 @@ public class RemplirSeance {
     @FXML
     private void registerCandidates() {
         if (selectedSeance == null) {
-            showAlert("Erreur", "Veuillez sélectionner une séance");
+            AlertUtil.showError("Erreur", "Veuillez sélectionner une séance");
             return;
         }
 
@@ -308,7 +309,7 @@ public class RemplirSeance {
         }
 
         if (selectedCandidatIds.isEmpty()) {
-            showAlert("Attention", "Aucun candidat sélectionné");
+            AlertUtil.showInfo("Attention", "Aucun candidat sélectionné");
             return;
         }
 
@@ -317,7 +318,7 @@ public class RemplirSeance {
         int placesDisponibles = selectedSeance.getCapaciteMax() - inscriptions;
 
         if (selectedCandidatIds.size() > placesDisponibles) {
-            boolean confirm = showConfirmation(
+            boolean confirm = AlertUtil.showConfirmation(
                     "Dépassement de capacité",
                     "Vous avez sélectionné " + selectedCandidatIds.size() + " candidats pour " +
                             placesDisponibles + " places disponibles. Voulez-vous continuer ?"
@@ -331,7 +332,7 @@ public class RemplirSeance {
         // Save inscriptions
         saveInscriptions(Math.toIntExact(selectedSeance.getId()), selectedCandidatIds);
 
-        showInformation("Succès", "Les inscriptions ont été enregistrées avec succès");
+        AlertUtil.showInfo("Succès", "Les inscriptions ont été enregistrées avec succès");
         resetSelection();
     }
 
@@ -344,28 +345,5 @@ public class RemplirSeance {
         saveBtn.setDisable(true);
     }
 
-    // Alert helper methods
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
-    private void showInformation(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private boolean showConfirmation(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
-    }
 }

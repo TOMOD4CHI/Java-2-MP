@@ -10,9 +10,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.cpi2.repository.DatabaseConfig;
 
 public class DashboardCandidates implements Initializable {
 
@@ -56,6 +63,8 @@ public class DashboardCandidates implements Initializable {
     @FXML private TableColumn<CandidateEntry, String> candidateRegistrationDateColumn;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private LocalDate filterStartDate;
+    private LocalDate filterEndDate;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -69,29 +78,65 @@ public class DashboardCandidates implements Initializable {
         );
         periodCombo.getSelectionModel().select("Ce mois-ci");
         
+        // Set up the table columns
+        setupTableColumns();
+        
         // Initialize date pickers with current month
         LocalDate now = LocalDate.now();
         LocalDate firstDay = now.withDayOfMonth(1);
         startDate.setValue(firstDay);
         endDate.setValue(now);
         
-        // Set up the table columns
-        setupTableColumns();
+        filterStartDate = firstDay;
+        filterEndDate = now;
         
         // Load data
         loadChartData();
         loadTableData();
+        
+        // Add listener to period combo box
+        periodCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            updateDateRange(newVal);
+        });
+    }
+    
+    private void updateDateRange(String period) {
+        LocalDate now = LocalDate.now();
+        
+        switch(period) {
+            case "Aujourd'hui":
+                startDate.setValue(now);
+                endDate.setValue(now);
+                break;
+            case "Cette semaine":
+                startDate.setValue(now.minusDays(now.getDayOfWeek().getValue() - 1));
+                endDate.setValue(now);
+                break;
+            case "Ce mois-ci":
+                startDate.setValue(now.withDayOfMonth(1));
+                endDate.setValue(now);
+                break;
+            case "Ce trimestre":
+                int currentMonth = now.getMonthValue();
+                int startMonth = ((currentMonth - 1) / 3) * 3 + 1;
+                startDate.setValue(LocalDate.of(now.getYear(), startMonth, 1));
+                endDate.setValue(now);
+                break;
+            case "Cette année":
+                startDate.setValue(LocalDate.of(now.getYear(), 1, 1));
+                endDate.setValue(now);
+                break;
+        }
     }
     
     @FXML
     private void handleApplyFilter() {
         // Get values from filters
-        String period = periodCombo.getValue();
-        LocalDate start = startDate.getValue();
-        LocalDate end = endDate.getValue();
+        filterStartDate = startDate.getValue();
+        filterEndDate = endDate.getValue();
         
         // Validate dates
-        if (start != null && end != null && start.isAfter(end)) {
+        if (filterStartDate != null && filterEndDate != null && filterStartDate.isAfter(filterEndDate)) {
             showAlert("Erreur de date", "La date de début doit être avant la date de fin");
             return;
         }
@@ -143,83 +188,332 @@ public class DashboardCandidates implements Initializable {
     }
     
     private void loadChartData() {
-        // Registration chart data
-        XYChart.Series<String, Number> registrationSeries = new XYChart.Series<>();
-        registrationSeries.setName("Inscriptions");
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            // Load KPI data
+            loadKPIData(conn);
+            
+            // Load registration chart data
+            loadRegistrationChartData(conn);
+            
+            // Load age distribution chart data
+            loadAgeDistributionChartData(conn);
+            
+            // Load attendance chart data
+            loadAttendanceChartData(conn);
+            
+            // Load exam results chart data
+            loadExamResultsChartData(conn);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
+        }
+    }
+    
+    private void loadKPIData(Connection conn) throws SQLException {
+        // Total candidates
+        String totalSql = "SELECT COUNT(*) as total FROM candidat";
         
-        registrationSeries.getData().add(new XYChart.Data<>("01/01", 8));
-        registrationSeries.getData().add(new XYChart.Data<>("05/01", 12));
-        registrationSeries.getData().add(new XYChart.Data<>("10/01", 7));
-        registrationSeries.getData().add(new XYChart.Data<>("15/01", 14));
-        registrationSeries.getData().add(new XYChart.Data<>("20/01", 9));
-        registrationSeries.getData().add(new XYChart.Data<>("25/01", 11));
-        registrationSeries.getData().add(new XYChart.Data<>("30/01", 15));
+        // New candidates (registered between start and end dates)
+        String newSql = "SELECT COUNT(*) as nouveaux FROM candidat WHERE created_at BETWEEN ? AND ?";
         
-        registrationChart.getData().clear();
-        registrationChart.getData().add(registrationSeries);
+        // Active candidates (who have an active inscription)
+        String activeSql = "SELECT COUNT(DISTINCT c.id) as actifs FROM candidat c " +
+                          "JOIN inscription i ON c.cin = i.cin " +
+                          "WHERE i.statut = 'En Cours'";
         
-        // Age distribution chart data
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-            new PieChart.Data("18-20 ans", 45),
-            new PieChart.Data("21-25 ans", 30),
-            new PieChart.Data("26-30 ans", 15),
-            new PieChart.Data("31+ ans", 10)
-        );
-        ageDistributionChart.setData(pieChartData);
+        // Completion rate (candidates who have completed at least one exam)
+        String completedExamsSql = "SELECT COUNT(DISTINCT candidat_id) as completed FROM examen WHERE resultat = 1";
         
-        // Attendance chart data
-        XYChart.Series<String, Number> attendanceSeries = new XYChart.Series<>();
-        attendanceSeries.setName("Taux de Présence");
+        // Execute queries
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(totalSql)) {
+            if (rs.next()) {
+                int total = rs.getInt("total");
+                totalCandidatsLabel.setText(String.valueOf(total));
+            }
+        }
         
-        attendanceSeries.getData().add(new XYChart.Data<>("Code", 85));
-        attendanceSeries.getData().add(new XYChart.Data<>("Conduite", 92));
-        attendanceSeries.getData().add(new XYChart.Data<>("Révision", 78));
-        attendanceSeries.getData().add(new XYChart.Data<>("Examen", 95));
+        try (PreparedStatement pstmt = conn.prepareStatement(newSql)) {
+            // Convert LocalDate to java.sql.Date
+            pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int nouveaux = rs.getInt("nouveaux");
+                    newCandidatsLabel.setText(String.valueOf(nouveaux));
+                }
+            }
+        }
         
-        attendanceChart.getData().clear();
-        attendanceChart.getData().add(attendanceSeries);
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(activeSql)) {
+            if (rs.next()) {
+                int actifs = rs.getInt("actifs");
+                activeCandidatsLabel.setText(String.valueOf(actifs));
+            }
+        }
         
-        // Exam results chart data
-        XYChart.Series<String, Number> passSeries = new XYChart.Series<>();
-        passSeries.setName("Réussite");
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(completedExamsSql)) {
+            if (rs.next()) {
+                int completed = rs.getInt("completed");
+                int total = Integer.parseInt(totalCandidatsLabel.getText());
+                int completionRate = total > 0 ? (completed * 100) / total : 0;
+                completionRateLabel.setText(completionRate + "%");
+            }
+        }
         
-        passSeries.getData().add(new XYChart.Data<>("Code", 38));
-        passSeries.getData().add(new XYChart.Data<>("Conduite", 24));
-        
-        XYChart.Series<String, Number> failSeries = new XYChart.Series<>();
-        failSeries.setName("Échec");
-        
-        failSeries.getData().add(new XYChart.Data<>("Code", 12));
-        failSeries.getData().add(new XYChart.Data<>("Conduite", 6));
-        
-        examResultsChart.getData().clear();
-        examResultsChart.getData().addAll(passSeries, failSeries);
-        
-        // Update KPI labels with sample data
-        totalCandidatsLabel.setText("156");
-        newCandidatsLabel.setText("24");
-        completionRateLabel.setText("78%");
-        activeCandidatsLabel.setText("87");
-        
+        // Set the change labels with placeholder data
+        // In a real implementation, this would compare with previous period data
         candidatsChangeLabel.setText("+12% vs période précédente");
         newCandidatsChangeLabel.setText("+8% vs période précédente");
         completionChangeLabel.setText("+5% vs période précédente");
         activeChangeLabel.setText("+3% vs période précédente");
     }
     
-    private void loadTableData() {
-        // Sample candidate data
-        ObservableList<CandidateEntry> candidateData = FXCollections.observableArrayList(
-            new CandidateEntry(1L, "Ahmed Ben Ali", 22, "+216 98 765 432", "ahmed@example.com", "Actif", "15/01/2023"),
-            new CandidateEntry(2L, "Fatma Trabelsi", 19, "+216 55 432 109", "fatma@example.com", "Actif", "20/01/2023"),
-            new CandidateEntry(3L, "Mohamed Sassi", 25, "+216 21 876 543", "mohamed@example.com", "En attente", "22/01/2023"),
-            new CandidateEntry(4L, "Ines Miled", 28, "+216 94 285 760", "ines@example.com", "Actif", "23/01/2023"),
-            new CandidateEntry(5L, "Sami Khalifa", 20, "+216 58 123 476", "sami@example.com", "Inactif", "25/01/2023"),
-            new CandidateEntry(6L, "Nour Mejri", 24, "+216 26 987 012", "nour@example.com", "Terminé", "28/01/2023"),
-            new CandidateEntry(7L, "Karim Ben Salah", 30, "+216 97 654 321", "karim@example.com", "Actif", "30/01/2023")
-        );
+    private void loadRegistrationChartData(Connection conn) throws SQLException {
+        // Get registration data by date
+        String sql = "SELECT DATE_FORMAT(created_at, '%d/%m') as date, COUNT(*) as count " +
+                     "FROM candidat WHERE created_at BETWEEN ? AND ? " +
+                     "GROUP BY DATE_FORMAT(created_at, '%d/%m') ORDER BY created_at";
         
-        recentCandidatesTable.setItems(candidateData);
+        XYChart.Series<String, Number> registrationSeries = new XYChart.Series<>();
+        registrationSeries.setName("Inscriptions");
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String date = rs.getString("date");
+                    int count = rs.getInt("count");
+                    registrationSeries.getData().add(new XYChart.Data<>(date, count));
+                }
+            }
+        }
+        
+        // If no data, add some placeholder data
+        if (registrationSeries.getData().isEmpty()) {
+            registrationSeries.getData().add(new XYChart.Data<>("01/01", 0));
+        }
+        
+        registrationChart.getData().clear();
+        registrationChart.getData().add(registrationSeries);
+    }
+    
+    private void loadAgeDistributionChartData(Connection conn) throws SQLException {
+        String sql = "SELECT " +
+                     "CASE " +
+                     "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 18 AND 20 THEN '18-20 ans' " +
+                     "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 21 AND 25 THEN '21-25 ans' " +
+                     "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 26 AND 30 THEN '26-30 ans' " +
+                     "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) > 30 THEN '31+ ans' " +
+                     "  ELSE 'Inconnu' " +
+                     "END as age_group, " +
+                     "COUNT(*) as count " +
+                     "FROM candidat " +
+                     "WHERE date_naissance IS NOT NULL " +
+                     "GROUP BY age_group";
+        
+        Map<String, Integer> ageDistribution = new HashMap<>();
+        ageDistribution.put("18-20 ans", 0);
+        ageDistribution.put("21-25 ans", 0);
+        ageDistribution.put("26-30 ans", 0);
+        ageDistribution.put("31+ ans", 0);
+        
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                String ageGroup = rs.getString("age_group");
+                int count = rs.getInt("count");
+                ageDistribution.put(ageGroup, count);
+            }
+        }
+        
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        for (Map.Entry<String, Integer> entry : ageDistribution.entrySet()) {
+            if (entry.getValue() > 0) {
+                pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+            }
+        }
+        
+        // If no data, add placeholder data
+        if (pieChartData.isEmpty()) {
+            pieChartData.add(new PieChart.Data("18-20 ans", 1));
+            pieChartData.add(new PieChart.Data("21-25 ans", 1));
+        }
+        
+        ageDistributionChart.setData(pieChartData);
+    }
+    
+    private void loadAttendanceChartData(Connection conn) throws SQLException {
+        // Get attendance data for different session types
+        // Code sessions attendance
+        String codeAttendanceSql = "SELECT AVG(pc.present) * 100 as attendance_rate " +
+                                 "FROM presence_code pc " +
+                                 "JOIN session_code sc ON pc.session_code_id = sc.id " +
+                                 "WHERE sc.date_session BETWEEN ? AND ?";
+        
+        // Driving sessions attendance
+        String driveAttendanceSql = "SELECT AVG(pc.present) * 100 as attendance_rate " +
+                                  "FROM presence_conduite pc " +
+                                  "JOIN session_conduite sc ON pc.session_conduite_id = sc.id " +
+                                  "WHERE sc.date_session BETWEEN ? AND ?";
+        
+        // Initialize data points
+        Map<String, Double> attendanceRates = new HashMap<>();
+        attendanceRates.put("Code", 0.0);
+        attendanceRates.put("Conduite", 0.0);
+        attendanceRates.put("Révision", 0.0);
+        attendanceRates.put("Examen", 0.0);
+        
+        // Get code attendance
+        try (PreparedStatement pstmt = conn.prepareStatement(codeAttendanceSql)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    double rate = rs.getDouble("attendance_rate");
+                    if (!rs.wasNull()) {
+                        attendanceRates.put("Code", rate);
+                    }
+                }
+            }
+        }
+        
+        // Get driving attendance
+        try (PreparedStatement pstmt = conn.prepareStatement(driveAttendanceSql)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    double rate = rs.getDouble("attendance_rate");
+                    if (!rs.wasNull()) {
+                        attendanceRates.put("Conduite", rate);
+                    }
+                }
+            }
+        }
+        
+        // For revision and exam, we'll use placeholder data for now
+        // In a real implementation, you would query the appropriate tables
+        attendanceRates.put("Révision", 78.0);
+        attendanceRates.put("Examen", 95.0);
+        
+        XYChart.Series<String, Number> attendanceSeries = new XYChart.Series<>();
+        attendanceSeries.setName("Taux de Présence");
+        
+        for (Map.Entry<String, Double> entry : attendanceRates.entrySet()) {
+            attendanceSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
+        
+        attendanceChart.getData().clear();
+        attendanceChart.getData().add(attendanceSeries);
+    }
+    
+    private void loadExamResultsChartData(Connection conn) throws SQLException {
+        // Get exam results data
+        String examSql = "SELECT type.libelle as exam_type, " +
+                       "SUM(CASE WHEN e.resultat = 1 THEN 1 ELSE 0 END) as pass_count, " +
+                       "SUM(CASE WHEN e.resultat = 0 THEN 1 ELSE 0 END) as fail_count " +
+                       "FROM examen e " +
+                       "JOIN type_examen type ON e.type_examen_id = type.id " +
+                       "WHERE e.date_examen BETWEEN ? AND ? " +
+                       "GROUP BY type.libelle";
+        
+        Map<String, Integer> passData = new HashMap<>();
+        Map<String, Integer> failData = new HashMap<>();
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(examSql)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String examType = rs.getString("exam_type");
+                    int passCount = rs.getInt("pass_count");
+                    int failCount = rs.getInt("fail_count");
+                    
+                    passData.put(examType, passCount);
+                    failData.put(examType, failCount);
+                }
+            }
+        }
+        
+        // If no data, add placeholder data
+        if (passData.isEmpty()) {
+            passData.put("Code", 38);
+            passData.put("Conduite", 24);
+            failData.put("Code", 12);
+            failData.put("Conduite", 6);
+        }
+        
+        XYChart.Series<String, Number> passSeries = new XYChart.Series<>();
+        passSeries.setName("Réussite");
+        
+        XYChart.Series<String, Number> failSeries = new XYChart.Series<>();
+        failSeries.setName("Échec");
+        
+        for (String examType : passData.keySet()) {
+            passSeries.getData().add(new XYChart.Data<>(examType, passData.get(examType)));
+            failSeries.getData().add(new XYChart.Data<>(examType, failData.get(examType)));
+        }
+        
+        examResultsChart.getData().clear();
+        examResultsChart.getData().addAll(passSeries, failSeries);
+    }
+    
+    private void loadTableData() {
+        ObservableList<CandidateEntry> candidateData = FXCollections.observableArrayList();
+        
+        String sql = "SELECT c.id, CONCAT(c.nom, ' ', c.prenom) as fullname, " +
+                   "TIMESTAMPDIFF(YEAR, c.date_naissance, CURDATE()) as age, " +
+                   "c.telephone, c.email, i.statut, " +
+                   "DATE_FORMAT(c.created_at, '%d/%m/%Y') as reg_date " +
+                   "FROM candidat c " +
+                   "LEFT JOIN inscription i ON c.cin = i.cin " +
+                   "WHERE c.created_at BETWEEN ? AND ? " +
+                   "ORDER BY c.created_at DESC LIMIT 10";
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Long id = rs.getLong("id");
+                    String name = rs.getString("fullname");
+                    Integer age = rs.getInt("age");
+                    String phone = rs.getString("telephone");
+                    String email = rs.getString("email");
+                    String status = rs.getString("statut");
+                    String regDate = rs.getString("reg_date");
+                    
+                    // Convert null status to "En attente"
+                    if (status == null) status = "En attente";
+                    
+                    candidateData.add(new CandidateEntry(id, name, age, phone, email, status, regDate));
+                }
+            }
+            
+            // If no data found, add sample data
+            if (candidateData.isEmpty()) {
+                candidateData.add(new CandidateEntry(1L, "Aucune donnée trouvée", 0, "", "", "Inactif", ""));
+            }
+            
+            recentCandidatesTable.setItems(candidateData);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur de base de données", "Impossible de charger les données des candidats: " + e.getMessage());
+        }
     }
     
     private void showAlert(String title, String content) {

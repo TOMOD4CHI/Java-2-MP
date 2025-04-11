@@ -12,11 +12,20 @@ import org.cpi2.service.CandidatService;
 import org.cpi2.service.ExamenService;
 import org.cpi2.service.InscriptionService;
 import org.cpi2.service.PaiementService;
+import org.cpi2.utils.PaymentReceiptGenerator;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Paiement implements Initializable {
@@ -260,27 +269,24 @@ public class Paiement implements Initializable {
     }
 
     private void setupListeners() {
-        // Setup button handlers
-        printButton.setOnAction(event -> showSuccessDialog("Impression en cours..."));
-        exportButton.setOnAction(event -> showSuccessDialog("Exportation en cours..."));
+        // Set up button action handlers
+        printButton.setOnAction(event -> handlePrintReceipt());
+        exportButton.setOnAction(event -> handleExportPdf());
     }
 
     private void loadMockData() {
-
         ObservableList<PaiementData> paiements = FXCollections.observableArrayList(
                 paiementService.getAllPaiements().stream()
                         .map(p -> new PaiementData(
                                 p.getId(),
                                 p.getDatePaiement(),
                                 p.getCandidat().getCin(),
-                                p.getCandidat().getNom()+" "+p.getCandidat().getPrenom(),
-                                p instanceof PaiementInscription ? ((p.getTypePaiement() == null) ? "Inscription" : p.getTypePaiement()): "Examen",//TODO: need to determine if its a monthly payment or not
+                                p.getCandidat().getNom() + " " + p.getCandidat().getPrenom(),
+                                p instanceof PaiementInscription ? ((p.getTypePaiement() == null) ? "Inscription" : p.getTypePaiement()): "Examen",
                                 p.getMontant(),
                                 p.getModePaiement().toString(),
                                 p.getDescription()
-                        ))
-                        .toList()
-
+                        )).toList()
         );
         paiementsTable.setItems(paiements);
         updateTotalLabel();
@@ -489,5 +495,148 @@ public class Paiement implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    
+    /**
+     * Handle printing a receipt for the selected payment
+     */
+    @FXML
+    private void handlePrintReceipt() {
+        // Get selected payment from table
+        PaiementData selectedPayment = paiementsTable.getSelectionModel().getSelectedItem();
+        
+        if (selectedPayment == null) {
+            showErrorDialog("Veuillez sélectionner un paiement à imprimer");
+            return;
+        }
+        
+        try {
+            // Convert PaiementData to Map for the receipt generator
+            Map<String, Object> paymentData = new HashMap<>();
+            paymentData.put("date", selectedPayment.getDate());
+            paymentData.put("candidat", selectedPayment.getCandidat());
+            paymentData.put("cin", selectedPayment.getCin());
+            paymentData.put("type", selectedPayment.getType());
+            paymentData.put("montant", selectedPayment.getMontant());
+            paymentData.put("methode", selectedPayment.getMethode());
+            paymentData.put("description", selectedPayment.getDescription());
+            
+            // Generate receipt
+            String pdfPath = PaymentReceiptGenerator.generateSinglePaymentReceipt(paymentData);
+            
+            if (pdfPath != null) {
+                // Show success alert with option to open file
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("Reçu généré");
+                alert.setContentText("Le reçu a été enregistré sous:\n" + pdfPath);
+                
+                // Add buttons to open file or directory
+                ButtonType openFileButton = new ButtonType("Ouvrir le fichier");
+                ButtonType openDirButton = new ButtonType("Ouvrir le dossier");
+                ButtonType closeButton = ButtonType.CLOSE;
+                
+                alert.getButtonTypes().setAll(openFileButton, openDirButton, closeButton);
+                
+                // Handle user choice
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent()) {
+                    if (result.get() == openFileButton) {
+                        // Open the PDF file
+                        File pdfFile = new File(pdfPath);
+                        if (pdfFile.exists()) {
+                            Desktop.getDesktop().open(pdfFile);
+                        }
+                    } else if (result.get() == openDirButton) {
+                        // Open the directory containing the PDF
+                        File pdfDirectory = new File(pdfPath).getParentFile();
+                        if (pdfDirectory.exists()) {
+                            Desktop.getDesktop().open(pdfDirectory);
+                        }
+                    }
+                }
+            } else {
+                showErrorDialog("Une erreur est survenue lors de la génération du reçu");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog("Une erreur est survenue: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Handle exporting a summary of payments to PDF
+     */
+    @FXML
+    private void handleExportPdf() {
+        // Check if there are payments to export
+        if (paiementsTable.getItems().isEmpty()) {
+            showErrorDialog("Aucun paiement à exporter");
+            return;
+        }
+        
+        try {
+            // Get current search parameters
+            LocalDate startDate = startDatePicker.getValue() != null ? startDatePicker.getValue() : LocalDate.now().minusMonths(1);
+            LocalDate endDate = endDatePicker.getValue() != null ? endDatePicker.getValue() : LocalDate.now();
+            String candidat = searchCandidatComboBox.getValue();
+            
+            // Convert table items to list of maps for the report generator
+            List<Map<String, Object>> paymentsData = new ArrayList<>();
+            
+            for (PaiementData payment : paiementsTable.getItems()) {
+                Map<String, Object> paymentMap = new HashMap<>();
+                paymentMap.put("date", payment.getDate());
+                paymentMap.put("candidat", payment.getCandidat());
+                paymentMap.put("cin", payment.getCin());
+                paymentMap.put("type", payment.getType());
+                paymentMap.put("montant", payment.getMontant());
+                paymentMap.put("methode", payment.getMethode());
+                paymentMap.put("description", payment.getDescription());
+                
+                paymentsData.add(paymentMap);
+            }
+            
+            // Generate summary report
+            String pdfPath = PaymentReceiptGenerator.generatePaymentSummaryReport(paymentsData, startDate, endDate, candidat);
+            
+            if (pdfPath != null) {
+                // Show success alert with option to open file
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText("Rapport généré");
+                alert.setContentText("Le rapport a été enregistré sous:\n" + pdfPath);
+                
+                // Add buttons to open file or directory
+                ButtonType openFileButton = new ButtonType("Ouvrir le fichier");
+                ButtonType openDirButton = new ButtonType("Ouvrir le dossier");
+                ButtonType closeButton = ButtonType.CLOSE;
+                
+                alert.getButtonTypes().setAll(openFileButton, openDirButton, closeButton);
+                
+                // Handle user choice
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent()) {
+                    if (result.get() == openFileButton) {
+                        // Open the PDF file
+                        File pdfFile = new File(pdfPath);
+                        if (pdfFile.exists()) {
+                            Desktop.getDesktop().open(pdfFile);
+                        }
+                    } else if (result.get() == openDirButton) {
+                        // Open the directory containing the PDF
+                        File pdfDirectory = new File(pdfPath).getParentFile();
+                        if (pdfDirectory.exists()) {
+                            Desktop.getDesktop().open(pdfDirectory);
+                        }
+                    }
+                }
+            } else {
+                showErrorDialog("Une erreur est survenue lors de la génération du rapport");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog("Une erreur est survenue: " + e.getMessage());
+        }
     }
 }

@@ -6,40 +6,40 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            stylesheets="@/css/stylee.css"
+            stylesheets="@/css/entretiens.css"
             fx:controller="org.cpi2.controllers.SuiviEntretiens"
             styleClass="main-container">
 
     <top>
-        <VBox spacing="10" styleClass="header-container">
+        <VBox spacing="15" styleClass="header-container">
             <padding>
-                <Insets top="10" right="15" bottom="10" left="15"/>
+                <Insets top="15" right="20" bottom="15" left="20"/>
             </padding>
             <Label text="Suivi des Entretiens" styleClass="title-label"/>
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Véhicule:" />
+            <HBox spacing="10" styleClass="vehicle-selector">
+                <Label text="Véhicule" styleClass="info-label"/>
                 <ComboBox fx:id="vehiculeComboBox" prefWidth="250" promptText="Sélectionner un véhicule"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="refreshBtn" text="Actualiser"/>
+                <Button fx:id="refreshBtn" text="Actualiser" styleClass="secondary-button"/>
             </HBox>
 
-            <HBox spacing="20">
+            <HBox spacing="20" styleClass="info-container">
                 <HBox spacing="5">
                     <Label text="Immatriculation:" styleClass="info-label"/>
-                    <Label fx:id="immatriculationLabel" text="--"/>
+                    <Label fx:id="immatriculationLabel" text="--" styleClass="info-value"/>
                 </HBox>
                 <HBox spacing="5">
                     <Label text="Marque/Modèle:" styleClass="info-label"/>
-                    <Label fx:id="marqueModeleLabel" text="--"/>
+                    <Label fx:id="marqueModeleLabel" text="--" styleClass="info-value"/>
                 </HBox>
                 <HBox spacing="5">
                     <Label text="Kilométrage:" styleClass="info-label"/>
-                    <Label fx:id="kilometrageLabel" text="--"/>
+                    <Label fx:id="kilometrageLabel" text="--" styleClass="info-value"/>
                 </HBox>
                 <HBox spacing="5">
                     <Label text="Dernier entretien:" styleClass="info-label"/>
-                    <Label fx:id="dernierEntretienLabel" text="--"/>
+                    <Label fx:id="dernierEntretienLabel" text="--" styleClass="info-value"/>
                 </HBox>
             </HBox>
 
@@ -51,15 +51,13 @@
         <SplitPane dividerPositions="0.65" VBox.vgrow="ALWAYS">
 
             <!-- Left side - Table and Actions -->
-            <VBox spacing="10" VBox.vgrow="ALWAYS">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
-                <HBox spacing="10">
-
-                    <Button fx:id="marquerTermineBtn" text="Marquer comme terminé"
+            <VBox spacing="10" styleClass="table-container" VBox.vgrow="ALWAYS">
+                <HBox spacing="10" styleClass="table-actions">
+                    <Button fx:id="marquerTermineBtn" text="Marquer comme terminé" 
+                            styleClass="primary-button"
                             onAction="#handleMarquerTermine"/>
                     <Button fx:id="voirFactureBtn" text="Voir la facture"
+                            styleClass="secondary-button"
                             onAction="#handleVoirFacture"/>
                     <Region HBox.hgrow="ALWAYS"/>
                 </HBox>
@@ -74,50 +72,61 @@
                     </columns>
                 </TableView>
 
-                <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Label fx:id="totalEntretiensLabel" text="Total: 0 entretiens"/>
+                <HBox spacing="10" styleClass="table-stats">
+                    <Label fx:id="totalEntretiensLabel" text="Total: 0 entretiens" styleClass="total-label"/>
                 </HBox>
             </VBox>
 
-            <!-- Right side - Scrollable Form -->
-            <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" vbarPolicy="AS_NEEDED" hbarPolicy="NEVER">
-                <VBox spacing="10" >
+            <!-- Right side - Form -->
+            <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" 
+                      vbarPolicy="AS_NEEDED" hbarPolicy="NEVER">
+                <VBox spacing="15" styleClass="form-container">
 
                     <Label text="Formulaire Entretien" styleClass="section-header"/>
 
-                    <Label text="Date" styleClass="form-label"/>
-                    <DatePicker fx:id="dateEntretienPicker" maxWidth="Infinity" styleClass="form-field"/>
+                    <VBox spacing="5">
+                        <Label text="Date" styleClass="form-label"/>
+                        <DatePicker fx:id="dateEntretienPicker" maxWidth="Infinity"/>
+                    </VBox>
 
-                    <Label text="Type d'entretien" styleClass="form-label"/>
-                    <ComboBox fx:id="typeEntretienCombo" maxWidth="Infinity" styleClass="form-field"/>
+                    <VBox spacing="5">
+                        <Label text="Type d'entretien" styleClass="form-label"/>
+                        <ComboBox fx:id="typeEntretienCombo" maxWidth="Infinity"/>
+                    </VBox>
 
-                    <Label text="Description" styleClass="form-label"/>
-                    <TextArea fx:id="descriptionArea" prefHeight="60" wrapText="true" styleClass="form-field"/>
+                    <VBox spacing="5">
+                        <Label text="Description" styleClass="form-label"/>
+                        <TextArea fx:id="descriptionArea" prefHeight="60" wrapText="true"/>
+                    </VBox>
 
-                    <Label text="Coût" styleClass="form-label" />
-                    <TextField fx:id="coutField" styleClass="form-field"/>
+                    <VBox spacing="5">
+                        <Label text="Coût" styleClass="form-label" />
+                        <TextField fx:id="coutField"/>
+                    </VBox>
 
-                    <Label text="Statut" styleClass="form-label"/>
-                    <ComboBox fx:id="statutCombo" maxWidth="Infinity" styleClass="form-field"/>
+                    <VBox spacing="5">
+                        <Label text="Statut" styleClass="form-label"/>
+                        <ComboBox fx:id="statutCombo" maxWidth="Infinity"/>
+                    </VBox>
 
-                    <Label text="Facture" styleClass="form-label"/>
-                    <HBox spacing="5">
-                        <TextField fx:id="factureField" HBox.hgrow="ALWAYS" editable="false"/>
-                        <Button text="..." onAction="#handleChoisirFacture"/>
-                    </HBox>
+                    <VBox spacing="5">
+                        <Label text="Facture" styleClass="form-label"/>
+                        <HBox spacing="5" styleClass="file-field-container">
+                            <TextField fx:id="factureField" HBox.hgrow="ALWAYS" editable="false"/>
+                            <Button text="..." onAction="#handleChoisirFacture" styleClass="file-button"/>
+                        </HBox>
+                    </VBox>
 
-                    <Region VBox.vgrow="ALWAYS"/>
+                    <Region VBox.vgrow="ALWAYS" minHeight="20"/>
 
-                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <HBox spacing="10" styleClass="form-buttons">
                         <Button fx:id="annulerEntretienBtn" text="Annuler"
+                                styleClass="secondary-button"
                                 onAction="#handleAnnulerEntretien"/>
                         <Button fx:id="enregistrerEntretienBtn" text="Enregistrer"
+                                styleClass="primary-button"
                                 onAction="#handleEnregistrerEntretien"/>
                     </HBox>
-
-                    <Separator/>
-
-
 
                 </VBox>
             </ScrollPane>
@@ -125,15 +134,15 @@
     </center>
 
     <bottom>
-        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="status-bar">
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="status-bar">
             <padding>
-                <Insets top="5" right="15" bottom="5" left="15"/>
+                <Insets top="10" right="20" bottom="10" left="20"/>
             </padding>
-            <Label fx:id="statusEntretienLabel" text="Prêt" HBox.hgrow="ALWAYS"/>
+            <Label fx:id="statusEntretienLabel" text="Prêt" styleClass="status-label" HBox.hgrow="ALWAYS"/>
             <Label text="Coût total:"/>
-            <Label fx:id="coutTotalLabel" text="0 €"/>
+            <Label fx:id="coutTotalLabel" text="0 €" styleClass="status-value"/>
             <Label text="Entretiens planifiés:"/>
-            <Label fx:id="nbPlanifiesLabel" text="0"/>
+            <Label fx:id="nbPlanifiesLabel" text="0" styleClass="status-value"/>
         </HBox>
     </bottom>
 
