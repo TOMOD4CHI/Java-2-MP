@@ -495,7 +495,7 @@ public class SuiviEntretiens implements Initializable {
             updateStatistics();
             updateVehiculeInfo(Vehicule.from(vehiculeService.getVehiculeByImmatriculation(selectedVehicule.getImmatriculation()).get()));
         }else{
-            showError("Erreur","Veuillez sélectionner un entretien à marquer comme terminé.");
+            AlertUtil.showError("Erreur","Veuillez sélectionner un entretien à marquer comme terminé.");
         }
     }
 
