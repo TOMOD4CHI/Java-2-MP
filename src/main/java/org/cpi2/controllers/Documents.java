@@ -28,6 +28,7 @@ import org.cpi2.service.CandidatService;
 import org.cpi2.service.DocumentService;
 import org.cpi2.service.DossierService;
 import org.cpi2.service.TypeDocumentService;
+import org.cpi2.utils.AlertUtil;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -122,7 +123,7 @@ public class Documents {
         if (validateForm()) {
             Candidat selectedCandidat = candidatComboBox.getValue();
             if (selectedCandidat == null) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner un candidat");
+                AlertUtil.showError("Erreur", "Veuillez sélectionner un candidat");
                 return;
             }
             
@@ -141,14 +142,14 @@ public class Documents {
                     dossier.setCandidatId(selectedCandidat.getId());
                     boolean created = dossierService.creerDossier(dossier, selectedCandidat.getId());
                     if (!created) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de créer le dossier pour ce candidat");
+                        AlertUtil.showError("Erreur", "Impossible de créer le dossier pour ce candidat");
                         return;
                     }
                     
                     // Re-fetch the dossier to get its ID
                     existingDossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
                     if (existingDossierOpt.isEmpty()) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Le dossier a été créé mais impossible de le récupérer");
+                        AlertUtil.showError("Erreur", "Le dossier a été créé mais impossible de le récupérer");
                         return;
                     }
                     dossier = existingDossierOpt.get();
@@ -169,7 +170,7 @@ public class Documents {
                 // Confirm the dossier ID exists
                 Long dossierId = dossier.getId();
                 if (dossierId == null) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "ID du dossier est null");
+                    AlertUtil.showError("Erreur", "ID du dossier est null");
                     return;
                 }
                 System.out.println("Adding document to dossier with ID: " + dossierId);
@@ -178,14 +179,14 @@ public class Documents {
                 boolean success = dossierService.ajouterDocument(dossierId, document, selectedFile);
                 
                 if (success) {
-                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Document enregistré avec succès!");
+                    AlertUtil.showInfo( "Succès", "Document enregistré avec succès!");
                     loadDocuments(); // Refresh the documents list
                     clearForm();
                 } else {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'enregistrer le document");
+                    AlertUtil.showError("Erreur", "Impossible d'enregistrer le document");
                 }
             } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue: " + e.getMessage());
+                AlertUtil.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -195,7 +196,7 @@ public class Documents {
     private void loadDocuments() {
         Candidat selectedCandidat = candidatComboBox.getValue();
         if (selectedCandidat == null) {
-            showAlert(Alert.AlertType.WARNING, "Attention", "Veuillez sélectionner un candidat pour charger ses documents");
+            AlertUtil.showWarning("Attention", "Veuillez sélectionner un candidat pour charger ses documents");
             return;
         }
         
@@ -206,7 +207,7 @@ public class Documents {
         
         if (dossierOpt.isEmpty()) {
             System.out.println("No dossier found for candidate: " + selectedCandidat.getNom() + " " + selectedCandidat.getPrenom());
-            showAlert(Alert.AlertType.INFORMATION, "Information", 
+            AlertUtil.showInfo( "Information",
                     "Aucun dossier n'a été trouvé pour ce candidat");
             return;
         }
@@ -223,7 +224,7 @@ public class Documents {
         
         if (documents == null || documents.isEmpty()) {
             System.out.println("No documents found in dossier ID: " + dossier.getId());
-            showAlert(Alert.AlertType.INFORMATION, "Information", 
+            AlertUtil.showInfo( "Information",
                     "Aucun document n'a été trouvé pour ce candidat");
             return;
         }
@@ -264,20 +265,13 @@ public class Documents {
             dateAjoutPicker.getValue() == null || 
             selectedFile == null) {
             
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
+            AlertUtil.showError("Erreur de validation",
                     "Veuillez remplir tous les champs et sélectionner un fichier.");
             return false;
         }
         return true;
     }
-    
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
 
     private void clearForm() {
         candidatComboBox.getSelectionModel().clearSelection();

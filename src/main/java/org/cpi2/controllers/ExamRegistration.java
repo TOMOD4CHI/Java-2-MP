@@ -139,11 +139,7 @@ public class ExamRegistration {
                 return;
             }
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("Inscription à l'examen enregistrée avec succès!");
-            alert.showAndWait();
+            AlertUtil.showSuccess("Succès", "Inscription à l'examen enregistrée avec succès!");
 
             clearForm();
         }

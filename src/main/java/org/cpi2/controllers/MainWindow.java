@@ -92,7 +92,7 @@ public class MainWindow implements Initializable {
             stage.setHeight(bounds.getHeight());
 
             stage.setMaximized(true);
-            stage.setResizable(false);
+            stage.setResizable(true);
 
             setApplicationIcon(stage);
 

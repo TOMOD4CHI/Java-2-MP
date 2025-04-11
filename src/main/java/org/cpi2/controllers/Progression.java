@@ -16,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 import org.cpi2.entities.Candidat;
 import org.cpi2.service.ProgressionService;
+import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.ProgressionReportGenerator;
 
 import java.awt.Desktop;
@@ -111,7 +112,7 @@ public class Progression {
     private void rechercheCandidatAction() {
         CandidatItem selectedCandidat = candidatComboBox.getValue();
         if (selectedCandidat == null) {
-            showAlert("Erreur", "Veuillez sélectionner un candidat");
+            AlertUtil.showError("Erreur", "Veuillez sélectionner un candidat");
             return;
         }
         
@@ -124,7 +125,7 @@ public class Progression {
     private void exportPdfAction() {
         // Check if a candidate is loaded
         if (currentCandidatId == null) {
-            showAlert("Erreur", "Veuillez d'abord charger les données d'un candidat");
+            AlertUtil.showError("Erreur", "Veuillez d'abord charger les données d'un candidat");
             return;
         }
         
@@ -184,11 +185,11 @@ public class Progression {
                     }
                 }
             } else {
-                showAlert("Erreur", "Une erreur est survenue lors de la génération du PDF");
+                AlertUtil.showError("Erreur", "Une erreur est survenue lors de la génération du PDF");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Erreur", "Une erreur est survenue: " + e.getMessage());
+            AlertUtil.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
         }
     }
     
@@ -197,7 +198,7 @@ public class Progression {
         Map<String, Object> progressionData = progressionService.getCandidatProgression(candidatId);
         
         if (progressionData.isEmpty()) {
-            showAlert("Erreur", "Impossible de charger les données de progression");
+            AlertUtil.showError("Erreur", "Impossible de charger les données de progression");
             return;
         }
         
@@ -292,14 +293,6 @@ public class Progression {
         progressionBarChart.getData().clear();
         
         currentCandidatId = null;
-    }
-    
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
     
     /**

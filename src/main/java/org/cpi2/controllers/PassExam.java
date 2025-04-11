@@ -158,13 +158,6 @@ public class PassExam {
         commentaireArea.clear();
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
     @FXML
     public void rechercherExamens() {
         LocalDate selectedDate = dateFilter.getValue();
