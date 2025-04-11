@@ -114,6 +114,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
         LocalDate dateProchainEntretien = rs.getDate("date_prochain_entretien") != null ? rs.getDate("date_prochain_entretien").toLocalDate() : null;
         LocalDate dateDerniereVisiteTechnique = rs.getDate("date_derniere_visite_technique") != null ? rs.getDate("date_derniere_visite_technique").toLocalDate() : null;
         LocalDate dateProchaineVisiteTechnique = rs.getDate("date_prochaine_visite_technique") != null ? rs.getDate("date_prochaine_visite_technique").toLocalDate() : null;
+        LocalDate dateExpirationAssurance = rs.getDate("date_expiration_assurance") != null ? rs.getDate("date_expiration_assurance").toLocalDate() : null;
         long id =  rs.getLong("id");
         TypePermis typePermis = permis_mapper.get(permis_id);
 
@@ -132,6 +133,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
         vehicule.setDateProchainEntretien(dateProchainEntretien);
         vehicule.setDateDerniereVisiteTechnique(dateDerniereVisiteTechnique);
         vehicule.setDateProchaineVisiteTechnique(dateProchaineVisiteTechnique);
+        vehicule.setDateExpirationAssurance(dateExpirationAssurance);
         vehicule.setStatut(statut);
         return vehicule;
     }
@@ -217,7 +219,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setInt(4, typePermisId);  // Use the ID we retrieved earlier
             stmt.setDate(5, Date.valueOf(vehicule.getDateMiseEnService()));
             stmt.setInt(6, vehicule.getKilometrageTotal());
-            stmt.setInt(7, vehicule.getKilometrageAvantEntretien());
+            stmt.setInt(7, vehicule.getKilometrageProchainEntretien());
             stmt.setString(8, vehicule.getStatut());
 
             int affectedRows = stmt.executeUpdate();
@@ -250,7 +252,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             UPDATE vehicule 
             SET immatriculation = ?, marque = ?, modele = ?, type_permis_id = ?,
                 date_mise_service = ?, kilometrage_total = ?, kilometrage_prochain_entretien = ?,statut = ?,
-        date_prochaine_visite_technique=?,date_derniere_visite_technique=?,date_prochain_entretien=?
+        date_prochaine_visite_technique=?,date_derniere_visite_technique=?,date_prochain_entretien=?,date_expiration_assurance=?
             WHERE id = ?
         """;
 
@@ -263,7 +265,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setInt(4, typePermisId);
             stmt.setDate(5, Date.valueOf(vehicule.getDateMiseEnService()));
             stmt.setInt(6, vehicule.getKilometrageTotal());
-            stmt.setInt(7, vehicule.getKilometrageAvantEntretien().intValue());
+            stmt.setInt(7, vehicule.getKilometrageProchainEntretien());
             stmt.setString(8, vehicule.getStatut());
             if(vehicule.getDateDerniereVisiteTechnique() != null) {
                 stmt.setDate(10, Date.valueOf(vehicule.getDateDerniereVisiteTechnique()));
@@ -280,7 +282,12 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             } else {
                 stmt.setNull(11, Types.DATE);
             }
-            stmt.setLong(12, id);
+            if(vehicule.getDateExpirationAssurance() != null) {
+                stmt.setDate(12, Date.valueOf(vehicule.getDateExpirationAssurance()));
+            } else {
+                stmt.setNull(12, Types.DATE);
+            }
+            stmt.setLong(13, id);
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

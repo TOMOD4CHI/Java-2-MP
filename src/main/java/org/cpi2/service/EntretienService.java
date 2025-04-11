@@ -90,7 +90,6 @@ public class EntretienService {
      * @return The created entretien with generated ID
      */
     public boolean createEntretien(Entretien entretien) {
-        // Set creation date if not already set
         if (entretien.getCreatedAt() == null) {
             entretien.setCreatedAt(LocalDate.now());
         }
@@ -105,8 +104,7 @@ public class EntretienService {
         entretien.setKilometrageActuel(vehiculeService.getVehiculeById(entretien.getVehiculeId()).get().getKilometrageTotal());
 
         if(entretienRepository.save(entretien)){
-        if( entretien.isDone()){
-
+        if(entretien.isDone()){
                 return scheduleNextMaintenance(entretien.getVehiculeId(), entretien.getTypeEntretien(),
                         entretien.getKilometrageActuel(), entretien.getDateEntretien(),entretien.getCout());
 
@@ -115,15 +113,20 @@ public class EntretienService {
             if(Objects.equals(entretien.getTypeEntretien(), "Visite Technique")){
                 if (vehicule.getDateProchaineVisiteTechnique() == null || vehicule.getDateProchaineVisiteTechnique().isAfter(entretien.getDateEntretien())) {
                     vehicule.setDateProchainEntretien(entretien.getDateEntretien());
-                    vehiculeService.modifierVehicule(vehicule, vehicule);
                 }
+            }
+            else if(Objects.equals(entretien.getTypeEntretien(), "Assurance")){
+                if (vehicule.getDateExpirationAssurance() == null || vehicule.getDateExpirationAssurance().isAfter(entretien.getDateEntretien())) {
+                    vehicule.setDateExpirationAssurance(entretien.getDateEntretien());
+                }
+
             }
             else {
                 if (vehicule.getDateProchainEntretien() == null || vehicule.getDateProchainEntretien().isAfter(entretien.getDateEntretien())) {
                     vehicule.setDateProchainEntretien(entretien.getDateEntretien());
-                    vehiculeService.modifierVehicule(vehicule, vehicule);
                 }
             }
+            vehiculeService.modifierVehicule(vehicule, vehicule);
             return true;
 
         } }else {
@@ -131,6 +134,11 @@ public class EntretienService {
             return false;
         }
     }
+    /**
+     * Mark a maintenance record as done
+     * @param id The ID of the entretien to mark as done
+     * @return true if marked successfully, false otherwise
+     */
     public boolean markEntretienAsDone(int id) {
         Entretien entretien = entretienRepository.findById(id);
         if (entretien != null) {
@@ -156,6 +164,7 @@ public class EntretienService {
             return false;
         }
         if(entretienRepository.update(entretien) && entretien.isDone()){
+            System.out.println("i'm here");
             return scheduleNextMaintenance(entretien.getVehiculeId(), entretien.getTypeEntretien(),
                     entretien.getKilometrageActuel(), entretien.getDateEntretien(),entretien.getCout());
         }
@@ -213,21 +222,28 @@ public class EntretienService {
         nextEntretien.setDescription("Planifié: " + typeEntretien);
         nextEntretien.setStatut(false);
 
+        if(vehicule.getKilometrageProchainEntretien() == 0 || vehicule.getKilometrageProchainEntretien() > estimatedKilometrage) {
+            vehicule.setKilometrageProchainEntretien(estimatedKilometrage);
+        }
+
         if(entretienRepository.save(nextEntretien)) {
             if(typeEntretien.equals("Visite Technique")){
-                if(vehicule.getDateProchaineVisiteTechnique()!=null && vehicule.getDateProchaineVisiteTechnique().isAfter(nextMaintenanceDate)){
+                if(vehicule.getDateProchaineVisiteTechnique()==null || vehicule.getDateProchaineVisiteTechnique().isAfter(nextMaintenanceDate)){
                     vehicule.setDateProchaineVisiteTechnique(nextMaintenanceDate);
-                    vehiculeService.modifierVehicule(vehicule,vehicule);
+                }
+            }
+            else if(typeEntretien.equals("Assurance")){
+                if(vehicule.getDateExpirationAssurance()==null || vehicule.getDateExpirationAssurance().isAfter(nextMaintenanceDate)){
+                    vehicule.setDateExpirationAssurance(nextMaintenanceDate);
                 }
             }
             else
             {
-                if(vehicule.getDateProchainEntretien()!=null && vehicule.getDateProchainEntretien().isAfter(nextMaintenanceDate)){
+                if(vehicule.getDateProchainEntretien()==null || vehicule.getDateProchainEntretien().isAfter(nextMaintenanceDate)){
                     vehicule.setDateProchainEntretien(nextMaintenanceDate);
-                    vehiculeService.modifierVehicule(vehicule,vehicule);
                 }
             }
-            return vehiculeService.updateNextKilometrage(vehiculeId, estimatedKilometrage);
+            return vehiculeService.modifierVehicule(vehicule,vehicule);
         }else {
             return false;
         }

@@ -231,10 +231,6 @@ public class Vehicule {
         return immatriculation + " - " + marque + " " + modele;
     }
 
-    public Integer getKilometrageAvantEntretien() {
-        // TODO : add it
-        return 0;
-    }
     public String getTypeVehicule() {
         return typePermis.getTypeVehicule();
     }
