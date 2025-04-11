@@ -6,17 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="so many good things again my boys">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardCandidates.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardCandidates.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardFinance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardFinance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardVehicles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardVehicles.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Documents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Documents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AfficherCandidat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterSalle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AjouterSalle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ConfirmerSeance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ConfirmerSeance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ExamRegistration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ExamRegistration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierCandidat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/ModifierCandidat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Paiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Paiement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/PassExam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/PassExam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Progression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Progression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Notifications.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Notifications.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceConduite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/SeanceConduite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Seance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/entities/Seance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SalleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SalleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SeanceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/repository/SeanceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/SeanceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/SeanceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/utils/AlertHelper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/utils/AlertUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/utils/AlertUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/modern-alerts.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style1.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style3.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style4.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style5.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/css/style6.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceCode.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceCode.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceConduite.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/SeanceConduite.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,6 +222,7 @@
       <workItem from="1744312674132" duration="14835000" />
       <workItem from="1744361706872" duration="2955000" />
       <workItem from="1744366313381" duration="7988000" />
+      <workItem from="1744381960997" duration="17323000" />
     </task>
     <task id="LOCAL-00001" summary="ramadan kareem bro (added inscritpion class and plan enum)">
       <option name="closed" value="true" />

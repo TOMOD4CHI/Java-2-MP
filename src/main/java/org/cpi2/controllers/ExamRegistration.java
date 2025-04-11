@@ -1,8 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.fxml.FXML;
-import org.cpi2.utils.AlertUtil;
-import javafx.scene.control.Alert;
+ import org.cpi2.utils.AlertUtil;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;

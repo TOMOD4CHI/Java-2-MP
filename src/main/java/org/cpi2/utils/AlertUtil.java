@@ -15,38 +15,57 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.io.InputStream;
 import java.util.Objects;
 
-
 public class AlertUtil {
-    
+
+    // Color constants
     private static final String SUCCESS_COLOR = "#4CAF50";
     private static final String ERROR_COLOR = "#F44336";
     private static final String WARNING_COLOR = "#FF9800";
     private static final String INFO_COLOR = "#2196F3";
     private static final String CONFIRM_COLOR = "#673AB7";
-    
+
+    // Font constants
+    private static final String FONT_FAMILY = "Segoe UI";
+    private static final double TITLE_FONT_SIZE = 18;
+    private static final double CONTENT_FONT_SIZE = 14;
+    private static final double ICON_SIZE = 48;
+
+    // Load FontAwesome font
+    private static Font fontAwesome;
+    static {
+        try {
+            InputStream is = AlertUtil.class.getResourceAsStream("/fonts/fontawesome-solid-900.ttf");
+            if (is != null) {
+                fontAwesome = Font.loadFont(is, 48);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to load FontAwesome font: " + e.getMessage());
+        }
+    }
 
     public static void showError(String title, String content) {
         showModernAlert(AlertType.ERROR, title, content);
     }
-    
 
     public static void showInfo(String title, String content) {
         showModernAlert(AlertType.INFORMATION, title, content);
     }
-    
 
     public static void showWarning(String title, String content) {
         showModernAlert(AlertType.WARNING, title, content);
@@ -90,230 +109,253 @@ public class AlertUtil {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.TRANSPARENT);
-            
-            ImageView icon = new ImageView();
-            String color;
-            
-            switch (type) {
-                case ERROR:
-                    icon.setImage(createIcon("\uf071", ERROR_COLOR)); // Icône d'erreur (FontAwesome)
-                    color = ERROR_COLOR;
-                    break;
-                case WARNING:
-                    icon.setImage(createIcon("\uf06a", WARNING_COLOR)); // Icône d'avertissement
-                    color = WARNING_COLOR;
-                    break;
-                case SUCCESS:
-                    icon.setImage(createIcon("\uf058", SUCCESS_COLOR)); // Icône de succès
-                    color = SUCCESS_COLOR;
-                    break;
-                case INFORMATION:
-                default:
-                    icon.setImage(createIcon("\uf05a", INFO_COLOR)); // Icône d'information
-                    color = INFO_COLOR;
-                    break;
-            }
-            
-            icon.setFitHeight(48);
-            icon.setFitWidth(48);
-            
-            Label titleLabel = new Label(title);
-            titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-            titleLabel.setTextFill(Color.web("#2d3748"));
-            
-            // Création du contenu
-            Label contentLabel = new Label(content);
-            contentLabel.setFont(Font.font("Segoe UI", 14));
-            contentLabel.setTextFill(Color.web("#4a5568"));
-            contentLabel.setWrapText(true);
-            
-            Button okButton = new Button("OK");
-            okButton.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;");
-            okButton.setPrefWidth(100);
-            okButton.setPrefHeight(30);
+
+            StackPane iconContainer = createIconContainer(type);
+            String color = getColorForType(type);
+
+            Label titleLabel = createTitleLabel(title);
+            Label contentLabel = createContentLabel(content);
+
+            Button okButton = createButton("OK", color, 100, 36);
             okButton.setOnAction(e -> stage.close());
-            
-            okButton.setOnMouseEntered(e -> okButton.setStyle("-fx-background-color: derive(" + color + ", 20%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;"));
-            okButton.setOnMouseExited(e -> okButton.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;"));
-            
-            VBox textBox = new VBox(5, titleLabel, contentLabel);
-            textBox.setPadding(new Insets(0, 0, 0, 10));
+
+            VBox textBox = new VBox(8, titleLabel, contentLabel);
+            textBox.setPadding(new Insets(0, 0, 0, 15));
             HBox.setHgrow(textBox, Priority.ALWAYS);
-            
-            HBox headerBox = new HBox(10, icon, textBox);
+
+            HBox headerBox = new HBox(15, iconContainer, textBox);
             headerBox.setAlignment(Pos.CENTER_LEFT);
-            headerBox.setPadding(new Insets(15, 15, 15, 15));
-            
+            headerBox.setPadding(new Insets(20, 20, 20, 20));
+
             HBox buttonBox = new HBox(okButton);
             buttonBox.setAlignment(Pos.CENTER_RIGHT);
-            buttonBox.setPadding(new Insets(0, 15, 15, 15));
-            
+            buttonBox.setPadding(new Insets(0, 20, 20, 20));
+
             VBox mainBox = new VBox(10, headerBox, buttonBox);
-            mainBox.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-            
-            // Effet d'ombre
-            DropShadow dropShadow = new DropShadow();
-            dropShadow.setRadius(10.0);
-            dropShadow.setOffsetX(0);
-            dropShadow.setOffsetY(0);
-            dropShadow.setColor(Color.color(0, 0, 0, 0.2));
-            mainBox.setEffect(dropShadow);
-            
+            mainBox.setStyle("-fx-background-color: white; -fx-background-radius: 12;");
+
+            // Apply shadow effect
+            mainBox.setEffect(createShadowEffect());
+
             StackPane root = new StackPane(mainBox);
             root.setPadding(new Insets(10));
             root.setStyle("-fx-background-color: transparent;");
-            
+
             Scene scene = new Scene(root);
             scene.setFill(Color.TRANSPARENT);
-            
+
             stage.setScene(scene);
-            stage.setMinWidth(400);
+            stage.setMinWidth(450);
             stage.setMinHeight(200);
-            
-            mainBox.setScaleX(0.7);
-            mainBox.setScaleY(0.7);
-            mainBox.setOpacity(0);
-            
-            Timeline timeline = new Timeline();
-            KeyValue kvScaleX = new KeyValue(mainBox.scaleXProperty(), 1);
-            KeyValue kvScaleY = new KeyValue(mainBox.scaleYProperty(), 1);
-            KeyValue kvOpacity = new KeyValue(mainBox.opacityProperty(), 1);
-            
-            KeyFrame kf = new KeyFrame(Duration.millis(150), kvOpacity, kvScaleX, kvScaleY);
-            timeline.getKeyFrames().add(kf);
-            timeline.play();
-            
+
+            // Animation
+            animateDialog(mainBox);
+
             stage.showAndWait();
         });
     }
 
     private static boolean showModernConfirmation(String title, String content) {
         final boolean[] result = {false};
-        
+
         Platform.runLater(() -> {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.TRANSPARENT);
-            
-            ImageView icon = new ImageView();
-            icon.setImage(createIcon("\uf059", CONFIRM_COLOR)); // Icône de question
-            icon.setFitHeight(48);
-            icon.setFitWidth(48);
-            
-            Label titleLabel = new Label(title);
-            titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-            titleLabel.setTextFill(Color.web("#2d3748"));
-            
-            Label contentLabel = new Label(content);
-            contentLabel.setFont(Font.font("Segoe UI", 14));
-            contentLabel.setTextFill(Color.web("#4a5568"));
-            contentLabel.setWrapText(true);
-            
-            Button confirmButton = new Button("Confirmer");
-            confirmButton.setStyle("-fx-background-color: " + CONFIRM_COLOR + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;");
-            confirmButton.setPrefWidth(120);
-            confirmButton.setPrefHeight(30);
+
+            StackPane iconContainer = createIconContainer(null); // Confirmation icon
+
+            Label titleLabel = createTitleLabel(title);
+            Label contentLabel = createContentLabel(content);
+
+            Button confirmButton = createButton("Confirmer", CONFIRM_COLOR, 130, 36);
             confirmButton.setOnAction(e -> {
                 result[0] = true;
                 stage.close();
             });
-            
-            Button cancelButton = new Button("Annuler");
-            cancelButton.setStyle("-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-font-weight: bold; -fx-background-radius: 20;");
-            cancelButton.setPrefWidth(120);
-            cancelButton.setPrefHeight(30);
+
+            Button cancelButton = createButton("Annuler", "#E0E0E0", 130, 36);
+            cancelButton.setStyle(cancelButton.getStyle() + "; -fx-text-fill: #424242;");
             cancelButton.setOnAction(e -> {
                 result[0] = false;
                 stage.close();
             });
-            
-            confirmButton.setOnMouseEntered(e -> confirmButton.setStyle("-fx-background-color: derive(" + CONFIRM_COLOR + ", 20%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;"));
-            confirmButton.setOnMouseExited(e -> confirmButton.setStyle("-fx-background-color: " + CONFIRM_COLOR + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;"));
-            
-            cancelButton.setOnMouseEntered(e -> cancelButton.setStyle("-fx-background-color: #EEEEEE; -fx-text-fill: #424242; -fx-font-weight: bold; -fx-background-radius: 20;"));
-            cancelButton.setOnMouseExited(e -> cancelButton.setStyle("-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-font-weight: bold; -fx-background-radius: 20;"));
-            
-            VBox textBox = new VBox(5, titleLabel, contentLabel);
-            textBox.setPadding(new Insets(0, 0, 0, 10));
+
+            VBox textBox = new VBox(8, titleLabel, contentLabel);
+            textBox.setPadding(new Insets(0, 0, 0, 15));
             HBox.setHgrow(textBox, Priority.ALWAYS);
-            
-            HBox headerBox = new HBox(10, icon, textBox);
+
+            HBox headerBox = new HBox(15, iconContainer, textBox);
             headerBox.setAlignment(Pos.CENTER_LEFT);
-            headerBox.setPadding(new Insets(15, 15, 15, 15));
-            
-            HBox buttonBox = new HBox(10, cancelButton, confirmButton);
+            headerBox.setPadding(new Insets(20, 20, 20, 20));
+
+            HBox buttonBox = new HBox(15, cancelButton, confirmButton);
             buttonBox.setAlignment(Pos.CENTER_RIGHT);
-            buttonBox.setPadding(new Insets(0, 15, 15, 15));
-            
-            // Layout principal
+            buttonBox.setPadding(new Insets(0, 20, 20, 20));
+
             VBox mainBox = new VBox(10, headerBox, buttonBox);
-            mainBox.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-            
-            // Effet d'ombre
-            DropShadow dropShadow = new DropShadow();
-            dropShadow.setRadius(10.0);
-            dropShadow.setOffsetX(0);
-            dropShadow.setOffsetY(0);
-            dropShadow.setColor(Color.color(0, 0, 0, 0.2));
-            mainBox.setEffect(dropShadow);
-            
+            mainBox.setStyle("-fx-background-color: white; -fx-background-radius: 12;");
+
+            // Apply shadow effect
+            mainBox.setEffect(createShadowEffect());
+
             StackPane root = new StackPane(mainBox);
             root.setPadding(new Insets(10));
             root.setStyle("-fx-background-color: transparent;");
-            
+
             Scene scene = new Scene(root);
             scene.setFill(Color.TRANSPARENT);
-            
+
             stage.setScene(scene);
-            stage.setMinWidth(450);
-            stage.setMinHeight(200);
-            
-            mainBox.setScaleX(0.7);
-            mainBox.setScaleY(0.7);
-            mainBox.setOpacity(0);
-            
-            Timeline timeline = new Timeline();
-            KeyValue kvScaleX = new KeyValue(mainBox.scaleXProperty(), 1);
-            KeyValue kvScaleY = new KeyValue(mainBox.scaleYProperty(), 1);
-            KeyValue kvOpacity = new KeyValue(mainBox.opacityProperty(), 1);
-            
-            KeyFrame kf = new KeyFrame(Duration.millis(150), kvOpacity, kvScaleX, kvScaleY);
-            timeline.getKeyFrames().add(kf);
-            timeline.play();
-            
+            stage.setMinWidth(500);
+            stage.setMinHeight(220);
+
+            // Animation
+            animateDialog(mainBox);
+
             stage.showAndWait();
         });
-        
+
         return result[0];
     }
 
-    private static Image createIcon(String unicode, String color) {
-        Label iconLabel = new Label(unicode);
-        iconLabel.setFont(Font.font("FontAwesome", 48)); // Utilise FontAwesome si disponible, sinon utilise la police par défaut
-        iconLabel.setTextFill(Color.web(color));
-        
-        Region icon = new Region();
-        icon.setStyle("-fx-background-color: " + color + "; -fx-shape: 'M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 448c-110.532 0-200-89.431-200-200 0-110.495 89.472-200 200-200 110.491 0 200 89.471 200 200 0 110.53-89.431 200-200 200zm0-338c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z';");
-        icon.setPrefSize(48, 48);
-        
-        try {
-            String iconPath = "/icons/" + getIconName(unicode) + ".png";
-            Image image = new Image(Objects.requireNonNull(AlertUtil.class.getResourceAsStream(iconPath)));
-            return image;
-        } catch (Exception e) {
-            return icon.snapshot(null, null);
+    // Helper methods for cleaner code
+
+    private static String getColorForType(AlertType type) {
+        if (type == null) {
+            return CONFIRM_COLOR;
+        }
+
+        switch (type) {
+            case ERROR: return ERROR_COLOR;
+            case WARNING: return WARNING_COLOR;
+            case SUCCESS: return SUCCESS_COLOR;
+            case INFORMATION: default: return INFO_COLOR;
         }
     }
-    
 
-    private static String getIconName(String unicode) {
-        switch (unicode) {
-            case "\uf071": return "error";
-            case "\uf06a": return "warning";
-            case "\uf058": return "success";
-            case "\uf05a": return "info";
-            case "\uf059": return "question";
-            default: return "info";
+    private static StackPane createIconContainer(AlertType type) {
+        String color = getColorForType(type);
+        String iconChar = getIconCharacter(type);
+
+        // Create a circular background
+        Circle circle = new Circle(ICON_SIZE / 2);
+        circle.setFill(Color.web(color));
+
+        // Create the icon text
+        Text icon = new Text(iconChar);
+        if (fontAwesome != null) {
+            icon.setFont(fontAwesome);
+        } else {
+            // Fallback icon characters if FontAwesome is not available
+            switch (iconChar) {
+                case "\uf071": icon.setText("⚠"); break; // Error
+                case "\uf06a": icon.setText("⚠"); break; // Warning
+                case "\uf058": icon.setText("✓"); break; // Success
+                case "\uf05a": icon.setText("ℹ"); break; // Info
+                case "\uf059": icon.setText("?"); break; // Question
+                default: icon.setText("ℹ");
+            }
+            icon.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 24));
         }
+        icon.setFill(Color.WHITE);
+
+        // Try to load from resources as backup
+        try {
+            String iconName = type == null ? "question" : type.name().toLowerCase();
+            String path = "/icons/" + iconName + ".png";
+            InputStream stream = AlertUtil.class.getResourceAsStream(path);
+
+            if (stream != null) {
+                ImageView imageView = new ImageView(new Image(stream));
+                imageView.setFitWidth(ICON_SIZE - 16);
+                imageView.setFitHeight(ICON_SIZE - 16);
+                return new StackPane(circle, imageView);
+            }
+        } catch (Exception ignored) {
+            // Continue with text fallback
+        }
+
+        return new StackPane(circle, icon);
+    }
+
+    private static String getIconCharacter(AlertType type) {
+        if (type == null) {
+            return "\uf059"; // Question mark for confirmation
+        }
+
+        switch (type) {
+            case ERROR: return "\uf071"; // Exclamation triangle
+            case WARNING: return "\uf06a"; // Exclamation circle
+            case SUCCESS: return "\uf058"; // Check circle
+            case INFORMATION: default: return "\uf05a"; // Info circle
+        }
+    }
+
+    private static Label createTitleLabel(String title) {
+        Label label = new Label(title);
+        label.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, TITLE_FONT_SIZE));
+        label.setTextFill(Color.web("#2d3748"));
+        return label;
+    }
+
+    private static Label createContentLabel(String content) {
+        Label label = new Label(content);
+        label.setFont(Font.font(FONT_FAMILY, CONTENT_FONT_SIZE));
+        label.setTextFill(Color.web("#4a5568"));
+        label.setWrapText(true);
+        label.setTextAlignment(TextAlignment.LEFT);
+        return label;
+    }
+
+    private static Button createButton(String text, String color, double width, double height) {
+        Button button = new Button(text);
+        String style = String.format(
+                "-fx-background-color: %s; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 18;",
+                color
+        );
+        button.setStyle(style);
+        button.setPrefWidth(width);
+        button.setPrefHeight(height);
+
+        // Hover effects
+        button.setOnMouseEntered(e ->
+                button.setStyle(String.format(
+                        "-fx-background-color: derive(%s, 20%%); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 18;",
+                        color
+                ))
+        );
+        button.setOnMouseExited(e ->
+                button.setStyle(String.format(
+                        "-fx-background-color: %s; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 18;",
+                        color
+                ))
+        );
+
+        return button;
+    }
+
+    private static DropShadow createShadowEffect() {
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(15.0);
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(0);
+        shadow.setColor(Color.color(0, 0, 0, 0.15));
+        return shadow;
+    }
+
+    private static void animateDialog(VBox dialog) {
+        dialog.setScaleX(0.9);
+        dialog.setScaleY(0.9);
+        dialog.setOpacity(0);
+
+        Timeline timeline = new Timeline();
+        KeyValue kvScaleX = new KeyValue(dialog.scaleXProperty(), 1);
+        KeyValue kvScaleY = new KeyValue(dialog.scaleYProperty(), 1);
+        KeyValue kvOpacity = new KeyValue(dialog.opacityProperty(), 1);
+
+        KeyFrame kf = new KeyFrame(Duration.millis(180), kvOpacity, kvScaleX, kvScaleY);
+        timeline.getKeyFrames().add(kf);
+        timeline.play();
     }
 }

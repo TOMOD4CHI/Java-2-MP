@@ -19,33 +19,47 @@
                     <ColumnConstraints hgrow="ALWAYS" minWidth="150" prefWidth="200"/>
                 </columnConstraints>
 
-                <Label text="Capacité de la Séance :" styleClass="form-label"
+                <Label text="Candidat :" styleClass="form-label"
                        GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <TextField fx:id="capfield" styleClass="form-field" promptText="Nombre de places"
+                <ComboBox fx:id="candidatCombo" styleClass="form-field" promptText="Sélectionner un candidat"
                            GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                 <Label fx:id="candidatError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
                        GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
 
-                <Label text="Date de la Séance :" styleClass="form-label"
+                <Label text="Capacité de la Séance :" styleClass="form-label"
                        GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                <DatePicker fx:id="datefield" styleClass="form-field"
-                            GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                <Label fx:id="dateError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                <TextField fx:id="capfield" styleClass="form-field" promptText="Nombre de places"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label fx:id="capaciteError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
                        GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
 
-                <Label text="Heure de la Séance :" styleClass="form-label"
+                <Label text="Date de la Séance :" styleClass="form-label"
                        GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                <TextField fx:id="tempsfield" styleClass="form-field" promptText="Format: HH:mm"
-                           GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-                <Label fx:id="tempsError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                <DatePicker fx:id="datefield" styleClass="form-field"
+                            GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label fx:id="dateError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
                        GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
 
-                <Label text="Moniteur :" styleClass="form-label"
+                <Label text="Heure de la Séance :" styleClass="form-label"
                        GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-                <TextField fx:id="moniteurfield" styleClass="form-field" editable="false" promptText="Sélectionnez un moniteur"
+                <TextField fx:id="tempsfield" styleClass="form-field" promptText="Format: HH:mm"
                            GridPane.columnIndex="1" GridPane.rowIndex="6"/>
-                <Label fx:id="moniteurError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                <Label fx:id="tempsError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
                        GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
+
+                <Label text="Moniteur :" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+                <TextField fx:id="moniteurfield" styleClass="form-field" editable="false" promptText="Sélectionnez un moniteur"
+                           GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                <Label fx:id="moniteurError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                       GridPane.rowIndex="9" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
+                
+                <Label text="Salle :" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+                <ComboBox fx:id="salleCombo" styleClass="form-field" promptText="Sélectionner une salle"
+                           GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+                <Label fx:id="salleError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                       GridPane.rowIndex="11" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
             </GridPane>
 
             <HBox spacing="15" alignment="center" styleClass="button-container">

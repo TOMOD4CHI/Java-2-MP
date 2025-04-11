@@ -93,11 +93,12 @@ public class SalleRepository {
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     salle.setId(generatedKeys.getLong(1));
+                    LOGGER.log(Level.INFO, "Salle enregistrée avec succès, ID: " + salle.getId());
                     return true;
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Erreur lors de l'enregistrement de la salle", e);
+            LOGGER.log(Level.SEVERE, "Erreur lors de l'enregistrement de la salle: " + e.getMessage(), e);
         }
 
         return false;
