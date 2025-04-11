@@ -13,6 +13,7 @@ import org.cpi2.entities.TypePermis;
 import org.cpi2.entities.TypeSession;
 import org.cpi2.service.MoniteurService;
 import org.cpi2.service.SessionService;
+import org.cpi2.utils.ValidationUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,6 +27,11 @@ public class SeanceCode {
     @FXML private DatePicker datefield;
     @FXML private TextField tempsfield;
     @FXML private TextField moniteurfield;
+    
+    @FXML private Label candidatError;
+    @FXML private Label dateError;
+    @FXML private Label tempsError;
+    @FXML private Label moniteurError;
 
     @FXML private TableView<Moniteur> moniteurTableView;
     @FXML private TableColumn<Moniteur, Long> idMoniteurColumn;
@@ -50,7 +56,15 @@ public class SeanceCode {
         specialiteColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getSpecialites().stream()
                         .map(TypePermis::toString)
-                        .collect(Collectors.joining(", "))));
+                        .collect(Collectors.joining(", "))));  
+        
+        // Set placeholders for input fields
+        capfield.setPromptText("Nombre de places");
+        tempsfield.setPromptText("Format: HH:mm");
+        moniteurfield.setPromptText("Sélectionnez un moniteur");
+        
+        // Setup validation
+        setupValidation();
 
         // Set default date to today
         datefield.setValue(LocalDate.now());
@@ -189,48 +203,206 @@ public class SeanceCode {
         moniteurfield.clear();
         selectedMoniteur = null;
         moniteurTableView.getSelectionModel().clearSelection();
+        
+        // Masquer les messages d'erreur
+        candidatError.setVisible(false);
+        dateError.setVisible(false);
+        tempsError.setVisible(false);
+        moniteurError.setVisible(false);
+        
+        // Supprimer les styles de validation
+        capfield.getStyleClass().remove("error-field");
+        capfield.getStyleClass().remove("valid-field");
+        datefield.getStyleClass().remove("error-field");
+        datefield.getStyleClass().remove("valid-field");
+        tempsfield.getStyleClass().remove("error-field");
+        tempsfield.getStyleClass().remove("valid-field");
+        moniteurfield.getStyleClass().remove("error-field");
+        moniteurfield.getStyleClass().remove("valid-field");
     }
 
     @FXML
     private void handleCancel() {
-        // Close the current window
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
+        // Reset form instead of closing the window
+        clearFields();
     }
 
+    private void setupValidation() {
+        // Réinitialiser les labels d'erreur
+        candidatError.setVisible(false);
+        dateError.setVisible(false);
+        tempsError.setVisible(false);
+        moniteurError.setVisible(false);
+        
+        // Capacité validation
+        capfield.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.trim().isEmpty()) {
+                candidatError.setText("La capacité est obligatoire");
+                candidatError.setVisible(true);
+                capfield.getStyleClass().remove("valid-field");
+                if (!capfield.getStyleClass().contains("error-field")) {
+                    capfield.getStyleClass().add("error-field");
+                }
+            } else {
+                try {
+                    int cap = Integer.parseInt(newVal);
+                    if (cap <= 0) {
+                        candidatError.setText("La capacité doit être un nombre entier positif");
+                        candidatError.setVisible(true);
+                        capfield.getStyleClass().remove("valid-field");
+                        if (!capfield.getStyleClass().contains("error-field")) {
+                            capfield.getStyleClass().add("error-field");
+                        }
+                    } else {
+                        candidatError.setVisible(false);
+                        capfield.getStyleClass().remove("error-field");
+                        if (!capfield.getStyleClass().contains("valid-field")) {
+                            capfield.getStyleClass().add("valid-field");
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    candidatError.setText("La capacité doit être un nombre entier positif");
+                    candidatError.setVisible(true);
+                    capfield.getStyleClass().remove("valid-field");
+                    if (!capfield.getStyleClass().contains("error-field")) {
+                        capfield.getStyleClass().add("error-field");
+                    }
+                }
+            }
+        });
+        
+        // Date validation
+        datefield.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                dateError.setText("La date est obligatoire");
+                dateError.setVisible(true);
+                datefield.getStyleClass().remove("valid-field");
+                if (!datefield.getStyleClass().contains("error-field")) {
+                    datefield.getStyleClass().add("error-field");
+                }
+            } else if (newVal.isBefore(LocalDate.now())) {
+                dateError.setText("La date ne peut pas être dans le passé");
+                dateError.setVisible(true);
+                datefield.getStyleClass().remove("valid-field");
+                if (!datefield.getStyleClass().contains("error-field")) {
+                    datefield.getStyleClass().add("error-field");
+                }
+            } else {
+                dateError.setVisible(false);
+                datefield.getStyleClass().remove("error-field");
+                if (!datefield.getStyleClass().contains("valid-field")) {
+                    datefield.getStyleClass().add("valid-field");
+                }
+            }
+        });
+        
+        // Temps validation
+        tempsfield.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.trim().isEmpty()) {
+                tempsError.setText("L'heure est obligatoire");
+                tempsError.setVisible(true);
+                tempsfield.getStyleClass().remove("valid-field");
+                if (!tempsfield.getStyleClass().contains("error-field")) {
+                    tempsfield.getStyleClass().add("error-field");
+                }
+            } else {
+                try {
+                    LocalTime.parse(newVal, DateTimeFormatter.ofPattern("HH:mm"));
+                    tempsError.setVisible(false);
+                    tempsfield.getStyleClass().remove("error-field");
+                    if (!tempsfield.getStyleClass().contains("valid-field")) {
+                        tempsfield.getStyleClass().add("valid-field");
+                    }
+                } catch (Exception e) {
+                    tempsError.setText("Format d'heure invalide. Utilisez le format HH:mm (ex: 14:30)");
+                    tempsError.setVisible(true);
+                    tempsfield.getStyleClass().remove("valid-field");
+                    if (!tempsfield.getStyleClass().contains("error-field")) {
+                        tempsfield.getStyleClass().add("error-field");
+                    }
+                }
+            }
+        });
+        
+        // Moniteur validation
+        moniteurfield.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.trim().isEmpty()) {
+                moniteurError.setText("Veuillez sélectionner un moniteur");
+                moniteurError.setVisible(true);
+                moniteurfield.getStyleClass().remove("valid-field");
+                if (!moniteurfield.getStyleClass().contains("error-field")) {
+                    moniteurfield.getStyleClass().add("error-field");
+                }
+            } else {
+                moniteurError.setVisible(false);
+                moniteurfield.getStyleClass().remove("error-field");
+                if (!moniteurfield.getStyleClass().contains("valid-field")) {
+                    moniteurfield.getStyleClass().add("valid-field");
+                }
+            }
+        });
+    }
+    
     private boolean validateInputs() {
-        // Basic input validation
-        if (capfield.getText().isEmpty()) {
-            showAlert("Validation", "Veuillez saisir la capacité de la séance", Alert.AlertType.WARNING);
-            return false;
+        // Vérifier les entrées manuellement
+        boolean hasErrors = false;
+        
+        // Vérifier la capacité
+        if (capfield.getText().trim().isEmpty()) {
+            candidatError.setText("La capacité est obligatoire");
+            candidatError.setVisible(true);
+            hasErrors = true;
+        } else {
+            try {
+                int cap = Integer.parseInt(capfield.getText());
+                if (cap <= 0) {
+                    candidatError.setText("La capacité doit être un nombre entier positif");
+                    candidatError.setVisible(true);
+                    hasErrors = true;
+                }
+            } catch (NumberFormatException e) {
+                candidatError.setText("La capacité doit être un nombre entier positif");
+                candidatError.setVisible(true);
+                hasErrors = true;
+            }
         }
-
+        
+        // Vérifier la date
         if (datefield.getValue() == null) {
-            showAlert("Validation", "Veuillez sélectionner une date", Alert.AlertType.WARNING);
-            return false;
+            dateError.setText("La date est obligatoire");
+            dateError.setVisible(true);
+            hasErrors = true;
+        } else if (datefield.getValue().isBefore(LocalDate.now())) {
+            dateError.setText("La date ne peut pas être dans le passé");
+            dateError.setVisible(true);
+            hasErrors = true;
         }
-
-        if (tempsfield.getText().isEmpty()) {
-            showAlert("Validation", "Veuillez saisir le temps de la séance (format HH:mm)", Alert.AlertType.WARNING);
-            return false;
+        
+        // Vérifier l'heure
+        if (tempsfield.getText().trim().isEmpty()) {
+            tempsError.setText("L'heure est obligatoire");
+            tempsError.setVisible(true);
+            hasErrors = true;
+        } else {
+            try {
+                LocalTime.parse(tempsfield.getText(), DateTimeFormatter.ofPattern("HH:mm"));
+            } catch (Exception e) {
+                tempsError.setText("Format d'heure invalide. Utilisez le format HH:mm (ex: 14:30)");
+                tempsError.setVisible(true);
+                hasErrors = true;
+            }
         }
-
-        if (selectedMoniteur == null) {
-            showAlert("Validation", "Veuillez sélectionner un moniteur", Alert.AlertType.WARNING);
-            return false;
+        
+        // Vérifier le moniteur
+        if (moniteurfield.getText().trim().isEmpty() || selectedMoniteur == null) {
+            moniteurError.setText("Veuillez sélectionner un moniteur");
+            moniteurError.setVisible(true);
+            hasErrors = true;
         }
-
-        // Validate time format
-        try {
-            LocalTime.parse(tempsfield.getText(), DateTimeFormatter.ofPattern("HH:mm"));
-        } catch (Exception e) {
-            showAlert("Validation", "Format de temps invalide. Utilisez le format HH:mm (ex: 14:30)", Alert.AlertType.WARNING);
-            return false;
-        }
-
-        return true;
+        
+        return !hasErrors;
     }
-
+    
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

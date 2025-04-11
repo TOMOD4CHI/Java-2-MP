@@ -18,64 +18,69 @@
         <HBox spacing="20" alignment="CENTER">
             <VBox HBox.hgrow="ALWAYS" maxWidth="Infinity" minWidth="600" >
                 <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
-                    <VBox styleClass="form-container" spacing="15">
+                    <VBox styleClass="form-container" spacing="5">
                         <padding>
                             <Insets top="20" right="25" bottom="20" left="25"/>
                         </padding>
 
-
-                            <Label text="Planifier une Séance de Conduite" fx:id="titre" styleClass="form-title"/>
-
+                        <Label text="Planifier une Séance de Conduite" fx:id="titre" styleClass="form-title"/>
 
                         <Separator styleClass="form-separator">
                             <VBox.margin>
-                                <Insets top="5" bottom="15"/>
+                                <Insets top="5" bottom="10"/>
                             </VBox.margin>
                         </Separator>
 
-                        <GridPane hgap="15" vgap="15" alignment="CENTER">
+                        <GridPane hgap="15" vgap="5" alignment="CENTER">
                             <columnConstraints>
                                 <ColumnConstraints halignment="RIGHT" minWidth="140" prefWidth="140" maxWidth="140"/>
-
                                 <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="250" prefWidth="250"/>
                             </columnConstraints>
 
                             <Label text="Candidat:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                             <ComboBox fx:id="candidatCombo" promptText="Sélectionner un candidat"
                                       maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                            <Label fx:id="candidatError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                            <Label text="Moniteur:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <Label text="Moniteur:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                             <ComboBox fx:id="moniteurCombo" promptText="Sélectionner un moniteur"
-                                      maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-
-                            <Label text="Véhicule:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <ComboBox fx:id="vehiculeCombo" promptText="Sélectionner un véhicule"
                                       maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                            <Label fx:id="moniteurError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-                            <Label text="Kilométrage:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <Label text="Véhicule:" styleClass="form-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                            <ComboBox fx:id="vehiculeCombo" promptText="Sélectionner un véhicule"
+                                      maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                            <Label fx:id="vehiculeError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                            <Label text="Kilométrage:" styleClass="form-label" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
                             <TextField fx:id="kilometrage" promptText="Kilométrage actuel"
-                                       maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                                       maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                            <Label fx:id="kilometrageError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
 
-                            <Label text="Date:" styleClass="form-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                            <Label text="Date:" styleClass="form-label" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
                             <DatePicker fx:id="date" promptText="JJ/MM/AAAA"
-                                        maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                                        maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+                            <Label fx:id="dateError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
 
-                            <Label text="Heure:" styleClass="form-label" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                            <Label text="Heure:" styleClass="form-label" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
                             <TextField fx:id="temps" promptText="HH:MM"
-                                       maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                                       maxWidth="Infinity" styleClass="form-field" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+                            <Label fx:id="tempsError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
 
-                            <Label text="Latitude:" styleClass="form-label" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                            <Label text="Latitude:" styleClass="form-label" GridPane.rowIndex="12" GridPane.columnIndex="0"/>
                             <TextField fx:id="latitudeField" editable="false" promptText="Sélectionner sur la carte"
-                                       maxWidth="Infinity" styleClass="form-field, readonly-field" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                                       maxWidth="Infinity" styleClass="form-field, readonly-field" GridPane.rowIndex="12" GridPane.columnIndex="1"/>
+                            <Label fx:id="latitudeError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
 
-                            <Label text="Longitude:" styleClass="form-label" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                            <Label text="Longitude:" styleClass="form-label" GridPane.rowIndex="14" GridPane.columnIndex="0"/>
                             <TextField fx:id="longitudeField" editable="false" promptText="Sélectionner sur la carte"
-                                       maxWidth="Infinity" styleClass="form-field, readonly-field" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+                                       maxWidth="Infinity" styleClass="form-field, readonly-field" GridPane.rowIndex="14" GridPane.columnIndex="1"/>
+                            <Label fx:id="longitudeError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
                         </GridPane>
 
                         <HBox spacing="15" alignment="CENTER" styleClass="button-container">
                             <VBox.margin>
-                                <Insets top="20" bottom="10"/>
+                                <Insets top="15" bottom="10"/>
                             </VBox.margin>
                             <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="button, cancel-button"/>
                             <Button text="Planifier" fx:id="submitButton" onAction="#handleSubmit" styleClass="button, submit-button"/>

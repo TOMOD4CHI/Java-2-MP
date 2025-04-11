@@ -1,6 +1,7 @@
 package org.cpi2.entities;
 
 public class Salle {
+    private Long id;
     private String nom;
     private String numero;
     private int capacite;
@@ -51,10 +52,19 @@ public class Salle {
     @Override
     public String toString() {
         return "Salle{" +
-                "nom='" + nom + '\'' +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
                 ", numero='" + numero + '\'' +
                 ", capacite=" + capacite +
                 ", notes='" + notes + '\'' +
                 '}';
+    }
+    
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
     }
 }

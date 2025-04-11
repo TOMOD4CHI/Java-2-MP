@@ -13,6 +13,7 @@ import org.cpi2.entities.Seance;
 import org.cpi2.service.SeanceService;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -27,9 +28,21 @@ public class SeanceConduite {
     @FXML private TextField kilometrage;
     @FXML private DatePicker date;
     @FXML private TextField temps;
-    
+
+    @FXML private Label candidatError;
+    @FXML private Label moniteurError;
+    @FXML private Label vehiculeError;
+    @FXML private Label kilometrageError;
+    @FXML private Label dateError;
+    @FXML private Label tempsError;
+    @FXML private Label latitudeError;
+    @FXML private Label longitudeError;
+
     private final SeanceService seanceService = new SeanceService();
-    
+
+    // CSS class for inputs with errors
+    private static final String ERROR_STYLE_CLASS = "error-field";
+
     @FXML
     public void initialize() {
         // Initialize the map
@@ -42,23 +55,26 @@ public class SeanceConduite {
                 window.setMember("javaConnector", this);
             }
         });
-        
+
         // Load the combo boxes with data
         loadCandidats();
         loadMoniteurs();
         loadVehicules();
-        
+
         // Set default date to today
         date.setValue(LocalDate.now());
+
+        // Setup validation
+        setupValidation();
     }
-    
+
     private void loadCandidats() {
         // Charger les candidats depuis la base de données
         org.cpi2.service.CandidatService candidatService = new org.cpi2.service.CandidatService();
         List<Candidat> candidatsList = candidatService.getAllCandidats();
-        
+
         ObservableList<String> candidats = FXCollections.observableArrayList();
-        
+
         if (candidatsList.isEmpty()) {
             // Afficher un message d'avertissement si aucun candidat n'est trouvé
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -72,17 +88,17 @@ public class SeanceConduite {
                 candidats.add(candidat.getId() + " - " + candidat.getNom() + " " + candidat.getPrenom());
             }
         }
-        
+
         candidatCombo.setItems(candidats);
     }
-    
+
     private void loadMoniteurs() {
         // Charger les moniteurs depuis la base de données
         org.cpi2.service.MoniteurService moniteurService = new org.cpi2.service.MoniteurService();
         List<org.cpi2.entities.Moniteur> moniteursList = moniteurService.getAllMoniteurs();
-        
+
         ObservableList<String> moniteurs = FXCollections.observableArrayList();
-        
+
         if (moniteursList.isEmpty()) {
             // Afficher un message d'avertissement si aucun moniteur n'est trouvé
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -96,17 +112,17 @@ public class SeanceConduite {
                 moniteurs.add(moniteur.getId() + " - " + moniteur.getNom() + " " + moniteur.getPrenom());
             }
         }
-        
+
         moniteurCombo.setItems(moniteurs);
     }
-    
+
     private void loadVehicules() {
         // Charger les véhicules depuis la base de données
         org.cpi2.service.VehiculeService vehiculeService = new org.cpi2.service.VehiculeService();
         List<org.cpi2.entities.Vehicule> vehiculesList = vehiculeService.getAllVehicules();
-        
+
         ObservableList<String> vehicules = FXCollections.observableArrayList();
-        
+
         if (vehiculesList.isEmpty()) {
             // Afficher un message d'avertissement si aucun véhicule n'est trouvé
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -120,13 +136,19 @@ public class SeanceConduite {
                 vehicules.add(vehicule.getId() + " - " + vehicule.getMarque() + " " + vehicule.getModele() + " (" + vehicule.getImmatriculation() + ")");
             }
         }
-        
+
         vehiculeCombo.setItems(vehicules);
     }
 
     public void updateCoordinates(String lat, String lng) {
         latitudeField.setText(lat);
         longitudeField.setText(lng);
+
+        // Clear any error styling and messages when coordinates are updated
+        removeErrorStyle(latitudeField);
+        removeErrorStyle(longitudeField);
+        latitudeError.setVisible(false);
+        longitudeError.setVisible(false);
     }
 
     private String getMapHtml() {
@@ -157,7 +179,42 @@ public class SeanceConduite {
                 "</body>" +
                 "</html>";
     }
-    
+
+    // Add error styling to a Control
+    private void addErrorStyle(Control control) {
+        if (!control.getStyleClass().contains(ERROR_STYLE_CLASS)) {
+            control.getStyleClass().add(ERROR_STYLE_CLASS);
+        }
+    }
+
+    // Remove error styling from a Control
+    private void removeErrorStyle(Control control) {
+        control.getStyleClass().remove(ERROR_STYLE_CLASS);
+    }
+
+    // Reset styling and errors for all form fields
+    private void resetAllStyles() {
+        // Remove error styling from all controls
+        removeErrorStyle(candidatCombo);
+        removeErrorStyle(moniteurCombo);
+        removeErrorStyle(vehiculeCombo);
+        removeErrorStyle(kilometrage);
+        removeErrorStyle(date);
+        removeErrorStyle(temps);
+        removeErrorStyle(latitudeField);
+        removeErrorStyle(longitudeField);
+
+        // Hide all error messages
+        candidatError.setVisible(false);
+        moniteurError.setVisible(false);
+        vehiculeError.setVisible(false);
+        kilometrageError.setVisible(false);
+        dateError.setVisible(false);
+        tempsError.setVisible(false);
+        latitudeError.setVisible(false);
+        longitudeError.setVisible(false);
+    }
+
     @FXML
     private void cancelAction() {
         // Clear all fields (reset form)
@@ -169,114 +226,188 @@ public class SeanceConduite {
         temps.clear();
         latitudeField.clear();
         longitudeField.clear();
-        
+
         // Reset the map marker
         WebEngine webEngine = mapView.getEngine();
         webEngine.executeScript("if (marker) { map.removeLayer(marker); marker = null; }");
+
+        // Reset all styling and error messages
+        resetAllStyles();
     }
 
     @FXML
     private void handleSubmit(ActionEvent event) {
-        // Validate all fields
-        if (candidatCombo.getValue() == null || moniteurCombo.getValue() == null || 
-            vehiculeCombo.getValue() == null || kilometrage.getText().isEmpty() ||
-            date.getValue() == null || temps.getText().isEmpty() ||
-            latitudeField.getText().isEmpty() || longitudeField.getText().isEmpty()) {
+        // Reset all styles and error messages before validation
+        resetAllStyles();
 
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
-                     "Veuillez remplir tous les champs avant de soumettre!");
+        // Check and validate all fields
+        boolean hasErrors = false;
+
+        // Validate candidat
+        if (candidatCombo.getValue() == null) {
+            candidatError.setText("Veuillez sélectionner un candidat");
+            candidatError.setVisible(true);
+            addErrorStyle(candidatCombo);
+            hasErrors = true;
+        }
+
+        // Validate moniteur
+        if (moniteurCombo.getValue() == null) {
+            moniteurError.setText("Veuillez sélectionner un moniteur");
+            moniteurError.setVisible(true);
+            addErrorStyle(moniteurCombo);
+            hasErrors = true;
+        }
+
+        // Validate véhicule
+        if (vehiculeCombo.getValue() == null) {
+            vehiculeError.setText("Veuillez sélectionner un véhicule");
+            vehiculeError.setVisible(true);
+            addErrorStyle(vehiculeCombo);
+            hasErrors = true;
+        }
+
+        // Validate kilométrage
+        if (kilometrage.getText().trim().isEmpty()) {
+            kilometrageError.setText("Le kilométrage est obligatoire");
+            kilometrageError.setVisible(true);
+            addErrorStyle(kilometrage);
+            hasErrors = true;
+        } else {
+            try {
+                double km = Double.parseDouble(kilometrage.getText());
+                if (km < 0) {
+                    kilometrageError.setText("Le kilométrage doit être un nombre positif");
+                    kilometrageError.setVisible(true);
+                    addErrorStyle(kilometrage);
+                    hasErrors = true;
+                }
+            } catch (NumberFormatException e) {
+                kilometrageError.setText("Le kilométrage doit être un nombre");
+                kilometrageError.setVisible(true);
+                addErrorStyle(kilometrage);
+                hasErrors = true;
+            }
+        }
+
+        // Validate date
+        if (date.getValue() == null) {
+            dateError.setText("La date est obligatoire");
+            dateError.setVisible(true);
+            addErrorStyle(date);
+            hasErrors = true;
+        } else if (date.getValue().isBefore(LocalDate.now())) {
+            dateError.setText("La date ne peut pas être dans le passé");
+            dateError.setVisible(true);
+            addErrorStyle(date);
+            hasErrors = true;
+        }
+
+        // Validate temps (HH:MM)
+        if (temps.getText().trim().isEmpty()) {
+            tempsError.setText("L'heure est obligatoire");
+            tempsError.setVisible(true);
+            addErrorStyle(temps);
+            hasErrors = true;
+        } else {
+            String timeRegex = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$";
+            if (!temps.getText().matches(timeRegex)) {
+                tempsError.setText("Format d'heure invalide. Utilisez le format HH:mm (ex: 14:30)");
+                tempsError.setVisible(true);
+                addErrorStyle(temps);
+                hasErrors = true;
+            }
+        }
+
+        // Validate coordinates
+        if (latitudeField.getText().trim().isEmpty()) {
+            latitudeError.setText("Veuillez sélectionner un lieu sur la carte");
+            latitudeError.setVisible(true);
+            addErrorStyle(latitudeField);
+            hasErrors = true;
+        }
+
+        if (longitudeField.getText().trim().isEmpty()) {
+            longitudeError.setText("Veuillez sélectionner un lieu sur la carte");
+            longitudeError.setVisible(true);
+            addErrorStyle(longitudeField);
+            hasErrors = true;
+        }
+
+        // If there are validation errors, stop here
+        if (hasErrors) {
             return;
         }
-        
+
         try {
             // Extract IDs from selected values (format: "1 - Name")
             Long candidatId = Long.parseLong(candidatCombo.getValue().split(" - ")[0]);
             Long moniteurId = Long.parseLong(moniteurCombo.getValue().split(" - ")[0]);
             Long vehiculeId = Long.parseLong(vehiculeCombo.getValue().split(" - ")[0]);
-            
+
             // Validate and parse kilometrage
-            double km;
-            try {
-                km = Double.parseDouble(kilometrage.getText());
-                if (km < 0) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
-                             "Le kilométrage ne peut pas être négatif!");
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
-                         "Le kilométrage doit être un nombre!");
-                return;
-            }
-            
-            // Validate time format (HH:MM)
-            String timeRegex = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$";
-            if (!temps.getText().matches(timeRegex)) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
-                         "L'heure doit être au format HH:MM!");
-                return;
-            }
-            
+            double km = Double.parseDouble(kilometrage.getText());
+
             // Create Seance object
             Seance seance = new Seance();
             seance.setType("Conduite");
             seance.setCandidatId(candidatId);
             seance.setMoniteurId(moniteurId);
             seance.setVehiculeId(vehiculeId);
-            
+
             // Format date as string (yyyy-MM-dd)
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             seance.setDate(date.getValue().format(formatter));
-            
+
             seance.setTemps(temps.getText());
             seance.setKilometrage(km);
             seance.setLatitude(Double.parseDouble(latitudeField.getText()));
             seance.setLongitude(Double.parseDouble(longitudeField.getText()));
-            
+
             // Vérifier si le moniteur existe avant de sauvegarder
             org.cpi2.service.MoniteurService moniteurService = new org.cpi2.service.MoniteurService();
             if (!moniteurService.getMoniteurById(moniteurId).isPresent()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                showAlert(Alert.AlertType.ERROR, "Erreur",
                         "Le moniteur sélectionné n'existe pas dans la base de données. Veuillez ajouter le moniteur avant de planifier une séance.");
                 return;
             }
-            
+
             // Vérifier si le candidat existe avant de sauvegarder
             org.cpi2.service.CandidatService candidatService = new org.cpi2.service.CandidatService();
             if (!candidatService.getCandidatById(candidatId).isPresent()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                showAlert(Alert.AlertType.ERROR, "Erreur",
                         "Le candidat sélectionné n'existe pas dans la base de données. Veuillez ajouter le candidat avant de planifier une séance.");
                 return;
             }
-            
+
             // Vérifier si le véhicule existe avant de sauvegarder
             if (vehiculeId != null) {
                 org.cpi2.service.VehiculeService vehiculeService = new org.cpi2.service.VehiculeService();
                 if (!vehiculeService.getVehiculeById(vehiculeId).isPresent()) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", 
+                    showAlert(Alert.AlertType.ERROR, "Erreur",
                             "Le véhicule sélectionné n'existe pas dans la base de données. Veuillez ajouter le véhicule avant de planifier une séance.");
                     return;
                 }
             }
-            
+
             // Save to database
             boolean success = seanceService.saveSeance(seance);
-            
+
             if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès", 
+                showAlert(Alert.AlertType.INFORMATION, "Succès",
                         "La séance de conduite a été planifiée avec succès!");
                 cancelAction(); // Clear the form
             } else {
-                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                showAlert(Alert.AlertType.ERROR, "Erreur",
                         "Échec de la planification de la séance de conduite!");
             }
-            
+
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
-                     "Une erreur s'est produite: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Une erreur s'est produite: " + e.getMessage());
         }
     }
-    
+
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -284,9 +415,103 @@ public class SeanceConduite {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    private void setupValidation() {
+        // Candidat validation
+        candidatCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                candidatError.setText("Veuillez sélectionner un candidat");
+                candidatError.setVisible(true);
+                addErrorStyle(candidatCombo);
+            } else {
+                candidatError.setVisible(false);
+                removeErrorStyle(candidatCombo);
+            }
+        });
+
+        // Moniteur validation
+        moniteurCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                moniteurError.setText("Veuillez sélectionner un moniteur");
+                moniteurError.setVisible(true);
+                addErrorStyle(moniteurCombo);
+            } else {
+                moniteurError.setVisible(false);
+                removeErrorStyle(moniteurCombo);
+            }
+        });
+
+        // Véhicule validation
+        vehiculeCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                vehiculeError.setText("Veuillez sélectionner un véhicule");
+                vehiculeError.setVisible(true);
+                addErrorStyle(vehiculeCombo);
+            } else {
+                vehiculeError.setVisible(false);
+                removeErrorStyle(vehiculeCombo);
+            }
+        });
+
+        // Kilométrage validation
+        kilometrage.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.trim().isEmpty()) {
+                kilometrageError.setText("Le kilométrage est obligatoire");
+                kilometrageError.setVisible(true);
+                addErrorStyle(kilometrage);
+            } else {
+                try {
+                    double km = Double.parseDouble(newVal);
+                    if (km < 0) {
+                        kilometrageError.setText("Le kilométrage doit être un nombre positif");
+                        kilometrageError.setVisible(true);
+                        addErrorStyle(kilometrage);
+                    } else {
+                        kilometrageError.setVisible(false);
+                        removeErrorStyle(kilometrage);
+                    }
+                } catch (NumberFormatException e) {
+                    kilometrageError.setText("Le kilométrage doit être un nombre");
+                    kilometrageError.setVisible(true);
+                    addErrorStyle(kilometrage);
+                }
+            }
+        });
+
+        // Date validation
+        date.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                dateError.setText("La date est obligatoire");
+                dateError.setVisible(true);
+                addErrorStyle(date);
+            } else if (newVal.isBefore(LocalDate.now())) {
+                dateError.setText("La date ne peut pas être dans le passé");
+                dateError.setVisible(true);
+                addErrorStyle(date);
+            } else {
+                dateError.setVisible(false);
+                removeErrorStyle(date);
+            }
+        });
+
+        // Temps validation
+        temps.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.trim().isEmpty()) {
+                tempsError.setText("L'heure est obligatoire");
+                tempsError.setVisible(true);
+                addErrorStyle(temps);
+            } else {
+                try {
+                    LocalTime.parse(newVal, DateTimeFormatter.ofPattern("HH:mm"));
+                    tempsError.setVisible(false);
+                    removeErrorStyle(temps);
+                } catch (Exception e) {
+                    tempsError.setText("Format d'heure invalide. Utilisez le format HH:mm (ex: 14:30)");
+                    tempsError.setVisible(true);
+                    addErrorStyle(temps);
+                }
+            }
+        });
+
+    }
 }
-
-
-
-
-
