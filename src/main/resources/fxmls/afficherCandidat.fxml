@@ -7,143 +7,210 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.cpi2.controllers.AfficherCandidat"
-            prefHeight="700.0" prefWidth="1000.0">
+<StackPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="org.cpi2.controllers.AfficherCandidat"
+           stylesheets="@/css/candidate-details.css"
+          prefHeight="600.0" prefWidth="1000.0" styleClass="main-background">
     
-    <top>
-        <HBox styleClass="header-container" alignment="CENTER_LEFT" spacing="20">
-            <padding>
-                <Insets top="15" right="20" bottom="15" left="20"/>
-            </padding>
-            <Label text="Dossiers des Candidats" styleClass="page-title">
-                <font>
-                    <Font name="System Bold" size="18"/>
-                </font>
-            </Label>
-            <Region HBox.hgrow="ALWAYS"/>
-            <TextField fx:id="searchField" promptText="Rechercher un candidat..." prefWidth="250"/>
-            <Button text="Rafraîchir" onAction="#loadCandidats" styleClass="glass-button"/>
-        </HBox>
-    </top>
+    <!-- Simple background -->
+    <Rectangle width="1000" height="700" fill="#f0f4fa"/>
     
-    <center>
-        <SplitPane dividerPositions="0.3" styleClass="content-container" VBox.vgrow="ALWAYS">
-            
-            <!-- Left Panel: Liste des Candidats -->
-            <VBox styleClass="candidate-list-panel" spacing="10">
+    <BorderPane styleClass="glass-container">
+        <top>
+            <HBox styleClass="glass-header" alignment="CENTER_LEFT" spacing="20">
                 <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
+                    <Insets top="15" right="20" bottom="15" left="20"/>
                 </padding>
-                
-                <Label text="Liste des Candidats" styleClass="section-title">
-                    <font>
-                        <Font name="System Bold" size="14"/>
-                    </font>
-                </Label>
-                
-                <ListView fx:id="candidatListView" VBox.vgrow="ALWAYS" styleClass="candidate-list-view"/>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="title-container">
+
+                    <Label text="Dossiers des Candidats" styleClass="page-title">
+                        <font>
+                            <Font name="System Bold" size="18"/>
+                        </font>
+                    </Label>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox styleClass="search-container" alignment="CENTER">
+                    <TextField fx:id="searchField" promptText="Rechercher un candidat..." prefWidth="250" styleClass="glass-search"/>
+                    <Button styleClass="search-button">
+                        <graphic>
+                            <Label text="🔍" styleClass="search-icon"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+                <Button text="Rafraîchir" onAction="#loadCandidats" styleClass="glass-button">
+                    <graphic>
+                        <Label text="⟳" styleClass="refresh-icon"/>
+                    </graphic>
+                </Button>
+            </HBox>
+        </top>
+
+    <center>
+        <SplitPane dividerPositions="0.3" styleClass="glass-content" VBox.vgrow="ALWAYS">
+
+            <!-- Left Panel: Liste des Candidats -->
+            <VBox styleClass="glass-panel" spacing="15">
+                <padding>
+                    <Insets top="0" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="panel-header">
+                    <Label text="👥" styleClass="header-icon"/>
+                    <Label text="Liste des Candidats" styleClass="panel-title">
+                        <font>
+                            <Font name="System Bold" size="14"/>
+                        </font>
+                    </Label>
+                </HBox>
+
+                <Separator styleClass="glass-separator"/>
+
+                <ListView fx:id="candidatListView" VBox.vgrow="ALWAYS" styleClass="glass-list-view"/>
             </VBox>
-            
+
             <!-- Right Panel: Détails et Documents -->
-            <ScrollPane fitToWidth="true" styleClass="details-scroll-pane">
-                <VBox fx:id="detailsContainer" styleClass="candidate-details-panel" spacing="20">
+            <ScrollPane fitToWidth="true" styleClass="glass-scroll-pane">
+                <VBox fx:id="detailsContainer" styleClass="glass-details-panel" spacing="20">
                     <padding>
                         <Insets top="20" right="20" bottom="20" left="20"/>
                     </padding>
-                    
-                    <!-- Personal Info Card -->
-                    <VBox styleClass="info-card" spacing="15">
-                        <padding>
-                            <Insets top="15" right="15" bottom="15" left="15"/>
-                        </padding>
+
+                    <!-- Personal Info Card (Profile Style) -->
+                    <VBox styleClass="profile-card" spacing="0">
+                        <!-- Banner Area -->
+                        <StackPane styleClass="profile-banner">
+                            <Rectangle  height="80" styleClass="profile-banner-bg"/>
+                        </StackPane>
                         
-                        <HBox alignment="CENTER_LEFT" spacing="15">
-                            <ImageView fx:id="candidatPhoto" fitWidth="80" fitHeight="80" preserveRatio="true">
-                                <image>
-                                    <Image url="/images/user_placeholder.png"/>
-                                </image>
-                            </ImageView>
+                        <!-- Profile Section -->
+                        <HBox styleClass="profile-section">
+                            <!-- Avatar with Status -->
+                            <StackPane styleClass="profile-avatar-container">
+                                <Circle radius="40" styleClass="profile-avatar-circle"/>
+                                <ImageView fx:id="candidatPhoto" fitWidth="75" fitHeight="75" preserveRatio="true" styleClass="profile-avatar-image"/>
+                                <StackPane styleClass="profile-status-indicator" StackPane.alignment="BOTTOM_RIGHT">
+                                    <Circle radius="8" styleClass="profile-status-circle"/>
+                                    <Label text="✓" styleClass="profile-status-icon"/>
+                                </StackPane>
+                            </StackPane>
                             
-                            <VBox spacing="5">
-                                <Label fx:id="fullNameLabel" text="Sélectionnez un candidat" styleClass="candidate-name">
-                                    <font>
-                                        <Font name="System Bold" size="18"/>
-                                    </font>
-                                </Label>
-                                <Label fx:id="cinLabel" text="" styleClass="cin-label"/>
+                            <!-- Username and Tag Area -->
+                            <VBox styleClass="profile-username-container">
+                                <HBox alignment="CENTER_LEFT" spacing="5">
+                                    <Label fx:id="nomPrenomLabel" text="Nom et Prenom" styleClass="profile-username"/>
+                                    <HBox styleClass="profile-tag-container">
+                                        <Label fx:id="cinLabel" text="" styleClass="profile-tag"/>
+                                    </HBox>
+                                </HBox>
+                                <HBox styleClass="profile-badge-container" spacing="5">
+                                    <Label text="Candidat" styleClass="profile-badge"/>
+                                    <Label fx:id="typePermisLabel" text="" styleClass="profile-badge-permis"/>
+                                </HBox>
                             </VBox>
                         </HBox>
                         
-                        <Separator/>
+                        <!-- Profile-like info section -->
+                        <VBox styleClass="profile-about-section">
+                            <Label text="À PROPOS" styleClass="profile-section-title"/>
+                            
+                            <!-- Info rows with text icons -->
+                            <HBox styleClass="profile-info-row">
+                                <Label text="📧" styleClass="profile-info-icon"/>
+                                <Label text="Email:" styleClass="profile-info-label"/>
+                                <Label fx:id="emailLabel" text="" styleClass="profile-info-value"/>
+                            </HBox>
+                            
+                            <HBox styleClass="profile-info-row">
+                                <Label text="📱" styleClass="profile-info-icon"/>
+                                <Label text="Téléphone:" styleClass="profile-info-label"/>
+                                <Label fx:id="telephoneLabel" text="" styleClass="profile-info-value"/>
+                            </HBox>
+                            
+                            <HBox styleClass="profile-info-row">
+                                <Label text="🏠" styleClass="profile-info-icon"/>
+                                <Label text="Adresse:" styleClass="profile-info-label"/>
+                                <Label fx:id="adresseLabel" text="" styleClass="profile-info-value"/>
+                            </HBox>
+                            
+                            <HBox styleClass="profile-info-row">
+                                <Label text="🎂" styleClass="profile-info-icon"/>
+                                <Label text="Date Naissance:" styleClass="profile-info-label"/>
+                                <Label fx:id="dateNaissanceLabel" text="" styleClass="profile-info-value"/>
+                            </HBox>
+                        </VBox>
                         
-                        <GridPane hgap="20" vgap="10">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="NEVER" minWidth="120"/>
-                                <ColumnConstraints hgrow="ALWAYS"/>
-                            </columnConstraints>
-                            
-                            <Label text="Adresse:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
-                            <Label fx:id="adresseLabel" text="" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="field-value"/>
-                            
-                            <Label text="Téléphone:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
-                            <Label fx:id="telephoneLabel" text="" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="field-value"/>
-                            
-                            <Label text="Email:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
-                            <Label fx:id="emailLabel" text="" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="field-value"/>
-                            
-                            <Label text="Date Naissance:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
-                            <Label fx:id="dateNaissanceLabel" text="" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="field-value"/>
-                            
-                            <Label text="Type Permis:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="field-label"/>
-                            <Label fx:id="typePermisLabel" text="" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="field-value"/>
-                        </GridPane>
+                        <!-- Activity Status Section -->
+                        <HBox styleClass="profile-activity-section">
+                            <Label text="📋" styleClass="profile-activity-icon"/>
+                            <Label text="Dossier actif depuis le 15 avril 2025" styleClass="profile-activity-status"/>
+                        </HBox>
                     </VBox>
-                    
+
                     <!-- Documents Card -->
-                    <VBox styleClass="documents-card" spacing="15">
+                    <VBox styleClass="glass-card" spacing="15">
                         <padding>
-                            <Insets top="15" right="15" bottom="15" left="15"/>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
                         </padding>
-                        
-                        <Label text="Documents Fournis" styleClass="section-title">
-                            <font>
-                                <Font name="System Bold" size="14"/>
-                            </font>
-                        </Label>
-                        
-                        <Separator/>
-                        
+
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="panel-header">
+                            <Label text="📄" styleClass="document-icon"/>
+                            <Label text="Documents Fournis" styleClass="panel-title">
+                                <font>
+                                    <Font name="System Bold" size="16"/>
+                                </font>
+                            </Label>
+                        </HBox>
+
+                        <Separator styleClass="glass-separator"/>
+
                         <!-- CIN Documents -->
-                        <TitledPane text="Carte d'identité" expanded="true" styleClass="document-section">
-                            <VBox fx:id="cinDocumentsContainer" spacing="10" styleClass="documents-container"/>
-                        </TitledPane>
-                        
+                        <VBox styleClass="glass-document-group">
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="document-header">
+                                <Label text="🪪" styleClass="document-type-icon"/>
+                                <Label text="Carte d'identité" styleClass="document-title"/>
+                            </HBox>
+                            <VBox fx:id="cinDocumentsContainer" spacing="10" styleClass="document-list"/>
+                        </VBox>
+
                         <!-- Permis Documents -->
-                        <TitledPane text="Permis de conduire" expanded="true" styleClass="document-section">
-                            <VBox fx:id="permisDocumentsContainer" spacing="10" styleClass="documents-container"/>
-                        </TitledPane>
-                        
+                        <VBox styleClass="glass-document-group">
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="document-header">
+                                <Label text="🚗" styleClass="document-type-icon"/>
+                                <Label text="Permis de conduire" styleClass="document-title"/>
+                            </HBox>
+                            <VBox fx:id="permisDocumentsContainer" spacing="10" styleClass="document-list"/>
+                        </VBox>
+
                         <!-- Medical Documents -->
-                        <TitledPane text="Certificats médicaux" expanded="true" styleClass="document-section">
-                            <VBox fx:id="medicalDocumentsContainer" spacing="10" styleClass="documents-container"/>
-                        </TitledPane>
-                        
+                        <VBox styleClass="glass-document-group">
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="document-header">
+                                <Label text="🏥" styleClass="document-type-icon"/>
+                                <Label text="Certificats médicaux" styleClass="document-title"/>
+                            </HBox>
+                            <VBox fx:id="medicalDocumentsContainer" spacing="10" styleClass="document-list"/>
+                        </VBox>
+
                         <!-- Other Documents -->
-                        <TitledPane text="Autres documents" expanded="true" styleClass="document-section">
-                            <VBox fx:id="otherDocumentsContainer" spacing="10" styleClass="documents-container"/>
-                        </TitledPane>
+                        <VBox styleClass="glass-document-group">
+                            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="document-header">
+                                <Label text="📑" styleClass="document-type-icon"/>
+                                <Label text="Autres documents" styleClass="document-title"/>
+                            </HBox>
+                            <VBox fx:id="otherDocumentsContainer" spacing="10" styleClass="document-list"/>
+                        </VBox>
                     </VBox>
                 </VBox>
             </ScrollPane>
         </SplitPane>
+
+
     </center>
-    
-    <stylesheets>
-        <String fx:value="/css/styletab.css"/>
-        <String fx:value="/css/candidate-details.css"/>
-    </stylesheets>
-</BorderPane>
+    </BorderPane>
+
+</StackPane>

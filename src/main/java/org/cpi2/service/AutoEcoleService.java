@@ -30,6 +30,18 @@ public class AutoEcoleService {
     }
     
     /**
+     * Get the AutoEcole data from the database
+     * @return The AutoEcole data
+     */
+    public AutoEcole getAutoEcoleData() {
+        try {
+            return autoEcoleRepository.findFirst();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
      * Get all auto-écoles from the database
      * @return A list of all auto-écoles
      */

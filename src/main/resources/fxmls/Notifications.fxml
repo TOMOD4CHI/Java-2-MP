@@ -3,144 +3,214 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Circle?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            stylesheets="@/css/stylee.css"
+            stylesheets="@/css/style.css, @/css/notifications.css"
             fx:controller="org.cpi2.controllers.Notifications"
             styleClass="main-container">
 
     <top>
-        <VBox spacing="10" styleClass="header-container">
+        <VBox spacing="15" styleClass="header-container">
             <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
+                <Insets top="20" right="25" bottom="15" left="25"/>
             </padding>
-            <HBox alignment="CENTER_LEFT" spacing="15">
-                <Label text="Notifications et Alertes" styleClass="title-label"/>
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label text="Centre de Notifications" styleClass="page-title"/>
+                <Circle styleClass="status-indicator-online" radius="5"/>
+                <Label text="En ligne" styleClass="status-text"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="totalNotificationsLabel" text="0 notifications" styleClass="badge"/>
+                <StackPane>
+                    <Circle fx:id="notificationIndicator" radius="8" styleClass="notification-indicator" visible="false"/>
+                    <Label fx:id="totalNotificationsLabel" text="0" styleClass="notification-counter"/>
+                </StackPane>
+                <Button fx:id="refreshBtn" styleClass="action-button" onAction="#handleRefresh">
+                    <graphic>
+                        <Label text="↻" styleClass="icon-label">
+                            <font>
+                                <Font name="System Bold" size="14.0"/>
+                            </font>
+                        </Label>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Actualiser"/>
+                    </tooltip>
+                </Button>
             </HBox>
-
-            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="filter-container">
-                <Label text="Filtrer par:" styleClass="filter-label"/>
-                <ToggleButton fx:id="toutBtn" text="Tout" selected="true" styleClass="filter-button, filter-all"/>
-                <ToggleButton fx:id="assuranceBtn" text="Assurance" styleClass="filter-button, filter-insurance"/>
-                <ToggleButton fx:id="vignetteBtn" text="Vignette" styleClass="filter-button, filter-sticker"/>
-                <ToggleButton fx:id="entretienBtn" text="Entretien" styleClass="filter-button, filter-maintenance"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="refreshBtn" text="Actualiser" styleClass="refresh-button"/>
-            </HBox>
-
-            <Separator styleClass="separator"/>
         </VBox>
     </top>
 
     <center>
-        <VBox spacing="10" styleClass="content-container">
-            <padding>
-                <Insets top="10" right="15" bottom="10" left="15"/>
-            </padding>
-
-            <TableView fx:id="notificationsTable" VBox.vgrow="ALWAYS" styleClass="notifications-table">
-                <columns>
-                    <TableColumn fx:id="typeCol" text="Type" prefWidth="120" styleClass="table-column"/>
-                    <TableColumn fx:id="vehiculeCol" text="Véhicule" prefWidth="150" styleClass="table-column"/>
-                    <TableColumn fx:id="descriptionCol" text="Description" prefWidth="300" styleClass="table-column"/>
-                    <TableColumn fx:id="dateEcheanceCol" text="Date d'échéance" prefWidth="120" styleClass="table-column"/>
-                    <TableColumn fx:id="statutCol" text="Statut" prefWidth="100" styleClass="table-column"/>
-                    <TableColumn fx:id="actionsCol" text="Actions" prefWidth="150" styleClass="table-column"/>
-                </columns>
-            </TableView>
-
-            <StackPane fx:id="emptyPlaceholder" styleClass="empty-placeholder">
-                <VBox spacing="15" alignment="CENTER">
-
-                    <Label text="Aucune notification" styleClass="empty-label"/>
-                    <Label text="Toutes les alertes apparaîtront ici" styleClass="empty-sublabel"/>
-                </VBox>
-            </StackPane>
-        </VBox>
+        <StackPane>
+            <!-- Background Card -->
+            <VBox styleClass="content-card">
+                <padding>
+                    <Insets top="20" right="25" bottom="20" left="25"/>
+                </padding>
+                
+                <!-- Search/Filter Bar -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="search-bar">
+                    <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS" styleClass="search-field-container">
+                        <Label text="🔍" styleClass="search-icon"/>
+                        <TextField fx:id="searchField" promptText="Rechercher des notifications..." 
+                                 HBox.hgrow="ALWAYS" onKeyReleased="#handleSearch" styleClass="search-field"/>
+                    </HBox>
+                    <ComboBox fx:id="filterTypeComboBox" promptText="Type" prefWidth="130" 
+                             onAction="#handleFilterChange" styleClass="filter-combo"/>
+                    <ComboBox fx:id="filterStatusComboBox" promptText="Statut" prefWidth="130" 
+                             onAction="#handleFilterChange" styleClass="filter-combo"/>
+                </HBox>
+                
+                <Separator styleClass="light-separator">
+                    <VBox.margin>
+                        <Insets top="15" bottom="15"/>
+                    </VBox.margin>
+                </Separator>
+                
+                <!-- Content Area -->
+                <HBox spacing="25" VBox.vgrow="ALWAYS">
+                    <!-- Notifications List -->
+                    <VBox spacing="15" HBox.hgrow="ALWAYS" styleClass="notifications-container">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Notifications" styleClass="section-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <HBox styleClass="tab-selector">
+                                <Button text="Récentes" styleClass="tab-button, tab-selected" onAction="#showRecentTab"/>
+                                <Button text="À venir" styleClass="tab-button" onAction="#showUpcomingTab"/>
+                                <Button text="Traitées" styleClass="tab-button" onAction="#showProcessedTab"/>
+                            </HBox>
+                        </HBox>
+                        
+                        <StackPane VBox.vgrow="ALWAYS">
+                            <!-- Each ListView corresponds to one of the three tabs -->
+                            <ListView fx:id="recentNotificationsListView" VBox.vgrow="ALWAYS" styleClass="card-list-view"/>
+                            <ListView fx:id="upcomingNotificationsListView" VBox.vgrow="ALWAYS" styleClass="card-list-view" visible="false"/>
+                            <ListView fx:id="processedNotificationsListView" VBox.vgrow="ALWAYS" styleClass="card-list-view" visible="false"/>
+                            
+                            <!-- Empty state placeholder -->
+                            <StackPane fx:id="emptyPlaceholder" styleClass="empty-placeholder" visible="false">
+                                <VBox spacing="15" alignment="CENTER" maxWidth="300">
+                                    <Label text="📭" styleClass="empty-icon">
+                                        <font>
+                                            <Font size="48.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label text="Aucune notification" styleClass="empty-title"/>
+                                    <Label text="Aucune notification à afficher pour le moment" 
+                                           styleClass="empty-subtitle" wrapText="true" textAlignment="CENTER"/>
+                                    <Button text="Actualiser" styleClass="refresh-button" onAction="#handleRefresh"/>
+                                </VBox>
+                            </StackPane>
+                        </StackPane>
+                    </VBox>
+                    
+                    <!-- Details Panel -->
+                    <VBox fx:id="detailsPane" spacing="20" styleClass="details-card" prefWidth="350" visible="false">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Détails" styleClass="section-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="closeDetailsBtn" text="×" onAction="#handleCloseDetails" styleClass="close-button"/>
+                        </HBox>
+                        
+                        <Separator styleClass="light-separator"/>
+                        
+                        <!-- Details Content -->
+                        <VBox fx:id="detailsContent" spacing="20" VBox.vgrow="ALWAYS">
+                            <!-- Notification Banner -->
+                            <HBox styleClass="notification-banner" alignment="CENTER_LEFT" spacing="15">
+                                <StackPane styleClass="type-icon-container">
+                                    <Circle fx:id="typeIndicator" radius="16" styleClass="type-indicator"/>
+                                    <Label fx:id="typeIconText" text="🚗" styleClass="type-icon-text">
+                                        <font>
+                                            <Font size="14.0"/>
+                                        </font>
+                                    </Label>
+                                </StackPane>
+                                <VBox>
+                                    <Label fx:id="typeLabel" styleClass="notification-type-label"/>
+                                    <Label fx:id="priorityLabel" styleClass="priority-indicator"/>
+                                </VBox>
+                            </HBox>
+                            
+                            <!-- Title -->
+                            <VBox spacing="8">
+                                <Label text="Titre" styleClass="detail-section-label"/>
+                                <Label fx:id="titleLabel" wrapText="true" styleClass="detail-title"/>
+                            </VBox>
+                            
+                            <!-- Description -->
+                            <VBox spacing="8" VBox.vgrow="ALWAYS">
+                                <Label text="Description" styleClass="detail-section-label"/>
+                                <TextArea fx:id="descriptionArea" wrapText="true" editable="false" styleClass="detail-description"/>
+                            </VBox>
+                            
+                            <!-- Info Container - Two Columns -->
+                            <GridPane styleClass="info-grid" hgap="20" vgap="15">
+                                <!-- Date d'échéance -->
+                                <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <Label text="📅" styleClass="field-icon"/>
+                                        <Label text="Échéance" styleClass="detail-field-label"/>
+                                    </HBox>
+                                    <Label fx:id="dueDateLabel" styleClass="detail-field-value"/>
+                                </VBox>
+                                
+                                <!-- Véhicule -->
+                                <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <Label text="🚗" styleClass="field-icon"/>
+                                        <Label text="Véhicule" styleClass="detail-field-label"/>
+                                    </HBox>
+                                    <Label fx:id="vehicleLabel" styleClass="detail-field-value"/>
+                                </VBox>
+                                
+                                <!-- Status -->
+                                <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <Label text="⚡" styleClass="field-icon"/>
+                                        <Label text="Statut" styleClass="detail-field-label"/>
+                                    </HBox>
+                                    <Label fx:id="statusLabel" styleClass="detail-field-value"/>
+                                </VBox>
+                                
+                                <!-- Created Date -->
+                                <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                                    <HBox alignment="CENTER_LEFT" spacing="5">
+                                        <Label text="🕒" styleClass="field-icon"/>
+                                        <Label text="Créée le" styleClass="detail-field-label"/>
+                                    </HBox>
+                                    <Label fx:id="createdDateLabel" styleClass="detail-field-value"/>
+                                </VBox>
+                            </GridPane>
+                            
+                            <Region VBox.vgrow="ALWAYS"/>
+                            
+                            <!-- Action Buttons -->
+                            <VBox spacing="10">
+                                <Button fx:id="markAsHandledBtn" text="✓ Marquer comme traité" maxWidth="Infinity" 
+                                        onAction="#handleMarkAsHandled" styleClass="primary-button"/>
+                                
+                                <Button fx:id="viewVehicleBtn" text="👁 Voir le véhicule" maxWidth="Infinity" 
+                                        onAction="#handleViewVehicle" styleClass="secondary-button"/>
+                            </VBox>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </StackPane>
     </center>
 
-    <right>
-        <ScrollPane>
-        <VBox spacing="15" styleClass="details-container" prefWidth="380">
-            <padding>
-                <Insets top="20" right="15" bottom="20" left="15"/>
-            </padding>
-
-            <TitledPane text="Détails de la notification" expanded="true" styleClass="details-pane">
-                <VBox spacing="15" styleClass="notification-details">
-                    <HBox styleClass="detail-header">
-                        <Label fx:id="detailTypeLabel" text="Type: --" styleClass="form-label"/>
-                    </HBox>
-
-                    <VBox spacing="5" styleClass="detail-section">
-                        <Label text="Véhicule concerné" styleClass="form-title"/>
-                        <Label fx:id="detailVehiculeLabel" text="--" styleClass="form-label"/>
-                    </VBox>
-
-                    <VBox spacing="5" styleClass="detail-section">
-                        <Label text="Description" styleClass="form-label"/>
-                        <TextArea fx:id="detailDescriptionArea" wrapText="true" editable="false"
-                                  prefHeight="80" styleClass="form-field"/>
-                    </VBox>
-
-                    <VBox spacing="5" styleClass="detail-section">
-                        <Label text="Échéance" styleClass="form-label"/>
-                        <Label fx:id="detailEcheanceLabel" text="--" styleClass="form-label"/>
-                    </VBox>
-
-                    <VBox spacing="5" styleClass="detail-section">
-                        <Label text="Statut" styleClass="form-label"/>
-                        <Label fx:id="detailStatutLabel" text="--" styleClass="form-label"/>
-                    </VBox>
-
-                    <HBox spacing="10" alignment="CENTER" styleClass="action-buttons">
-                        <Button fx:id="marquerTraiteBtn" text="Marquer comme traité" maxWidth="Infinity"
-                                HBox.hgrow="ALWAYS" onAction="#handleMarquerTraite"
-                                styleClass="button"/>
-                    </HBox>
-
-                    <Button fx:id="voirVehiculeBtn" text="Voir le véhicule" maxWidth="Infinity"
-                            onAction="#handleVoirVehicule" styleClass="button"/>
-                </VBox>
-            </TitledPane>
-
-            <TitledPane text="Statistiques" expanded="false" styleClass="stats-pane">
-                <GridPane hgap="10" vgap="10" styleClass="stats-grid">
-                    <Label text="Notifications urgentes:" GridPane.rowIndex="0" GridPane.columnIndex="0"
-                           styleClass="form-label"/>
-                    <Label fx:id="nbUrgentesLabel" text="0" GridPane.rowIndex="0" GridPane.columnIndex="1"
-                           styleClass="form-label"/>
-
-                    <Label text="Notifications à venir:" GridPane.rowIndex="1" GridPane.columnIndex="0"
-                           styleClass="form-label"/>
-                    <Label fx:id="nbAVenirLabel" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1"
-                           styleClass="form-label"/>
-
-                    <Label text="Total:" GridPane.rowIndex="2" GridPane.columnIndex="0"
-                           styleClass="form-label"/>
-                    <Label fx:id="totalLabel" text="0" GridPane.rowIndex="2" GridPane.columnIndex="1"
-                           styleClass="form-label"/>
-                </GridPane>
-            </TitledPane>
-        </VBox>
-        </ScrollPane>
-    </right>
-
     <bottom>
-        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="status-bar">
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="footer-bar">
             <padding>
-                <Insets top="5" right="15" bottom="5" left="15"/>
+                <Insets top="10" right="25" bottom="10" left="25"/>
             </padding>
-            <Label fx:id="statusLabel" text="Dernière vérification: --" styleClass="form-label"/>
+            <Label fx:id="notificationStats" text="0 récentes | 0 à venir | 0 traitées" styleClass="stats-text"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Hyperlink fx:id="paramNotificationsLink" text="Paramètres de notification"
-                       onAction="#handleParametresNotifications" styleClass="settings-link"/>
+            <Hyperlink fx:id="settingsLink" text="⚙ Paramètres" onAction="#handleSettings" styleClass="settings-link"/>
         </HBox>
     </bottom>
-
 </BorderPane>
