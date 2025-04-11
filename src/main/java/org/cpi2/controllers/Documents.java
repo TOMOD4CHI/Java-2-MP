@@ -71,8 +71,6 @@ public class Documents {
     @FXML
     private void saveDocument() {
         if (validateForm()) {
-            // Here you would save the document to database
-            // For this example, we'll just show a success alert
 
             Dossier dossier = dossierService.getDossierByCandidat(candidatIdField.getText()).orElse(null);
             if(dossier != null) {
@@ -84,7 +82,6 @@ public class Documents {
                 alert.setHeaderText(null);
                 alert.setContentText("Document enregistré avec succès!");
                 alert.showAndWait();
-
                 clearForm();
             }
             else{

@@ -37,6 +37,15 @@ public class DossierService {
         return dossierRepository.findAll();
     }
 
+    public List<Document> getDocumentsByDossierId(Long dossierId) {
+        Optional<Dossier> dossierOpt = dossierRepository.findById(dossierId);
+        List<Document> documents = new ArrayList<>();
+        for(Map.Entry<TypeDocument, TreeSet<Document>> entry : dossierOpt.get().getDocuments().entrySet()) {
+            documents.addAll(entry.getValue());
+        }
+        return documents;
+    }
+
     public Optional<Dossier> getDossierByCandidat(String candidatCin) {
         long candidatId = candidatService.CinToId(candidatCin);
         if (candidatId!=-1 && candidatService.getCandidatById(candidatId).isPresent()) {
