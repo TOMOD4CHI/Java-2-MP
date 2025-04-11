@@ -1,0 +1,200 @@
+.content-container {
+    -fx-background-color: #f5f5f7;
+    background-color: #f5f5f7;
+}
+
+.header-container {
+    -fx-background-color: white;
+    background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.page-title {
+    -fx-text-fill: #333333;
+}
+
+/* Left Panel Styling */
+.candidate-list-panel {
+    -fx-background-color: white;
+    background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.candidate-list-view {
+    -fx-background-color: transparent;
+    background-color: transparent;
+    -fx-border-color: transparent;
+    border-color: transparent;
+}
+
+.candidate-list-view .list-cell {
+    -fx-background-color: transparent;
+    background-color: transparent;
+    -fx-padding: 10 15;
+    padding: 10px 15px;
+    -fx-font-size: 14px;
+    font-size: 14px;
+}
+
+.candidate-list-view .list-cell:selected {
+    -fx-background-color: #e0f0ff;
+    background-color: #e0f0ff;
+    -fx-text-fill: #0066cc;
+    color: #0066cc;
+    -fx-font-weight: bold;
+    font-weight: bold;
+}
+
+.candidate-list-view .list-cell:hover:filled {
+    -fx-background-color: #f0f8ff;
+    background-color: #f0f8ff;
+}
+
+/* Right Panel Styling */
+.candidate-details-panel {
+    -fx-background-color: #f5f5f7;
+    background-color: #f5f5f7;
+}
+
+.info-card, .documents-card {
+    -fx-background-color: white;
+    background-color: white;
+    -fx-background-radius: 8;
+    border-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.field-label {
+    -fx-font-weight: bold;
+    font-weight: bold;
+    -fx-text-fill: #555555;
+    color: #555555;
+}
+
+.field-value {
+    -fx-text-fill: #333333;
+    color: #333333;
+}
+
+.cin-label {
+    -fx-text-fill: #666666;
+    color: #666666;
+    -fx-font-style: italic;
+    font-style: italic;
+}
+
+.section-title {
+    -fx-text-fill: #0066cc;
+    color: #0066cc;
+}
+
+/* Document Sections */
+.document-section {
+    -fx-background-color: white;
+    background-color: white;
+}
+
+.document-section .title {
+    -fx-background-color: #f0f4f8;
+    background-color: #f0f4f8;
+    -fx-padding: 10;
+    padding: 10px;
+}
+
+.document-section .title .text {
+    -fx-fill: #333333;
+    fill: #333333;
+    color: #333333;
+    -fx-font-weight: bold;
+    font-weight: bold;
+}
+
+.documents-container {
+    -fx-padding: 10;
+    padding: 10px;
+}
+
+/* Document Item */
+.document-item {
+    -fx-background-color: #f9f9f9;
+    background-color: #f9f9f9;
+    -fx-background-radius: 5;
+    border-radius: 5px;
+    -fx-border-color: #eeeeee;
+    border-color: #eeeeee;
+    -fx-border-radius: 5;
+    border-radius: 5px;
+    -fx-padding: 10;
+    padding: 10px;
+}
+
+.document-item-title {
+    -fx-font-weight: bold;
+    font-weight: bold;
+    -fx-text-fill: #333333;
+    color: #333333;
+}
+
+.document-item-date {
+    -fx-font-size: 11px;
+    font-size: 11px;
+    -fx-text-fill: #888888;
+    color: #888888;
+}
+
+.document-thumbnail {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+    -fx-background-radius: 5;
+    border-radius: 5px;
+    -fx-border-radius: 5;
+    border-radius: 5px;
+}
+
+/* Search Field */
+.text-field {
+    -fx-background-color: #f5f5f7;
+    background-color: #f5f5f7;
+    -fx-background-radius: 20;
+    border-radius: 20px;
+    -fx-border-color: #dddddd;
+    border-color: #dddddd;
+    -fx-border-radius: 20;
+    border-radius: 20px;
+    -fx-padding: 8 15;
+    padding: 8px 15px;
+}
+
+.text-field:focused {
+    -fx-border-color: #0066cc;
+    border-color: #0066cc;
+}
+
+/* Button Styling */
+.glass-button {
+    -fx-background-color: #0066cc;
+    background-color: #0066cc;
+    -fx-text-fill: white;
+    color: white;
+    -fx-background-radius: 5;
+    border-radius: 5px;
+    -fx-padding: 8 15;
+    padding: 8px 15px;
+}
+
+.glass-button:hover {
+    -fx-background-color: #0055bb;
+    background-color: #0055bb;
+}
+
+/* Scroll Pane */
+.details-scroll-pane {
+    -fx-background-color: transparent;
+    background-color: transparent;
+    -fx-border-color: transparent;
+    border-color: transparent;
+}
+
+.details-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    background-color: transparent;
+}

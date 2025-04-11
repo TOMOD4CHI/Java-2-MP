@@ -4,86 +4,248 @@
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cpi2.controllers.Progression"
-            stylesheets="@/css/style2.css">
+            stylesheets="/css/style2.css"
+            style="-fx-background-color: #f5f5f7;">
 
     <top>
-        <VBox spacing="10" styleClass="header-container">
-            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="dashboard-header">
-                <Label text="Tableau de Bord: Suivi de Progression" styleClass="dashboard-title"/>
+        <VBox spacing="15" styleClass="header-container">
+            <padding><Insets top="20" right="25" bottom="10" left="25"/></padding>
+            
+            <!-- Header with title and search -->
+            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="dashboard-header">
+                <VBox>
+                    <Label text="Tableau de Bord: Suivi de Progression" styleClass="dashboard-title">
+                        <font>
+                            <Font name="System Bold" size="18"/>
+                        </font>
+                    </Label>
+                    <Label text="Visualisez et analysez la progression de vos candidats" 
+                           styleClass="dashboard-subtitle" textFill="#666666"/>
+                </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
-                <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Label text="ID Candidat:" styleClass="form-label"/>
-                    <TextField fx:id="candidatIdField" prefWidth="150" styleClass="search-field"/>
-                    <Button text="Rechercher" onAction="#rechercheCandidatAction" styleClass="search-button"/>
+                <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="actions-container">
+                    <VBox spacing="8">
+                        <Label text="Sélectionnez un candidat:" styleClass="form-label-bold"/>
+                        <ComboBox fx:id="candidatComboBox" prefWidth="280" styleClass="search-field" promptText="Choisir un candidat">
+                            <effect>
+                                <javafx.scene.effect.DropShadow color="#00000022" radius="3" spread="0.05"/>
+                            </effect>
+                        </ComboBox>
+                    </VBox>
+                    <VBox alignment="BOTTOM_CENTER">
+                        <Button text="Actualiser" onAction="#rechercheCandidatAction" styleClass="search-button" prefHeight="38">
+                            <graphic>
+                                <Region styleClass="refresh-icon" minWidth="16" minHeight="16"/>
+                            </graphic>
+                        </Button>
+                    </VBox>
+                    <VBox alignment="BOTTOM_CENTER">
+                        <Button text="Exporter PDF" onAction="#exportPdfAction" styleClass="export-button" prefHeight="38">
+                            <graphic>
+                                <Region styleClass="pdf-icon" minWidth="16" minHeight="16"/>
+                            </graphic>
+                        </Button>
+                    </VBox>
                 </HBox>
             </HBox>
 
-            <HBox spacing="15" styleClass="info-panel">
-                <VBox spacing="5" styleClass="info-card" HBox.hgrow="ALWAYS">
-                    <Label text="Informations Candidat" styleClass="card-title"/>
-                    <GridPane hgap="10" vgap="5">
+            <!-- Info cards with candidate information and metrics -->
+            <HBox spacing="25" styleClass="info-panel">
+                <!-- Candidate Information Card -->
+                <VBox spacing="12" styleClass="info-card" HBox.hgrow="ALWAYS">
+                    <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+                    <effect>
+                        <javafx.scene.effect.DropShadow color="#00000022" radius="5" spread="0.05"/>
+                    </effect>
+                    
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Region styleClass="user-icon" minWidth="22" minHeight="22"/>
+                        <Label text="Informations Candidat" styleClass="card-title">
+                            <font>
+                                <Font name="System Bold" size="14"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                    
+                    <Separator/>
+                    
+                    <GridPane hgap="20" vgap="12" styleClass="info-grid">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="NEVER" minWidth="80"/>
-                            <ColumnConstraints hgrow="ALWAYS"/>
+                            <ColumnConstraints hgrow="NEVER" minWidth="140"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="180"/>
                         </columnConstraints>
-                        <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
-                        <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" styleClass="data-field"/>
-                        <Label text="Prénom:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
-                        <TextField fx:id="prenomField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" styleClass="data-field"/>
+                        
+                        <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" styleClass="data-field-highlight"/>
+                        
+                        <Label text="Prénom:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <TextField fx:id="prenomField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" styleClass="data-field-highlight"/>
+                        
+                        <Label text="Type Permis:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <TextField fx:id="typePermisField" GridPane.rowIndex="2" GridPane.columnIndex="1" editable="false" styleClass="data-field-highlight"/>
+                        
+                        <Label text="Date Inscription:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <Label fx:id="dateInscriptionLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="data-field-highlight"/>
+                        
+                        <Label text="Statut:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <Label fx:id="statutLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="data-field-highlight"/>
                     </GridPane>
                 </VBox>
 
-                <VBox spacing="5" styleClass="info-card" HBox.hgrow="ALWAYS">
-                    <Label text="Résumé de Progression" styleClass="card-title"/>
-                    <GridPane hgap="10" vgap="5">
+                <!-- Progression Summary Card -->
+                <VBox spacing="12" styleClass="info-card" HBox.hgrow="ALWAYS">
+                    <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+                    <effect>
+                        <javafx.scene.effect.DropShadow color="#00000022" radius="5" spread="0.05"/>
+                    </effect>
+                    
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Region styleClass="chart-icon" minWidth="22" minHeight="22"/>
+                        <Label text="Résumé de Progression" styleClass="card-title">
+                            <font>
+                                <Font name="System Bold" size="14"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                    
+                    <Separator/>
+                    
+                    <GridPane hgap="20" vgap="12" styleClass="info-grid">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="NEVER" minWidth="150"/>
-                            <ColumnConstraints hgrow="ALWAYS"/>
+                            <ColumnConstraints hgrow="NEVER" minWidth="180"/>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
                         </columnConstraints>
-                        <Label text="Total séances code:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="metric-label"/>
-                        <Label fx:id="totalSeancesCodeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="metric-value"/>
-                        <Label text="Séances code complètes:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="metric-label"/>
-                        <Label fx:id="seancesCodeCompletesLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="metric-value"/>
+                        
+                        <Label text="Total séances code:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="metric-label-bold"/>
+                        <Label fx:id="totalSeancesCodeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="metric-value-highlight"/>
+                        
+                        <Label text="Séances code complètes:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="metric-label-bold"/>
+                        <Label fx:id="seancesCodeCompletesLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="metric-value-highlight"/>
+                        
+                        <Label text="Total séances conduite:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="metric-label-bold"/>
+                        <Label fx:id="totalSeancesConduiteLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="metric-value-highlight"/>
+                        
+                        <Label text="Séances conduite complètes:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="metric-label-bold"/>
+                        <Label fx:id="seancesConduiteCompletesLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="metric-value-highlight"/>
                     </GridPane>
                 </VBox>
             </HBox>
 
-            <VBox spacing="5" styleClass="progress-container">
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="Progression totale:" styleClass="progress-label"/>
-                    <ProgressBar fx:id="progressionTotaleBar" progress="0.6" prefWidth="300" styleClass="progress-bar"/>
-                    <Label fx:id="progressionPourcentageLabel" text="60.0%" styleClass="progress-percentage"/>
+            <!-- Progress bar and period selection -->
+            <VBox spacing="15" styleClass="progress-container">
+                <padding><Insets top="5" right="5" bottom="10" left="5"/></padding>
+                
+                <!-- Overall progress card -->
+                <HBox styleClass="progress-card" alignment="CENTER_LEFT" spacing="20">
+                    <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+                    <effect>
+                        <javafx.scene.effect.DropShadow color="#00000022" radius="5" spread="0.05"/>
+                    </effect>
+                    
+                    <VBox spacing="8">
+                        <Label text="Progression totale:" styleClass="progress-label-large">
+                            <font>
+                                <Font name="System Bold" size="14"/>
+                            </font>
+                        </Label>
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <ProgressBar fx:id="progressionTotaleBar" progress="0.6" prefWidth="450" prefHeight="25" styleClass="progress-bar-large"/>
+                            <Label fx:id="progressionPourcentageLabel" text="60.0%" styleClass="progress-percentage-large">
+                                <font>
+                                    <Font name="System Bold" size="16"/>
+                                </font>
+                            </Label>
+                        </HBox>
+                    </VBox>
+                    
+                    <Region HBox.hgrow="ALWAYS"/>
+                    
+                    <VBox spacing="8" alignment="CENTER_RIGHT">
+                        <Label text="Période d'analyse:" styleClass="form-label-bold"/>
+                        <ComboBox fx:id="periodeComboBox" prefWidth="180" styleClass="period-combo-box"/>
+                    </VBox>
                 </HBox>
             </VBox>
         </VBox>
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" styleClass="dashboard-content">
-            <VBox spacing="15">
-                <Label text="Visualisation de la Progression" styleClass="section-title"/>
+        <ScrollPane fitToWidth="true" styleClass="dashboard-content" style="-fx-background-color: transparent;">
+            <VBox spacing="25">
+                <padding><Insets top="10" right="25" bottom="25" left="25"/></padding>
+                
+                <!-- Charts section title -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Region styleClass="visualization-icon" minWidth="24" minHeight="24"/>
+                    <Label text="Visualisation de la Progression" styleClass="section-title">
+                        <font>
+                            <Font name="System Bold" size="16"/>
+                        </font>
+                    </Label>
+                </HBox>
 
-                <HBox spacing="15" alignment="CENTER">
-                    <VBox spacing="10" styleClass="chart-container" HBox.hgrow="ALWAYS">
-                        <Label text="Répartition des Séances" styleClass="chart-title"/>
-                        <PieChart fx:id="progressionPieChart" legendVisible="true" prefHeight="300" styleClass="dashboard-chart"/>
+                <!-- Charts container -->
+                <HBox spacing="25" alignment="CENTER">
+                    <!-- Pie Chart Card -->
+                    <VBox spacing="15" styleClass="chart-container-enhanced" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="15" right="20" bottom="20" left="20"/></padding>
+                        <effect>
+                            <javafx.scene.effect.DropShadow color="#00000022" radius="5" spread="0.05"/>
+                        </effect>
+                        
+                        <Label text="Répartition des Séances" styleClass="chart-title-large">
+                            <font>
+                                <Font name="System Bold" size="14"/>
+                            </font>
+                        </Label>
+                        <Separator/>
+                        <PieChart fx:id="progressionPieChart" legendVisible="true" prefHeight="350" 
+                                 styleClass="dashboard-chart-enhanced" animated="true" labelLineLength="20"/>
                     </VBox>
 
-                    <VBox spacing="10" styleClass="chart-container" HBox.hgrow="ALWAYS">
-                        <Label text="Séances Planifiées vs Complétées" styleClass="chart-title"/>
-                        <BarChart fx:id="progressionBarChart" prefHeight="300" styleClass="dashboard-chart">
+                    <!-- Bar Chart Card -->
+                    <VBox spacing="15" styleClass="chart-container-enhanced" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="15" right="20" bottom="20" left="20"/></padding>
+                        <effect>
+                            <javafx.scene.effect.DropShadow color="#00000022" radius="5" spread="0.05"/>
+                        </effect>
+                        
+                        <Label text="Séances Planifiées vs Complétées" styleClass="chart-title-large">
+                            <font>
+                                <Font name="System Bold" size="14"/>
+                            </font>
+                        </Label>
+                        <Separator/>
+                        <BarChart fx:id="progressionBarChart" prefHeight="350" 
+                                 styleClass="dashboard-chart-enhanced" animated="true" barGap="4">
                             <xAxis>
-                                <CategoryAxis label="Type"/>
+                                <CategoryAxis label="Type" styleClass="chart-axis"/>
                             </xAxis>
                             <yAxis>
-                                <NumberAxis label="Nombre de séances"/>
+                                <NumberAxis label="Nombre de séances" styleClass="chart-axis"/>
                             </yAxis>
                         </BarChart>
                     </VBox>
                 </HBox>
+                
+                <!-- Additional instructions or notes -->
+                <VBox styleClass="info-note" spacing="10">
+                    <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Region styleClass="info-icon" minWidth="16" minHeight="16"/>
+                        <Label text="Astuces d'utilisation" styleClass="note-title" textFill="#555555">
+                            <font>
+                                <Font name="System Bold" size="12"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                    <Label text="Utilisez les filtres de période pour analyser la progression sur différentes durées. Exportez en PDF pour conserver et partager les rapports de progression." 
+                           textFill="#666666" wrapText="true"/>
+                </VBox>
             </VBox>
         </ScrollPane>
     </center>

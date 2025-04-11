@@ -6,7 +6,7 @@
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.cpi2.controllers.Documents"
-      spacing="16" alignment="CENTER" stylesheets="@/css/style2.css"
+      spacing="16" alignment="CENTER" stylesheets="/css/style2.css"
       styleClass="form-container">
     <GridPane hgap="20" vgap="16">
         <columnConstraints>
@@ -17,8 +17,8 @@
         <!-- Left Form Section -->
         <VBox spacing="16" styleClass="card" GridPane.columnIndex="0">
             <GridPane hgap="12" vgap="12" maxWidth="600">
-                <Label text="ID Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0"  GridPane.columnSpan="2" styleClass="form-label" />
-                <TextField fx:id="candidatIdField" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-field" prefWidth="250"/>
+                <Label text="Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0"  GridPane.columnSpan="2" styleClass="form-label" />
+                <ComboBox fx:id="candidatComboBox" GridPane.rowIndex="0" GridPane.columnIndex="2" styleClass="form-field" prefWidth="250"/>
 
                 <Label text="Nom du document:" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" styleClass="form-label"/>
                 <TextField fx:id="nomDocumentField" GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="form-field" prefWidth="250"/>
@@ -49,7 +49,7 @@
             </TableView>
 
             <HBox spacing="12" alignment="CENTER_RIGHT">
-                <Button fx:id="cancelButton" text="Annuler" onAction="#cancelAction" styleClass="button cancel"/>
+                <Button fx:id="loadButton" text="Charger Documents" onAction="#loadDocuments" styleClass="button primary"/>
                 <Button fx:id="submitButton" text="Enregistrer" onAction="#saveDocument" styleClass="button"/>
             </HBox>
         </VBox>

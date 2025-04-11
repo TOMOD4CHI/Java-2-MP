@@ -15,7 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.cpi2.entities.AutoEcole;
@@ -64,7 +66,7 @@ public class MainWindow implements Initializable {
         // We'll set up the stage properties after the scene is fully loaded
         Platform.runLater(this::setupMainWindow);
     }
-    
+
     private void setupMainWindow() {
         try {
             // Wait until the scene is available
@@ -73,24 +75,27 @@ public class MainWindow implements Initializable {
                 Platform.runLater(this::setupMainWindow);
                 return;
             }
-            
+
             // Get the stage from the scene
             Stage stage = (Stage) contentArea.getScene().getWindow();
             if (stage == null) {
-                // If window is not available yet, try again later
                 Platform.runLater(this::setupMainWindow);
                 return;
             }
-            
-            stage.setFullScreen(true);
+
+            Screen screen = Screen.getPrimary();
+            javafx.geometry.Rectangle2D bounds = screen.getVisualBounds();
+
+            stage.setX(bounds.getMinX());
+            stage.setY(bounds.getMinY());
+            stage.setWidth(bounds.getWidth());
+            stage.setHeight(bounds.getHeight());
+
+            stage.setMaximized(true);
             stage.setResizable(false);
 
-            
-            // Set application icon
             setApplicationIcon(stage);
-            
-            // Center the window on screen
-            stage.centerOnScreen();
+
         } catch (Exception e) {
             System.err.println("Error setting up main window: " + e.getMessage());
             e.printStackTrace();
