@@ -11,6 +11,7 @@ import netscape.javascript.JSObject;
 import org.cpi2.entities.Candidat;
 import org.cpi2.entities.Seance;
 import org.cpi2.service.SeanceService;
+import org.cpi2.utils.AlertUtil;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -76,14 +77,8 @@ public class SeanceConduite {
         ObservableList<String> candidats = FXCollections.observableArrayList();
 
         if (candidatsList.isEmpty()) {
-            // Afficher un message d'avertissement si aucun candidat n'est trouvé
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aucun candidat");
-            alert.setHeaderText(null);
-            alert.setContentText("Aucun candidat n'est disponible dans la base de données. Veuillez ajouter des candidats avant de planifier des séances.");
-            alert.show();
+            AlertUtil.showError("Erreur", "Aucun candidat trouvé dans la base de données.");
         } else {
-            // Ajouter les candidats à la liste déroulante
             for (org.cpi2.entities.Candidat candidat : candidatsList) {
                 candidats.add(candidat.getId() + " - " + candidat.getNom() + " " + candidat.getPrenom());
             }
@@ -100,12 +95,8 @@ public class SeanceConduite {
         ObservableList<String> moniteurs = FXCollections.observableArrayList();
 
         if (moniteursList.isEmpty()) {
-            // Afficher un message d'avertissement si aucun moniteur n'est trouvé
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aucun moniteur");
-            alert.setHeaderText(null);
-            alert.setContentText("Aucun moniteur n'est disponible dans la base de données. Veuillez ajouter des moniteurs avant de planifier des séances.");
-            alert.show();
+
+            AlertUtil.showWarning( "Erreur", "Aucun moniteur trouvé dans la base de données.");
         } else {
             // Ajouter les moniteurs à la liste déroulante
             for (org.cpi2.entities.Moniteur moniteur : moniteursList) {
@@ -124,14 +115,8 @@ public class SeanceConduite {
         ObservableList<String> vehicules = FXCollections.observableArrayList();
 
         if (vehiculesList.isEmpty()) {
-            // Afficher un message d'avertissement si aucun véhicule n'est trouvé
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aucun véhicule");
-            alert.setHeaderText(null);
-            alert.setContentText("Aucun véhicule n'est disponible dans la base de données. Veuillez ajouter des véhicules avant de planifier des séances.");
-            alert.show();
+            AlertUtil.showWarning( "Aucun véhicule", "Aucun véhicule trouvé dans la base de données.");
         } else {
-            // Ajouter les véhicules à la liste déroulante
             for (org.cpi2.entities.Vehicule vehicule : vehiculesList) {
                 vehicules.add(vehicule.getId() + " - " + vehicule.getMarque() + " " + vehicule.getModele() + " (" + vehicule.getImmatriculation() + ")");
             }
@@ -367,7 +352,8 @@ public class SeanceConduite {
             // Vérifier si le moniteur existe avant de sauvegarder
             org.cpi2.service.MoniteurService moniteurService = new org.cpi2.service.MoniteurService();
             if (!moniteurService.getMoniteurById(moniteurId).isPresent()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur",
+
+                AlertUtil.showError("Erreur",
                         "Le moniteur sélectionné n'existe pas dans la base de données. Veuillez ajouter le moniteur avant de planifier une séance.");
                 return;
             }
@@ -375,7 +361,8 @@ public class SeanceConduite {
             // Vérifier si le candidat existe avant de sauvegarder
             org.cpi2.service.CandidatService candidatService = new org.cpi2.service.CandidatService();
             if (!candidatService.getCandidatById(candidatId).isPresent()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur",
+
+                AlertUtil.showError("Erreur",
                         "Le candidat sélectionné n'existe pas dans la base de données. Veuillez ajouter le candidat avant de planifier une séance.");
                 return;
             }
@@ -384,7 +371,8 @@ public class SeanceConduite {
             if (vehiculeId != null) {
                 org.cpi2.service.VehiculeService vehiculeService = new org.cpi2.service.VehiculeService();
                 if (!vehiculeService.getVehiculeById(vehiculeId).isPresent()) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur",
+
+                    AlertUtil.showError("Erreur",
                             "Le véhicule sélectionné n'existe pas dans la base de données. Veuillez ajouter le véhicule avant de planifier une séance.");
                     return;
                 }
@@ -394,30 +382,23 @@ public class SeanceConduite {
             boolean success = seanceService.saveSeance(seance);
 
             if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès",
+                AlertUtil.showSuccess( "Succès",
                         "La séance de conduite a été planifiée avec succès!");
                 cancelAction(); // Clear the form
             } else {
-                showAlert(Alert.AlertType.ERROR, "Erreur",
+
+                AlertUtil.showError("Erreur",
                         "Échec de la planification de la séance de conduite!");
             }
 
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur",
+
+            AlertUtil.showError("Erreur",
                     "Une erreur s'est produite: " + e.getMessage());
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
     private void setupValidation() {
-        // Candidat validation
         candidatCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) {
                 candidatError.setText("Veuillez sélectionner un candidat");

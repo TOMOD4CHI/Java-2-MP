@@ -12,6 +12,7 @@ import org.cpi2.entities.Entretien;
 import org.cpi2.entities.Vehicule;
 import org.cpi2.service.EntretienService;
 import org.cpi2.service.VehiculeService;
+import org.cpi2.utils.AlertUtil;
 
 import java.io.File;
 import java.net.URL;
@@ -311,11 +312,7 @@ public class SuiviEntretiens implements Initializable {
         }
 
         if (errorMessage.length() > 0) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur de validation");
-            alert.setHeaderText("Veuillez corriger les erreurs suivantes :");
-            alert.setContentText(errorMessage.toString());
-            alert.showAndWait();
+            AlertUtil.showError("Erreur de validation", "Veuillez corriger les erreurs suivantes : " + errorMessage.toString());
             return false;
         }
 
@@ -384,7 +381,7 @@ public class SuiviEntretiens implements Initializable {
             return;
         }
         if(selectedVehicule == null) {
-            showError("Erreur", "Veuillez sélectionner un véhicule.");
+            AlertUtil.showError("Erreur", "Veuillez sélectionner un véhicule.");
             return;
         }
 
@@ -402,7 +399,7 @@ public class SuiviEntretiens implements Initializable {
                 org.cpi2.entities.Entretien entretien = new org.cpi2.entities.Entretien(vehiculeService.getVehiculeByImmatriculation(selectedVehicule.getImmatriculation()).get().getId(), date, type, selectedVehicule.getKilometrage(), cout, facture,nouvelEntretien.isDone(),description);
                 success = entretienService.createEntretien(entretien);
                 if (!success) {
-                    showError("Erreur", "Impossible d'ajouter l'entretien.");
+                    AlertUtil.showError("Erreur", "Impossible d'ajouter l'entretien.");
                     return;
                 }
                 entretiens.add(nouvelEntretien);
@@ -427,7 +424,7 @@ public class SuiviEntretiens implements Initializable {
             resetFormFields();
 
         } catch (Exception e) {
-            showError("Erreur lors de l'enregistrement", e.getMessage());
+            AlertUtil.showError("Error","Erreur lors de l'enregistrement\n" + e.getMessage());
         }
         updateStatistics();
         updateVehiculeInfo(Vehicule.from(vehiculeService.getVehiculeByImmatriculation(selectedVehicule.getImmatriculation()).get()));
@@ -440,30 +437,10 @@ public class SuiviEntretiens implements Initializable {
     public void handleSupprimerEntretien(ActionEvent actionEvent) {
         Entretien selectedEntretien = entretiensTable.getSelectionModel().getSelectedItem();
         if (selectedEntretien != null) {
-            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setTitle("Confirmer la suppression");
-            confirmation.setHeaderText("Êtes-vous sûr de vouloir supprimer cet entretien ?");
-            confirmation.setContentText("Cette action est irréversible.");
+            AlertUtil.showConfirmation( "Confirmer la suppression" , "Êtes-vous sûr de vouloir supprimer cet entretien ?" );
 
-            Optional<ButtonType> result = confirmation.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                entretiens.remove(selectedEntretien);
-                updateStatistics();
-                totalEntretiensLabel.setText("Total: " + entretiens.size() + " entretiens");
-                statusEntretienLabel.setText("Entretien supprimé");
-            }
+
         }
-    }
-
-    /**
-     * Shows an error dialog.
-     */
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     /**
@@ -513,7 +490,7 @@ public class SuiviEntretiens implements Initializable {
                 statusEntretienLabel.setText("Terminer");
             }
             else {
-                showError("Erreur","Erreur lors de la modification");
+                AlertUtil.showError("Erreur","Erreur lors de la modification");
             }
             updateStatistics();
             updateVehiculeInfo(Vehicule.from(vehiculeService.getVehiculeByImmatriculation(selectedVehicule.getImmatriculation()).get()));

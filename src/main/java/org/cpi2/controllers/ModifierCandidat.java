@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import org.cpi2.service.CandidatService;
 import org.cpi2.entities.Candidat;
 import org.cpi2.entities.TypePermis;
+import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.ValidationUtils;
 
 import java.util.Optional;
@@ -138,7 +139,7 @@ public class ModifierCandidat {
     private void searchCandidat() {
         String cin = cinField.getText().trim();
         if (!isValidCIN(cin)) {
-            showError("Format CIN invalide", "Le CIN doit contenir au moins 8 chiffres.");
+            AlertUtil.showError("Format CIN invalide", "Le CIN doit contenir au moins 8 chiffres.");
             return;
         }
 
@@ -148,11 +149,11 @@ public class ModifierCandidat {
                 candidatToModify = candidatOpt.get();
                 populateFields(candidatToModify);
             } else {
-                showError("Candidat non trouvé", "Aucun candidat trouvé avec ce CIN.");
+                AlertUtil.showError("Candidat non trouvé", "Aucun candidat trouvé avec ce CIN.");
                 clearFields();
             }
         } catch (Exception e) {
-            showError("Erreur", "Une erreur s'est produite lors de la recherche du candidat: " + e.getMessage());
+            AlertUtil.showError("Erreur", "Une erreur s'est produite lors de la recherche du candidat: " + e.getMessage());
         }
     }
 
@@ -178,24 +179,17 @@ public class ModifierCandidat {
         }
     }
 
-    private void showError(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 
     @FXML
     private void confirmAction() {
         if (!validateInput()) {
-            showError("Validation", "Veuillez corriger les erreurs avant de continuer.");
+            AlertUtil.showWarning("Validation", "Veuillez corriger les erreurs avant de continuer.");
             return;
         }
 
         try {
             if (candidatToModify == null) {
-                showError("Aucun candidat", "Veuillez d'abord rechercher un candidat à modifier.");
+                AlertUtil.showError("Aucun candidat", "Veuillez d'abord rechercher un candidat à modifier.");
                 return;
             }
 
@@ -221,7 +215,7 @@ public class ModifierCandidat {
             ((Stage) nomField.getScene().getWindow()).close();
 
         } catch (Exception e) {
-            showError("Erreur", "Une erreur s'est produite lors de la modification: " + e.getMessage());
+            AlertUtil.showError("Erreur", "Une erreur s'est produite lors de la modification: " + e.getMessage());
         }
     }
 

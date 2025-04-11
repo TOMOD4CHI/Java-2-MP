@@ -1,7 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.fxml.FXML;
-import org.cpi2.utils.AlertManager;
+import org.cpi2.utils.AlertUtil;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -65,12 +65,8 @@ public class ExamRegistration {
         List<org.cpi2.entities.Candidat> candidatsList = candidatService.getAllCandidats();
         
         if (candidatsList.isEmpty()) {
-            // Afficher un message d'avertissement si aucun candidat n'est trouvé
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aucun candidat");
-            alert.setHeaderText(null);
-            alert.setContentText("Aucun candidat n'est disponible dans la base de données. Veuillez ajouter des candidats avant de planifier des examens.");
-            alert.show();
+
+            AlertUtil.showWarning("Warning", "Aucun candidat n'est disponible dans la base de données. Veuillez ajouter des candidats avant de planifier des examens.");
         } else {
             // Ajouter les candidats à la liste déroulante
             for (org.cpi2.entities.Candidat candidat : candidatsList) {
@@ -84,7 +80,7 @@ public class ExamRegistration {
         String selectedCandidat = candidatComboBox.getValue();
         
         if (selectedCandidat == null || selectedCandidat.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Aucune sélection", "Veuillez sélectionner un candidat");
+            AlertUtil.showWarning("Aucune sélection", "Veuillez sélectionner un candidat");
             return;
         }
         
@@ -104,10 +100,10 @@ public class ExamRegistration {
                 eligibiliteLabel.getStyleClass().clear();
                 eligibiliteLabel.getStyleClass().add("label");
             } else {
-                showAlert(Alert.AlertType.ERROR, "Candidat non trouvé", "Aucun candidat trouvé avec cet ID");
+                AlertUtil.showError("Erreur", "Aucun candidat trouvé avec cet ID");
             }
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur s'est produite lors de la récupération du candidat");
+            AlertUtil.showError("Erreur", "Une erreur s'est produite lors de la récupération du candidat");
         }
     }
     
@@ -115,11 +111,7 @@ public class ExamRegistration {
     private void verifierEligibiliteAction() {
         // In a real app, this would check candidate eligibility based on completed sessions
         if (nomField.getText().isEmpty() || typeExamenComboBox.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Veuillez sélectionner un candidat et un type d'examen pour vérifier l'éligibilité.");
-            alert.showAndWait();
+            AlertUtil.showError("Erreur", "Veuillez sélectionner un candidat et un type d'examen pour vérifier l'éligibilité.");
             return;
         }
         
@@ -143,7 +135,7 @@ public class ExamRegistration {
             //l enregistrement dans la  base de donnee
             //Note every Candidat should have only one examen (Active) at a time
             if(examenService.hasPendingExamens(cinField.getText())){
-                showErrorDialog("Le candidat a déjà un examen en cours.");
+                AlertUtil.showError( "Error" ,"Le candidat a déjà un examen en cours.");
                 return;
             }
 
@@ -170,22 +162,14 @@ public class ExamRegistration {
             typeExamenComboBox.getValue() == null || 
             dateExamenPicker.getValue() == null || 
             fraisField.getText().isEmpty()) {
-            
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur de validation");
-            alert.setHeaderText(null);
-            alert.setContentText("Veuillez remplir tous les champs obligatoires.");
-            alert.showAndWait();
+
+            AlertUtil.showError("Erreur", "Veuillez remplir tous les champs obligatoires.");
             return false;
         }
         
         if (!eligibiliteLabel.getText().equals("ELIGIBLE")) {
-            //cherhcer l existence dans la base de donneee
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur d'éligibilité");
-            alert.setHeaderText(null);
-            alert.setContentText("Le candidat doit être éligible pour s'inscrire à l'examen.");
-            alert.showAndWait();
+
+            AlertUtil.showError("Erreur", "Le candidat doit être éligible pour s'inscrire à l'examen.");
             return false;
         }
         
@@ -205,11 +189,5 @@ public class ExamRegistration {
         eligibiliteLabel.getStyleClass().clear();
         eligibiliteLabel.getStyleClass().add("label");
     }
-    private void showErrorDialog(String message) {
-        AlertManager.showError("Erreur", message);
-    }
-    
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        AlertManager.showAlert(type, title, message);
-    }
+
 }

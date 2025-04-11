@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.cpi2.utils.AlertUtil;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -84,7 +85,7 @@ public class DashboardFinance implements Initializable {
         
         // Validate dates
         if (start != null && end != null && start.isAfter(end)) {
-            showAlert("Erreur de date", "La date de début doit être avant la date de fin");
+            AlertUtil.showError("Erreur de date", "La date de début doit être avant la date de fin");
             return;
         }
         
@@ -189,14 +190,7 @@ public class DashboardFinance implements Initializable {
         
         transactionsTable.setItems(data);
     }
-    
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
     
     // Inner class for Transaction table
     public static class Transaction {

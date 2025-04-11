@@ -12,6 +12,7 @@ import org.cpi2.service.CandidatService;
 import org.cpi2.service.ExamenService;
 import org.cpi2.service.InscriptionService;
 import org.cpi2.service.PaiementService;
+import org.cpi2.utils.AlertUtil;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -476,18 +477,10 @@ public class Paiement implements Initializable {
 
     // Dialog methods
     private void showErrorDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertUtil.showError("Erreur", message);
     }
 
     private void showSuccessDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Succès");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertUtil.showSuccess("Success", message);
     }
 }

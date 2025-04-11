@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.cpi2.entities.Salle;
 import org.cpi2.service.SalleService;
+import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.ValidationUtils;
 
 import java.util.regex.Pattern;
@@ -92,7 +93,7 @@ public class AjouterSalle {
     public void handleEnregistrerButtonAction(ActionEvent actionEvent) {
         // Check if there are any validation errors
         if (ValidationUtils.hasAnyErrors()) {
-            showAlert("Erreur de validation", "Veuillez corriger les erreurs avant d'enregistrer.");
+            AlertUtil.showError("Erreur de validation", "Veuillez corriger les erreurs avant d'enregistrer.");
             return;
         }
         
@@ -114,42 +115,29 @@ public class AjouterSalle {
             boolean success = salleService.addSalle(salle);
             
             if (success) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText(null);
-                alert.setContentText("La salle a été ajoutée avec succès!");
-                alert.showAndWait();
+
+                AlertUtil.showSuccess("Succès", "La salle a été ajoutée avec succès!");
                 
-                // Clear the form
                 clearForm();
             } else {
-                showAlert("Erreur", "Échec de l'ajout de la salle.");
+                AlertUtil.showError("Erreur", "Échec de l'ajout de la salle.");
             }
         } catch (NumberFormatException e) {
-            showAlert("Erreur", "La capacité doit être un nombre entier.");
+            AlertUtil.showError("Erreur", "La capacité doit être un nombre entier.");
         } catch (Exception e) {
-            showAlert("Erreur", "Une erreur est survenue: " + e.getMessage());
+            AlertUtil.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
         }
     }
     
     private void clearForm() {
-        // Clear all fields
         nomSalleField.clear();
         numeroSalleField.clear();
         capaciteField.clear();
         notesTextArea.clear();
         
-        // Clear validation styles
         ValidationUtils.clearValidation(nomSalleField);
         ValidationUtils.clearValidation(numeroSalleField);
         ValidationUtils.clearValidation(capaciteField);
     }
-    
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 }

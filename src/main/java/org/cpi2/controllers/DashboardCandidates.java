@@ -8,6 +8,7 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import org.cpi2.utils.AlertUtil;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -92,7 +93,7 @@ public class DashboardCandidates implements Initializable {
         
         // Validate dates
         if (start != null && end != null && start.isAfter(end)) {
-            showAlert("Erreur de date", "La date de début doit être avant la date de fin");
+            AlertUtil.showError("Erreur de date", "La date de début doit être avant la date de fin");
             return;
         }
         
@@ -220,14 +221,6 @@ public class DashboardCandidates implements Initializable {
         );
         
         recentCandidatesTable.setItems(candidateData);
-    }
-    
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
     
     // Inner class for candidate table entries
