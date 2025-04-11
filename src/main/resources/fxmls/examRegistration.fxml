@@ -21,9 +21,8 @@
                 <Separator/>
                 
                 <HBox spacing="10" alignment="center_left" minWidth="450" prefWidth="450">
-                    <Label text="ID Candidat:" styleClass="form-label" minWidth="150" prefWidth="150"/>
-                    <TextField fx:id="candidatIdField" styleClass="form-field" minWidth="250" prefWidth="250"/>
-                    <Button text="Rechercher" onAction="#rechercheCandidatAction" styleClass="button" minWidth="120" prefWidth="120"/>
+                    <Label text="Candidat:" styleClass="form-label" minWidth="150" prefWidth="150"/>
+                    <ComboBox fx:id="candidatComboBox" styleClass="form-field" minWidth="250" prefWidth="250" onAction="#candidatSelectionneAction"/>
                 </HBox>
                 
                 <GridPane hgap="15" vgap="10" alignment="center" minWidth="450" prefWidth="450">

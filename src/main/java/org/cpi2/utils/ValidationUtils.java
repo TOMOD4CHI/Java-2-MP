@@ -16,10 +16,8 @@ import java.util.function.Predicate;
 
 public class ValidationUtils {
     
-    // Map to store field-error label associations
     private static final Map<Region, Label> fieldErrorMap = new HashMap<>();
     
-    // Map to store validation priorities (lower number = higher priority)
     private static final Map<Label, Integer> errorPriorities = new HashMap<>();
     
 
@@ -43,10 +41,8 @@ public class ValidationUtils {
 
     private static <T> void setupValidation(Region field, Property<T> observable, 
                                           Predicate<T> validator, String errorMessage, int priority) {
-        // Check if this field already has an error label
         Label errorLabel = fieldErrorMap.get(field);
         
-        // If not, create a new one and add it to the parent container
         if (errorLabel == null) {
             errorLabel = new Label();
             errorLabel.getStyleClass().addAll("error-label", "visible");
@@ -110,8 +106,6 @@ public class ValidationUtils {
             }
         });
         
-        // We don't add valid-field class initially anymore
-        // The field will get the valid-field class only after user interaction
     }
     
     public static void clearValidation(Region field) {

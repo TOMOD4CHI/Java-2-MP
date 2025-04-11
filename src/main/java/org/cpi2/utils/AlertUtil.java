@@ -25,7 +25,7 @@ public class AlertUtil {
         return alert.showAndWait().get() == ButtonType.OK;
     }
 
-    private static void showAlert(Alert.AlertType type, String title, String content) {
+    static void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);

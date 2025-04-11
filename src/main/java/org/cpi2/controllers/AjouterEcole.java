@@ -3,7 +3,7 @@ package org.cpi2.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import org.cpi2.utils.AlertManager;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -147,11 +147,7 @@ public class AjouterEcole implements Initializable {
         boolean success = autoEcoleService.saveAutoEcole(autoEcole);
 
         if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("L'école a été ajoutée avec succès!");
-            alert.showAndWait();
+            AlertManager.showSuccess("Succès", "L'école a été ajoutée avec succès!");
             
             // Clear the form
             clearForm();
@@ -161,11 +157,7 @@ public class AjouterEcole implements Initializable {
     }
 
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertManager.showError(title, message);
     }
 
     // Handle cancelling the operation

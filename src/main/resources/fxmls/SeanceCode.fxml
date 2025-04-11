@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.cpi2.controllers.SeanceCode"
@@ -12,27 +13,47 @@
         <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" maxWidth="400">
             <Label text="Planifier une Séance de Code" styleClass="form-title"/>
 
-            <HBox spacing="10" alignment="center_left">
-                <Label text="Capacité de la Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="capfield" styleClass="form-field" HBox.hgrow="ALWAYS" promptText="Nombre de places"/>
-            </HBox>
-            <HBox spacing="10" alignment="center_left">
-                <Label text="Date de la Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                <DatePicker fx:id="datefield" styleClass="form-field" HBox.hgrow="ALWAYS"/>
-            </HBox>
-            <HBox spacing="10" alignment="center_left">
-                <Label text="Heure de la Séance :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="tempsfield" styleClass="form-field" HBox.hgrow="ALWAYS" promptText="Format: HH:mm"/>
-            </HBox>
+            <GridPane hgap="10" vgap="5" alignment="center">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="150" prefWidth="200"/>
+                </columnConstraints>
 
-            <HBox spacing="10" alignment="center_left">
-                <Label text="Moniteur :" styleClass="form-label" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="moniteurfield" styleClass="form-field" HBox.hgrow="ALWAYS" editable="false" promptText="Sélectionnez un moniteur"/>
-            </HBox>
-            
-            <HBox spacing="15" alignment="center">
-                <Button fx:id="cancelButton" text="Annuler" styleClass="button" onAction="#handleCancel"/>
-                <Button fx:id="planifierButton" text="Planifier" styleClass="button" onAction="#handlePlanifier"/>
+                <Label text="Capacité de la Séance :" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="capfield" styleClass="form-field" promptText="Nombre de places"
+                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label fx:id="candidatError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                       GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
+
+                <Label text="Date de la Séance :" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <DatePicker fx:id="datefield" styleClass="form-field"
+                            GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label fx:id="dateError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                       GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
+
+                <Label text="Heure de la Séance :" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <TextField fx:id="tempsfield" styleClass="form-field" promptText="Format: HH:mm"
+                           GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label fx:id="tempsError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                       GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
+
+                <Label text="Moniteur :" styleClass="form-label"
+                       GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <TextField fx:id="moniteurfield" styleClass="form-field" editable="false" promptText="Sélectionnez un moniteur"
+                           GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Label fx:id="moniteurError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" 
+                       GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.halignment="LEFT"/>
+            </GridPane>
+
+            <HBox spacing="15" alignment="center" styleClass="button-container">
+                <VBox.margin>
+                    <Insets top="15" bottom="10"/>
+                </VBox.margin>
+                <Button fx:id="cancelButton" text="Annuler" styleClass="button, cancel-button" onAction="#handleCancel"/>
+                <Button fx:id="planifierButton" text="Planifier" styleClass="button, submit-button" onAction="#handlePlanifier"/>
             </HBox>
         </VBox>
 

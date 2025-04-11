@@ -1,6 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.fxml.FXML;
+import org.cpi2.utils.AlertManager;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -14,10 +15,12 @@ import org.cpi2.service.ExamenService;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 public class ExamRegistration {
 
-    @FXML private TextField candidatIdField;
+    @FXML private ComboBox<String> candidatComboBox;
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
     @FXML private TextField cinField;
@@ -36,7 +39,7 @@ public class ExamRegistration {
 
 
     @FXML
-    public void initialize() {;
+    public void initialize() {
         // Initialize the exam types
         typeExamenComboBox.getItems().addAll(examTypePrices.keySet());
         
@@ -52,32 +55,59 @@ public class ExamRegistration {
         
         // Set current date in footer
         dateFooterLabel.setText("📅 Date: " + LocalDate.now().toString());
+        
+        // Charger les candidats dans la ComboBox
+        loadCandidats();
+    }
+    
+    private void loadCandidats() {
+        // Charger les candidats depuis la base de données
+        List<org.cpi2.entities.Candidat> candidatsList = candidatService.getAllCandidats();
+        
+        if (candidatsList.isEmpty()) {
+            // Afficher un message d'avertissement si aucun candidat n'est trouvé
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucun candidat");
+            alert.setHeaderText(null);
+            alert.setContentText("Aucun candidat n'est disponible dans la base de données. Veuillez ajouter des candidats avant de planifier des examens.");
+            alert.show();
+        } else {
+            // Ajouter les candidats à la liste déroulante
+            for (org.cpi2.entities.Candidat candidat : candidatsList) {
+                candidatComboBox.getItems().add(candidat.getId() + " - " + candidat.getNom() + " " + candidat.getPrenom());
+            }
+        }
     }
 
     @FXML
-    private void rechercheCandidatAction() {
-        //TODO : Further check this method
-        //need the sessions to be completed :)
-        // les informations vont etre recuperer de base de donnee
-        if (!candidatIdField.getText().isEmpty()) {
-            if(candidatService.findByCin(candidatIdField.getText()).isPresent()){
-                Candidat candidat = candidatService.findByCin(candidatIdField.getText()).get();
+    private void candidatSelectionneAction() {
+        String selectedCandidat = candidatComboBox.getValue();
+        
+        if (selectedCandidat == null || selectedCandidat.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Aucune sélection", "Veuillez sélectionner un candidat");
+            return;
+        }
+        
+        try {
+            // Extraire l'ID du candidat (format: "1 - Nom Prénom")
+            Long id = Long.parseLong(selectedCandidat.split(" - ")[0]);
+            Optional<Candidat> candidatOpt = candidatService.getCandidatById(id);
+            
+            if (candidatOpt.isPresent()) {
+                Candidat candidat = candidatOpt.get();
                 nomField.setText(candidat.getNom());
                 prenomField.setText(candidat.getPrenom());
                 cinField.setText(candidat.getCin());
-
+                
                 // Reset eligibility message
                 eligibiliteLabel.setText("Eligibilité non vérifiée");
                 eligibiliteLabel.getStyleClass().clear();
                 eligibiliteLabel.getStyleClass().add("label");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Candidat non trouvé", "Aucun candidat trouvé avec cet ID");
             }
-            else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("Candidat non trouvé.");
-                alert.showAndWait();
-            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur s'est produite lors de la récupération du candidat");
         }
     }
     
@@ -133,7 +163,7 @@ public class ExamRegistration {
     }
     
     private boolean validateForm() {
-        if (candidatIdField.getText().isEmpty() || 
+        if (candidatComboBox.getValue() == null || 
             nomField.getText().isEmpty() || 
             prenomField.getText().isEmpty() || 
             cinField.getText().isEmpty() || 
@@ -163,7 +193,7 @@ public class ExamRegistration {
     }
     
     private void clearForm() {
-        candidatIdField.clear();
+        candidatComboBox.getSelectionModel().clearSelection();
         nomField.clear();
         prenomField.clear();
         cinField.clear();
@@ -176,10 +206,10 @@ public class ExamRegistration {
         eligibiliteLabel.getStyleClass().add("label");
     }
     private void showErrorDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertManager.showError("Erreur", message);
+    }
+    
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        AlertManager.showAlert(type, title, message);
     }
 }

@@ -45,6 +45,7 @@
                             <TextField fx:id="nomSalleField"
                                        promptText="Entrez le nom de la salle"
                                        styleClass="form-text-field"/>
+                            <Label fx:id="nomSalleError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false"/>
                         </VBox>
 
                         <!-- Numéro de la Salle -->
@@ -53,6 +54,7 @@
                             <TextField fx:id="numeroSalleField"
                                        promptText="Entrez le numéro de salle"
                                        styleClass="form-text-field"/>
+                            <Label fx:id="numeroSalleError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false"/>
                         </VBox>
 
                         <!-- Étage -->
@@ -66,6 +68,7 @@
                             <TextField fx:id="capaciteField"
                                        promptText="Entrez la capacité de la salle"
                                        styleClass="form-text-field"/>
+                            <Label fx:id="capaciteError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false"/>
                         </VBox>
 
 
