@@ -3,7 +3,7 @@ package org.cpi2.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import org.cpi2.utils.AlertManager;
+import org.cpi2.utils.AlertUtil;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -105,12 +105,7 @@ public class AjouterMoniteur implements Initializable {
             "Veuillez sélectionner un type de permis", 1);
     }
 
-    private void showAlert(String title, String message) {
-        AlertManager.showError(title, message);
-    }
-
     public void ajouterAction(ActionEvent event) {
-        // Check if there are any validation errors
         if (ValidationUtils.hasAnyErrors()) {
             return;
         }
@@ -144,12 +139,12 @@ public class AjouterMoniteur implements Initializable {
         boolean success = moniteurService.addMoniteur(moniteur);
 
         if (success) {
-            AlertManager.showSuccess("Succès", "Le moniteur a été ajouté avec succès!");
+            AlertUtil.showSuccess("Succès", "Le moniteur a été ajouté avec succès!");
             
             // Clear the form
             clearForm();
         } else {
-            showAlert("Erreur", "Échec de l'ajout du moniteur.");
+            AlertUtil.showError("Erreur", "Échec de l'ajout du moniteur.");
         }
     }
 

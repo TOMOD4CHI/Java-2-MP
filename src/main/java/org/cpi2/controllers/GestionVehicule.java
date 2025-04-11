@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.cpi2.entities.TypePermis;
 import org.cpi2.entities.Vehicule;
 import org.cpi2.service.VehiculeService;
+import org.cpi2.utils.AlertUtil;
 
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -164,13 +165,13 @@ public class GestionVehicule implements Initializable {
     private void handleSupprimerVehicule(ActionEvent event) {
         if (vehiculeSelected == null) return;
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation de suppression");
-        alert.setHeaderText("Supprimer le véhicule " + vehiculeSelected.getImmatriculation());
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer ce véhicule ?");
+        boolean confirmation = AlertUtil.showConfirmation(
+            "Confirmation de suppression",
+            "Supprimer le véhicule " + vehiculeSelected.getImmatriculation() +
+            "Êtes-vous sûr de vouloir supprimer ce véhicule ?"
+        );
 
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
+        if (confirmation) {
                 if (vehiculeService.supprimerVehicule((int) vehiculeSelected.getId())) {
                     vehiculesList.remove(vehiculeSelected);
                     mettreAJourTotal();
@@ -178,16 +179,15 @@ public class GestionVehicule implements Initializable {
                     vehiculeSelected = null;
                     activerBoutons(false);
                 } else {
-                    showErrorAlert("Erreur de suppression", "Impossible de supprimer le véhicule.");
+                    AlertUtil.showError("Erreur de suppression", "Impossible de supprimer le véhicule.");
                 }
             }
-        });
     }
 
     @FXML
     private void handleVoirDetails(ActionEvent event) {
         if (vehiculeSelected == null) return;
-        showErrorAlert("Erreur", "Fonctionnalité non implémentée :) ");
+        AlertUtil.showError("Erreur", "Fonctionnalité non implémentée :) ");
         statusLabel.setText("Affichage des détails du véhicule " + vehiculeSelected.getImmatriculation());
         // TODO: Navigate to details view or open details dialog
     }
@@ -217,7 +217,7 @@ public class GestionVehicule implements Initializable {
                     vehiculesTable.refresh();
                     statusLabel.setText("Véhicule modifié avec succès");
                 } else {
-                    showErrorAlert("Erreur de modification", "Impossible de modifier le véhicule. Vérifiez les données saisies.");
+                    AlertUtil.showError("Erreur de modification", "Impossible de modifier le véhicule. Vérifiez les données saisies.");
                 }
         } else {
                 vehicule = createVehiculeFromForm();
@@ -227,7 +227,7 @@ public class GestionVehicule implements Initializable {
                     statusLabel.setText("Véhicule ajouté avec succès");
                 }
                 else {
-                    showErrorAlert("Erreur d'ajout", "Impossible d'ajouter le véhicule. Vérifiez les données saisies.");
+                    AlertUtil.showError("Erreur d'ajout", "Impossible d'ajouter le véhicule. Vérifiez les données saisies.");
                 }
         }
 
@@ -323,19 +323,11 @@ public class GestionVehicule implements Initializable {
         }
 
         if (erreurs.length() > 0) {
-            showErrorAlert("Erreurs de validation", erreurs.toString());
+            AlertUtil.showError("Erreurs de validation", erreurs.toString());
             return false;
         }
 
         return true;
-    }
-
-    private void showErrorAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     private void remplirChamps(Vehicule vehicule) {

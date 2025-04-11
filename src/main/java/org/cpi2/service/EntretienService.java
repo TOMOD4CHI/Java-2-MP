@@ -104,12 +104,13 @@ public class EntretienService {
         entretien.setMaintenance(isMaitenance(entretien.getTypeEntretien()));
         entretien.setKilometrageActuel(vehiculeService.getVehiculeById(entretien.getVehiculeId()).get().getKilometrageTotal());
 
-        if(entretienRepository.save(entretien)&& entretien.isDone()){
+        if(entretienRepository.save(entretien)){
+        if( entretien.isDone()){
 
                 return scheduleNextMaintenance(entretien.getVehiculeId(), entretien.getTypeEntretien(),
                         entretien.getKilometrageActuel(), entretien.getDateEntretien(),entretien.getCout());
 
-        } else if (entretienRepository.save(entretien) && !entretien.isDone()) {
+        } else{
             Vehicule vehicule = vehiculeService.getVehiculeById(entretien.getVehiculeId()).orElseThrow();
             if(Objects.equals(entretien.getTypeEntretien(), "Visite Technique")){
                 if (vehicule.getDateProchaineVisiteTechnique() == null || vehicule.getDateProchaineVisiteTechnique().isAfter(entretien.getDateEntretien())) {
@@ -125,7 +126,7 @@ public class EntretienService {
             }
             return true;
 
-        } else {
+        } }else {
 
             return false;
         }
@@ -210,6 +211,7 @@ public class EntretienService {
         nextEntretien.setCout(cout);
         nextEntretien.setMaintenance(true);
         nextEntretien.setDescription("Planifié: " + typeEntretien);
+        nextEntretien.setStatut(false);
 
         if(entretienRepository.save(nextEntretien)) {
             if(typeEntretien.equals("Visite Technique")){

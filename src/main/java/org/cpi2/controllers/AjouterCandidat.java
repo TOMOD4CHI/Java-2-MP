@@ -1,7 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.fxml.FXML;
-import org.cpi2.utils.AlertManager;
+import org.cpi2.utils.AlertUtil;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -159,7 +159,7 @@ public class AjouterCandidat {
     @FXML
     private void confirmAction() {
         if (ValidationUtils.hasAnyErrors()) {
-            AlertManager.showError("Validation Error", "Veuillez corriger les erreurs avant de soumettre le formulaire.");
+            AlertUtil.showError("Validation Error", "Veuillez corriger les erreurs avant de soumettre le formulaire.");
             return;
         }
         
@@ -177,7 +177,7 @@ public class AjouterCandidat {
         if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || 
             address.isEmpty() || phone.isEmpty() || typePermis == null) {
             // This should be caught by the validation, but just in case
-            AlertManager.showError("Validation Error", "Merci de remplir tous les champs obligatoires!");
+            AlertUtil.showError("Validation Error", "Merci de remplir tous les champs obligatoires!");
             return;
         }
 
@@ -202,9 +202,9 @@ public class AjouterCandidat {
 
 
             if (candidatService.addCandidat(candidat)) {
-                AlertManager.showSuccess("Succès", "Le candidat a été ajouté avec succès!");
+                AlertUtil.showSuccess("Succès", "Le candidat a été ajouté avec succès!");
             } else {
-                AlertManager.showError("Erreur", "Une erreur est survenue lors de l'ajout du candidat.");
+                AlertUtil.showError("Erreur", "Une erreur est survenue lors de l'ajout du candidat.");
             }
             List<Inscription> activeinscriptions = inscriptionService.getActifInscirptionBycin(cin);
             if (activeinscriptions.isEmpty()) {
@@ -212,22 +212,22 @@ public class AjouterCandidat {
                 TypePermis requiredPermis = CoursePlan.requiredTypePermis(CoursePlan.valueOf(typePermis));
                 if(requiredPermis == null ||candidatService.findCandidatsByTypePermis(requiredPermis.name()).contains(cin)){
                     if(inscriptionService.saveInscription(inscription)){
-                        AlertManager.showSuccess("Succès", "L'inscription a été ajoutée avec succès!");
+                        AlertUtil.showSuccess("Succès", "L'inscription a été ajoutée avec succès!");
                         cancelAction();
                     } else {
-                        AlertManager.showError("Erreur", "Une erreur est survenue lors de l'ajout de l'inscription.");
+                        AlertUtil.showError("Erreur", "Une erreur est survenue lors de l'ajout de l'inscription.");
                     }
 
                 }
                 else {
-                    AlertManager.showError("Erreur", "Le candidat n'est pas eligible car il n'avais pas le document suivant : "+requiredPermis.getDescription()+".");
+                    AlertUtil.showError("Erreur", "Le candidat n'est pas eligible car il n'avais pas le document suivant : "+requiredPermis.getDescription()+".");
                 }
             }
             else {
-                AlertManager.showError("Erreur", "Le candidat a déjà une inscription en cours : \n "+activeinscriptions.get(0).getPlan().getDescription()+" .");
+                AlertUtil.showError("Erreur", "Le candidat a déjà une inscription en cours : \n "+activeinscriptions.get(0).getPlan().getDescription()+" .");
             }
         } catch (Exception e) {
-            AlertManager.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
+            AlertUtil.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
             //for debugging
             e.printStackTrace();
         }

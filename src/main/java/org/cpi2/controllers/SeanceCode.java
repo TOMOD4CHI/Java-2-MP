@@ -13,6 +13,7 @@ import org.cpi2.entities.TypePermis;
 import org.cpi2.entities.TypeSession;
 import org.cpi2.service.MoniteurService;
 import org.cpi2.service.SessionService;
+import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.ValidationUtils;
 
 import java.time.LocalDate;
@@ -182,17 +183,17 @@ public class SeanceCode {
             boolean saved = sessionService.saveSessionCode(sessionCode);
             
             if (saved) {
-                showAlert("Planification", "Séance de code planifiée avec succès", Alert.AlertType.INFORMATION);
+                AlertUtil.showSuccess("Planification", "Séance de code planifiée avec succès");
                 clearFields();
             } else {
-                showAlert("Erreur", "Erreur lors de la planification de la séance", Alert.AlertType.ERROR);
+                AlertUtil.showError("Erreur", "Erreur lors de la planification de la séance");
             }
         } catch (NumberFormatException e) {
-            showAlert("Validation", "La capacité doit être un nombre entier", Alert.AlertType.WARNING);
+            AlertUtil.showConfirmation("Validation", "La capacité doit être un nombre entier");
         } catch (Exception e) {
             System.err.println("Erreur lors de la planification: " + e.getMessage());
             e.printStackTrace();
-            showAlert("Erreur", "Erreur lors de la planification: " + e.getMessage(), Alert.AlertType.ERROR);
+            AlertUtil.showError("Erreur", "Erreur lors de la planification: " + e.getMessage());
         }
     }
 
@@ -402,12 +403,5 @@ public class SeanceCode {
         
         return !hasErrors;
     }
-    
-    private void showAlert(String title, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
 }

@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import org.cpi2.utils.AlertUtil;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -303,8 +304,8 @@ public class ConfirmerSeance implements Initializable {
         if (!"Toutes les séances".equals(status)) {
             message += " avec statut: " + status;
         }
-        
-        showAlert(Alert.AlertType.INFORMATION, "Filtre appliqué", message);
+
+        AlertUtil.showInfo( "Filtre appliqué", message);
     }
     
     @FXML
@@ -355,7 +356,7 @@ public class ConfirmerSeance implements Initializable {
         }
         
         // Show success message
-        showAlert(Alert.AlertType.INFORMATION, "Statut mis à jour", 
+        AlertUtil.showInfo( "Statut mis à jour",
                 "Le statut de la séance a été mis à jour avec succès.");
         
         // Reset form
@@ -367,7 +368,7 @@ public class ConfirmerSeance implements Initializable {
     
     private boolean validateKilometrage() {
         if (kmFinField.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
+            AlertUtil.showError( "Erreur de validation",
                     "Veuillez saisir le kilométrage final du véhicule.");
             return false;
         }
@@ -375,26 +376,19 @@ public class ConfirmerSeance implements Initializable {
         try {
             int km = Integer.parseInt(kmFinField.getText().trim());
             if (km <= 0) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
+                AlertUtil.showError( "Erreur de validation",
                         "Le kilométrage doit être un nombre positif.");
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", 
+            AlertUtil.showError("Erreur de validation",
                     "Le kilométrage doit être un nombre valide.");
             return false;
         }
         
         return true;
     }
-    
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
     
     // Inner class for seance data
     public static class SeanceEntry {

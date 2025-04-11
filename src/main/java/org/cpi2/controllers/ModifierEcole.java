@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.cpi2.entities.AutoEcole;
 import org.cpi2.service.AutoEcoleService;
+import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.ValidationUtils;
 
 import java.io.File;
@@ -84,21 +85,6 @@ public class ModifierEcole implements Initializable {
 
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showSuccessAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
     // Method to set an auto-ecole to modify from the list view
     public void setAutoEcoleToModify(AutoEcole autoEcole) {
@@ -155,7 +141,7 @@ public class ModifierEcole implements Initializable {
                     logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
                 }
             } catch (Exception e) {
-                showAlert("Erreur", "Impossible de charger le logo: " + e.getMessage());
+                AlertUtil.showError("Erreur", "Impossible de charger le logo: " + e.getMessage());
             }
         } else {
             logoImageView.setImage(null);
@@ -229,7 +215,7 @@ public class ModifierEcole implements Initializable {
                 // Apply dropshadow effect
                 logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
             } catch (Exception e) {
-                showAlert("Erreur", "Impossible de charger l'image: " + e.getMessage());
+                AlertUtil.showError("Erreur", "Impossible de charger l'image: " + e.getMessage());
             }
         }
     }
@@ -249,7 +235,7 @@ public class ModifierEcole implements Initializable {
 
         // Validate required fields
         if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty()) {
-            showAlert("Erreur de validation", "Tous les champs sont obligatoires.");
+            AlertUtil.showError("Erreur de validation", "Tous les champs sont obligatoires.");
             return;
         }
 
@@ -264,7 +250,7 @@ public class ModifierEcole implements Initializable {
         boolean success = autoEcoleService.updateAutoEcole(currentAutoEcole);
 
         if (success) {
-            showSuccessAlert("Succès", "L'école a été modifiée avec succès!");
+            AlertUtil.showSuccess("Succès", "L'école a été modifiée avec succès!");
             
             // Update the original auto-ecole for reset functionality
             originalAutoEcole = new AutoEcole(
@@ -282,7 +268,7 @@ public class ModifierEcole implements Initializable {
             telephoneField.getStyleClass().removeAll("modified-field");
             emailField.getStyleClass().removeAll("modified-field");
         } else {
-            showAlert("Erreur", "Échec de la modification de l'école.");
+            AlertUtil.showError("Erreur", "Échec de la modification de l'école.");
         }
     }
 
