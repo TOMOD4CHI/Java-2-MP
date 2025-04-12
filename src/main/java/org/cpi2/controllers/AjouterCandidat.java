@@ -1,6 +1,7 @@
 package org.cpi2.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
 import org.cpi2.utils.AlertUtil;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -56,6 +57,7 @@ public class AjouterCandidat {
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
+    @FXML private DatePicker birthDatePicker;
     @FXML private ComboBox<String> modeComboBox;
     @FXML private Button cancelButton;
     @FXML private Button confirmButton;
@@ -78,9 +80,17 @@ public class AjouterCandidat {
         addressField.setPromptText("Entrez l'adresse complète");
         phoneField.setPromptText("Entrez le numéro (8 chiffres)");
         emailField.setPromptText("exemple@domaine.com");
+        birthDatePicker.setPromptText("Choisir une date");
+        
+        // Set default value for birth date to 18 years ago
+        birthDatePicker.setValue(LocalDate.now().minusYears(18));
         
         // Setup real-time validation
         setupValidation();
+    }
+    
+    private boolean isValidBirthDate(LocalDate date) {
+        return date != null && !date.isAfter(LocalDate.now());
     }
     
     private void setupValidation() {
@@ -91,6 +101,11 @@ public class AjouterCandidat {
         ValidationUtils.addValidation(nomField, 
             this::isValidName, 
             "Le nom ne doit contenir que des lettres et des espaces", 2);
+        
+        // Birth date validation
+        ValidationUtils.addValidation(birthDatePicker,
+            this::isValidBirthDate,
+            "La date de naissance ne peut pas être dans le futur", 1);
             
         // Prénom validation
         ValidationUtils.addValidation(prenomField, 
@@ -154,6 +169,7 @@ public class AjouterCandidat {
         ValidationUtils.clearValidation(addressField);
         ValidationUtils.clearValidation(phoneField);
         ValidationUtils.clearValidation(emailField);
+        ValidationUtils.clearValidation(birthDatePicker);
     }
 
     @FXML
@@ -175,9 +191,16 @@ public class AjouterCandidat {
 
         // Check required fields
         if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || 
-            address.isEmpty() || phone.isEmpty() || typePermis == null) {
+            address.isEmpty() || phone.isEmpty() || typePermis == null ||
+            birthDatePicker.getValue() == null) {
             // This should be caught by the validation, but just in case
             AlertUtil.showError("Validation Error", "Merci de remplir tous les champs obligatoires!");
+            return;
+        }
+        
+        // Check that birth date is not in the future
+        if (birthDatePicker.getValue() != null && birthDatePicker.getValue().isAfter(LocalDate.now())) {
+            AlertUtil.showError("Validation Error", "La date de naissance ne peut pas être dans le futur!");
             return;
         }
 
@@ -190,6 +213,7 @@ public class AjouterCandidat {
             candidat.setAdresse(address);
             candidat.setTelephone(phone);
             candidat.setEmail(email);
+            candidat.setDateNaissance(birthDatePicker.getValue());
 
 
             inscription.setCin(candidat.getCin());

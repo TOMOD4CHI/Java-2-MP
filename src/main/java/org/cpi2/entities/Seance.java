@@ -123,12 +123,50 @@ public class Seance {
      */
     public LocalDate getLocalDate() {
         if (date == null || date.isEmpty()) {
+            System.out.println("Warning: Empty date for session ID " + id + ", using current date");
             return LocalDate.now();
         }
+        
+        System.out.println("DEBUG - Trying to parse date: '" + date + "' for seance ID: " + id);
+        
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            return LocalDate.parse(date, formatter);
+            // First try yyyy-MM-dd (ISO format)
+            if (date.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                return LocalDate.parse(date, formatter);
+            }
+            // Then try dd/MM/yyyy (European format)
+            else if (date.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                return LocalDate.parse(date, formatter);
+            }
+            // Try yyyy/MM/dd
+            else if (date.matches("\\d{4}/\\d{2}/\\d{2}")) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+                return LocalDate.parse(date, formatter);
+            }
+            else {
+                System.out.println("DEBUG - Date format not recognized: '" + date + "', trying flexible parsing");
+                // Try multiple formats in sequence
+                String[] patterns = {
+                    "yyyy-MM-dd", "dd/MM/yyyy", "yyyy/MM/dd", "MM/dd/yyyy", "dd-MM-yyyy"
+                };
+                
+                for (String pattern : patterns) {
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+                        return LocalDate.parse(date, formatter);
+                    } catch (Exception e) {
+                        // Continue to next pattern
+                    }
+                }
+                
+                // If all formats fail, log error and return current date
+                System.out.println("ERROR: Could not parse date '" + date + "' using any known format");
+                return LocalDate.now();
+            }
         } catch (Exception e) {
+            System.out.println("ERROR parsing date '" + date + "': " + e.getMessage());
             return LocalDate.now();
         }
     }

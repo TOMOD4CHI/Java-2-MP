@@ -83,6 +83,12 @@
             <TextField fx:id="emailField" promptText="exemple@domaine.com" styleClass="form-field"/>
             <Label fx:id="emailError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
         </VBox>
+        
+        <Label text="Date de naissance:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="form-label"/>
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <DatePicker fx:id="birthDatePicker" promptText="Choisir la date de naissance" styleClass="form-field" maxWidth="Infinity"/>
+            <Label fx:id="birthDateError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
     </GridPane>
 
     <HBox spacing="10" alignment="CENTER">

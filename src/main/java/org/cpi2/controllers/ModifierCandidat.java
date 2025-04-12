@@ -40,6 +40,10 @@ public class ModifierCandidat {
     private boolean isValidAddress(String address, int minLength) {
         return address != null && address.length() >= minLength;
     }
+    
+    private boolean isValidBirthDate(java.time.LocalDate date) {
+        return date != null && !date.isAfter(java.time.LocalDate.now());
+    }
 
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
@@ -47,6 +51,7 @@ public class ModifierCandidat {
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
+    @FXML private DatePicker birthDatePicker;
 
     //This might be useless since we can't change the type of permit through the candidat itself
     @FXML private ComboBox<TypePermis> typeComboBox;
@@ -58,6 +63,7 @@ public class ModifierCandidat {
     @FXML private Label addressError;
     @FXML private Label phoneError;
     @FXML private Label emailError;
+    @FXML private Label birthDateError;
     @FXML private Label typeError;
 
     public void initialize() {
@@ -76,6 +82,10 @@ public class ModifierCandidat {
         addressField.setPromptText("Entrez l'adresse complète");
         phoneField.setPromptText("Entrez le numéro (8 chiffres)");
         emailField.setPromptText("exemple@domaine.com");
+        birthDatePicker.setPromptText("Choisir la date de naissance");
+        
+        // Set default value for birth date to 18 years ago
+        birthDatePicker.setValue(java.time.LocalDate.now().minusYears(18));
         
         setupValidation();
     }
@@ -164,6 +174,7 @@ public class ModifierCandidat {
         addressField.setText(candidat.getAdresse());
         phoneField.setText(candidat.getTelephone());
         emailField.setText(candidat.getEmail());
+        birthDatePicker.setValue(candidat.getDateNaissance());
         typeComboBox.setValue(candidat.getTypePermis());
     }
 
@@ -174,6 +185,7 @@ public class ModifierCandidat {
         addressField.clear();
         phoneField.clear();
         emailField.clear();
+        birthDatePicker.setValue(java.time.LocalDate.now().minusYears(18));
         if (!typeComboBox.getItems().isEmpty()) {
             typeComboBox.getSelectionModel().selectFirst();
         }
@@ -199,6 +211,7 @@ public class ModifierCandidat {
             candidatToModify.setAdresse(addressField.getText().trim());
             candidatToModify.setTelephone(phoneField.getText().trim());
             candidatToModify.setEmail(emailField.getText().trim());
+            candidatToModify.setDateNaissance(birthDatePicker.getValue());
             candidatToModify.setTypePermis(typeComboBox.getValue());
 
             // Save to database
@@ -228,6 +241,7 @@ public class ModifierCandidat {
         ValidationUtils.clearValidation(addressField);
         ValidationUtils.clearValidation(phoneField);
         ValidationUtils.clearValidation(emailField);
+        ValidationUtils.clearValidation(birthDatePicker);
         ValidationUtils.clearValidation(typeComboBox);
     }
 
@@ -241,6 +255,7 @@ public class ModifierCandidat {
         addressError.setText("");
         phoneError.setText("");
         emailError.setText("");
+        birthDateError.setText("");
         typeError.setText("");
 
         // Validate each field
@@ -271,6 +286,14 @@ public class ModifierCandidat {
 
         if (!isValidEmail(emailField.getText())) {
             emailError.setText("L'email est invalide");
+            isValid = false;
+        }
+        
+        if (birthDatePicker.getValue() == null) {
+            birthDateError.setText("La date de naissance est obligatoire");
+            isValid = false;
+        } else if (birthDatePicker.getValue().isAfter(java.time.LocalDate.now())) {
+            birthDateError.setText("La date de naissance ne peut pas être dans le futur");
             isValid = false;
         }
 
