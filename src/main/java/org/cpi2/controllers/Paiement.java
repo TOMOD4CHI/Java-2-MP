@@ -288,7 +288,6 @@ public class Paiement implements Initializable {
                     
                     showSuccessDialog("Paiement d'examen enregistré avec succès");
                 } else {
-                    // For Inscription or Tranche
                     if(!inscriptionService.haveActifInscription(cin)){
                         showErrorDialog("Le candidat n'a pas d'inscription active");
                         return;
@@ -296,7 +295,12 @@ public class Paiement implements Initializable {
                     
                     Inscription inscription = inscriptionService.getActifInscirptionBycin(cin).get(0);
                     double reste = paiementService.calculerMontantRestant(inscription.getId());
-                    
+
+                    if (montant > reste) {
+                        showErrorDialog("Le montant ne peut pas dépasser le montant restant à payer "+reste+" DT");
+                        return;
+                    }
+
                     String paymentType;
                     if (type.equals("Inscription")) {
                         paymentType = "Totale";
@@ -318,7 +322,7 @@ public class Paiement implements Initializable {
                             description
                     ));
                     
-                    if(montant >= reste){
+                    if(montant == reste){
                         inscriptionService.updatePaymentStatus(inscription.getId(), true);
                         showSuccessDialog("Paiement enregistré avec succès. L'inscription est maintenant payée en totalité.");
                     } else {
