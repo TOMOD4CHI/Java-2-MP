@@ -44,7 +44,12 @@ public class PaiementService {
         Optional<Paiement> paiementOpt = paiementRepository.findById(id);
         if (paiementOpt.isPresent()) {
             Paiement paiement = paiementOpt.get();
-
+            if(paiement instanceof PaiementInscription) {
+                Inscription inscription = ((PaiementInscription) paiement).getInscription();
+                if (inscription != null) {
+                    inscriptionService.updatePaymentStatus(inscription.getId(), false);
+                }
+            }
             paiement.setStatut(StatutPaiement.ANNULEE);
             return paiementRepository.update(paiement);
         }
@@ -58,6 +63,9 @@ public class PaiementService {
         return delete(id);
     }
 
+    public List<Paiement> getAll() {
+        return paiementRepository.findAll();
+    }
     public List<Paiement> getAllPaiements() {
         return paiementRepository.findAll().stream().filter(p -> p.getStatut() != StatutPaiement.ANNULEE).toList();
     }
@@ -79,7 +87,7 @@ public class PaiementService {
 
 
     public double calculerMontantPayer(int inscriptionId) throws SQLException {
-        List<PaiementInscription> paiements = paiementRepository.getTranches(inscriptionId);
+        List<PaiementInscription> paiements = paiementRepository.getTranches(inscriptionId).stream().filter(p -> p.getStatut() != StatutPaiement.ANNULEE).toList();
         return paiements.stream()
                 .mapToDouble(Paiement::getMontant)
                 .sum();

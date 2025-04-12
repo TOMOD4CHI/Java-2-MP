@@ -262,10 +262,10 @@ public class PaymentHistory implements Initializable {
     }
 
     private void loadPaymentData() {
-        // This would be replaced with actual database call
+
         paymentsList.clear();
         List<PaymentEntry> payments = new ArrayList<>();
-        for(Paiement p : paiementService.getAllPaiements()) {
+        for(Paiement p : paiementService.getAll()) {
             String type = p.getTypePaiement();
             if (type.equals("Totale")) {
                 type = "Inscription Totale";
@@ -297,11 +297,11 @@ public class PaymentHistory implements Initializable {
     private void updateSummary() {
         int total = paymentsList.size();
         double totalAmount = paymentsList.stream()
-                .filter(p -> !p.getStatut().equals("annulee"))
+                .filter(p -> !p.getStatut().equalsIgnoreCase("annulee"))
                 .mapToDouble(PaymentEntry::getMontant)
                 .sum();
         long completed = paymentsList.stream()
-                .filter(p -> p.getStatut().equals("complete"))
+                .filter(p -> p.getStatut().equalsIgnoreCase("complete"))
                 .count();
         long pending = inscriptionService.getAllInscriptions().stream()
                 .filter(i -> i.getnextPaymentDate()!=null && i.getnextPaymentDate().after(Date.valueOf(LocalDate.now())))
@@ -361,7 +361,6 @@ public class PaymentHistory implements Initializable {
 
     @FXML
     void handleFilter(ActionEvent event) {
-        //TODO : Complete this shit
         Candidat selectedCandidat = candidatComboBox.getSelectionModel().getSelectedItem();
         String selectedType = typeComboBox.getSelectionModel().getSelectedItem();
         LocalDate dateDebut = dateDebutPicker.getValue();
@@ -372,13 +371,14 @@ public class PaymentHistory implements Initializable {
             return;
         }
 
-        paymentsList.clear();
         List<PaymentEntry> filteredPayments = new ArrayList<>();
         for (PaymentEntry payment : paymentsList) {
             boolean matches = selectedCandidat == null || selectedCandidat.getCin().equals(payment.getCin());
 
-            if (!selectedType.equals("Tous les types") && !selectedType.equals(payment.getType())) {
-                matches = false;
+            if (selectedType.equalsIgnoreCase("Inscription")) {
+                matches = matches && (payment.getType().equals("Inscription Totale") || payment.getType().equals("Tranches d'Inscription"));
+            } else if (selectedType.equalsIgnoreCase("Examen")) {
+                matches = matches && payment.getType().equals("Examen");
             }
 
             if (dateDebut != null && payment.getD().isBefore(dateDebut)) {
@@ -394,9 +394,8 @@ public class PaymentHistory implements Initializable {
             }
         }
         AlertUtil.showInfo("Filtres Appliqués", "Les filtres ont été appliqués avec succès.");
-
-        paymentsList= FXCollections.observableArrayList(filteredPayments);
-        paymentsTable.setItems(paymentsList);
+        ObservableList<PaymentEntry> filteredPaymentsList = FXCollections.observableArrayList(filteredPayments);
+        paymentsTable.setItems(filteredPaymentsList);
         updateSummary();
         updateChartData();
     }

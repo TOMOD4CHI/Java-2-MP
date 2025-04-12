@@ -202,8 +202,7 @@ public class Paiement implements Initializable {
 
                 deleteButton.setOnAction(event -> {
                     PaiementData data = getTableView().getItems().get(getIndex());
-                    boolean deleted = paiementService.deletePaiement(data.getId());
-                    
+                    boolean deleted = paiementService.cancelPiament(data.getId());
                     if (deleted) {
                         showSuccessDialog("Paiement supprimé avec succès");
                         getTableView().getItems().remove(getIndex());
@@ -236,6 +235,7 @@ public class Paiement implements Initializable {
     private void loadMockData() {
         ObservableList<PaiementData> paiements = FXCollections.observableArrayList(
                 paiementService.getAllPaiements().stream()
+                        .filter(p -> p.getStatut() != StatutPaiement.ANNULEE)
                         .map(p -> new PaiementData(
                                 p.getId(),
                                 p.getDatePaiement(),

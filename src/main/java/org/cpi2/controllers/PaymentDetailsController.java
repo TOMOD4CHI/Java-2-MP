@@ -103,29 +103,34 @@ public class PaymentDetailsController implements Initializable {
         cinLabel.setText(payment.getCin());
         
         // Load and display payment plan details if it's an inscription payment
-        if (!payment.getType().equals("Examen")) {
-            loadInscriptionPaymentDetails();
-        } else {
-            // Hide payment plan section for exam payments
-            if (paymentProgressBar != null) {
-                paymentProgressBar.setVisible(false);
-            }
-            if (totalPaidLabel != null) {
-                totalPaidLabel.setText("N/A");
-            }
-            if (remainingLabel != null) {
-                remainingLabel.setText("N/A");
-            }
-            if (planTypeLabel != null) {
-                planTypeLabel.setText("Paiement d'examen");
-            }
-            if (nextPaymentLabel != null) {
-                nextPaymentLabel.setText("N/A");
+        if (payment.getStatut().equalsIgnoreCase("annulee")){
+            nextPaymentLabel.setText("N/A");
+            remainingLabel.setText("N/A");
+            totalPaidLabel.setText("N/A");
+            paymentProgressBar.setVisible(false);
+        }
+        else {
+            if (!payment.getType().equals("Examen")) {
+                loadInscriptionPaymentDetails();
+            } else {
+                if (paymentProgressBar != null) {
+                    paymentProgressBar.setVisible(false);
+                }
+                if (totalPaidLabel != null) {
+                    totalPaidLabel.setText("N/A");
+                }
+                if (remainingLabel != null) {
+                    remainingLabel.setText("N/A");
+                }
+                if (planTypeLabel != null) {
+                    planTypeLabel.setText("Paiement d'examen");
+                }
+                if (nextPaymentLabel != null) {
+                    nextPaymentLabel.setText("N/A");
+                }
             }
         }
-        
-        // Load payment history for this candidate
-        loadPaymentHistory();
+        loadPaymentHistory(payment.getCin());
     }
     
     private void loadInscriptionPaymentDetails() {
@@ -173,13 +178,13 @@ public class PaymentDetailsController implements Initializable {
         }
     }
     
-    private void loadPaymentHistory() {
+    private void loadPaymentHistory(String cin) {
         // Create observable list for payment history
         ObservableList<PaymentHistoryEntry> historyData = FXCollections.observableArrayList();
         
         try {
             // Get all payments for this candidate
-            List<Paiement> candidatePayments = paiementService.getAllPaiements();
+            List<Paiement> candidatePayments = paiementService.getAllPaiements().stream().filter(p -> p.getCandidat().getCin().equals(cin)).toList();
             
             // Convert to table entries
             for (Paiement p : candidatePayments) {

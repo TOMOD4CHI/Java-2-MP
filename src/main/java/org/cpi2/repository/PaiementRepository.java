@@ -83,6 +83,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
         String notes = rs.getString("notes");
         long candidatId = rs.getLong("id_candidat");
         ModePaiement modePaiement = ModePaiement.valueOf(rs.getString("mode_paiement"));
+        StatutPaiement statut = StatutPaiement.valueOf(rs.getString("statut"));
 
         Long idExamen = rs.getObject("id_examen", Long.class);
         Integer idInscription = rs.getObject("inscription_id", Integer.class);
@@ -94,7 +95,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
 
         if (idExamen == null) {
             return new PaiementInscription(
-                    StatutPaiement.COMPLETE,
+                    statut,
                     id,
                     candidat,
                     montant,
@@ -109,7 +110,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             );
         } else {
             return new PaiementExamen(
-                    StatutPaiement.COMPLETE,
+                    statut,
                     id,
                     candidat,
                     montant,
