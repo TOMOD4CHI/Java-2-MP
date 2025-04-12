@@ -22,16 +22,13 @@ import java.util.List;
 import org.cpi2.repository.DatabaseConfig;
 import org.cpi2.utils.AlertUtil;
 
-/**
- * Contrôleur pour le tableau de bord des candidats
- */
+
 public class DashboardCandidates implements Initializable {
 
     @FXML private ComboBox<String> periodCombo;
     @FXML private DatePicker startDate;
     @FXML private DatePicker endDate;
-    
-    // KPI Labels
+
     @FXML private Label totalCandidatsLabel;
     @FXML private Label newCandidatsLabel;
     @FXML private Label completionRateLabel;
@@ -40,8 +37,7 @@ public class DashboardCandidates implements Initializable {
     @FXML private Label newCandidatsChangeLabel;
     @FXML private Label completionChangeLabel;
     @FXML private Label activeChangeLabel;
-    
-    // Charts
+
     @FXML private LineChart<String, Number> registrationChart;
     @FXML private CategoryAxis registrationDateAxis;
     @FXML private NumberAxis registrationCountAxis;
@@ -55,8 +51,7 @@ public class DashboardCandidates implements Initializable {
     @FXML private StackedBarChart<String, Number> examResultsChart;
     @FXML private CategoryAxis examTypeAxis;
     @FXML private NumberAxis examResultsAxis;
-    
-    // Table
+
     @FXML private TableView<CandidateEntry> recentCandidatesTable;
     @FXML private TableColumn<CandidateEntry, Long> candidateIdColumn;
     @FXML private TableColumn<CandidateEntry, String> candidateNameColumn;
@@ -70,9 +65,7 @@ public class DashboardCandidates implements Initializable {
     private LocalDate filterStartDate;
     private LocalDate filterEndDate;
     
-    /**
-     * Initialise le contrôleur et configure les composants UI
-     */
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         periodCombo.getItems().addAll(
@@ -104,9 +97,7 @@ public class DashboardCandidates implements Initializable {
         });
     }
     
-    /**
-     * Met à jour la plage de dates en fonction de la période sélectionnée
-     */
+    
     private void updateDateRange(String period) {
         LocalDate now = LocalDate.now();
         
@@ -136,28 +127,22 @@ public class DashboardCandidates implements Initializable {
         }
     }
     
-    /**
-     * Gère l'action du bouton de filtre
-     */
+    
     @FXML
     private void handleApplyFilter() {
         filterStartDate = startDate.getValue();
         filterEndDate = endDate.getValue();
-        
-        // Validate dates
+
         if (filterStartDate != null && filterEndDate != null && filterStartDate.isAfter(filterEndDate)) {
             AlertUtil.showError("Erreur de date", "La date de début doit être avant la date de fin");
             return;
         }
-        
-        // Apply filter and reload data
+
         loadChartData();
         loadTableData();
     }
     
-    /**
-     * Configure les colonnes du tableau des candidats
-     */
+    
     private void setupTableColumns() {
         candidateIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         candidateNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -202,9 +187,7 @@ public class DashboardCandidates implements Initializable {
         });
     }
     
-    /**
-     * Charge les données pour tous les graphiques
-     */
+    
     private void loadChartData() {
         try (Connection conn = DatabaseConfig.getConnection()) {
             loadKPIData(conn);
@@ -218,25 +201,19 @@ public class DashboardCandidates implements Initializable {
         }
     }
     
-    /**
-     * Charge les données des indicateurs clés de performance
-     */
+    
     private void loadKPIData(Connection conn) throws SQLException {
-        // Total candidates
+
         String totalSql = "SELECT COUNT(*) as total FROM candidat";
-        
-        // New candidates (registered between start and end dates)
+
         String newSql = "SELECT COUNT(*) as nouveaux FROM candidat WHERE created_at BETWEEN ? AND ?";
-        
-        // Active candidates (who have an active inscription)
+
         String activeSql = "SELECT COUNT(DISTINCT c.id) as actifs FROM candidat c " +
                           "JOIN inscription i ON c.cin = i.cin " +
                           "WHERE i.statut = 'En Cours'";
-        
-        // Completion rate (candidates who have completed at least one exam)
+
         String completedExamsSql = "SELECT COUNT(DISTINCT candidat_id) as completed FROM examen WHERE resultat = 1";
-        
-        // Execute queries
+
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(totalSql)) {
             if (rs.next()) {
@@ -246,7 +223,7 @@ public class DashboardCandidates implements Initializable {
         }
         
         try (PreparedStatement pstmt = conn.prepareStatement(newSql)) {
-            // Convert LocalDate to java.sql.Date
+
             pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
             pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
             
@@ -275,18 +252,15 @@ public class DashboardCandidates implements Initializable {
                 completionRateLabel.setText(completionRate + "%");
             }
         }
-        
-        // Set the change labels with placeholder data
-        // In a real implementation, this would compare with previous period data
+
+
         candidatsChangeLabel.setText("+12% vs période précédente");
         newCandidatsChangeLabel.setText("+8% vs période précédente");
         completionChangeLabel.setText("+5% vs période précédente");
         activeChangeLabel.setText("+3% vs période précédente");
     }
     
-    /**
-     * Charge les données du graphique d'inscription
-     */
+    
     private void loadRegistrationChartData(Connection conn) throws SQLException {
         XYChart.Series<String, Number> registrationSeries = new XYChart.Series<>();
         registrationSeries.setName("Inscriptions");
@@ -316,7 +290,7 @@ public class DashboardCandidates implements Initializable {
                 registrationSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
             }
         } else {
-            // Provide empty data rather than mock data
+
             registrationSeries.getData().add(new XYChart.Data<>(filterStartDate.format(DateTimeFormatter.ofPattern("dd/MM")), 0));
         }
         
@@ -324,9 +298,7 @@ public class DashboardCandidates implements Initializable {
         registrationChart.getData().add(registrationSeries);
     }
     
-    /**
-     * Charge les données du graphique de distribution d'âge
-     */
+    
     private void loadAgeDistributionChartData(Connection conn) throws SQLException {
         Map<String, Integer> ageGroups = new HashMap<>();
         ageGroups.put("<18 ans", 0);
@@ -338,8 +310,7 @@ public class DashboardCandidates implements Initializable {
         ageGroups.put("Sans date", 0);
         
         System.out.println("Loading age distribution data for date range: " + filterStartDate + " to " + filterEndDate);
-        
-        // First count total candidates within filter date range
+
         String countSql = "SELECT COUNT(*) as total FROM candidat WHERE created_at BETWEEN ? AND ? OR created_at IS NULL";
         try (PreparedStatement pstmt = conn.prepareStatement(countSql)) {
             pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
@@ -349,8 +320,7 @@ public class DashboardCandidates implements Initializable {
                 if (rs.next()) {
                     int total = rs.getInt("total");
                     System.out.println("Total candidates in date range: " + total);
-                    
-                    // If no candidates at all, show "No data"
+
                     if (total == 0) {
                         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
                         pieChartData.add(new PieChart.Data("Aucune donnée", 1));
@@ -360,8 +330,7 @@ public class DashboardCandidates implements Initializable {
                 }
             }
         }
-        
-        // Direct SQL approach using CASE to categorize - handles candidates with and without birth dates
+
         String ageSql = "SELECT " +
                       "CASE " +
                       "  WHEN date_naissance IS NULL THEN 'Sans date' " +
@@ -388,8 +357,7 @@ public class DashboardCandidates implements Initializable {
                     int count = rs.getInt("count");
                     
                     System.out.println("SQL found age group: " + ageGroup + " with count: " + count);
-                    
-                    // Add to our age groups map
+
                     if (ageGroup != null && ageGroups.containsKey(ageGroup)) {
                         ageGroups.put(ageGroup, count);
                     } else {
@@ -402,17 +370,14 @@ public class DashboardCandidates implements Initializable {
                 }
             }
         }
-        
-        // If we have a "Sans date" category with candidates, keep track of the count
+
         int withoutDateCount = ageGroups.get("Sans date");
-        
-        // For debug: Direct hardcoded data to ensure all groups are shown
+
         System.out.println("Current age groups from SQL: ");
         ageGroups.forEach((group, count) -> {
             System.out.println("  " + group + ": " + count);
         });
-        
-        // If we don't get any data from SQL, add some sample data to show all categories
+
         boolean allZero = true;
         for (Integer count : ageGroups.values()) {
             if (count > 0) {
@@ -423,8 +388,7 @@ public class DashboardCandidates implements Initializable {
         
         if (allZero) {
             System.out.println("No age data found from SQL. Using manual approach instead.");
-            
-            // Second approach: Use individual candidate query to catch any edge cases
+
             String candidateSql = "SELECT CONCAT(c.nom, ' ', c.prenom) as fullname, c.date_naissance, " +
                                 "TIMESTAMPDIFF(YEAR, c.date_naissance, CURDATE()) as age " +
                                 "FROM candidat c";
@@ -446,8 +410,7 @@ public class DashboardCandidates implements Initializable {
                     }
                     
                     System.out.println("Candidate: " + fullname + ", DOB: " + birthDate + ", Age: " + age);
-                    
-                    // Categorize based on age if possible
+
                     if (birthDate != null && age != null) {
                         String ageGroup;
                         if (age < 18) ageGroup = "<18 ans";
@@ -469,8 +432,7 @@ public class DashboardCandidates implements Initializable {
                 System.out.println("Error in direct candidate query: " + e.getMessage());
             }
         }
-        
-        // If we still have no data, add demonstration data to at least show the chart structure
+
         if (allZero) {
             System.out.println("No real candidate data found. Using demonstration data.");
             ageGroups.put("<18 ans", 2);
@@ -481,13 +443,11 @@ public class DashboardCandidates implements Initializable {
             ageGroups.put("41+ ans", 3);
             ageGroups.put("Sans date", 4);
         }
-        
-        // Prepare chart data
+
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         boolean hasData = false;
         int totalShown = 0;
-        
-        // Add data points for age groups
+
         for (Map.Entry<String, Integer> entry : ageGroups.entrySet()) {
             if (entry.getValue() > 0 && !entry.getKey().equals("Sans date")) {
                 pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
@@ -496,8 +456,7 @@ public class DashboardCandidates implements Initializable {
                 System.out.println("Adding to chart: " + entry.getKey() + " count: " + entry.getValue());
             }
         }
-        
-        // Add "Sans date" category only if there are some candidates without dates
+
         if (withoutDateCount > 0) {
             pieChartData.add(new PieChart.Data("Sans date de naissance", withoutDateCount));
             hasData = true;
@@ -506,36 +465,31 @@ public class DashboardCandidates implements Initializable {
         }
         
         if (!hasData) {
-            // If no data in any age group, show "No data"
+
             pieChartData.add(new PieChart.Data("Aucune donnée", 1));
             System.out.println("No age distribution data found - showing 'Aucune donnée'");
         } else {
             System.out.println("Total candidates shown in chart: " + totalShown);
         }
-        
-        // Set data and configure the chart
+
         ageDistributionChart.setData(pieChartData);
         ageDistributionChart.setTitle("Répartition par Âge");
         ageDistributionChart.setLegendVisible(true);
         ageDistributionChart.setLabelsVisible(true);
-        
-        // Add tooltips to the chart slices
+
         pieChartData.forEach(data -> {
             Tooltip tooltip = new Tooltip(data.getName() + ": " + (int)data.getPieValue() + " candidat(s)");
             Tooltip.install(data.getNode(), tooltip);
         });
     }
     
-    /**
-     * Charge les données du graphique de présence
-     */
+    
     private void loadAttendanceChartData(Connection conn) throws SQLException {
-        // The session_candidat table doesn't exist, use presence_code and presence_conduite tables instead
+
         Map<String, Integer> attendanceData = new HashMap<>();
         attendanceData.put("Code", 0);
         attendanceData.put("Conduite", 0);
-        
-        // Get presence rates for code sessions
+
         String codeSql = "SELECT " +
                         "COUNT(*) as total, " +
                         "SUM(present) as present_count " +
@@ -559,11 +513,10 @@ public class DashboardCandidates implements Initializable {
                 }
             }
         } catch (SQLException e) {
-            // Table might be empty, continue with default values
+
             System.out.println("Warning: Could not get code attendance data: " + e.getMessage());
         }
-        
-        // Get presence rates for driving sessions
+
         String conduiteSql = "SELECT " +
                             "COUNT(*) as total, " +
                             "SUM(present) as present_count " +
@@ -587,11 +540,10 @@ public class DashboardCandidates implements Initializable {
                 }
             }
         } catch (SQLException e) {
-            // Table might be empty, continue with default values
+
             System.out.println("Warning: Could not get driving attendance data: " + e.getMessage());
         }
-        
-        // Alternative - use seances for attendance data for driving
+
         if (attendanceData.get("Conduite") == 0) {
             String seanceSql = "SELECT " +
                              "COUNT(*) as total, " +
@@ -616,7 +568,7 @@ public class DashboardCandidates implements Initializable {
                     }
                 }
             } catch (SQLException e) {
-                // Table might not have the right status values, continue with default values
+
                 System.out.println("Warning: Could not get driving attendance data from seance: " + e.getMessage());
             }
         }
@@ -632,9 +584,7 @@ public class DashboardCandidates implements Initializable {
         attendanceChart.getData().add(attendanceSeries);
     }
     
-    /**
-     * Charge les données du graphique des résultats d'examen
-     */
+    
     private void loadExamResultsChartData(Connection conn) throws SQLException {
         Map<String, Integer> passData = new HashMap<>();
         passData.put("Code", 0);
@@ -645,8 +595,7 @@ public class DashboardCandidates implements Initializable {
         failData.put("Conduite", 0);
         
         System.out.println("Loading exam results data for date range: " + filterStartDate + " to " + filterEndDate);
-        
-        // Get exam pass/fail data for code
+
         String codeSql = "SELECT " +
                        "COUNT(CASE WHEN e.resultat = 1 THEN 1 END) as pass_count, " +
                        "COUNT(CASE WHEN e.resultat = 0 THEN 1 END) as fail_count " +
@@ -670,8 +619,7 @@ public class DashboardCandidates implements Initializable {
                 }
             }
         }
-        
-        // Get exam pass/fail data for driving
+
         String drivingSql = "SELECT " +
                           "COUNT(CASE WHEN e.resultat = 1 THEN 1 END) as pass_count, " +
                           "COUNT(CASE WHEN e.resultat = 0 THEN 1 END) as fail_count " +
@@ -695,15 +643,13 @@ public class DashboardCandidates implements Initializable {
                 }
             }
         }
-        
-        // Create series for pass/fail data
+
         XYChart.Series<String, Number> passSeries = new XYChart.Series<>();
         passSeries.setName("Réussite");
         
         XYChart.Series<String, Number> failSeries = new XYChart.Series<>();
         failSeries.setName("Échec");
-        
-        // Populate series
+
         for (String examType : passData.keySet()) {
             passSeries.getData().add(new XYChart.Data<>(examType, passData.get(examType)));
             failSeries.getData().add(new XYChart.Data<>(examType, failData.get(examType)));
@@ -713,9 +659,7 @@ public class DashboardCandidates implements Initializable {
         examResultsChart.getData().addAll(passSeries, failSeries);
     }
     
-    /**
-     * Charge les données du tableau des candidats récents
-     */
+    
     private void loadTableData() {
         ObservableList<CandidateEntry> candidateData = FXCollections.observableArrayList();
         
@@ -751,16 +695,14 @@ public class DashboardCandidates implements Initializable {
                     java.sql.Date rawDate = rs.getDate("raw_date");
                     
                     System.out.println("Found candidate: ID=" + id + ", Name=" + name + ", Created=" + rawDate);
-                    
-                    // Convert null status to "En attente"
+
                     if (status == null) status = "En attente";
                     
                     candidateData.add(new CandidateEntry(id, name, age, phone, email, status, regDate));
                 }
                 System.out.println("Total candidates found: " + rowCount);
             }
-            
-            // If no data found, add sample data
+
             if (candidateData.isEmpty()) {
                 candidateData.add(new CandidateEntry(1L, "Aucune donnée trouvée", 0, "", "", "Inactif", ""));
                 System.out.println("No candidates found for the selected date range");
@@ -776,9 +718,7 @@ public class DashboardCandidates implements Initializable {
     
 
     
-    /**
-     * Classe interne pour les entrées du tableau des candidats
-     */
+    
     public static class CandidateEntry {
         private final Long id;
         private final String name;
@@ -808,3 +748,4 @@ public class DashboardCandidates implements Initializable {
         public String getRegistrationDate() { return registrationDate; }
     }
 }
+

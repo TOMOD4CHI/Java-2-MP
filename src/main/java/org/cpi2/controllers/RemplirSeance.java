@@ -673,14 +673,12 @@ public class RemplirSeance {
         }
 
         int seanceId = Math.toIntExact(selectedSeance.getId());
-        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmation.setTitle("Confirmation d'inscription");
-        confirmation.setHeaderText("Inscription de candidats");
-        confirmation.setContentText("Voulez-vous inscrire " + selectedCandidatIds.size() + 
-                                    " candidat(s) à la séance sélectionnée?");
-        
-        Optional<ButtonType> result = confirmation.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        boolean confirmed = AlertUtil.showConfirmation(
+                "Confirmation d'inscription",
+                "Voulez-vous inscrire " + selectedCandidatIds.size() + " candidat(s) à la séance sélectionnée?"
+        );
+
+        if (confirmed) {
             saveInscriptions(seanceId, selectedCandidatIds);
 
             resetSelection();

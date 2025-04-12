@@ -175,7 +175,7 @@ public class AccueilPageController implements Initializable {
             System.err.println("Erreur lors de la configuration des notifications: " + e.getMessage());
         }
     }
-
+    
     private void checkSystemNotifications() {
         try {
             List<String> notifications = dashboardService.getSystemNotifications();
@@ -215,7 +215,7 @@ public class AccueilPageController implements Initializable {
             System.err.println("Erreur lors de l'initialisation des cartes du tableau de bord: " + e.getMessage());
         }
     }
-
+    
     private void setupProgressionChart() {
         try {
             progressionChart.getData().clear();

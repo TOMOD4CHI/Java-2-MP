@@ -16,7 +16,7 @@ public class ModifierCandidat {
     private final CandidatService candidatService = new CandidatService();
     private Candidat candidatToModify;
     
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,}$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
     private static final Pattern CIN_PATTERN = Pattern.compile("^[0-9]{8,}$");
@@ -49,8 +49,7 @@ public class ModifierCandidat {
         java.time.LocalDate today = java.time.LocalDate.now();
         java.time.LocalDate minDate = today.minusYears(100); // Maximum reasonable age (100 years)
         java.time.LocalDate maxDate = today.minusYears(16);  // Minimum reasonable age (16 years)
-        
-        // Check if date is not in the future and within reasonable age range
+
         return !date.isAfter(today) && !date.isBefore(minDate) && !date.isAfter(maxDate);
     }
 
@@ -89,8 +88,7 @@ public class ModifierCandidat {
         phoneField.setPromptText("Entrez le numéro (8 chiffres)");
         emailField.setPromptText("exemple@domaine.com");
         birthDatePicker.setPromptText("Choisir la date de naissance");
-        
-        // Set default value for birth date to 18 years ago
+
         birthDatePicker.setValue(java.time.LocalDate.now().minusYears(18));
         
         setupValidation();
@@ -108,8 +106,7 @@ public class ModifierCandidat {
         ValidationUtils.addValidation(prenomField, 
             text -> !text.trim().isEmpty(), 
             "Le prénom est obligatoire", 1);
-        
-        // Date de naissance validation
+
         birthDatePicker.valueProperty().addListener((obs, oldValue, newValue) -> {
             if (!isValidBirthDate(newValue)) {
                 if (newValue == null) {
@@ -260,13 +257,10 @@ public class ModifierCandidat {
         ValidationUtils.clearValidation(typeComboBox);
     }
 
-    /**
-     * Silent validation for form submission - doesn't update UI error labels
-     */
+    
     private boolean validateInputSilent() {
         boolean isValid = true;
 
-        // Validate each field without showing error messages
         if (!isValidName(nomField.getText())) {
             isValid = false;
         }
@@ -302,10 +296,7 @@ public class ModifierCandidat {
         return isValid;
     }
     
-    /**
-     * Interactive validation that updates UI error labels
-     * Only used for direct field validation, not form submission
-     */
+    
     private boolean validateInput() {
         boolean isValid = true;
 
@@ -369,4 +360,6 @@ public class ModifierCandidat {
         return isValid;
     }
 }
+
+
 

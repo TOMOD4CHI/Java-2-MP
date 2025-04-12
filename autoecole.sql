@@ -4,7 +4,9 @@
 --
 -- Host: 127.0.0.1
 -- Generation Time: Apr 12, 2025 at 02:19 PM
+-- Generation Time: Apr 12, 2025 at 02:19 PM
 -- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -44,6 +46,7 @@ CREATE TABLE `auto_ecole` (
 --
 
 INSERT INTO `auto_ecole` VALUES(1, 'Auto École Exemplaire', 'Avenue des Conducteurs 123, Ville', 'logos/default_logo.png', '12345678', 'contact@autoecole.com', 'aaaa', 'aaaa', '2025-03-22 13:11:27');
+INSERT INTO `auto_ecole` VALUES(1, 'Auto École Exemplaire', 'Avenue des Conducteurs 123, Ville', 'logos/default_logo.png', '12345678', 'contact@autoecole.com', 'aaaa', 'aaaa', '2025-03-22 13:11:27');
 
 -- --------------------------------------------------------
 
@@ -67,6 +70,10 @@ CREATE TABLE `candidat` (
 --
 -- Dumping data for table `candidat`
 --
+
+
+
+
 
 
 
@@ -99,6 +106,12 @@ CREATE TABLE `document` (
 
 
 
+
+
+
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -117,6 +130,10 @@ CREATE TABLE `dossier` (
 --
 -- Dumping data for table `dossier`
 --
+
+
+
+
 
 
 
@@ -161,6 +178,23 @@ CREATE TABLE `entretien` (
 
 
 
+--
+-- Dumping data for table `entretien`
+--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -179,6 +213,13 @@ CREATE TABLE `examen` (
   `commentaire` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `examen`
+--
+
+
+
 
 --
 -- Dumping data for table `examen`
@@ -214,6 +255,10 @@ CREATE TABLE `inscription` (
 
 
 
+
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -241,6 +286,7 @@ CREATE TABLE `moniteur` (
 
 
 
+
 -- --------------------------------------------------------
 
 --
@@ -258,6 +304,7 @@ CREATE TABLE `moniteur_specialite` (
 --
 -- Dumping data for table `moniteur_specialite`
 --
+
 
 
 
@@ -292,6 +339,12 @@ CREATE TABLE `paiement` (
 
 
 
+
+
+
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -318,6 +371,9 @@ CREATE TABLE `plan` (
 INSERT INTO `plan` VALUES(1, 'Basic Motorcycle Course', 'Fundamental motorcycle training for beginners', 1, 200.00, 2, 10, 10, 1, '2025-03-23 22:54:51');
 INSERT INTO `plan` VALUES(3, 'Basic Car Driving Course', 'Essential car driving skills for new drivers', 2, 350.00, 3, 10, 10, 1, '2025-03-23 22:54:51');
 INSERT INTO `plan` VALUES(7, 'Heavy Truck License Course', 'Complete training for heavy goods vehicle license', 3, 900.00, 4, 10, 10, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(1, 'Basic Motorcycle Course', 'Fundamental motorcycle training for beginners', 1, 200.00, 2, 10, 10, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(3, 'Basic Car Driving Course', 'Essential car driving skills for new drivers', 2, 350.00, 3, 10, 10, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(7, 'Heavy Truck License Course', 'Complete training for heavy goods vehicle license', 3, 900.00, 4, 10, 10, 1, '2025-03-23 22:54:51');
 
 -- --------------------------------------------------------
 
@@ -332,6 +388,14 @@ CREATE TABLE `presence_code` (
   `present` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `presence_code`
+--
+
+
+
+
 
 --
 -- Dumping data for table `presence_code`
@@ -443,6 +507,8 @@ CREATE TABLE `session_code` (
 
 
 
+
+
 -- --------------------------------------------------------
 
 --
@@ -492,6 +558,14 @@ INSERT INTO `type_document` VALUES(5, 'PROOF_OF_RESIDENCE', 'Justificatif de dom
 INSERT INTO `type_document` VALUES(6, 'AUTRE', 'Autre document', 0, '2025-03-23 22:49:32');
 INSERT INTO `type_document` VALUES(7, 'PERMIS_B', 'Permis de Counduite d\'une Voiture', 1, '2025-03-27 19:33:03');
 INSERT INTO `type_document` VALUES(8, 'PERMIS_C', 'Permis de counduite d\'un Camion', 1, '2025-03-27 19:33:36');
+INSERT INTO `type_document` VALUES(1, 'CIN', 'Carte d\'identité nationale', 1, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(2, 'PERMIS_A', 'Permis de conduire d\'un Moto', 0, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(3, 'CERTIFICAT_MEDICAL', 'Certificat d\'aptitude médicale', 1, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(4, 'PHOTO', 'Photo d\'identité', 1, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(5, 'PROOF_OF_RESIDENCE', 'Justificatif de domicile', 1, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(6, 'AUTRE', 'Autre document', 0, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(7, 'PERMIS_B', 'Permis de Counduite d\'une Voiture', 1, '2025-03-27 19:33:03');
+INSERT INTO `type_document` VALUES(8, 'PERMIS_C', 'Permis de counduite d\'un Camion', 1, '2025-03-27 19:33:36');
 
 -- --------------------------------------------------------
 
@@ -511,6 +585,8 @@ CREATE TABLE `type_examen` (
 -- Dumping data for table `type_examen`
 --
 
+INSERT INTO `type_examen` VALUES(1, 'Code', 'Examen du code de la route', 100.00, '2025-03-22 13:11:28');
+INSERT INTO `type_examen` VALUES(2, 'Conduite', 'Examen de conduite en circulation', 200.00, '2025-03-22 13:11:28');
 INSERT INTO `type_examen` VALUES(1, 'Code', 'Examen du code de la route', 100.00, '2025-03-22 13:11:28');
 INSERT INTO `type_examen` VALUES(2, 'Conduite', 'Examen de conduite en circulation', 200.00, '2025-03-22 13:11:28');
 
@@ -533,6 +609,9 @@ CREATE TABLE `type_permis` (
 -- Dumping data for table `type_permis`
 --
 
+INSERT INTO `type_permis` VALUES(1, 'A', 'Moto', 'Permis pour conduire une moto', 18, '2025-03-22 13:11:28');
+INSERT INTO `type_permis` VALUES(2, 'B', 'Voiture', 'Permis pour conduire une voiture', 18, '2025-03-22 13:11:28');
+INSERT INTO `type_permis` VALUES(3, 'C', 'Camion', 'Permis pour conduire un camion', 21, '2025-03-22 13:11:28');
 INSERT INTO `type_permis` VALUES(1, 'A', 'Moto', 'Permis pour conduire une moto', 18, '2025-03-22 13:11:28');
 INSERT INTO `type_permis` VALUES(2, 'B', 'Voiture', 'Permis pour conduire une voiture', 18, '2025-03-22 13:11:28');
 INSERT INTO `type_permis` VALUES(3, 'C', 'Camion', 'Permis pour conduire un camion', 21, '2025-03-22 13:11:28');
@@ -564,6 +643,8 @@ CREATE TABLE `vehicule` (
 --
 -- Dumping data for table `vehicule`
 --
+
+
 
 
 

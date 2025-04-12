@@ -371,11 +371,7 @@ public class AfficherCandidat {
             System.err.println("Error opening document: " + e.getMessage());
             e.printStackTrace();
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Cannot Open Document");
-            alert.setContentText("Unable to open the document: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtil.showError("Error", "Unable to open the document: \n" + e.getMessage());
         }
     }
 
@@ -474,4 +470,6 @@ public class AfficherCandidat {
         clearDocumentContainers();
     }
 }
+
+
 

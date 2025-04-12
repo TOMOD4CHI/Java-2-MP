@@ -35,7 +35,7 @@ public class ModifierMoniteur {
     private final MoniteurService moniteurService = new MoniteurService();
     private Moniteur currentMoniteur;
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,}$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
     private static final Pattern CIN_PATTERN = Pattern.compile("^[0-9]{8,}$");
@@ -291,4 +291,6 @@ public class ModifierMoniteur {
         dateEmbaucheField.getStyleClass().removeAll("field-error", "field-valid");
     }
 }
+
+
 
