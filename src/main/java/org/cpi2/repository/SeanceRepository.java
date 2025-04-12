@@ -38,30 +38,23 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 seance.setVehiculeId(rs.getLong("vehicule_id"));
                 seance.setVehiculeName(rs.getString("vehicule_marque") + " " + rs.getString("vehicule_modele"));
                 seance.setDate(rs.getString("date"));
-                // Map heure to temps
                 seance.setTemps(rs.getString("heure"));
-                // Map kilometrage_debut to kilometrage
                 seance.setKilometrage(getDoubleFromInt(rs, "kilometrage_debut"));
-                // Map statut to status
                 seance.setStatus(rs.getString("statut"));
                 seance.setCommentaire(rs.getString("commentaire"));
-                
-                // Gérer correctement les valeurs NULL pour latitude et longitude
+
                 if (rs.getObject("latitude") != null) {
                     seance.setLatitude(rs.getDouble("latitude"));
                 }
                 if (rs.getObject("longitude") != null) {
                     seance.setLongitude(rs.getDouble("longitude"));
                 }
-                
-                // Récupérer le lieu et le mapper selon le type de séance
+
                 String lieu = rs.getString("lieu");
                 if (lieu != null) {
                     if ("Code".equals(seance.getType())) {
-                        // Pour les séances de code, le lieu est la salle
                         seance.setSalle(lieu);
                     } else if ("Conduite".equals(seance.getType())) {
-                        // Pour les séances de conduite, le lieu est le quartier
                         seance.setQuartier(lieu);
                     }
                 }
@@ -101,30 +94,23 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 seance.setVehiculeId(rs.getLong("vehicule_id"));
                 seance.setVehiculeName(rs.getString("vehicule_marque") + " " + rs.getString("vehicule_modele"));
                 seance.setDate(rs.getString("date"));
-                // Map heure to temps
                 seance.setTemps(rs.getString("heure"));
-                // Map kilometrage_debut to kilometrage
                 seance.setKilometrage(getDoubleFromInt(rs, "kilometrage_debut"));
-                // Map statut to status
                 seance.setStatus(rs.getString("statut"));
                 seance.setCommentaire(rs.getString("commentaire"));
-                
-                // Gérer correctement les valeurs NULL pour latitude et longitude
+
                 if (rs.getObject("latitude") != null) {
                     seance.setLatitude(rs.getDouble("latitude"));
                 }
                 if (rs.getObject("longitude") != null) {
                     seance.setLongitude(rs.getDouble("longitude"));
                 }
-                
-                // Récupérer le lieu et le mapper selon le type de séance
+
                 String lieu = rs.getString("lieu");
                 if (lieu != null) {
                     if ("Code".equals(seance.getType())) {
-                        // Pour les séances de code, le lieu est la salle
                         seance.setSalle(lieu);
                     } else if ("Conduite".equals(seance.getType())) {
-                        // Pour les séances de conduite, le lieu est le quartier
                         seance.setQuartier(lieu);
                     }
                 }
@@ -181,7 +167,6 @@ public class SeanceRepository extends BaseRepository<Seance> {
             }
             
             if ("Code".equals(seance.getType())) {
-                // Pour les séances de code, on utilise la salle
                 stmt.setString(13, seance.getSalle());
             } else if ("Conduite".equals(seance.getType())) {
                 String quartier = seance.getQuartier();
@@ -232,17 +217,14 @@ public class SeanceRepository extends BaseRepository<Seance> {
             }
 
             stmt.setString(5, seance.getDate());
-            // Map temps to heure
             stmt.setString(6, seance.getTemps());
 
-            // Map kilometrage to kilometrage_debut and convert Double to Integer
             if (seance.getKilometrage() != null) {
                 stmt.setInt(7, seance.getKilometrage().intValue());
             } else {
                 stmt.setNull(7, Types.INTEGER);
             }
 
-            // Map status to statut
             stmt.setString(8, seance.getStatus());
             stmt.setString(9, seance.getCommentaire());
 
@@ -257,16 +239,12 @@ public class SeanceRepository extends BaseRepository<Seance> {
             } else {
                 stmt.setNull(11, Types.DOUBLE);
             }
-            
-            // Utiliser le champ lieu pour stocker la salle ou le quartier selon le type de séance
+
             if ("Code".equals(seance.getType())) {
-                // Pour les séances de code, on utilise la salle
                 stmt.setString(12, seance.getSalle());
             } else if ("Conduite".equals(seance.getType())) {
-                // Pour les séances de conduite, on utilise le quartier
                 String quartier = seance.getQuartier();
                 if (quartier == null || quartier.isEmpty()) {
-                    // Si pas de quartier défini, on utilise les coordonnées comme description
                     if (seance.getLatitude() != null && seance.getLongitude() != null) {
                         quartier = "Position: " + seance.getLatitude() + ", " + seance.getLongitude();
                     } else {
@@ -275,7 +253,6 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 }
                 stmt.setString(12, quartier);
             } else {
-                // Pour les autres types de séances
                 stmt.setString(12, seance.getSalle());
             }
 
@@ -289,7 +266,6 @@ public class SeanceRepository extends BaseRepository<Seance> {
     }
 
     public boolean updateStatus(Long id, String status, String commentaire) {
-        // Note: status in code maps to statut in DB
         String sql = "UPDATE seance SET statut = ?, commentaire = ? WHERE id = ?";
 
         try (Connection conn = getConnection();

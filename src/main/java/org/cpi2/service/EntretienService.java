@@ -158,7 +158,7 @@ public class EntretienService {
      * @return true if updated successfully, false otherwise
      */
     public boolean updateEntretien(Entretien entretien) {
-        // Check if the entretien exists
+        
         Entretien existingEntretien = entretienRepository.findById(entretien.getId());
         if (existingEntretien == null) {
             return false;
@@ -282,7 +282,7 @@ public class EntretienService {
         LocalDate oneMonthLater = now.plusMonths(1);
 
         for (Entretien entretien : maintenances) {
-            // If there's a planned maintenance within the next month
+            
             if (entretien.isMaintenance() &&
                     entretien.getDateProchainEntretien() != null &&
                     !entretien.getDateProchainEntretien().isBefore(now) &&

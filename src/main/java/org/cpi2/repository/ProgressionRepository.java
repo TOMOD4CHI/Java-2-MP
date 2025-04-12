@@ -205,12 +205,12 @@ public class ProgressionRepository {
                 String result = rs.getString("resultat");
                 int attempts = rs.getInt("attempts");
                 
-                if (examType == 1) { // Code exam
+                if (examType == 1) {
                     codeAttempts += attempts;
                     if ("REUSSI".equals(result)) {
                         codeExamPassed = true;
                     }
-                } else if (examType == 2) { // Drive exam
+                } else if (examType == 2) {
                     driveAttempts += attempts;
                     if ("REUSSI".equals(result)) {
                         driveExamPassed = true;
@@ -256,16 +256,14 @@ public class ProgressionRepository {
                 timeInterval = "MONTH";
                 groupBy = "DAY(sc.date)";
         }
-        
-        // Code sessions
+
         String sqlCode = "SELECT " + groupBy + " as time_unit, COUNT(*) as count " +
                         "FROM presence_code pc " +
                         "JOIN session_code sc ON pc.session_code_id = sc.id " +
                         "WHERE pc.candidat_id = ? AND pc.present = 1 " +
                         "AND sc.date >= DATE_SUB(CURDATE(), INTERVAL 1 " + timeInterval + ") " +
                         "GROUP BY " + groupBy;
-                        
-        // Driving sessions
+
         String sqlDriving = "SELECT " + groupBy + " as time_unit, COUNT(*) as count " +
                            "FROM presence_conduite pc " +
                            "JOIN session_conduite sc ON pc.session_conduite_id = sc.id " +
@@ -274,7 +272,6 @@ public class ProgressionRepository {
                            "GROUP BY " + groupBy;
         
         try (Connection conn = getConnection()) {
-            // Get code sessions
             try (PreparedStatement stmt = conn.prepareStatement(sqlCode)) {
                 stmt.setLong(1, candidatId);
                 ResultSet rs = stmt.executeQuery();
@@ -286,8 +283,7 @@ public class ProgressionRepository {
                     sessionsData.put("Code-" + timeLabel, count);
                 }
             }
-            
-            // Get driving sessions
+
             try (PreparedStatement stmt = conn.prepareStatement(sqlDriving)) {
                 stmt.setLong(1, candidatId);
                 ResultSet rs = stmt.executeQuery();

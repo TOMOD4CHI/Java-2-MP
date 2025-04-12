@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// Candidat Repository
 public class CandidatRepository {
     private static final Logger LOGGER = Logger.getLogger(CandidatRepository.class.getName());
 
@@ -88,7 +87,6 @@ public class CandidatRepository {
             stmt.setString(5, candidat.getTelephone());
             stmt.setString(6, candidat.getEmail());
             stmt.setDate(7, Date.valueOf(candidat.getDateNaissance()));
-            //stmt.setInt(8, candidat.getTypePermis().ordinal() + 1);
 
             int affectedRows = stmt.executeUpdate();
 
@@ -123,14 +121,13 @@ public class CandidatRepository {
             stmt.setString(5, candidat.getTelephone());
             stmt.setString(6, candidat.getEmail());
             stmt.setDate(7, Date.valueOf(candidat.getDateNaissance()));
-            
-            // Map TypePermis enum to database IDs based on the code value
+
             int typePermisId;
             switch(candidat.getTypePermis()) {
-                case A: typePermisId = 1; break;  // Moto
-                case B: typePermisId = 2; break;  // Voiture
-                case C: typePermisId = 3; break;  // Camion
-                default: typePermisId = 2; break; // Default to Voiture (B) if not found
+                case A: typePermisId = 1; break;
+                case B: typePermisId = 2; break;
+                case C: typePermisId = 3; break;
+                default: typePermisId = 2; break;
             }
             stmt.setInt(8, typePermisId);
             stmt.setLong(9, candidat.getId());

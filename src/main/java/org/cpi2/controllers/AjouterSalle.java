@@ -35,9 +35,6 @@ public class AjouterSalle {
 
     @FXML
     public void initialize() {
-        // S'assurer que la table salle existe dans la base de données
-        org.cpi2.utils.DatabaseSetup.createSalleTable();
-        
         // Set placeholders for input fields
         nomSalleField.setPromptText("Entrez le nom de la salle");
         numeroSalleField.setPromptText("Entrez le numéro de salle");

@@ -103,6 +103,5 @@ public class SessionService {
     public List<SessionConduite> viewSessionConduiteByVehiculeAndDate(long vehiculeId, String date) {
         return viewSessionConduiteByVehicule(vehiculeId).stream().filter(session -> session.getDateSession().toString().equals(date)).toList();
     }
-    //more to add based on the requirements
 
 }

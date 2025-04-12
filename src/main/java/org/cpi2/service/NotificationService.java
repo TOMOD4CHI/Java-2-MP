@@ -57,7 +57,6 @@ public class NotificationService {
         return lastRefresh.format(formatter);
     }
 
-    // Utility method to get notification statistics
     public String getStatisticsText() {
         int recent = getRecentNotifications().size();
         int upcoming = getUpcomingNotifications().size();
@@ -66,25 +65,21 @@ public class NotificationService {
         return recent + " récentes | " + upcoming + " à venir | " + processed + " traitées";
     }
 
-    // Helper for filter/search functionality
     public List<Notification> searchNotifications(String searchTerm, String typeFilter, String statusFilter) {
         List<Notification> result = getAllNotifications();
-        
-        // Apply type filter if not empty or "all"
+
         if (typeFilter != null && !typeFilter.isEmpty() && !typeFilter.equalsIgnoreCase("all")) {
             result = result.stream()
                 .filter(n -> n.getType().equals(typeFilter))
                 .collect(Collectors.toList());
         }
-        
-        // Apply status filter if not empty or "all"
+
         if (statusFilter != null && !statusFilter.isEmpty() && !statusFilter.equalsIgnoreCase("all")) {
             result = result.stream()
                 .filter(n -> n.getStatut().equals(statusFilter))
                 .collect(Collectors.toList());
         }
-        
-        // Apply search term if not empty
+
         if (searchTerm != null && !searchTerm.isEmpty()) {
             String search = searchTerm.toLowerCase();
             result = result.stream()

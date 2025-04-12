@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// Auto École Repository
 public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
     
     private static final Logger LOGGER = Logger.getLogger(AutoEcoleRepository.class.getName());
@@ -102,11 +101,9 @@ public class AutoEcoleRepository extends BaseRepository<AutoEcole> {
     }
 
     public boolean save(AutoEcole autoEcole) {
-        // Check if an auto-école already exists
         try {
             AutoEcole existingAutoEcole = findFirst();
             if (existingAutoEcole != null) {
-                // An auto-école already exists, update it instead
                 autoEcole.setId(existingAutoEcole.getId());
                 return update(autoEcole);
             }

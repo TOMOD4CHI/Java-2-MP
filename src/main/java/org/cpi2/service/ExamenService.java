@@ -71,7 +71,7 @@ public class ExamenService {
             LOGGER.log(Level.WARNING, "Candidat has no active inscription");
             return false;
         }
-        // Check if the candidat has completed all sessions
+        
         if (ExamenType.equalsIgnoreCase("code")) {
             if (inscriptionService.isInscriptionCodeDone(inscription.getId())) {
                 LOGGER.log(Level.INFO, "Candidat has completed all code sessions");
@@ -101,9 +101,9 @@ public class ExamenService {
 
 
     public boolean createExamen(Examen examen) {
-        //need to check if the candidat complete all his sessions before proceeding
-        //so need to check the number of session static in the course plan
-        //using the inscription just check for an active inscription (meaning the candidat is still taking lessons)
+        
+        
+        
 
         Candidat candidat = examen.getCandidat();
         if (candidat == null) {
@@ -123,7 +123,7 @@ public class ExamenService {
         boolean hasSuccededCode = false;
         boolean hasSuccededConduite = false;
         for (Examen examen : examens) {
-            if (examen.getResultat() != null && examen.getResultat()) {
+            if (examen.getResultat() != null && examen.getResultat() && examen.getDate().isAfter(inscription.getInscriptioDate().toLocalDate())) {
                 if(examen.getTypeExamen().name().equalsIgnoreCase("code")) {
                     hasSuccededCode = true;
                 } else if (examen.getTypeExamen().name().equalsIgnoreCase("conduite")) {

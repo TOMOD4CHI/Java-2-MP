@@ -16,20 +16,20 @@ public class InscriptionService {
     private final CandidatService candidatService;
 
 
-    //causes circular dependencies in invoice.java
+    
 
-    //private final PaiementService paiementService;
+    
 
     public InscriptionService() {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
-        //this.paiementService = new PaiementService(this);
+        
         this.candidatService = new CandidatService();
     }
     public InscriptionService(PaiementService paiementService) {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
-        //this.paiementService = paiementService;
+        
         this.candidatService = new CandidatService();
     }
     public InscriptionService(CandidatService candidatService) {
@@ -127,7 +127,7 @@ public class InscriptionService {
                 calendar.add(Calendar.MONTH, 3);
                 break;
             default:
-                calendar.add(Calendar.MONTH, 1); // Default to monthly
+                calendar.add(Calendar.MONTH, 1); 
         }
 
         return calendar.getTime();

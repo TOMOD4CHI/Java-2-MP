@@ -21,14 +21,14 @@ import java.util.logging.Logger;
 public class DocumentService {
     private final DocumentRepository documentRepository;
     private final TypeDocumentRepository typeDocumentRepository;
-    private final String uploadDirectory = "uploads/documents/";  // Base directory for document storage
+    private final String uploadDirectory = "uploads/documents/";  
     private static final Logger LOGGER = Logger.getLogger(DocumentService.class.getName());
 
     public DocumentService() {
         this.documentRepository = new DocumentRepository();
         this.typeDocumentRepository = new TypeDocumentRepository();
 
-        // Ensure upload directory exists
+        
         createDirectoryIfNotExists(uploadDirectory);
     }
 
@@ -54,26 +54,26 @@ public class DocumentService {
 
     public boolean uploadDocument(Document document, Long dossierId, File fichierSource) throws DataNotFound {
         try {
-            // Generate unique filename
+            
             String uniqueFileName = generateUniqueFileName(document.getNomFichier());
             String subDirectory = String.valueOf(dossierId);
 
-            // Create specific directory for this dossier if it doesn't exist
+            
             String dossierDirectory = uploadDirectory + subDirectory + "/";
             createDirectoryIfNotExists(dossierDirectory);
 
-            // Set full file path
+            
             String filePath = dossierDirectory + uniqueFileName;
 
-            // Copy file to destination
+            
             Path destination = Paths.get(filePath);
             Files.copy(fichierSource.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-            // Update document with file path and upload date
+            
             document.setCheminFichier(filePath);
             document.setDateUpload(LocalDateTime.now());
 
-            // Save document in database
+            
             return documentRepository.save(document, dossierId);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error uploading document", e);
@@ -81,16 +81,16 @@ public class DocumentService {
         }
     }
 
-    //public boolean overrideDocument
+    
 
     public boolean updateDocument(Document document, Long dossierId, File nouveauFichier) throws DataNotFound {
         try {
-            // Get existing document to find its file path
+            
             Optional<Document> existingDocumentOpt = documentRepository.findById(document.getId());
             if (existingDocumentOpt.isPresent()) {
                 Document existingDocument = existingDocumentOpt.get();
 
-                // Delete old file if it exists
+                
                 File oldFile = new File(existingDocument.getCheminFichier());
                 if (oldFile.exists()) {
                     try {
@@ -100,21 +100,21 @@ public class DocumentService {
                     }
                 }
 
-                // Generate unique filename for new file
+                
                 String uniqueFileName = generateUniqueFileName(document.getNomFichier());
                 String subDirectory = String.valueOf(dossierId);
                 String dossierDirectory = uploadDirectory + subDirectory + "/";
 
-                // Copy new file to destination
+                
                 String filePath = dossierDirectory + uniqueFileName;
                 Path destination = Paths.get(filePath);
                 Files.copy(nouveauFichier.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-                // Update document with new file path and upload date
+                
                 document.setCheminFichier(filePath);
                 document.setDateUpload(LocalDateTime.now());
 
-                // Update document in database
+                
                 return documentRepository.update(document, dossierId);
             }
             return false;
@@ -126,12 +126,12 @@ public class DocumentService {
 
     public boolean deleteDocument(Long documentId) {
         try {
-            // Get document to find its file path
+            
             Optional<Document> documentOpt = documentRepository.findById(documentId);
             if (documentOpt.isPresent()) {
                 Document document = documentOpt.get();
 
-                // Delete file if it exists
+                
                 File file = new File(document.getCheminFichier());
                 if (file.exists()) {
                     try {
@@ -141,7 +141,7 @@ public class DocumentService {
                     }
                 }
 
-                // Delete document from database
+                
                 return documentRepository.delete(documentId);
             }
             return false;
@@ -156,14 +156,14 @@ public class DocumentService {
     }
 
     private String generateUniqueFileName(String originalFileName) {
-        // Extract file extension
+        
         String extension = "";
         int i = originalFileName.lastIndexOf('.');
         if (i > 0) {
             extension = originalFileName.substring(i);
         }
 
-        // Generate UUID for uniqueness
+        
         String uuid = UUID.randomUUID().toString();
 
         return uuid + extension;
@@ -189,7 +189,7 @@ public class DocumentService {
     }
 
     public boolean validateDocument(Document document, String expectedType, long maxFileSizeMB) {
-        // Validate file type
+        
         String fileExtension = getFileExtension(document.getNomFichier()).toLowerCase();
         boolean isValidType = switch (expectedType) {
             case "IMAGE" -> fileExtension.matches("jpg|jpeg|png|gif");
@@ -202,7 +202,7 @@ public class DocumentService {
             return false;
         }
 
-        // Validate file size
+        
         File file = new File(document.getCheminFichier());
         double fileSizeInMB = (double) file.length() / (1024 * 1024);
         return fileSizeInMB <= maxFileSizeMB;

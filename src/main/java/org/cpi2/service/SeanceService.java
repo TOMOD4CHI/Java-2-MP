@@ -85,14 +85,11 @@ public class SeanceService {
                     LOGGER.log(Level.SEVERE, "Error updating vehicle kilometrage", e);
                 }
             }
-            
-            // Enregistrer la présence du candidat pour cette séance
-            // L'ID de la séance est maintenant disponible car seanceRepository.save() l'a défini
+
             if (seance.getCandidatId() != null && seance.getType() != null) {
                 try {
                     PresenceService presenceService = new PresenceService();
-                    
-                    // Vérifier que l'ID de la séance a bien été généré
+
                     if (seance.getId() == null) {
                         LOGGER.log(Level.WARNING, "Cannot record presence: Seance ID is null after save");
                     } else {

@@ -71,7 +71,6 @@ public class PresenceService {
      * @return true if the presence was recorded successfully, false otherwise
      */
     public boolean incrementPresence(long candidatId, String seanceType, long seanceId) {
-        // Mark the candidate as present (true)
         return recordPresenceForSeance(seanceId, candidatId, seanceType, true);
     }
 

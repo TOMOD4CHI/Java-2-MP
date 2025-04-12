@@ -38,8 +38,7 @@ public class NotificationRepository {
                 String vehiculeInfo = marque + " " + modele + " (" + immatriculation + ")";
                 int kilometrageTotal = rs.getInt("kilometrage_total");
                 int kilometrageProchainEntretien = rs.getInt("kilometrage_prochain_entretien");
-                
-                // Check insurance expiration
+
                 Date assuranceDate = rs.getDate("date_expiration_assurance");
                 if (assuranceDate != null) {
                     LocalDate dateExpiration = assuranceDate.toLocalDate();
@@ -65,8 +64,7 @@ public class NotificationRepository {
                             vehiculeId, vehiculeInfo, dateExpiration, LocalDateTime.now(), statut, priorite);
                     notifications.add(notification);
                 }
-                
-                // Check technical visit expiration
+
                 Date visiteDate = rs.getDate("date_prochaine_visite_technique");
                 if (visiteDate != null) {
                     LocalDate dateVisite = visiteDate.toLocalDate();
@@ -92,8 +90,7 @@ public class NotificationRepository {
                             vehiculeId, vehiculeInfo, dateVisite, LocalDateTime.now(), statut, priorite);
                     notifications.add(notification);
                 }
-                
-                // Check maintenance date or distance
+
                 Date entretienDate = rs.getDate("date_prochain_entretien");
                 if (entretienDate != null) {
                     LocalDate dateEntretien = entretienDate.toLocalDate();
@@ -119,8 +116,7 @@ public class NotificationRepository {
                             vehiculeId, vehiculeInfo, dateEntretien, LocalDateTime.now(), statut, priorite);
                     notifications.add(notification);
                 }
-                
-                // Check maintenance by distance
+
                 if (kilometrageTotal >= kilometrageProchainEntretien && kilometrageProchainEntretien > 0) {
                     LocalDate today = LocalDate.now();
                     
@@ -183,10 +179,9 @@ public class NotificationRepository {
         
         if (!query.isEmpty()) {
             try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-                LocalDate nouvelleDate = LocalDate.now().plusMonths(12); // Default to one year in the future
-                
+                LocalDate nouvelleDate = LocalDate.now().plusMonths(12);
+
                 if (type.equals("ENTRETIEN")) {
-                    // Get current kilometrage
                     String getKmQuery = "SELECT kilometrage_total FROM vehicule WHERE id = ?";
                     try (PreparedStatement kmStmt = connection.prepareStatement(getKmQuery)) {
                         kmStmt.setInt(1, vehiculeId);
@@ -194,7 +189,7 @@ public class NotificationRepository {
                         if (rs.next()) {
                             int kmActuel = rs.getInt("kilometrage_total");
                             pstmt.setDate(1, Date.valueOf(nouvelleDate));
-                            pstmt.setInt(2, kmActuel + 10000); // Next maintenance after 10,000 km
+                            pstmt.setInt(2, kmActuel + 10000);
                             pstmt.setInt(3, vehiculeId);
                         }
                     }

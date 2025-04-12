@@ -8,7 +8,6 @@ public enum CoursePlan {
     private final int id;
     private final String name;
     private final double price;
-    //private final TypePermis typePermis;
     private final String description;
     private final int nbreSeanceConduite;
     private final int getNbreSeanceCode;
@@ -17,7 +16,6 @@ public enum CoursePlan {
     CoursePlan(int id, String name, double price, String description, int nbreSeanceConduite, int getNbreSeanceCode) {
         this.id = id;
         this.name = name;
-        //this.typePermis = typePermis;
         this.price = price;
         this.description = description;
         this.nbreSeanceConduite = nbreSeanceConduite;

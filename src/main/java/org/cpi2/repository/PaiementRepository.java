@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-// Payment Repository
 public class PaiementRepository extends BaseRepository<Paiement> {
     private final CandidatRepository candidatRepository = new CandidatRepository();
     private final  ExamenRepository examenRepository = new ExamenRepository();
@@ -68,7 +67,6 @@ public class PaiementRepository extends BaseRepository<Paiement> {
 
             while (rs.next()) {
                 Paiement paiement = mapResultSetToPaiement(rs);
-                //loadTranches(conn, paiement);
                 paiements.add(paiement);
             }
         } catch (SQLException e) {
@@ -125,7 +123,6 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             );
         }
     }
-    //Take in mind that its possible to pay with tranches only for inscription (so this method is safe)
     public List<PaiementInscription> getTranches(int inscriptionId) throws SQLException {
         String sql = "SELECT * FROM paiement WHERE inscription_id = ? ORDER BY date_paiement ASC";
         List<PaiementInscription> tranchePaiements = new ArrayList<>();

@@ -22,12 +22,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SuiviEntretiens implements Initializable {
-    //TODO: Add done button for the entretiens that haven't been done yet but are "Planfier" AKA isDone() == false
-    //TODO: May have to abandon the delete and update because it is pretty useless to do so + if u do the above TODO that will be much more efficient and practical
-    //because as soon as a finished entretien is done another one is scheduled automatically so no need to update the entretien(just its statut is important)
-
-    //TODO: Add a button to see the facture of the entretien and the creation of the facture
-
     // FXML components
     @FXML private ComboBox<Vehicule> vehiculeComboBox;
     @FXML private Button refreshBtn;

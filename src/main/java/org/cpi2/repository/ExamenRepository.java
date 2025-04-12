@@ -73,7 +73,6 @@ public class ExamenRepository extends BaseRepository<Examen> {
                 LOGGER.info("Query returned data: " + hasRows + ", row count: " + examenDataList.size());
             }
 
-            // Now process the data after ResultSet is closed
             for (Map<String, Object> examenData : examenDataList) {
                 Examen examen = createExamenFromData(examenData);
                 if (examen != null) {
@@ -101,11 +100,9 @@ public class ExamenRepository extends BaseRepository<Examen> {
         examenData.put("resultat", rs.getObject("resultat"));
         examenData.put("candidat_id", rs.getLong("candidat_id"));
 
-        // Handle commentaire column which might not exist in older schema versions
         try {
             examenData.put("commentaire", rs.getString("commentaire"));
         } catch (SQLException e) {
-            // Column doesn't exist, just continue
             examenData.put("commentaire", null);
         }
 
@@ -141,7 +138,6 @@ public class ExamenRepository extends BaseRepository<Examen> {
             examen.setFrais(frais);
             examen.setCommentaire(commentaire);
 
-            // Handle nullable resultat field
             if (resultat != null) {
                 examen.setResultat((Boolean) resultat);
             }
@@ -265,7 +261,6 @@ public class ExamenRepository extends BaseRepository<Examen> {
                 }
             }
 
-            // Process data after ResultSet is closed
             for (Map<String, Object> examenData : examenDataList) {
                 Examen examen = createExamenFromData(examenData);
                 if (examen != null) {
@@ -294,7 +289,6 @@ public class ExamenRepository extends BaseRepository<Examen> {
                 }
             }
 
-            // Process data after ResultSet is closed
             for (Map<String, Object> examenData : examenDataList) {
                 Examen examen = createExamenFromData(examenData);
                 if (examen != null) {
@@ -324,7 +318,6 @@ public class ExamenRepository extends BaseRepository<Examen> {
                 }
             }
 
-            // Process data after ResultSet is closed
             for (Map<String, Object> examenData : examenDataList) {
                 Examen examen = createExamenFromData(examenData);
                 if (examen != null) {
@@ -353,7 +346,6 @@ public class ExamenRepository extends BaseRepository<Examen> {
                 }
             }
 
-            // Process data after ResultSet is closed
             for (Map<String, Object> examenData : examenDataList) {
                 Examen examen = createExamenFromData(examenData);
                 if (examen != null) {

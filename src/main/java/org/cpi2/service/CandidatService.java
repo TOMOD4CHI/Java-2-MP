@@ -140,16 +140,16 @@ public class CandidatService {
         try {
             Candidat candidat = getCandidatByCin(cin);
             
-            // Get the latest inscription for this candidate
+            
             List<Inscription> inscriptions = inscriptionRepository.findByCin(cin);
             Inscription latestInscription = inscriptions.stream()
                 .max(Comparator.comparing(Inscription::getInscriptioDate))
                 .orElseThrow(() -> new DataNotFound("No inscription found for candidate " + cin));
             
-            // Get course plan details
+            
             CoursePlan coursePlan = latestInscription.getPlan();
             
-            // Generate PDF
+            
             InvoiceGenerator.generatePDF(
                 candidat,
                 typeFacture,
