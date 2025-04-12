@@ -148,7 +148,7 @@
                         
                         <HBox styleClass="profile-activity-section">
                             <Label text="📋" styleClass="profile-activity-icon"/>
-                            <Label text="Dossier actif depuis le 15 avril 2025" styleClass="profile-activity-status"/>
+                            <Label fx:id="actifDateLabel" text="Dossier actif depuis le 15 avril 2025" styleClass="profile-activity-status"/>
                         </HBox>
                     </VBox>
 

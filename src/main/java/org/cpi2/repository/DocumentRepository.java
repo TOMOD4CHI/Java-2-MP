@@ -73,7 +73,6 @@ public class DocumentRepository extends BaseRepository<Document> {
         document.setNomFichier(nomFichier);
         document.setCheminFichier(cheminFichier);
         document.setDateUpload(timestamp != null ? timestamp.toLocalDateTime() : null);
-
         return document;
     }
 

@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import org.cpi2.entities.Candidat;
-// Using entity Document with full qualification to avoid conflict with inner Document class
 
 import java.util.Map;
 import java.util.Optional;
@@ -137,16 +136,13 @@ public class Documents {
             }
             
             try {
-                // First, check if the candidate already has a dossier in the database
                 Optional<Dossier> existingDossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
                 Dossier dossier;
                 
                 if (existingDossierOpt.isPresent()) {
-                    // Use the existing dossier
                     dossier = existingDossierOpt.get();
                     System.out.println("Using existing dossier with ID: " + dossier.getId());
                 } else {
-                    // Create a new dossier
                     dossier = new Dossier();
                     dossier.setCandidatId(selectedCandidat.getId());
                     boolean created = dossierService.creerDossier(dossier, selectedCandidat.getId());
@@ -154,8 +150,7 @@ public class Documents {
                         showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de créer le dossier pour ce candidat");
                         return;
                     }
-                    
-                    // Re-fetch the dossier to get its ID
+
                     existingDossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
                     if (existingDossierOpt.isEmpty()) {
                         showAlert(Alert.AlertType.ERROR, "Erreur", "Le dossier a été créé mais impossible de le récupérer");
@@ -164,32 +159,28 @@ public class Documents {
                     dossier = existingDossierOpt.get();
                     System.out.println("Created new dossier with ID: " + dossier.getId());
                 }
-                
-                // Update the candidate's dossier reference
+
                 selectedCandidat.setDossier(dossier);
-                
-                // Create document from form - use fully qualified name to avoid confusion with inner Document class
+
                 TypeDocument typeDocument = TypeDocument.valueOf(typeDocumentComboBox.getValue());
                 org.cpi2.entities.Document document = new org.cpi2.entities.Document(
                     typeDocument, 
                     nomDocumentField.getText(), 
                     selectedFile.getAbsolutePath()
                 );
-                
-                // Confirm the dossier ID exists
+
                 Long dossierId = dossier.getId();
                 if (dossierId == null) {
                     showAlert(Alert.AlertType.ERROR, "Erreur", "ID du dossier est null");
                     return;
                 }
                 System.out.println("Adding document to dossier with ID: " + dossierId);
-                
-                // Add the document to the dossier
+
                 boolean success = dossierService.ajouterDocument(dossierId, document, selectedFile);
                 
                 if (success) {
                     showAlert(Alert.AlertType.INFORMATION, "Succès", "Document enregistré avec succès!");
-                    loadDocuments(); // Refresh the documents list
+                    loadDocuments();
                     clearForm();
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'enregistrer le document");
@@ -198,6 +189,8 @@ public class Documents {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue: " + e.getMessage());
                 e.printStackTrace();
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -213,8 +206,7 @@ public class Documents {
         }
         
         documentsList.clear();
-        
-        // Fetch the dossier directly from the database
+
         Optional<Dossier> dossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
         
         if (dossierOpt.isEmpty()) {
@@ -225,13 +217,11 @@ public class Documents {
         }
         
         Dossier dossier = dossierOpt.get();
-        // Update the candidate's dossier reference
         selectedCandidat.setDossier(dossier);
         
         System.out.println("Found dossier with ID: " + dossier.getId() + " for candidate: " + 
                 selectedCandidat.getNom() + " " + selectedCandidat.getPrenom());
-        
-        // Make sure to use the fully qualified name for the entity Document to avoid naming conflicts
+
         Map<TypeDocument, TreeSet<org.cpi2.entities.Document>> documents = dossier.getDocuments();
         
         if (documents == null || documents.isEmpty()) {
@@ -242,13 +232,11 @@ public class Documents {
         }
         
         System.out.println("Found " + documents.size() + " document types in dossier");
-        
-        // Convert documents from the dossier to our Document model for the TableView
+
         documents.forEach((type, docs) -> {
             System.out.println("Document type: " + type + " has " + docs.size() + " documents");
             
             for (org.cpi2.entities.Document entityDoc : docs) {
-                // Extract the properties from the entity Document
                 String nomFichier = entityDoc.getNomFichier();
                 String typeStr = type.toString();
                 LocalDate dateUpload = null;
@@ -259,13 +247,11 @@ public class Documents {
                 }
                 
                 System.out.println("Adding to table: " + nomFichier);
-                // Create our UI Document model using the inner Document class
                 Document uiDocument = new Document(nomFichier, typeStr, dateUpload);
                 documentsList.add(uiDocument);
             }
         });
-        
-        // Update the TableView
+
         documentsTableView.setItems(documentsList);
         System.out.println("Added " + documentsList.size() + " documents to table view");
     }

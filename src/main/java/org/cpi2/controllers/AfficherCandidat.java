@@ -34,21 +34,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.*;
 
-/**
- * Contrôleur pour l'affichage et la gestion des détails d'un candidat
- * Permet de visualiser la liste des candidats, leurs informations personnelles
- * et leurs documents associés
- */
 public class AfficherCandidat {
     @FXML
     private ListView<Candidat> candidatListView;
     @FXML
     private TextField searchField;
-    
+    @FXML
+    private Label actifDateLabel;
+
     @FXML
     private Label nomPrenomLabel;
     
@@ -95,9 +95,6 @@ public class AfficherCandidat {
     private final DossierService dossierService = new DossierService();
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    /**
-     * Initialise le contrôleur et configure les composants de l'interface
-     */
     public void initialize() {
         setupListView();
         setupSearch();
@@ -105,9 +102,6 @@ public class AfficherCandidat {
         addForceReloadButton();
     }
     
-    /**
-     * Configure la ListView pour l'affichage des candidats
-     */
     private void setupListView() {
         candidatListView.setCellFactory(lv -> new ListCell<Candidat>() {
             @Override
@@ -128,9 +122,6 @@ public class AfficherCandidat {
         });
     }
     
-    /**
-     * Configure le champ de recherche pour filtrer les candidats
-     */
     private void setupSearch() {
         filteredCandidats = new FilteredList<>(candidatsList, p -> true);
         
@@ -158,12 +149,10 @@ public class AfficherCandidat {
         });
     }
     
-    /**
-     * Charge la liste des candidats depuis le service
-     */
+    @FXML
     private void loadCandidats() {
         try {
-            List<Candidat> loadedCandidats = candidatService.getAll();
+            List<Candidat> loadedCandidats = candidatService.getAllCandidats();
             
             if (loadedCandidats != null && !loadedCandidats.isEmpty()) {
                 candidatsList.clear();
@@ -175,7 +164,6 @@ public class AfficherCandidat {
                     displayCandidatDetails(candidatsList.get(0));
                 }
             } else {
-                showNoDataAlert();
                 clearCandidatDetails();
             }
         } catch (Exception e) {
@@ -201,27 +189,52 @@ public class AfficherCandidat {
         } else {
             dateNaissanceLabel.setText("Non spécifiée");
         }
-        
-        typePermisLabel.setText(candidat.getTypePermis() != null ? candidat.getTypePermis() : "Non spécifié");
+        dossierService.getDossierByCandidat(candidat.getCin()).ifPresent(candidat::setDossier);
+        String typePermis= "";
+        if (candidat.getDossier() != null) {
+            for(Map.Entry<TypeDocument, TreeSet<Document>> entry : candidat.getDossier().getDocuments().entrySet()){
+                for(Document doc : entry.getValue()){
+                    if(doc.getTypeDocument() == TypeDocument.PERMIS_A){
+                        typePermis+="Moto A /";
+                        break;
+                    }
+                    if(doc.getTypeDocument() == TypeDocument.PERMIS_B){
+                        typePermis+="Voiture B /";
+                        break;
+                    }
+                    if(doc.getTypeDocument() == TypeDocument.PERMIS_C){
+                        typePermis+="Camion C /";
+                        break;
+                    }
+                }
+            }
+        }
+
+        typePermisLabel.setText(!Objects.equals(typePermis, "") ? typePermis.substring(0,typePermis.length()-1) : "Non spécifié");
         
         loadCandidatPhoto(candidat);
         loadCandidatDocuments(candidat);
     }
     
-    /**
-     * Charge la photo du candidat si disponible
-     */
     private void loadCandidatPhoto(Candidat candidat) {
         try {
             String photoPath = "path/to/default/profile.png";
-            
-            if (candidat.getPhotoUrl() != null && !candidat.getPhotoUrl().isEmpty()) {
-                File photoFile = new File(candidat.getPhotoUrl());
-                if (photoFile.exists()) {
-                    photoPath = photoFile.toURI().toString();
+            if(dossierService.getDossierByCandidat(candidat.getCin()).isPresent()){
+                Dossier dossier = dossierService.getDossierByCandidat(candidat.getCin()).get();
+                candidat.setDossier(dossier);
+            }
+
+            for(Map.Entry<TypeDocument, TreeSet<Document>> entry : candidat.getDossier().getDocuments().entrySet()){
+                for(Document doc : entry.getValue()){
+                    if(doc.getTypeDocument() == TypeDocument.PHOTO){
+                        photoPath = doc.getCheminFichier();
+                        break;
+                    }
                 }
             }
-            
+
+            File photoFile = new File(photoPath);
+            photoPath = photoFile.toURI().toString();
             Image image = new Image(photoPath, true);
             candidatPhoto.setImage(image);
             
@@ -240,34 +253,42 @@ public class AfficherCandidat {
         }
     }
     
-    /**
-     * Charge les documents associés au dossier du candidat
-     */
     private void loadCandidatDocuments(Candidat candidat) {
         clearDocumentContainers();
-        
         try {
             Dossier dossier = candidat.getDossier();
             
             if (dossier == null) {
-                dossier = dossierService.getDossierByCandidat(candidat.getCin());
-                candidat.setDossier(dossier);
+                if(dossierService.getDossierByCandidat(candidat.getCin()).isPresent()){
+                    dossier = dossierService.getDossierByCandidat(candidat.getCin()).get();
+                    candidat.setDossier(dossier);
+                }
             }
-            
+            String actifDate= "";
+            ChronoLocalDateTime minDate = LocalDateTime.now();
             if (dossier != null && dossier.getDocuments() != null && !dossier.getDocuments().isEmpty()) {
-                for (Document document : dossier.getDocuments()) {
+                for (Map.Entry<TypeDocument, TreeSet<Document>> entry : dossier.getDocuments().entrySet()) {
                     try {
-                        System.out.println("Processing document: " + document.getNomFichier());
-                        VBox containerForType = getContainerForDocType(document.getTypeDocument());
-                        HBox documentView = createDocumentItemView(document);
-                        
-                        documentView.setOnMouseClicked(event -> openDocument(document));
-                        containerForType.getChildren().add(documentView);
+                        for (Document document : entry.getValue()) {
+                            if (document.getDateUpload() != null) {
+                                if (document.getDateUpload().isBefore(minDate)) {
+                                    minDate = document.getDateUpload();
+                                }
+                            }
+                            System.out.println("Processing document: " + document.getNomFichier());
+                            VBox containerForType = getContainerForDocType(entry.getKey());
+                            HBox documentView = createDocumentItemView(document);
+
+                            documentView.setOnMouseClicked(event -> openDocument(document));
+                            containerForType.getChildren().add(documentView);
+                        }
                     } catch (Exception e) {
                         System.err.println("Erreur lors de l'ajout du document: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
+                actifDate = "Dossier actif depuis le "+ minDate.format(dateFormatter);
+                actifDateLabel.setText(actifDate);
             } else {
                 System.out.println("Aucun document trouvé pour le candidat: " + candidat.getNom());
                 
@@ -293,27 +314,18 @@ public class AfficherCandidat {
         }
     }
     
-    /**
-     * Ajoute des documents de test pour la démonstration (utilisé seulement en développement)
-     */
     private void addTestDocuments(Candidat candidat) {
-        // Code supprimé pour la brièveté
     }
     
-    /**
-     * Ouvre le document sélectionné avec l'application par défaut du système
-     */
     private void openDocument(Document document) {
         try {
             System.out.println("Opening document: " + document.getNomFichier() + " at path: " + document.getCheminFichier());
-            
-            // Check if the document has a valid file path
+
             if (document.getCheminFichier() != null && !document.getCheminFichier().isEmpty()) {
                 File file = new File(document.getCheminFichier());
                 if (file.exists()) {
                     System.out.println("File exists, opening with Desktop: " + file.getAbsolutePath());
-                    
-                    // Use the appropriate method based on file extension
+
                     if (document.getNomFichier().toLowerCase().endsWith(".html")) {
                         Desktop.getDesktop().browse(file.toURI());
                     } else {
@@ -326,12 +338,10 @@ public class AfficherCandidat {
             } else {
                 System.out.println("Document has no file path");
             }
-            
-            // If we reached here, we couldn't open the file directly, create a simple HTML preview
+
             String tempDir = System.getProperty("java.io.tmpdir");
             Path tempFile = Paths.get(tempDir, "preview_" + document.getNomFichier() + ".html");
-            
-            // Create HTML preview with style
+
             StringBuilder html = new StringBuilder();
             html.append("<!DOCTYPE html><html><head><style>");
             html.append("body { font-family: Arial, sans-serif; margin: 20px; background-color: #f0f4fa; }");
@@ -352,8 +362,7 @@ public class AfficherCandidat {
             }
             
             html.append("</div></body></html>");
-            
-            // Write and open the preview
+
             Files.write(tempFile, html.toString().getBytes());
             System.out.println("Created preview file at: " + tempFile.toString());
             Desktop.getDesktop().browse(tempFile.toUri());
@@ -372,26 +381,14 @@ public class AfficherCandidat {
 
     
     private void addForceReloadButton() {
-        // Code supprimé pour la brièveté
     }
     
-    /**
-     * Charge des documents d'exemple pour le candidat sélectionné
-     */
     private void loadExampleDocuments(Candidat selectedCandidat) {
-        // Code supprimé pour la brièveté
     }
     
-    /**
-     * Ajoute un document d'exemple au conteneur spécifié
-     */
     private void addExampleDocument(VBox container, String fileName, TypeDocument type, Candidat candidat) {
-        // Code supprimé pour la brièveté
     }
     
-    /**
-     * Retourne le conteneur approprié pour le type de document spécifié
-     */
     private VBox getContainerForDocType(TypeDocument type) {
         if (type == null) {
             return otherDocumentsContainer;
@@ -414,9 +411,6 @@ public class AfficherCandidat {
         }
     }
     
-    /**
-     * Crée une vue d'élément de document avec icône et informations
-     */
     private HBox createDocumentItemView(Document document) {
         HBox docItem = new HBox(10);
         docItem.getStyleClass().add("document-item");
@@ -441,9 +435,6 @@ public class AfficherCandidat {
         return docItem;
     }
     
-    /**
-     * Retourne l'icône appropriée pour le type de document spécifié
-     */
     private String getDocumentTypeIcon(TypeDocument type) {
         if (type == null) {
             return "📄";
@@ -463,9 +454,6 @@ public class AfficherCandidat {
         }
     }
     
-    /**
-     * Vide tous les conteneurs de documents
-     */
     private void clearDocumentContainers() {
         cinDocumentsContainer.getChildren().clear();
         permisDocumentsContainer.getChildren().clear();
@@ -473,9 +461,6 @@ public class AfficherCandidat {
         otherDocumentsContainer.getChildren().clear();
     }
     
-    /**
-     * Réinitialise tous les champs d'affichage des détails du candidat
-     */
     private void clearCandidatDetails() {
         nomPrenomLabel.setText("--");
         cinLabel.setText("--");
