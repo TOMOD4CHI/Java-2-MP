@@ -218,7 +218,7 @@ public class EntretienService {
         nextEntretien.setDateEntretien(nextMaintenanceDate);
         nextEntretien.setKilometrageActuel(estimatedKilometrage);
         nextEntretien.setCout(cout);
-        nextEntretien.setMaintenance(true);
+        nextEntretien.setMaintenance(isMaitenance(typeEntretien));
         nextEntretien.setDescription("Planifié: " + typeEntretien);
         nextEntretien.setStatut(false);
 
