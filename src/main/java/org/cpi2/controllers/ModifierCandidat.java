@@ -42,7 +42,16 @@ public class ModifierCandidat {
     }
     
     private boolean isValidBirthDate(java.time.LocalDate date) {
-        return date != null && !date.isAfter(java.time.LocalDate.now());
+        if (date == null) {
+            return false;
+        }
+        
+        java.time.LocalDate today = java.time.LocalDate.now();
+        java.time.LocalDate minDate = today.minusYears(100); // Maximum reasonable age (100 years)
+        java.time.LocalDate maxDate = today.minusYears(16);  // Minimum reasonable age (16 years)
+        
+        // Check if date is not in the future and within reasonable age range
+        return !date.isAfter(today) && !date.isBefore(minDate) && !date.isAfter(maxDate);
     }
 
     @FXML private TextField nomField;
@@ -103,6 +112,25 @@ public class ModifierCandidat {
         ValidationUtils.addValidation(prenomField, 
             text -> !text.trim().isEmpty(), 
             "Le prénom est obligatoire", 1);
+        
+        // Date de naissance validation
+        birthDatePicker.valueProperty().addListener((obs, oldValue, newValue) -> {
+            if (!isValidBirthDate(newValue)) {
+                if (newValue == null) {
+                    birthDateError.setText("La date de naissance est obligatoire");
+                } else if (newValue.isAfter(java.time.LocalDate.now())) {
+                    birthDateError.setText("La date ne peut pas être dans le futur");
+                } else if (newValue.isBefore(java.time.LocalDate.now().minusYears(100))) {
+                    birthDateError.setText("L'âge ne peut pas dépasser 100 ans");
+                } else if (newValue.isAfter(java.time.LocalDate.now().minusYears(16))) {
+                    birthDateError.setText("L'âge minimum est de 16 ans");
+                }
+                birthDatePicker.setStyle("-fx-border-color: #e53e3e; -fx-border-width: 2px;");
+            } else {
+                birthDateError.setText("");
+                birthDatePicker.setStyle("-fx-border-color: #38a169; -fx-border-width: 2px;");
+            }
+        });
         ValidationUtils.addValidation(prenomField, 
             this::isValidName, 
             "Le prénom ne doit contenir que des lettres et des espaces", 2);
@@ -289,11 +317,16 @@ public class ModifierCandidat {
             isValid = false;
         }
         
-        if (birthDatePicker.getValue() == null) {
-            birthDateError.setText("La date de naissance est obligatoire");
-            isValid = false;
-        } else if (birthDatePicker.getValue().isAfter(java.time.LocalDate.now())) {
-            birthDateError.setText("La date de naissance ne peut pas être dans le futur");
+        if (!isValidBirthDate(birthDatePicker.getValue())) {
+            if (birthDatePicker.getValue() == null) {
+                birthDateError.setText("La date de naissance est obligatoire");
+            } else if (birthDatePicker.getValue().isAfter(java.time.LocalDate.now())) {
+                birthDateError.setText("La date de naissance ne peut pas être dans le futur");
+            } else if (birthDatePicker.getValue().isBefore(java.time.LocalDate.now().minusYears(100))) {
+                birthDateError.setText("L'âge ne peut pas dépasser 100 ans");
+            } else if (birthDatePicker.getValue().isAfter(java.time.LocalDate.now().minusYears(16))) {
+                birthDateError.setText("L'âge minimum est de 16 ans");
+            }
             isValid = false;
         }
 
