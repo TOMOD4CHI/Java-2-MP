@@ -105,11 +105,6 @@
                     </VBox>
 
                     <VBox spacing="5">
-                        <Label text="Statut" styleClass="form-label"/>
-                        <ComboBox fx:id="statutCombo" maxWidth="Infinity"/>
-                    </VBox>
-
-                    <VBox spacing="5">
                         <Label text="Facture" styleClass="form-label"/>
                         <HBox spacing="5" styleClass="file-field-container">
                             <TextField fx:id="factureField" HBox.hgrow="ALWAYS" editable="false"/>

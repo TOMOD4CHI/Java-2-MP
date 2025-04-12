@@ -1,6 +1,5 @@
 package org.cpi2.controllers;
 
-import javafx.scene.Node;
 import org.cpi2.entities.Candidat;
 import org.cpi2.entities.Document;
 import org.cpi2.entities.Dossier;
@@ -9,33 +8,23 @@ import org.cpi2.service.CandidatService;
 import org.cpi2.service.DocumentService;
 import org.cpi2.service.DossierService;
 import org.cpi2.utils.AlertUtil;
-import org.cpi2.utils.ImageViewUtil;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.awt.Desktop;
-import javafx.scene.control.Alert;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
