@@ -30,34 +30,34 @@
     <center>
         <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
             <VBox spacing="20">
-                <!-- KPI Cards Row -->
+                
                 <HBox spacing="15" alignment="CENTER">
                     <VBox.margin>
                         <Insets top="10" bottom="10"/>
                     </VBox.margin>
                     
-                    <!-- Total Candidates Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label text="Total des Candidats" styleClass="card-title"/>
                         <Label fx:id="totalCandidatsLabel" text="156" styleClass="card-value"/>
                         <Label fx:id="candidatsChangeLabel" text="+12% vs période précédente" styleClass="change-positive"/>
                     </VBox>
                     
-                    <!-- New Candidates Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label text="Nouveaux Candidats" styleClass="card-title"/>
                         <Label fx:id="newCandidatsLabel" text="24" styleClass="card-value"/>
                         <Label fx:id="newCandidatsChangeLabel" text="+8% vs période précédente" styleClass="change-positive"/>
                     </VBox>
                     
-                    <!-- Completion Rate Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label text="Taux de Réussite" styleClass="card-title"/>
                         <Label fx:id="completionRateLabel" text="78%" styleClass="card-value"/>
                         <Label fx:id="completionChangeLabel" text="+5% vs période précédente" styleClass="change-positive"/>
                     </VBox>
                     
-                    <!-- Active Candidates Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label text="Candidats Actifs" styleClass="card-title"/>
                         <Label fx:id="activeCandidatsLabel" text="87" styleClass="card-value"/>
@@ -65,9 +65,9 @@
                     </VBox>
                 </HBox>
                 
-                <!-- Charts Row 1 -->
+                
                 <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
-                    <!-- Registration Trend Chart -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label text="Évolution des Inscriptions" styleClass="chart-title"/>
                         <LineChart fx:id="registrationChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
@@ -80,16 +80,16 @@
                         </LineChart>
                     </VBox>
                     
-                    <!-- Age Distribution -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label text="Répartition par Âge" styleClass="chart-title"/>
                         <PieChart fx:id="ageDistributionChart" animated="true" labelsVisible="true" VBox.vgrow="ALWAYS"/>
                     </VBox>
                 </HBox>
                 
-                <!-- Charts Row 2 -->
+                
                 <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
-                    <!-- Session Attendance -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label text="Participation aux Séances" styleClass="chart-title"/>
                         <BarChart fx:id="attendanceChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
@@ -102,7 +102,7 @@
                         </BarChart>
                     </VBox>
                     
-                    <!-- Exam Results -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label text="Résultats aux Examens" styleClass="chart-title"/>
                         <StackedBarChart fx:id="examResultsChart" animated="true" VBox.vgrow="ALWAYS">
@@ -116,7 +116,7 @@
                     </VBox>
                 </HBox>
                 
-                <!-- Recent Candidates Table -->
+                
                 <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
                     <Label text="Candidats Récents" styleClass="table-title"/>
                     <TableView fx:id="recentCandidatesTable" VBox.vgrow="ALWAYS" styleClass="custom-table-view">

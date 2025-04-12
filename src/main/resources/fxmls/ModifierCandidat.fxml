@@ -24,7 +24,7 @@
             <ColumnConstraints halignment="LEFT" minWidth="250" hgrow="ALWAYS"/>
         </columnConstraints>
 
-        <!-- CIN with Search -->
+        
         <Label text="CIN:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="form-label"/>
         <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="0">
             <HBox spacing="10">
@@ -34,21 +34,21 @@
             <Label fx:id="cinError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
         </VBox>
 
-        <!-- Nom -->
+        
         <Label text="Nom:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="form-label"/>
         <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <TextField fx:id="nomField" promptText="Entrez le nom" styleClass="form-field"/>
             <Label fx:id="nomError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
         </VBox>
 
-        <!-- Prénom -->
+        
         <Label text="Prénom:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="form-label"/>
         <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <TextField fx:id="prenomField" promptText="Entrez le prénom" styleClass="form-field"/>
             <Label fx:id="prenomError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
         </VBox>
 
-        <!-- Type de Permis -->
+        
         <Label text="Type de Permis:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="form-label"/>
         <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <ComboBox fx:id="typeComboBox" styleClass="form-field" maxWidth="Infinity">
@@ -63,21 +63,21 @@
             <Label fx:id="typeError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
         </VBox>
 
-        <!-- Adresse -->
+        
         <Label text="Adresse:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="form-label"/>
         <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <TextField fx:id="addressField" promptText="Entrez l'adresse complète" styleClass="form-field"/>
             <Label fx:id="addressError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
         </VBox>
 
-        <!-- Téléphone -->
+        
         <Label text="Téléphone:" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="form-label"/>
         <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <TextField fx:id="phoneField" promptText="Entrez le numéro (8 chiffres)" styleClass="form-field"/>
             <Label fx:id="phoneError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
         </VBox>
 
-        <!-- Email -->
+        
         <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="form-label"/>
         <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="6">
             <TextField fx:id="emailField" promptText="exemple@domaine.com" styleClass="form-field"/>

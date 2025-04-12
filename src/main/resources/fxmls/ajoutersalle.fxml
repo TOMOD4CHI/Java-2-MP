@@ -11,7 +11,7 @@
             styleClass="ajouter-salle-container"
             stylesheets="@/css/style.css">
 
-    <!-- En-tête -->
+    
     <top>
         <VBox styleClass="header-container">
             <HBox alignment="CENTER_LEFT" spacing="15" styleClass="header-title-container">
@@ -25,7 +25,7 @@
         </VBox>
     </top>
 
-    <!-- Contenu Principal -->
+    
     <center>
             <VBox spacing="25" styleClass="form-container">
                 <padding><Insets top="20" right="40" bottom="40" left="40"/></padding>
@@ -39,7 +39,7 @@
                             <ColumnConstraints percentWidth="50" />
                         </columnConstraints>
 
-                        <!-- Nom de la Salle -->
+                        
                         <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
                             <Label text="Nom de la Salle *" styleClass="form-label"/>
                             <TextField fx:id="nomSalleField"
@@ -48,7 +48,7 @@
                             <Label fx:id="nomSalleError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false"/>
                         </VBox>
 
-                        <!-- Numéro de la Salle -->
+                        
                         <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <Label text="Numéro de Salle *" styleClass="form-label"/>
                             <TextField fx:id="numeroSalleField"
@@ -57,12 +57,12 @@
                             <Label fx:id="numeroSalleError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false"/>
                         </VBox>
 
-                        <!-- Étage -->
+                        
 
 
 
 
-                        <!-- Capacité -->
+                        
                         <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
                             <Label text="Capacité" styleClass="form-label"/>
                             <TextField fx:id="capaciteField"
@@ -76,7 +76,7 @@
                     </GridPane>
                 </VBox>
 
-                <!-- Section Équipements -->
+                
 
 
 
@@ -100,7 +100,7 @@
 
 
 
-                <!-- Boutons d'Action -->
+                
                 <HBox spacing="15" alignment="CENTER_RIGHT">
                     <Button fx:id="annulerButton"
                             text="Annuler"

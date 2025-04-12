@@ -14,7 +14,7 @@
             <ColumnConstraints hgrow="ALWAYS" percentWidth="80"/>
         </columnConstraints>
 
-        <!-- Left Form Section -->
+        
         <VBox spacing="16" styleClass="card" GridPane.columnIndex="0">
             <GridPane hgap="12" vgap="12" maxWidth="600">
                 <Label text="Candidat:" GridPane.rowIndex="0" GridPane.columnIndex="0"  GridPane.columnSpan="2" styleClass="form-label" />
@@ -56,3 +56,4 @@
     </GridPane>
 
 </VBox>
+

@@ -15,7 +15,7 @@
         <Separator/>
         
         <HBox spacing="30" alignment="center">
-            <!-- Left Container - Vehicle Details -->
+            
             <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="500" prefWidth="500">
                 <Label text="Détails du Véhicule" styleClass="form-title"/>
                 <Separator/>
@@ -39,7 +39,7 @@
                 </HBox>
             </VBox>
             
-            <!-- Right Container - Vehicles List -->
+            
             <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="600" prefWidth="600">
                 <Label text="Liste des Véhicules" styleClass="form-title"/>
                 <Separator/>
