@@ -55,7 +55,6 @@
                     <Menu text="🚗 Véhicules" styleClass="menu-item-with-icon">
                         <MenuItem text="🔧 Gérer véhicules" onAction="#loadGestionVehicules"/>
                         <MenuItem text="🔎 Suivi des entretiens" onAction="#loadSuiviEntretiens" />
-                        <MenuItem text="📊 Mettre à jour kilométrage" onAction="#loadMiseAJourKilometrage" />
                         <MenuItem text="🔔 Notifications" onAction="#loadNotifications"/>
                     </Menu>
                     <Menu text="💰 Paiements" styleClass="menu-item-with-icon">

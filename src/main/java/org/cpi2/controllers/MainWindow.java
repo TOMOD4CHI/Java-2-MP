@@ -214,7 +214,6 @@ public class MainWindow implements Initializable {
     @FXML public void loadSessionConduite() { loadViewWithTransition("/fxmls/SeanceConduite.fxml"); }
     @FXML public void loadSessionCode() { loadViewWithTransition("/fxmls/SeanceCode.fxml"); }
     @FXML public void loadSuiviEntretiens() { loadViewWithTransition("/fxmls/SuiviEntretiens.fxml"); }
-    @FXML public void loadMiseAJourKilometrage() { loadViewWithTransition("/fxmls/MiseAJourKilometrage.fxml"); }
     @FXML public void loadNotifications() { loadViewWithTransition("/fxmls/Notifications.fxml"); }
     @FXML public void loadInvoice() { loadViewWithTransition("/fxmls/Invoice.fxml"); }
     @FXML public void loadPaymentHistory() { loadViewWithTransition("/fxmls/PaymentHistory.fxml"); }
