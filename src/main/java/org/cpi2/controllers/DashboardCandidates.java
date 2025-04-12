@@ -21,6 +21,9 @@ import java.util.List;
 
 import org.cpi2.repository.DatabaseConfig;
 
+/**
+ * Contrôleur pour le tableau de bord des candidats
+ */
 public class DashboardCandidates implements Initializable {
 
     @FXML private ComboBox<String> periodCombo;
@@ -66,9 +69,11 @@ public class DashboardCandidates implements Initializable {
     private LocalDate filterStartDate;
     private LocalDate filterEndDate;
     
+    /**
+     * Initialise le contrôleur et configure les composants UI
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize the period combobox
         periodCombo.getItems().addAll(
             "Aujourd'hui",
             "Cette semaine",
@@ -78,10 +83,8 @@ public class DashboardCandidates implements Initializable {
         );
         periodCombo.getSelectionModel().select("Ce mois-ci");
         
-        // Set up the table columns
         setupTableColumns();
         
-        // Initialize date pickers with current month
         LocalDate now = LocalDate.now();
         LocalDate firstDay = now.withDayOfMonth(1);
         startDate.setValue(firstDay);
@@ -90,16 +93,17 @@ public class DashboardCandidates implements Initializable {
         filterStartDate = firstDay;
         filterEndDate = now;
         
-        // Load data
         loadChartData();
         loadTableData();
         
-        // Add listener to period combo box
         periodCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updateDateRange(newVal);
         });
     }
     
+    /**
+     * Met à jour la plage de dates en fonction de la période sélectionnée
+     */
     private void updateDateRange(String period) {
         LocalDate now = LocalDate.now();
         
@@ -118,34 +122,39 @@ public class DashboardCandidates implements Initializable {
                 break;
             case "Ce trimestre":
                 int currentMonth = now.getMonthValue();
-                int startMonth = ((currentMonth - 1) / 3) * 3 + 1;
-                startDate.setValue(LocalDate.of(now.getYear(), startMonth, 1));
+                int quarterStartMonth = ((currentMonth - 1) / 3) * 3 + 1;
+                startDate.setValue(now.withMonth(quarterStartMonth).withDayOfMonth(1));
                 endDate.setValue(now);
                 break;
             case "Cette année":
-                startDate.setValue(LocalDate.of(now.getYear(), 1, 1));
+                startDate.setValue(now.withDayOfYear(1));
                 endDate.setValue(now);
                 break;
         }
     }
     
+    /**
+     * Gère l'action du bouton de filtre
+     */
     @FXML
     private void handleApplyFilter() {
-        // Get values from filters
         filterStartDate = startDate.getValue();
         filterEndDate = endDate.getValue();
         
-        // Validate dates
-        if (filterStartDate != null && filterEndDate != null && filterStartDate.isAfter(filterEndDate)) {
-            showAlert("Erreur de date", "La date de début doit être avant la date de fin");
-            return;
+        if (filterStartDate != null && filterEndDate != null) {
+            if (filterStartDate.isAfter(filterEndDate)) {
+                showAlert("Erreur de date", "La date de début doit être antérieure à la date de fin.");
+                return;
+            }
+            
+            loadChartData();
+            loadTableData();
         }
-        
-        // Apply filter and reload data
-        loadChartData();
-        loadTableData();
     }
     
+    /**
+     * Configure les colonnes du tableau des candidats
+     */
     private void setupTableColumns() {
         candidateIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         candidateNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -155,61 +164,60 @@ public class DashboardCandidates implements Initializable {
         candidateStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         candidateRegistrationDateColumn.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
         
-        // Format status column with color indicators
-        candidateStatusColumn.setCellFactory(col -> new TableCell<CandidateEntry, String>() {
+        candidateStatusColumn.setCellFactory(column -> new TableCell<CandidateEntry, String>() {
             @Override
             protected void updateItem(String status, boolean empty) {
                 super.updateItem(status, empty);
+                
                 if (empty || status == null) {
                     setText(null);
-                    setStyle("");
+                    setGraphic(null);
                 } else {
-                    setText(status);
+                    Label statusLabel = new Label(status);
+                    statusLabel.setMaxWidth(Double.MAX_VALUE);
+                    statusLabel.setStyle("-fx-padding: 5px; -fx-alignment: center;");
+                    
                     switch (status) {
                         case "Actif":
-                            setStyle("-fx-text-fill: #2ecc71; -fx-font-weight: bold;");
-                            break;
-                        case "En attente":
-                            setStyle("-fx-text-fill: #f39c12; -fx-font-weight: bold;");
+                            statusLabel.setStyle(statusLabel.getStyle() + "-fx-background-color: #C6F6D5; -fx-text-fill: #22543D; -fx-background-radius: 4px;");
                             break;
                         case "Inactif":
-                            setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+                            statusLabel.setStyle(statusLabel.getStyle() + "-fx-background-color: #FED7D7; -fx-text-fill: #822727; -fx-background-radius: 4px;");
                             break;
                         case "Terminé":
-                            setStyle("-fx-text-fill: #3498db; -fx-font-weight: bold;");
+                            statusLabel.setStyle(statusLabel.getStyle() + "-fx-background-color: #E9D8FD; -fx-text-fill: #553C9A; -fx-background-radius: 4px;");
                             break;
-                        default:
-                            setStyle("");
+                        default: // En attente
+                            statusLabel.setStyle(statusLabel.getStyle() + "-fx-background-color: #FEEBC8; -fx-text-fill: #744210; -fx-background-radius: 4px;");
                             break;
                     }
+                    
+                    setGraphic(statusLabel);
+                    setText(null);
                 }
             }
         });
     }
     
+    /**
+     * Charge les données pour tous les graphiques
+     */
     private void loadChartData() {
         try (Connection conn = DatabaseConfig.getConnection()) {
-            // Load KPI data
             loadKPIData(conn);
-            
-            // Load registration chart data
             loadRegistrationChartData(conn);
-            
-            // Load age distribution chart data
             loadAgeDistributionChartData(conn);
-            
-            // Load attendance chart data
             loadAttendanceChartData(conn);
-            
-            // Load exam results chart data
             loadExamResultsChartData(conn);
-            
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
+            showAlert("Erreur de base de données", "Impossible de charger les données des graphiques: " + e.getMessage());
         }
     }
     
+    /**
+     * Charge les données des indicateurs clés de performance
+     */
     private void loadKPIData(Connection conn) throws SQLException {
         // Total candidates
         String totalSql = "SELECT COUNT(*) as total FROM candidat";
@@ -273,6 +281,9 @@ public class DashboardCandidates implements Initializable {
         activeChangeLabel.setText("+3% vs période précédente");
     }
     
+    /**
+     * Charge les données du graphique d'inscription
+     */
     private void loadRegistrationChartData(Connection conn) throws SQLException {
         // Get registration data by date
         String sql = "SELECT DATE_FORMAT(created_at, '%d/%m') as date, COUNT(*) as count " +
@@ -304,6 +315,9 @@ public class DashboardCandidates implements Initializable {
         registrationChart.getData().add(registrationSeries);
     }
     
+    /**
+     * Charge les données du graphique de distribution d'âge
+     */
     private void loadAgeDistributionChartData(Connection conn) throws SQLException {
         String sql = "SELECT " +
                      "CASE " +
@@ -349,6 +363,9 @@ public class DashboardCandidates implements Initializable {
         ageDistributionChart.setData(pieChartData);
     }
     
+    /**
+     * Charge les données du graphique de présence
+     */
     private void loadAttendanceChartData(Connection conn) throws SQLException {
         // Get attendance data for different session types
         // Code sessions attendance
@@ -416,6 +433,9 @@ public class DashboardCandidates implements Initializable {
         attendanceChart.getData().add(attendanceSeries);
     }
     
+    /**
+     * Charge les données du graphique des résultats d'examen
+     */
     private void loadExamResultsChartData(Connection conn) throws SQLException {
         // Get exam results data
         String examSql = "SELECT type.libelle as exam_type, " +
@@ -468,6 +488,9 @@ public class DashboardCandidates implements Initializable {
         examResultsChart.getData().addAll(passSeries, failSeries);
     }
     
+    /**
+     * Charge les données du tableau des candidats récents
+     */
     private void loadTableData() {
         ObservableList<CandidateEntry> candidateData = FXCollections.observableArrayList();
         
@@ -516,6 +539,9 @@ public class DashboardCandidates implements Initializable {
         }
     }
     
+    /**
+     * Affiche une alerte d'erreur
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -524,7 +550,9 @@ public class DashboardCandidates implements Initializable {
         alert.showAndWait();
     }
     
-    // Inner class for candidate table entries
+    /**
+     * Classe interne pour les entrées du tableau des candidats
+     */
     public static class CandidateEntry {
         private final Long id;
         private final String name;
@@ -553,4 +581,4 @@ public class DashboardCandidates implements Initializable {
         public String getStatus() { return status; }
         public String getRegistrationDate() { return registrationDate; }
     }
-} 
+}

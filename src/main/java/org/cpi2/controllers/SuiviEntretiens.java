@@ -28,7 +28,6 @@ public class SuiviEntretiens implements Initializable {
 
     //TODO: Add a button to see the facture of the entretien and the creation of the facture
 
-    // FXML components
     @FXML private ComboBox<Vehicule> vehiculeComboBox;
     @FXML private Button refreshBtn;
 
@@ -45,7 +44,6 @@ public class SuiviEntretiens implements Initializable {
     @FXML private TableColumn<Entretien, String> statutCol;
 
     @FXML private Button voirFactureBtn;
-
 
     @FXML private DatePicker dateEntretienPicker;
     @FXML private ComboBox<String> typeEntretienCombo;
@@ -66,7 +64,6 @@ public class SuiviEntretiens implements Initializable {
     private final VehiculeService vehiculeService = new VehiculeService();
     private final EntretienService entretienService = new EntretienService();
 
-    // Data model
     private ObservableList<Vehicule> vehicules;
     private ObservableList<Entretien> entretiens;
     private Entretien entretienEnCours;
@@ -78,19 +75,12 @@ public class SuiviEntretiens implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize data
         initializeData();
-
-        // Set up UI components
         setupVehiculeComboBox();
         setupTableView();
         setupTypeEntretienCombo();
         setupButtonStates();
-
-        // Add listeners
         addListeners();
-
-        // Initial UI state
         updateUIState();
     }
 
@@ -98,11 +88,8 @@ public class SuiviEntretiens implements Initializable {
      * Initializes the data model.
      */
     private void initializeData() {
-        // In a real application, this would load data from a service or repository
         vehicules = FXCollections.observableArrayList();
         entretiens = FXCollections.observableArrayList();
-
-        // For demonstration purposes, add some sample data
         loadSampleData();
     }
 
@@ -110,13 +97,9 @@ public class SuiviEntretiens implements Initializable {
      * Loads sample data for demonstration.
      */
     private void loadSampleData() {
-        // Add sample vehicles
         for(org.cpi2.entities.Vehicule vehicule: vehiculeService.getAllVehicules()) {
             vehicules.add(new Vehicule(vehicule.getImmatriculation(), vehicule.getMarque() +" "+vehicule.getModele(), vehicule.getKilometrageTotal(),vehicule.getDateDerniereVisiteTechnique()));
         }
-
-        // Sample maintenance records could be added here
-        // For now, we'll just leave it empty
     }
 
     /**
@@ -170,14 +153,12 @@ public class SuiviEntretiens implements Initializable {
      * Sets up the initial button states.
      */
     private void setupButtonStates() {
-        //voirFactureBtn.setDisable(true);
     }
 
     /**
      * Adds listeners to UI components.
      */
     private void addListeners() {
-        // Vehicle selection change
         vehiculeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 selectedVehicule = vehiculeComboBox.getSelectionModel().getSelectedItem();
@@ -186,19 +167,16 @@ public class SuiviEntretiens implements Initializable {
             }
         });
 
-        // Maintenance table selection
         entretiensTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updateButtonsState(newVal != null);
         });
 
-        // Numeric validation for cost field
         coutField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal.matches("\\d*(\\.\\d*)?")) {
                 coutField.setText(oldVal);
             }
         });
 
-        // Refresh button
         refreshBtn.setOnAction(e -> refreshData());
     }
 
@@ -231,7 +209,6 @@ public class SuiviEntretiens implements Initializable {
      * Updates button states based on selection.
      */
     private void updateButtonsState(boolean hasSelection) {
-        //voirFactureBtn.setDisable(!hasSelection);
     }
 
     /**
@@ -331,15 +308,10 @@ public class SuiviEntretiens implements Initializable {
     }
 
     /**
-     * Handles modifying an existing maintenance record.
-     */
-
-    /**
      * Handles viewing an invoice.
      */
     @FXML
     public void handleVoirFacture(ActionEvent actionEvent) {
-        //TODO: Implement invoice viewing logic
     }
 
     /**
@@ -393,7 +365,6 @@ public class SuiviEntretiens implements Initializable {
             boolean success = false;
 
             if (modeAjout) {
-                // Create new maintenance record
                 Entretien nouvelEntretien = new Entretien(date, type, description, cout, (!date.isAfter(LocalDate.now())));
                 org.cpi2.entities.Entretien entretien = new org.cpi2.entities.Entretien(vehiculeService.getVehiculeByImmatriculation(selectedVehicule.getImmatriculation()).get().getId(), date, type, selectedVehicule.getKilometrage(), cout, facture,nouvelEntretien.isDone(),description);
                 success = entretienService.createEntretien(entretien);
@@ -401,23 +372,18 @@ public class SuiviEntretiens implements Initializable {
                     AlertUtil.showError("Erreur", "Impossible d'ajouter l'entretien.");
                     return;
                 }
-                //entretiens.add(nouvelEntretien);
                 statusEntretienLabel.setText("Nouvel entretien ajouté");
             } else if (entretienEnCours != null) {
                 Entretien selectedEntretien = entretiensTable.getSelectionModel().getSelectedItem();
-                // Update existing maintenance record
                 entretienEnCours.setDate(date);
                 entretienEnCours.setType(type);
                 entretienEnCours.setDescription(description);
                 entretienEnCours.setCout(cout);
 
-
-                // Refresh the table
                 entretiensTable.refresh();
                 statusEntretienLabel.setText("Entretien modifié");
             }
 
-            // Update statistics and reset UI
             refreshData();
             updateStatistics();
             totalEntretiensLabel.setText("Total: " + entretiens.size() + " entretiens");
@@ -438,8 +404,6 @@ public class SuiviEntretiens implements Initializable {
         Entretien selectedEntretien = entretiensTable.getSelectionModel().getSelectedItem();
         if (selectedEntretien != null) {
             AlertUtil.showConfirmation( "Confirmer la suppression" , "Êtes-vous sûr de vouloir supprimer cet entretien ?" );
-
-
         }
     }
 

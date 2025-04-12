@@ -56,34 +56,36 @@ public class Documents {
     private final DocumentService documentService = new DocumentService();
     private ObservableList<Document> documentsList = FXCollections.observableArrayList();
 
+    /**
+     * Initializes the controller.
+     */
     @FXML
     public void initialize() {
-        // Initialize the ComboBox with document types
         typeDocumentComboBox.getItems().addAll(
                 typeDocumentService.getAllTypeDocuments().stream().sorted().toList()
         );
         
-        // Set current date as default for date picker
         dateAjoutPicker.setValue(LocalDate.now());
-        
-        // Initialize table columns
         setupTableColumns();
-        
-        // Load candidates into ComboBox
         loadCandidates();
     }
     
+    /**
+     * Sets up the table columns.
+     */
     private void setupTableColumns() {
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateAjout"));
     }
     
+    /**
+     * Loads candidates into the combo box.
+     */
     private void loadCandidates() {
         List<Candidat> candidats = candidatService.getAllCandidats();
         candidatComboBox.setItems(FXCollections.observableArrayList(candidats));
         
-        // Set a custom string converter to display candidate name
         candidatComboBox.setConverter(new StringConverter<Candidat>() {
             @Override
             public String toString(Candidat candidat) {
@@ -93,11 +95,14 @@ public class Documents {
 
             @Override
             public Candidat fromString(String string) {
-                return null; // Not needed for ComboBox
+                return null;
             }
         });
     }
 
+    /**
+     * Opens a file chooser dialog to select a document file.
+     */
     @FXML
     private void browseFile() {
         FileChooser fileChooser = new FileChooser();
@@ -108,104 +113,107 @@ public class Documents {
             new FileChooser.ExtensionFilter("Tous les fichiers", "*.*")
         );
         
-        Stage stage = (Stage) browseButton.getScene().getWindow();
-        selectedFile = fileChooser.showOpenDialog(stage);
-        
+        selectedFile = fileChooser.showOpenDialog(browseButton.getScene().getWindow());
         if (selectedFile != null) {
             selectedFileLabel.setText(selectedFile.getName());
         }
     }
 
+    /**
+     * Saves the document to the selected candidate's dossier.
+     */
     @FXML
     private void saveDocument() {
-        if (validateForm()) {
+        if (!validateForm()) {
+            return;
+        }
+        
+        try {
             Candidat selectedCandidat = candidatComboBox.getValue();
             if (selectedCandidat == null) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner un candidat");
                 return;
             }
             
-            try {
-                // First, check if the candidate already has a dossier in the database
-                Optional<Dossier> existingDossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
-                Dossier dossier;
-                
-                if (existingDossierOpt.isPresent()) {
-                    // Use the existing dossier
-                    dossier = existingDossierOpt.get();
-                    System.out.println("Using existing dossier with ID: " + dossier.getId());
-                } else {
-                    // Create a new dossier
-                    dossier = new Dossier();
-                    dossier.setCandidatId(selectedCandidat.getId());
-                    boolean created = dossierService.creerDossier(dossier, selectedCandidat.getId());
-                    if (!created) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de créer le dossier pour ce candidat");
-                        return;
-                    }
-                    
-                    // Re-fetch the dossier to get its ID
-                    existingDossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
-                    if (existingDossierOpt.isEmpty()) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Le dossier a été créé mais impossible de le récupérer");
-                        return;
-                    }
-                    dossier = existingDossierOpt.get();
-                    System.out.println("Created new dossier with ID: " + dossier.getId());
-                }
-                
-                // Update the candidate's dossier reference
-                selectedCandidat.setDossier(dossier);
-                
-                // Get the type document string from the combo box
-                String typeDocumentStr = typeDocumentComboBox.getValue();
-                
-                // Convert string to TypeDocument enum - handle case mismatch
-                TypeDocument typeDocument = null;
-                for (TypeDocument type : TypeDocument.values()) {
-                    if (type.toString().equalsIgnoreCase(typeDocumentStr)) {
-                        typeDocument = type;
-                        break;
-                    }
-                }
-                
-                if (typeDocument == null) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Type de document invalide: " + typeDocumentStr);
+            // First, check if the candidate already has a dossier in the database
+            Optional<Dossier> existingDossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
+            Dossier dossier;
+            
+            if (existingDossierOpt.isPresent()) {
+                // Use the existing dossier
+                dossier = existingDossierOpt.get();
+            } else {
+                // Create a new dossier
+                dossier = new Dossier();
+                dossier.setCandidatId(selectedCandidat.getId());
+                boolean created = dossierService.creerDossier(dossier, selectedCandidat.getId());
+                if (!created) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de créer le dossier pour ce candidat");
                     return;
                 }
                 
-                // Create entity document (not the UI document)
-                org.cpi2.entities.Document document = new org.cpi2.entities.Document(
-                    typeDocument, 
-                    nomDocumentField.getText(), 
-                    selectedFile.getAbsolutePath()
-                );
-                
-                // Confirm the dossier ID exists
-                Long dossierId = dossier.getId();
-                if (dossierId == null) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "ID du dossier est null");
+                // Re-fetch the dossier to get its ID
+                existingDossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
+                if (existingDossierOpt.isEmpty()) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le dossier a été créé mais impossible de le récupérer");
                     return;
                 }
-                System.out.println("Adding document to dossier with ID: " + dossierId);
-                
-                // Add the document to the dossier
-                boolean success = dossierService.ajouterDocument(dossierId, document, selectedFile);
-                
-                if (success) {
-                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Document enregistré avec succès!");
-                    loadDocuments(); // Refresh the documents list
-                    clearForm();
-                } else {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'enregistrer le document");
-                }
-            } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue: " + e.getMessage());
-                e.printStackTrace();
+                dossier = existingDossierOpt.get();
             }
+            
+            // Update the candidate's dossier reference
+            selectedCandidat.setDossier(dossier);
+            
+            // Get the type document string from the combo box
+            String typeDocumentStr = typeDocumentComboBox.getValue();
+            
+            // Convert string to TypeDocument enum - handle case mismatch
+            TypeDocument typeDocument = null;
+            for (TypeDocument type : TypeDocument.values()) {
+                if (type.toString().equalsIgnoreCase(typeDocumentStr)) {
+                    typeDocument = type;
+                    break;
+                }
+            }
+            
+            if (typeDocument == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Type de document invalide: " + typeDocumentStr);
+                return;
+            }
+            
+            // Create entity document (not the UI document)
+            org.cpi2.entities.Document document = new org.cpi2.entities.Document(
+                typeDocument, 
+                nomDocumentField.getText(), 
+                selectedFile.getAbsolutePath()
+            );
+            
+            // Confirm the dossier ID exists
+            Long dossierId = dossier.getId();
+            if (dossierId == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "ID du dossier est null");
+                return;
+            }
+            
+            // Add the document to the dossier
+            boolean success = dossierService.ajouterDocument(dossierId, document, selectedFile);
+            
+            if (success) {
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Document enregistré avec succès!");
+                loadDocuments(); // Refresh the documents list
+                clearForm();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'enregistrer le document");
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Loads documents for the selected candidate.
+     */
     @FXML
     private void loadDocuments() {
         Candidat selectedCandidat = candidatComboBox.getValue();
@@ -222,7 +230,6 @@ public class Documents {
             Optional<Dossier> dossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
             
             if (dossierOpt.isEmpty()) {
-                System.out.println("No dossier found for candidate: " + selectedCandidat.getNom() + " " + selectedCandidat.getPrenom());
                 showAlert(Alert.AlertType.INFORMATION, "Information", 
                         "Aucun dossier n'a été trouvé pour ce candidat");
                 return;
@@ -232,28 +239,20 @@ public class Documents {
             // Update the candidate's dossier reference
             selectedCandidat.setDossier(dossier);
             
-            System.out.println("Found dossier with ID: " + dossier.getId() + " for candidate: " + 
-                    selectedCandidat.getNom() + " " + selectedCandidat.getPrenom());
-            
             // Get the documents from the dossier
             Map<TypeDocument, TreeSet<org.cpi2.entities.Document>> documentsMap = dossier.getDocuments();
             
             if (documentsMap == null || documentsMap.isEmpty()) {
-                System.out.println("No documents found in dossier ID: " + dossier.getId());
                 showAlert(Alert.AlertType.INFORMATION, "Information", 
                         "Aucun document n'a été trouvé pour ce candidat");
                 return;
             }
-            
-            System.out.println("Found " + documentsMap.size() + " document types in dossier");
             
             // Process each document type manually
             for (TypeDocument type : documentsMap.keySet()) {
                 TreeSet<org.cpi2.entities.Document> entityDocs = documentsMap.get(type);
                 
                 if (entityDocs != null) {
-                    System.out.println("Document type: " + type + " has " + entityDocs.size() + " documents");
-                    
                     // Process each entity document
                     for (org.cpi2.entities.Document entityDoc : entityDocs) {
                         if (entityDoc != null) {
@@ -267,10 +266,7 @@ public class Documents {
                                 uploadDate = LocalDate.now();
                             }
                             
-                            System.out.println("Adding document to table: " + fileName);
-                            
                             // Create a UI Document (inner class) and add to list
-                            // We need to make sure we use the correct constructor for our inner class
                             Document uiDoc = new Document(fileName, type.toString(), uploadDate);
                             documentsList.add(uiDoc);
                         }
@@ -280,15 +276,17 @@ public class Documents {
             
             // Update the TableView
             documentsTableView.setItems(documentsList);
-            System.out.println("Added " + documentsList.size() + " documents to table view");
             
         } catch (Exception e) {
-            System.err.println("Error loading documents: " + e.getMessage());
-            e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue lors du chargement des documents");
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Validates the form fields.
+     * @return true if all fields are valid, false otherwise
+     */
     private boolean validateForm() {
         if (candidatComboBox.getValue() == null || 
             nomDocumentField.getText().isEmpty() || 
@@ -303,6 +301,9 @@ public class Documents {
         return true;
     }
     
+    /**
+     * Shows an alert dialog.
+     */
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -311,6 +312,9 @@ public class Documents {
         alert.showAndWait();
     }
 
+    /**
+     * Clears the form fields.
+     */
     private void clearForm() {
         candidatComboBox.getSelectionModel().clearSelection();
         nomDocumentField.clear();
@@ -320,7 +324,9 @@ public class Documents {
         selectedFile = null;
     }
     
-    // Inner class to represent a document (for TableView)
+    /**
+     * Inner class to represent a document (for TableView)
+     */
     public static class Document {
         private String nom;
         private String type;

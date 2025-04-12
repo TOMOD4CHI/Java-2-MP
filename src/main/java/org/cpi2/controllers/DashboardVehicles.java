@@ -19,6 +19,9 @@ import java.util.Map;
 
 import org.cpi2.repository.DatabaseConfig;
 
+/**
+ * Contrôleur pour le tableau de bord des véhicules
+ */
 public class DashboardVehicles implements Initializable {
 
     @FXML private ComboBox<String> filterCombo;
@@ -57,9 +60,11 @@ public class DashboardVehicles implements Initializable {
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private String currentFilter = "Tous les véhicules";
     
+    /**
+     * Initialise le contrôleur et configure les composants UI
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize the filter combobox
         filterCombo.getItems().addAll(
             "Tous les véhicules",
             "Véhicules disponibles",
@@ -68,58 +73,52 @@ public class DashboardVehicles implements Initializable {
         );
         filterCombo.getSelectionModel().select("Tous les véhicules");
         
-        // Set up the table columns
         setupVehicleTableColumns();
         setupAlertTableColumns();
         
-        // Load data
         loadDashboardData();
     }
     
+    /**
+     * Gère l'action du bouton de filtre
+     */
     @FXML
     private void handleApplyFilter() {
-        // Get filter value and reload data
         currentFilter = filterCombo.getValue();
         loadDashboardData();
     }
     
+    /**
+     * Charge toutes les données du tableau de bord
+     */
     private void loadDashboardData() {
         try (Connection conn = DatabaseConfig.getConnection()) {
-            // Load KPI data
             loadKPIData(conn);
-            
-            // Load chart data
             loadVehicleUsageChart(conn);
             loadMaintenanceHistoryChart(conn);
-            
-            // Load table data
             loadVehiclesTableData(conn);
             loadMaintenanceAlertsData(conn);
-            
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
         }
     }
     
+    /**
+     * Charge les données des indicateurs clés de performance
+     */
     private void loadKPIData(Connection conn) throws SQLException {
-        // Total vehicles count
         String totalSql = "SELECT COUNT(*) as total FROM vehicule";
         
-        // Available vehicles count
         String availableSql = "SELECT COUNT(*) as available FROM vehicule WHERE statut = 'Disponible'";
         
-        // Maintenance due count (vehicles with maintenance soon due)
         String maintenanceDueSql = "SELECT COUNT(*) as due FROM vehicule " +
                                  "WHERE kilometrage_total >= (kilometrage_prochain_entretien - 500) " +
                                  "OR (date_prochain_entretien IS NOT NULL AND date_prochain_entretien <= DATE_ADD(CURDATE(), INTERVAL 30 DAY))";
         
-        // Total kilometers
         String totalKmSql = "SELECT SUM(kilometrage_total) as total_km FROM vehicule";
         
-        // Execute queries
         try (Statement stmt = conn.createStatement()) {
-            // Total vehicles
             try (ResultSet rs = stmt.executeQuery(totalSql)) {
                 if (rs.next()) {
                     int total = rs.getInt("total");
@@ -129,7 +128,6 @@ public class DashboardVehicles implements Initializable {
                 }
             }
             
-            // Available vehicles
             try (ResultSet rs = stmt.executeQuery(availableSql)) {
                 if (rs.next()) {
                     int available = rs.getInt("available");
@@ -139,7 +137,6 @@ public class DashboardVehicles implements Initializable {
                 }
             }
             
-            // Maintenance due
             try (ResultSet rs = stmt.executeQuery(maintenanceDueSql)) {
                 if (rs.next()) {
                     int due = rs.getInt("due");
@@ -149,7 +146,6 @@ public class DashboardVehicles implements Initializable {
                 }
             }
             
-            // Total kilometers
             try (ResultSet rs = stmt.executeQuery(totalKmSql)) {
                 if (rs.next()) {
                     int totalKm = rs.getInt("total_km");
@@ -161,8 +157,10 @@ public class DashboardVehicles implements Initializable {
         }
     }
     
+    /**
+     * Charge les données du graphique d'utilisation des véhicules
+     */
     private void loadVehicleUsageChart(Connection conn) throws SQLException {
-        // Query to get vehicle status distribution
         String sql = "SELECT statut, COUNT(*) as count FROM vehicule GROUP BY statut";
         
         Map<String, Integer> statusCounts = new HashMap<>();
@@ -179,7 +177,6 @@ public class DashboardVehicles implements Initializable {
             }
         }
         
-        // Prepare pie chart data
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         
         for (Map.Entry<String, Integer> entry : statusCounts.entrySet()) {
@@ -187,7 +184,6 @@ public class DashboardVehicles implements Initializable {
                 String label = entry.getKey();
                 int count = entry.getValue();
                 
-                // Change label for pie chart
                 if (label.equals("Disponible")) {
                     label = "Conduite";
                 } else if (label.equals("En entretien")) {
@@ -200,7 +196,6 @@ public class DashboardVehicles implements Initializable {
             }
         }
         
-        // If no data, add placeholder data
         if (pieChartData.isEmpty()) {
             pieChartData.add(new PieChart.Data("Conduite", 65));
             pieChartData.add(new PieChart.Data("Entretien", 15));
@@ -210,8 +205,10 @@ public class DashboardVehicles implements Initializable {
         vehicleUsageChart.setData(pieChartData);
     }
     
+    /**
+     * Charge les données du graphique d'historique d'entretien
+     */
     private void loadMaintenanceHistoryChart(Connection conn) throws SQLException {
-        // Get maintenance history by month
         String sql = "SELECT DATE_FORMAT(date_entretien, '%b') as month, COUNT(*) as count " +
                    "FROM entretien " +
                    "WHERE date_entretien >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) " +
@@ -232,13 +229,11 @@ public class DashboardVehicles implements Initializable {
             }
         }
         
-        // If data was found, add it to the series
         if (!monthCounts.isEmpty()) {
             for (Map.Entry<String, Integer> entry : monthCounts.entrySet()) {
                 maintenanceSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
             }
         } else {
-            // Otherwise use placeholder data
             maintenanceSeries.getData().add(new XYChart.Data<>("Jan", 4));
             maintenanceSeries.getData().add(new XYChart.Data<>("Fév", 3));
             maintenanceSeries.getData().add(new XYChart.Data<>("Mar", 5));
@@ -251,6 +246,9 @@ public class DashboardVehicles implements Initializable {
         maintenanceHistoryChart.getData().add(maintenanceSeries);
     }
     
+    /**
+     * Configure les colonnes du tableau des véhicules
+     */
     private void setupVehicleTableColumns() {
         vehicleIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         vehicleModelColumn.setCellValueFactory(new PropertyValueFactory<>("model"));
@@ -260,7 +258,6 @@ public class DashboardVehicles implements Initializable {
         vehicleLastMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("lastMaintenance"));
         vehicleNextMaintenanceColumn.setCellValueFactory(new PropertyValueFactory<>("nextMaintenance"));
         
-        // Format km column to show units
         vehicleKmColumn.setCellFactory(col -> new TableCell<VehicleEntry, Double>() {
             @Override
             protected void updateItem(Double km, boolean empty) {
@@ -273,7 +270,6 @@ public class DashboardVehicles implements Initializable {
             }
         });
         
-        // Format status column with color indicators
         vehicleStatusColumn.setCellFactory(col -> new TableCell<VehicleEntry, String>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -302,6 +298,9 @@ public class DashboardVehicles implements Initializable {
         });
     }
     
+    /**
+     * Configure les colonnes du tableau des alertes d'entretien
+     */
     private void setupAlertTableColumns() {
         alertVehicleColumn.setCellValueFactory(new PropertyValueFactory<>("vehicle"));
         alertTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -309,7 +308,6 @@ public class DashboardVehicles implements Initializable {
         alertStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         alertPriorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
         
-        // Format priority column with color indicators
         alertPriorityColumn.setCellFactory(col -> new TableCell<MaintenanceAlertEntry, String>() {
             @Override
             protected void updateItem(String priority, boolean empty) {
@@ -337,7 +335,6 @@ public class DashboardVehicles implements Initializable {
             }
         });
         
-        // Add action buttons to the alerts table
         alertActionsColumn.setCellFactory(col -> new TableCell<MaintenanceAlertEntry, Void>() {
             private final Button scheduleBtn = new Button("Planifier");
             private final Button ignoreBtn = new Button("Ignorer");
@@ -348,13 +345,11 @@ public class DashboardVehicles implements Initializable {
                 
                 scheduleBtn.setOnAction(event -> {
                     MaintenanceAlertEntry alert = getTableView().getItems().get(getIndex());
-                    // Handle scheduling maintenance
                     System.out.println("Schedule maintenance for: " + alert.getVehicle());
                 });
                 
                 ignoreBtn.setOnAction(event -> {
                     MaintenanceAlertEntry alert = getTableView().getItems().get(getIndex());
-                    // Handle ignoring alert
                     System.out.println("Ignore alert for: " + alert.getVehicle());
                 });
             }
@@ -372,10 +367,12 @@ public class DashboardVehicles implements Initializable {
         });
     }
     
+    /**
+     * Charge les données du tableau des véhicules
+     */
     private void loadVehiclesTableData(Connection conn) throws SQLException {
         ObservableList<VehicleEntry> vehicleData = FXCollections.observableArrayList();
         
-        // SQL query depends on filter
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT v.id, CONCAT(v.marque, ' ', v.modele) as vehicle_name, ")
                  .append("v.immatriculation, v.kilometrage_total, v.statut, ")
@@ -384,7 +381,6 @@ public class DashboardVehicles implements Initializable {
                  .append("DATE_FORMAT(v.date_prochain_entretien, '%d/%m/%Y') as next_maintenance ")
                  .append("FROM vehicule v");
         
-        // Add filter condition if needed
         if (!currentFilter.equals("Tous les véhicules")) {
             if (currentFilter.equals("Véhicules disponibles")) {
                 sqlBuilder.append(" WHERE v.statut = 'Disponible'");
@@ -397,7 +393,6 @@ public class DashboardVehicles implements Initializable {
         
         sqlBuilder.append(" ORDER BY v.id");
         
-        // Execute the query
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sqlBuilder.toString())) {
             
@@ -410,7 +405,6 @@ public class DashboardVehicles implements Initializable {
                 String lastMaintenance = rs.getString("last_maintenance");
                 String nextMaintenance = rs.getString("next_maintenance");
                 
-                // Handle null values
                 if (lastMaintenance == null) lastMaintenance = "Non disponible";
                 if (nextMaintenance == null) nextMaintenance = "Non planifié";
                 
@@ -418,7 +412,6 @@ public class DashboardVehicles implements Initializable {
             }
         }
         
-        // If no data found, add sample data
         if (vehicleData.isEmpty()) {
             vehicleData.add(new VehicleEntry(1L, "Peugeot 208", "134 TU 1234", 45231.0, "Disponible", "15/04/2023", "15/04/2024"));
             vehicleData.add(new VehicleEntry(2L, "Renault Clio", "134 TU 5678", 78562.0, "Disponible", "22/03/2023", "22/03/2024"));
@@ -428,10 +421,12 @@ public class DashboardVehicles implements Initializable {
         vehiclesTable.setItems(vehicleData);
     }
     
+    /**
+     * Charge les données du tableau des alertes d'entretien
+     */
     private void loadMaintenanceAlertsData(Connection conn) throws SQLException {
         ObservableList<MaintenanceAlertEntry> alertData = FXCollections.observableArrayList();
         
-        // Query for upcoming maintenance alerts
         String sql = "SELECT CONCAT(v.marque, ' ', v.modele) as vehicle_name, " +
                    "CASE " +
                    "  WHEN v.kilometrage_total >= (v.kilometrage_prochain_entretien - 500) THEN 'Vidange' " +
@@ -471,7 +466,6 @@ public class DashboardVehicles implements Initializable {
             }
         }
         
-        // If no data found, add sample data
         if (alertData.isEmpty()) {
             alertData.add(new MaintenanceAlertEntry("Peugeot 308", "Vidange", "03/06/2023", "En attente", "Haute"));
             alertData.add(new MaintenanceAlertEntry("Renault Clio", "Freins", "10/06/2023", "En attente", "Moyenne"));
@@ -481,6 +475,9 @@ public class DashboardVehicles implements Initializable {
         maintenanceAlertsTable.setItems(alertData);
     }
     
+    /**
+     * Affiche une alerte d'erreur
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -489,7 +486,9 @@ public class DashboardVehicles implements Initializable {
         alert.showAndWait();
     }
     
-    // Inner class for vehicle table entries
+    /**
+     * Classe interne pour les entrées du tableau des véhicules
+     */
     public static class VehicleEntry {
         private final Long id;
         private final String model;
@@ -519,7 +518,9 @@ public class DashboardVehicles implements Initializable {
         public String getNextMaintenance() { return nextMaintenance; }
     }
     
-    // Inner class for maintenance alert entries
+    /**
+     * Classe interne pour les entrées du tableau des alertes d'entretien
+     */
     public static class MaintenanceAlertEntry {
         private final String vehicle;
         private final String type;
@@ -542,4 +543,4 @@ public class DashboardVehicles implements Initializable {
         public String getStatus() { return status; }
         public String getPriority() { return priority; }
     }
-} 
+}
