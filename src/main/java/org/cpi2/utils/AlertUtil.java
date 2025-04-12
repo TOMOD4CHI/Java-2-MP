@@ -358,4 +358,69 @@ public class AlertUtil {
         timeline.getKeyFrames().add(kf);
         timeline.play();
     }
+
+    public static int showOptionsDialog(String title, String content, String... options) {
+        final int[] result = {-1};
+
+        Platform.runLater(() -> {
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.TRANSPARENT);
+
+            StackPane iconContainer = createIconContainer(null); // Confirmation icon
+
+            Label titleLabel = createTitleLabel(title);
+            Label contentLabel = createContentLabel(content);
+
+            HBox buttonBox = new HBox(15);
+            buttonBox.setAlignment(Pos.CENTER_RIGHT);
+            buttonBox.setPadding(new Insets(0, 20, 20, 20));
+
+            // Create buttons for each option
+            for (int i = 0; i < options.length; i++) {
+                final int index = i;
+                Button button = createButton(options[i], i == 0 ? CONFIRM_COLOR : "#E0E0E0", 150, 36);
+                if (i > 0) {
+                    button.setStyle(button.getStyle() + "; -fx-text-fill: #424242;");
+                }
+                button.setOnAction(e -> {
+                    result[0] = index;
+                    stage.close();
+                });
+                buttonBox.getChildren().add(button);
+            }
+
+            VBox textBox = new VBox(8, titleLabel, contentLabel);
+            textBox.setPadding(new Insets(0, 0, 0, 15));
+            HBox.setHgrow(textBox, Priority.ALWAYS);
+
+            HBox headerBox = new HBox(15, iconContainer, textBox);
+            headerBox.setAlignment(Pos.CENTER_LEFT);
+            headerBox.setPadding(new Insets(20, 20, 20, 20));
+
+            VBox mainBox = new VBox(10, headerBox, buttonBox);
+            mainBox.setStyle("-fx-background-color: white; -fx-background-radius: 12;");
+
+            // Apply shadow effect
+            mainBox.setEffect(createShadowEffect());
+
+            StackPane root = new StackPane(mainBox);
+            root.setPadding(new Insets(10));
+            root.setStyle("-fx-background-color: transparent;");
+
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+
+            stage.setScene(scene);
+            stage.setMinWidth(500);
+            stage.setMinHeight(220);
+
+            // Animation
+            animateDialog(mainBox);
+
+            stage.showAndWait();
+        });
+
+        return result[0];
+    }
 }

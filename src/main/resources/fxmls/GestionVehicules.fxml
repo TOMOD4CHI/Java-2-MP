@@ -58,8 +58,6 @@
                             onAction="#handleModifierVehicule" styleClass="action-button, edit-button"/>
                     <Button fx:id="supprimerBtn" text="Supprimer le véhicule" maxWidth="Infinity"
                             onAction="#handleSupprimerVehicule" styleClass="action-button, delete-button"/>
-                    <Button fx:id="detailsBtn" text="Voir détails" maxWidth="Infinity"
-                            onAction="#handleVoirDetails" styleClass="action-button, details-button"/>
                 </VBox>
             </TitledPane>
 
