@@ -30,14 +30,14 @@ public class ManageEcole implements Initializable {
     @FXML private Label emailLabel;
     @FXML private Label directeurLabel;
     @FXML private Label passwordLabel;
-    
+
     @FXML private TextField nomField;
     @FXML private TextField adresseField;
     @FXML private TextField telephoneField;
     @FXML private TextField emailField;
     @FXML private TextField directeurField;
     @FXML private PasswordField passwordField;
-    
+
     @FXML private ImageView logoImageView;
     @FXML private Button changeLogoButton;
     @FXML private Button modifierButton;
@@ -45,10 +45,10 @@ public class ManageEcole implements Initializable {
     @FXML private Button cancelButton;
     @FXML private HBox buttonContainer;
     @FXML private HBox editButtonsContainer;
-    
+
     @FXML private VBox infoContainer;
     @FXML private VBox editContainer;
-    
+
     // Error labels for validation
     @FXML private Label nomError;
     @FXML private Label adresseError;
@@ -104,37 +104,57 @@ public class ManageEcole implements Initializable {
     }
 
     private void validateField(TextField field, Label errorLabel, String fieldName, Pattern pattern) {
+        if (field == null || field.getText() == null) {
+            updateFieldValidation(field, errorLabel, false, 
+                    String.format("%s ne peut pas être vide", fieldName));
+            return;
+        }
+        
         String value = field.getText().trim();
         boolean isEmpty = value.isEmpty();
         boolean isValid = !isEmpty && pattern.matcher(value).matches();
 
         if (isEmpty) {
             updateFieldValidation(field, errorLabel, false,
-                String.format("%s ne peut pas être vide", fieldName));
+                    String.format("%s ne peut pas être vide", fieldName));
         } else {
             updateFieldValidation(field, errorLabel, isValid,
-                isValid ? null : String.format("%s n'est pas valide", fieldName));
+                    isValid ? null : String.format("%s n'est pas valide", fieldName));
         }
     }
 
     private void validateNonEmpty(TextField field, Label errorLabel, String fieldName) {
+        if (field == null || field.getText() == null) {
+            updateFieldValidation(field, errorLabel, false,
+                    String.format("%s ne peut pas être vide", fieldName));
+            return;
+        }
+        
         String value = field.getText().trim();
         boolean isValid = !value.isEmpty();
 
         updateFieldValidation(field, errorLabel, isValid,
-            isValid ? null : String.format("%s ne peut pas être vide", fieldName));
+                isValid ? null : String.format("%s ne peut pas être vide", fieldName));
     }
 
     private void validatePassword(PasswordField field, Label errorLabel) {
+        if (field == null || field.getText() == null) {
+            updateFieldValidation(field, errorLabel, false,
+                    "Le mot de passe doit contenir au moins 4 caractères");
+            return;
+        }
+        
         String value = field.getText();
         boolean isValid = value.length() >= 4;
 
         updateFieldValidation(field, errorLabel, isValid,
-            isValid ? null : "Le mot de passe doit contenir au moins 4 caractères");
+                isValid ? null : "Le mot de passe doit contenir au moins 4 caractères");
     }
 
     private void updateFieldValidation(TextInputControl field, Label errorLabel, boolean isValid, String errorMessage) {
-            // Remove existing style classes
+        if (field == null || errorLabel == null) return;
+        
+        // Remove existing style classes
         field.getStyleClass().removeAll("field-error", "field-valid");
 
         // Add appropriate style class
@@ -467,11 +487,11 @@ public class ManageEcole implements Initializable {
 
         // Validate password if it's a new auto-école or if the field is not empty
         if ((currentAutoEcole == null || currentAutoEcole.getId() == 0) &&
-            (passwordField.getText() == null || passwordField.getText().isEmpty())) {
+                (passwordField.getText() == null || passwordField.getText().isEmpty())) {
             showError(passwordError, "Le mot de passe est obligatoire");
             isValid = false;
         } else if (passwordField.getText() != null && !passwordField.getText().isEmpty() &&
-                   passwordField.getText().length() < 5) {
+                passwordField.getText().length() < 5) {
             showError(passwordError, "Le mot de passe doit contenir au moins 5 caractères");
             isValid = false;
         }

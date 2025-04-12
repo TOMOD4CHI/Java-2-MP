@@ -13,63 +13,110 @@
            stylesheets="@/css/styletab.css"
            prefWidth="1500" prefHeight="800">
 
-    <HBox spacing="30" alignment="center">
-        <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="900" prefWidth="900">
+    <HBox spacing="20" alignment="center">
+        <padding>
+            <Insets top="15" right="15" bottom="15" left="15"/>
+        </padding>
+        
+        <!-- Left side - Sessions -->
+        <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="800" prefWidth="850" maxWidth="1000">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            
             <Label text="Séances de Code Disponibles" styleClass="form-title"/>
             
-            <HBox spacing="10" alignment="center_left" minWidth="600" prefWidth="600">
-                <Label text="Filtrer par date:" styleClass="form-label" minWidth="150" prefWidth="150"/>
-                <DatePicker fx:id="dateFilter" styleClass="form-field" minWidth="200" prefWidth="200"/>
+            <!-- Date filter section -->
+            <HBox spacing="10" alignment="center_left">
+                <Label text="Filtrer par date:" styleClass="form-label" minWidth="120" prefWidth="120"/>
+                <DatePicker fx:id="dateFilter" styleClass="form-field" minWidth="180" prefWidth="180"/>
+                <Region HBox.hgrow="ALWAYS" minWidth="20"/>
+                <Button fx:id="searchBtn" text="Rechercher" onAction="#rechercherSeances" styleClass="button" minWidth="110" prefWidth="110"/>
+                <Button fx:id="resetBtn" text="Réinitialiser" onAction="#resetFilters" styleClass="button" minWidth="110" prefWidth="110"/>
             </HBox>
             
-            <HBox spacing="15" alignment="center">
-                <Button fx:id="searchBtn" text="Rechercher" onAction="#rechercherSeances" styleClass="button" minWidth="120" prefWidth="120"/>
-                <Button fx:id="resetBtn" text="Réinitialiser" onAction="#resetFilters" styleClass="button" minWidth="120" prefWidth="120"/>
-            </HBox>
-
-            
-            <TableView fx:id="seancesTable" VBox.vgrow="ALWAYS" styleClass="table-view" minWidth="500" prefWidth="500">
+            <!-- Sessions table -->
+            <TableView fx:id="seancesTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                 <columns>
-                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
-                    <TableColumn fx:id="heureColumn" text="Heure" prefWidth="100"/>
-                    <TableColumn fx:id="moniteurColumn" text="Moniteur" prefWidth="175"/>
-                    <TableColumn fx:id="placesColumn" text="Places disponibles" prefWidth="150"/>
+                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="180"/>
+                    <TableColumn fx:id="heureColumn" text="Heure" prefWidth="120"/>
+                    <TableColumn fx:id="moniteurColumn" text="Moniteur" prefWidth="250"/>
+                    <TableColumn fx:id="placesColumn" text="Places disponibles" prefWidth="180"/>
                 </columns>
+                <placeholder>
+                    <Label text="Aucune séance disponible pour cette date" />
+                </placeholder>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
             </TableView>
-
             
-            <HBox spacing="10" alignment="center_left" minWidth="700" prefWidth="700">
+            <!-- Selected session info -->
+            <HBox spacing="10" alignment="center_left">
                 <Label text="Séance sélectionnée:" styleClass="form-label" minWidth="150" prefWidth="150"/>
-                <Label fx:id="selectedSessionLabel" text="Aucune séance sélectionnée" styleClass="info-text" minWidth="200" prefWidth="200"/>
+                <Label fx:id="selectedSessionLabel" text="Aucune séance sélectionnée" styleClass="info-text" HBox.hgrow="ALWAYS"/>
             </HBox>
         </VBox>
 
-        
-        <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" maxWidth="400" prefWidth="400">
+        <!-- Right side - Candidates -->
+        <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="NEVER" minWidth="450" prefWidth="450" maxWidth="500">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            
             <Label text="Candidats disponibles" styleClass="form-title"/>
-
             
-            <TableView fx:id="candidatsTable" VBox.vgrow="ALWAYS" styleClass="table-view" minWidth="350" prefWidth="350">
+            <!-- Candidates table -->
+            <TableView fx:id="candidatsTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                 <columns>
-                    <TableColumn fx:id="selectColumn" text="Sélectionner" prefWidth="100"/>
-                    <TableColumn fx:id="nomColumn" text="Nom" prefWidth="125"/>
-                    <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="125"/>
+                    <TableColumn fx:id="selectColumn" text="Sélectionner" prefWidth="80"/>
+                    <TableColumn fx:id="nomColumn" text="Nom" prefWidth="150"/>
+                    <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="150"/>
                 </columns>
+                <placeholder>
+                    <Label text="Aucun candidat disponible" />
+                </placeholder>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
             </TableView>
-
             
-            <HBox spacing="10" alignment="center_left" minWidth="350" prefWidth="350">
+            <!-- Selection controls -->
+            <HBox spacing="10" alignment="center_left">
                 <Label text="Candidats sélectionnés:" styleClass="form-label" minWidth="150" prefWidth="150"/>
-                <Label fx:id="selectedCountLabel" text="0" styleClass="info-text" minWidth="50" prefWidth="50"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="selectAllBtn" text="Sélectionner tout" onAction="#selectAllCandidats" styleClass="button" minWidth="120" prefWidth="120"/>
-                <Button fx:id="deselectAllBtn" text="Désélectionner tout" onAction="#deselectAllCandidats" styleClass="button" minWidth="120" prefWidth="120"/>
+                <Label fx:id="selectedCountLabel" text="0" styleClass="info-text" minWidth="30" prefWidth="30"/>
             </HBox>
-
             
-            <HBox spacing="15" alignment="center">
-                <Button fx:id="cancelBtn" text="Annuler" onAction="#cancel" styleClass="button" minWidth="120" prefWidth="120"/>
-                <Button fx:id="saveBtn" text="Inscrire les candidats" onAction="#registerCandidates" styleClass="button" minWidth="150" prefWidth="150"/>
+            <!-- Selection buttons in a flow pane to ensure they fit -->
+            <FlowPane hgap="10" vgap="10" alignment="CENTER">
+                <Button fx:id="selectAllBtn" text="Sélectionner tout" onAction="#selectAllCandidats" 
+                        styleClass="button" minWidth="140" prefWidth="140">
+                    <FlowPane.margin>
+                        <Insets right="10" bottom="10"/>
+                    </FlowPane.margin>
+                </Button>
+                <Button fx:id="deselectAllBtn" text="Désélectionner tout" onAction="#deselectAllCandidats" 
+                        styleClass="button" minWidth="140" prefWidth="140">
+                    <FlowPane.margin>
+                        <Insets bottom="10"/>
+                    </FlowPane.margin>
+                </Button>
+            </FlowPane>
+            
+            <!-- Action buttons -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="cancelBtn" text="Annuler" onAction="#cancel" 
+                        styleClass="button" minWidth="140" prefWidth="140">
+                    <HBox.margin>
+                        <Insets right="5"/>
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="saveBtn" text="Inscrire les candidats" onAction="#registerCandidates" 
+                        styleClass="primary-button" minWidth="140" prefWidth="140">
+                    <HBox.margin>
+                        <Insets left="5"/>
+                    </HBox.margin>
+                </Button>
             </HBox>
         </VBox>
     </HBox>

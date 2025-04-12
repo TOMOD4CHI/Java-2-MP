@@ -47,7 +47,7 @@ public class PresenceRepository {
             List<Presence> presences = new ArrayList<>();
             while (rs.next()) {
                 long id = rs.getLong("id");
-                long sessionId = rs.getLong("session_code_id");
+                long sessionId = rs.getLong("session_conduite_id");
                 long candidatId = rs.getLong("candidat_id");
                 presences.add(new Presence(id, sessionId, candidatId));
             }

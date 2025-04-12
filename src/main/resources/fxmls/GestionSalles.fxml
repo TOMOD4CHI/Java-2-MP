@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.GestionSallesController"
+            stylesheets="@/css/style.css"
+            styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <top>
+        <VBox spacing="10">
+            <Label text="Gestion des Salles" styleClass="form-title"/>
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.4" styleClass="transparent-split-pane">
+            <!-- Form Panel for Add/Edit on the left -->
+            <VBox spacing="20" styleClass="form-container">
+                <padding>
+                    <Insets top="15" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <HBox spacing="10" alignment="CENTER">
+                    <Label fx:id="formTitle" text="Ajouter une Salle" styleClass="form-section-title"/>
+                </HBox>
+
+                <GridPane hgap="10" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="100"/>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="200" prefWidth="200"/>
+                    </columnConstraints>
+
+                    <!-- Nom -->
+                    <Label text="Nom:" styleClass="form-label" 
+                           GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <TextField fx:id="nomField" promptText="Entrez le nom de la salle" styleClass="form-field"/>
+                        <Label fx:id="nomError" styleClass="error-label" visible="false"/>
+                    </VBox>
+
+                    <!-- Numéro -->
+                    <Label text="Numéro:" styleClass="form-label" 
+                           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <TextField fx:id="numeroField" promptText="Entrez le numéro de la salle" styleClass="form-field"/>
+                        <Label fx:id="numeroError" styleClass="error-label" visible="false"/>
+                    </VBox>
+
+                    <!-- Capacité -->
+                    <Label text="Capacité:" styleClass="form-label" 
+                           GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <VBox spacing="2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <TextField fx:id="capaciteField" promptText="Entrez la capacité de la salle" styleClass="form-field"/>
+                        <Label fx:id="capaciteError" styleClass="error-label" visible="false"/>
+                    </VBox>
+
+                    <!-- Notes -->
+                    <Label text="Notes:" styleClass="form-label" 
+                           GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextArea fx:id="notesTextArea" promptText="Entrez des notes (optionnel)" 
+                              wrapText="true" prefHeight="100" styleClass="form-field"
+                              GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                </GridPane>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button fx:id="clearButton" text="Effacer" onAction="#handleClearAction" styleClass="secondary-button"/>
+                    <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSaveAction" styleClass="primary-button"/>
+                </HBox>
+                
+                <Region VBox.vgrow="ALWAYS" />
+            </VBox>
+
+            <!-- Table View of Rooms on the right -->
+            <VBox spacing="10" styleClass="detail-container">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Label text="Recherche: " styleClass="form-label"/>
+                    <TextField fx:id="searchField" promptText="Rechercher une salle..." HBox.hgrow="ALWAYS" styleClass="form-field"/>
+                    <Button fx:id="refreshButton" text="Actualiser" onAction="#handleRefreshAction" styleClass="primary-button"/>
+                </HBox>
+
+                <TableView fx:id="salleTableView" VBox.vgrow="ALWAYS" styleClass="custom-table-view">
+                    <columns>
+                        <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="nomColumn" text="Nom" prefWidth="150"/>
+                        <TableColumn fx:id="numeroColumn" text="Numéro" prefWidth="100"/>
+                        <TableColumn fx:id="capaciteColumn" text="Capacité" prefWidth="100"/>
+                        <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Aucune salle trouvée"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane> 

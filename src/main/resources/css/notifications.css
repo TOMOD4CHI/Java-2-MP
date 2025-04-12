@@ -13,7 +13,6 @@
     -fx-background-color: white;
     background-color: white;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     -fx-background-radius: 0 0 10 10;
     border-radius: 0 0 10px 10px;
 }
@@ -31,7 +30,6 @@
     -fx-fill: #2ecc71;
     fill: #2ecc71;
     -fx-effect: dropshadow(gaussian, rgba(46, 204, 113, 0.4), 4, 0, 0, 0);
-    box-shadow: 0 0 4px rgba(46, 204, 113, 0.4);
 }
 
 .status-text {
@@ -61,7 +59,6 @@
     -fx-background-radius: 10px;
     border-radius: 10px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 4);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Search Bar */
@@ -138,7 +135,6 @@
     -fx-text-fill: #3498db;
     color: #3498db;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Notification Cards */
@@ -172,7 +168,6 @@
     -fx-padding: 12px;
     padding: 12px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     -fx-cursor: hand;
     cursor: pointer;
 }
@@ -181,7 +176,6 @@
     -fx-background-color: #f8f9fa;
     background-color: #f8f9fa;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 3);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .cell-type-indicator {
@@ -486,8 +480,9 @@
 .footer-bar {
     -fx-background-color: white;
     background-color: white;
+    -fx-padding: 10px;
+    padding: 10px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, -5);
-    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
 }
 
 .stats-text {

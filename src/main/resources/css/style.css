@@ -61,9 +61,9 @@
 
 .form-section-title {
     -fx-font-family: "Poppins", "Segoe UI", sans-serif;
-    -fx-font-size: 22px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2B6CB0;
+    -fx-text-fill: #2c3e50;
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 2, 0, 0, 1);
     -fx-padding: 8px 0;
     -fx-alignment: center;
@@ -213,8 +213,8 @@
 }
 
 .error-label {
-    -fx-text-fill: #e53e3e;
-    -fx-font-size: 10px;
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
     -fx-wrap-text: true;
     -fx-opacity: 1;
@@ -361,14 +361,42 @@
 }
 
 .edit-button {
-    -fx-background-color: linear-gradient(to bottom, #3182CE, #2B6CB0);
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-padding: 5px 8px;
+    -fx-cursor: hand;
+    -fx-background-radius: 3px;
 }
 
 .edit-button:hover {
-    -fx-background-color: linear-gradient(to bottom, #2B6CB0, #2C5282);
-    -fx-effect: dropshadow(gaussian, rgba(49, 130, 206, 0.5), 8, 0, 0, 3);
-    -fx-scale-x: 1.03;
-    -fx-scale-y: 1.03;
+    -fx-background-color: #2980b9;
+}
+
+.delete-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-padding: 5px 8px;
+    -fx-cursor: hand;
+    -fx-background-radius: 3px;
+}
+
+.delete-button:hover {
+    -fx-background-color: #c0392b;
+}
+
+.refresh-button {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+    -fx-background-radius: 3px;
+}
+
+.refresh-button:hover {
+    -fx-background-color: #27ae60;
 }
 
 .button-outlined {
@@ -413,10 +441,9 @@
 }
 
 .small-button {
-    -fx-min-width: 120px;
-    -fx-min-height: 30px;
-    -fx-font-size: 13px;
-    -fx-padding: 8px 12px;
+    -fx-font-size: 11px;
+    -fx-padding: 5px 8px;
+    -fx-background-radius: 4px;
 }
 
 .register-button {
@@ -473,58 +500,51 @@
 }
 
 .custom-table-view {
-    -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(252, 253, 255, 0.8));
+    -fx-background-color: rgba(255, 255, 255, 0.8);
     -fx-background-radius: 10px;
-    -fx-border-color: #BEE3F8;
+    -fx-border-color: rgba(190, 227, 248, 0.6);
     -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
     -fx-padding: 5px;
-    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.15), 7, 0, 0, 2);
-    -fx-transition-duration: 0.3s;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 8, 0, 0, 3);
 }
 
-.custom-table-view:hover {
-    -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(252, 253, 255, 0.9));
-    -fx-border-color: #63B3ED;
-    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.25), 9, 0, 0, 3);
+.custom-table-view .column-header-background {
+    -fx-background-color: linear-gradient(to right, rgba(49, 130, 206, 0.7), rgba(79, 209, 197, 0.7));
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-padding: 5px 0;
 }
 
 .custom-table-view .column-header {
-    -fx-background-color: linear-gradient(to bottom, #90CDF4, #63B3ED);
-    -fx-text-fill: #2C5282;
+    -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-padding: 8px;
-    -fx-border-color: transparent;
-    -fx-border-width: 0 0 1px 0;
-    -fx-transition-duration: 0.2s;
-}
-
-.custom-table-view .column-header:hover {
-    -fx-background-color: linear-gradient(to bottom, #63B3ED, #4299E1);
-    -fx-cursor: hand;
+    -fx-text-fill: white;
+    -fx-border-width: 0;
+    -fx-padding: 8px 15px;
 }
 
 .custom-table-view .table-row-cell {
-    -fx-background-color: rgba(255, 255, 255, 0.7);
-    -fx-border-color: #E2E8F0;
-    -fx-border-width: 0 0 1px 0;
-    -fx-padding: 5px 0;
-    -fx-transition-duration: 0.2s;
+    -fx-border-color: transparent;
+    -fx-padding: 5 0 5 0;
 }
 
 .custom-table-view .table-row-cell:odd {
-    -fx-background-color: rgba(240, 249, 255, 0.7);
+    -fx-background-color: rgba(235, 248, 255, 0.3);
+}
+
+.custom-table-view .table-row-cell:even {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
 }
 
 .custom-table-view .table-row-cell:hover {
-    -fx-background-color: linear-gradient(to right, rgba(190, 227, 248, 0.5), rgba(200, 232, 250, 0.5));
-    -fx-scale-y: 1.03;
-    -fx-cursor: hand;
+    -fx-background-color: rgba(144, 205, 244, 0.3);
 }
 
 .custom-table-view .table-row-cell:selected {
-    -fx-background-color: linear-gradient(to right, rgba(144, 205, 244, 0.6), rgba(150, 210, 250, 0.6));
-    -fx-text-fill: #2C5282;
-    -fx-font-weight: bold;
+    -fx-background-color: rgba(66, 153, 225, 0.6);
+    -fx-text-fill: white;
 }
 
 .table-view {
@@ -1272,4 +1292,53 @@
 @keyframes payment-success {
     0% { -fx-opacity: 0; -fx-scale-x: 0.8; -fx-scale-y: 0.8; }
     100% { -fx-opacity: 1; -fx-scale-x: 1; -fx-scale-y: 1; }
+}
+
+/* Split pane styling */
+.transparent-split-pane > .split-pane-divider {
+    -fx-background-color: #e0e0e0;
+    -fx-padding: 0 0.5px;
+}
+
+.feature-card {
+    -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(250, 252, 255, 0.7));
+    -fx-background-radius: 12px;
+    -fx-padding: 15px;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 7, 0, 0, 2);
+    -fx-transition-duration: 0.3s;
+    -fx-min-width: 200px;
+    -fx-min-height: 60px;
+}
+
+.feature-card:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(250, 252, 255, 0.8));
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.4), 10, 0, 0, 3);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.welcome-section {
+    -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.9), rgba(250, 252, 255, 0.92));
+    -fx-background-radius: 18px;
+    -fx-border-color: rgba(144, 205, 244, 0.5);
+    -fx-border-radius: 18px;
+    -fx-padding: 25px;
+    -fx-spacing: 20;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.25), 10, 0, 0, 3);
+    -fx-alignment: center;
+}
+
+.welcome-text {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2B6CB0;
+    -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 2, 0, 0, 1);
+    -fx-alignment: center;
+}
+
+.welcome-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #4A5568;
+    -fx-alignment: center;
 }

@@ -1,6 +1,8 @@
 package org.cpi2.service;
 
 import org.cpi2.entities.Seance;
+import org.cpi2.entities.Inscription;
+import org.cpi2.entities.CoursePlan;
 import org.cpi2.repository.SeanceRepository;
 import org.cpi2.service.MoniteurService;
 import org.cpi2.service.CandidatService;
@@ -10,6 +12,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 public class SeanceService {
     private static final Logger LOGGER = Logger.getLogger(SeanceService.class.getName());
@@ -89,6 +94,7 @@ public class SeanceService {
             if (seance.getCandidatId() != null && seance.getType() != null) {
                 try {
                     PresenceService presenceService = new PresenceService();
+                    InscriptionService inscriptionService = new InscriptionService();
 
                     if (seance.getId() == null) {
                         LOGGER.log(Level.WARNING, "Cannot record presence: Seance ID is null after save");
@@ -103,6 +109,45 @@ public class SeanceService {
                         } else {
                             LOGGER.log(Level.INFO, "Recorded presence for candidate ID " + seance.getCandidatId() + 
                                     " in seance type " + seance.getType());
+                            
+                            // Check if the candidate has completed all required sessions
+                            try {
+                                // Get the candidate's CIN based on ID
+                                String candidatCin = candidatService.getCandidatById(seance.getCandidatId())
+                                    .map(c -> c.getCin())
+                                    .orElse(null);
+                                
+                                if (candidatCin != null) {
+                                    // Get active inscription for the candidate
+                                    List<Inscription> activeInscriptions = inscriptionService.getActifInscirptionBycin(candidatCin);
+                                    
+                                    if (!activeInscriptions.isEmpty()) {
+                                        Inscription inscription = activeInscriptions.get(0);
+                                        CoursePlan plan = inscription.getPlan();
+                                        
+                                        // Get count of code and driving sessions attended
+                                        int requiredCodeSessions = plan != null ? plan.getGetNbreSeanceCode() : 0;
+                                        int requiredDrivingSessions = plan != null ? plan.getNbreSeanceConduite() : 0;
+                                        
+                                        java.sql.Date inscriptionDate = inscription.getInscriptioDate();
+                                        
+                                        int codeSessions = presenceService.getCountInscriptioinPerSession(
+                                            seance.getCandidatId(), "code", inscriptionDate);
+                                        int drivingSessions = presenceService.getCountInscriptioinPerSession(
+                                            seance.getCandidatId(), "conduite", inscriptionDate);
+                                        
+                                        // If reached the required sessions, update inscription status
+                                        if (codeSessions >= requiredCodeSessions && drivingSessions >= requiredDrivingSessions) {
+                                            inscription.setStatus("Terminé");
+                                            inscriptionService.updateInscription(inscription);
+                                            LOGGER.log(Level.INFO, "Candidate " + candidatCin + 
+                                                " has completed all required sessions. Inscription marked as inactive.");
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                LOGGER.log(Level.SEVERE, "Error checking session completion status", e);
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -144,6 +189,47 @@ public class SeanceService {
 
     public List<Seance> findAllSeances() {
         return seanceRepository.findAll();
+    }
+    
+    /**
+     * Get all sessions (alias for findAllSeances to maintain API consistency)
+     */
+    public List<Seance> getAllSeances() {
+        return findAllSeances();
+    }
+    
+    /**
+     * Get upcoming sessions, ordered by date, limited to the specified number
+     * @param limit Maximum number of sessions to return
+     * @return List of upcoming sessions
+     */
+    public List<Seance> getUpcomingSeances(int limit) {
+        List<Seance> allSeances = findAllSeances();
+        LocalDate today = LocalDate.now();
+        
+        return allSeances.stream()
+                .filter(seance -> {
+                    try {
+                        // Use the getLocalDate method instead of parsing
+                        LocalDate seanceDate = seance.getLocalDate();
+                        // Keep only future sessions
+                        return seanceDate.isEqual(today) || seanceDate.isAfter(today);
+                    } catch (Exception e) {
+                        LOGGER.log(Level.WARNING, "Error getting date for seance ID " + seance.getId(), e);
+                        return false;
+                    }
+                })
+                .sorted((s1, s2) -> {
+                    try {
+                        LocalDate date1 = s1.getLocalDate();
+                        LocalDate date2 = s2.getLocalDate();
+                        return date1.compareTo(date2);
+                    } catch (Exception e) {
+                        return 0;
+                    }
+                })
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
     public boolean deleteSeance(Long id) {

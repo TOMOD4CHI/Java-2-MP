@@ -248,11 +248,7 @@ public class ConfirmerSeance implements Initializable {
         detailCandidatLabel.setText(seance.getCandidat());
         detailMoniteurLabel.setText(seance.getMoniteur());
         detailVehiculeLabel.setText(seance.getVehicule());
-        
-        // Déterminer le lieu à afficher selon le type de séance
-        String lieuAffiche = seance.getLieu() != null ? seance.getLieu() : "Non spécifié";
-        detailLieuLabel.setText(lieuAffiche);
-        
+        detailLieuLabel.setText(seance.getLieu());
         detailStatusLabel.setText(seance.getStatus());
         
         // Update status label style
@@ -405,8 +401,8 @@ public class ConfirmerSeance implements Initializable {
         private final String lieu;
         private String status;
         
-        public SeanceEntry(String date, String heure, int duree, String candidat,
-                          String moniteur, String vehicule, String lieu, String status) {
+        public SeanceEntry(String date, String heure, int duree, String candidat, 
+                           String moniteur, String vehicule, String lieu, String status) {
             this.date = date;
             this.heure = heure;
             this.duree = duree;
@@ -430,4 +426,4 @@ public class ConfirmerSeance implements Initializable {
             this.status = status;
         }
     }
-}
+} 

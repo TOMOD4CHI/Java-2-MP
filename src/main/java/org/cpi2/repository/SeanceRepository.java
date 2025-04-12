@@ -142,7 +142,7 @@ public class SeanceRepository extends BaseRepository<Seance> {
             }
 
             stmt.setString(5, seance.getDate());
-            stmt.setString(6, seance.getTemps());
+            stmt.setString(6, seance.getHeure());
             stmt.setInt(7, 60);
 
             if (seance.getKilometrage() != null) {
@@ -217,7 +217,7 @@ public class SeanceRepository extends BaseRepository<Seance> {
             }
 
             stmt.setString(5, seance.getDate());
-            stmt.setString(6, seance.getTemps());
+            stmt.setString(6, seance.getHeure());
 
             if (seance.getKilometrage() != null) {
                 stmt.setInt(7, seance.getKilometrage().intValue());

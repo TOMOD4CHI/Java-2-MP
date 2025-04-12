@@ -150,55 +150,75 @@ public class PaiementRepository extends BaseRepository<Paiement> {
             conn.setAutoCommit(false);
 
             String paiementSql = """
-                INSERT INTO paiement (id_candidat,inscription_id,id_examen,type_paiement, montant, date_paiement,mode_paiement,notes,statut)
-                VALUES (?,?,?, ?, ?,?,?,?,?)
+                INSERT INTO paiement (id_candidat, inscription_id, id_examen, type_paiement, montant, date_paiement, mode_paiement, notes, statut)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
              """;
 
             try (PreparedStatement stmt = conn.prepareStatement(paiementSql, Statement.RETURN_GENERATED_KEYS)) {
+                // Set common parameters first
+                stmt.setLong(1, paiement.getCandidat().getId());
+                stmt.setDouble(5, paiement.getMontant());
+                stmt.setDate(6, Date.valueOf(paiement.getDatePaiement()));
+                stmt.setString(7, paiement.getModePaiement().name());
+                stmt.setString(8, paiement.getDescription());
+                stmt.setString(9, paiement.getStatut().name());
+                
+                // Set type-specific parameters
                 if (paiement instanceof PaiementInscription) {
                     PaiementInscription paiementInscription = (PaiementInscription) paiement;
                     stmt.setLong(2, paiementInscription.getInscription().getId());
                     stmt.setNull(3, Types.INTEGER);
-                    if(paiementInscription.getTypePaiement() == null){
+                    
+                    if (paiementInscription.getTypePaiement() == null) {
                         stmt.setNull(4, Types.VARCHAR);
-                    }
-                    else {
+                    } else {
                         stmt.setString(4, paiementInscription.getTypePaiement());
                     }
+                    
+                    LOGGER.info("Saving inscription payment: " + paiementInscription.getMontant() + 
+                                " for candidate: " + paiement.getCandidat().getId() + 
+                                ", type: " + paiementInscription.getTypePaiement());
                 } else {
                     PaiementExamen paiementExamen = (PaiementExamen) paiement;
                     stmt.setNull(2, Types.INTEGER);
                     stmt.setLong(3, paiementExamen.getTypeExamen().getId());
                     stmt.setNull(4, Types.VARCHAR);
+                    
+                    LOGGER.info("Saving exam payment: " + paiementExamen.getMontant() + 
+                                " for candidate: " + paiement.getCandidat().getId() + 
+                                ", exam: " + paiementExamen.getTypeExamen().getId());
                 }
-                stmt.setLong(1, paiement.getCandidat().getId());
-                stmt.setDouble(5, paiement.getMontant());
-                stmt.setDate(6, Date.valueOf(paiement.getDatePaiement()));
-                stmt.setString(7, paiement.getModePaiement().name());
-                stmt.setString(9,paiement.getStatut().name());
-                stmt.setString(8, paiement.getDescription());
 
-
-                if (stmt.executeUpdate() > 0) {
+                int rowsAffected = stmt.executeUpdate();
+                LOGGER.info("Rows affected by insert: " + rowsAffected);
+                
+                if (rowsAffected > 0) {
                     try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
                             Long paiementId = generatedKeys.getLong(1);
                             paiement.setId(paiementId);
                             conn.commit();
+                            LOGGER.info("Payment saved successfully with ID: " + paiementId);
                             return true;
+                        } else {
+                            LOGGER.warning("No ID generated for the payment");
                         }
                     }
+                } else {
+                    LOGGER.warning("No rows affected when saving payment");
                 }
             }
 
             conn.rollback();
+            LOGGER.warning("Payment save failed, rolling back transaction");
             return false;
 
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error saving paiement", e);
+            LOGGER.log(Level.SEVERE, "Error saving paiement: " + e.getMessage(), e);
             if (conn != null) {
                 try {
                     conn.rollback();
+                    LOGGER.info("Transaction rolled back due to error");
                 } catch (SQLException ex) {
                     LOGGER.log(Level.SEVERE, "Error rolling back transaction", ex);
                 }
@@ -209,7 +229,7 @@ public class PaiementRepository extends BaseRepository<Paiement> {
         }
     }
     public boolean update(Paiement paiement) {
-        String sql = "UPDATE paiement SET montant = ?, date_paiement = ?, mode_paiement = ?, notes = ? statut=? WHERE id = ?";
+        String sql = "UPDATE paiement SET montant = ?, date_paiement = ?, mode_paiement = ?, notes = ?, statut=? WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 

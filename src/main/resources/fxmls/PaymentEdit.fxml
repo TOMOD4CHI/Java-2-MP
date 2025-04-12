@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<AnchorPane prefHeight="600.0" prefWidth="650.0" styleClass="main-background" stylesheets="@../css/payment.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.PaymentEditController">
+   <children>
+      <VBox layoutX="14.0" layoutY="14.0" spacing="20.0" styleClass="glass-panel" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <children>
+            <HBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <ImageView fitHeight="60.0" fitWidth="60.0" preserveRatio="true">
+                     <Image url="@/images/logo4.png"/>
+                  </ImageView>
+                  <Label styleClass="section-title" text="Modifier le Paiement">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Separator />
+            
+            <!-- ID and Type Section -->
+            <HBox spacing="10.0">
+               <children>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="field-label" text="ID du Paiement" />
+                        <Label fx:id="idLabel" styleClass="field-value" text="12345" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="field-label" text="Type de Paiement" />
+                        <Label fx:id="typeLabel" styleClass="field-value" text="Inscription Totale" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            
+            <!-- Candidate Info Section -->
+            <HBox spacing="10.0">
+               <children>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="field-label" text="Candidat" />
+                        <Label fx:id="candidatLabel" styleClass="field-value" text="Nom du Candidat" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="field-label" text="CIN" />
+                        <Label fx:id="cinLabel" styleClass="field-value" text="12345678" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            
+            <Separator />
+            
+            <!-- Editable Fields Section -->
+            <Label styleClass="section-subtitle" text="Informations Modifiables">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            
+            <!-- Amount and Date -->
+            <HBox spacing="10.0">
+               <children>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="field-label" text="Montant (DT)" />
+                        <TextField fx:id="montantField" styleClass="form-field" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="field-label" text="Date de Paiement" />
+                        <DatePicker fx:id="datePicker" prefWidth="200.0" styleClass="form-field" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            
+            <!-- Payment Mode -->
+            <VBox spacing="5.0">
+               <children>
+                  <Label styleClass="field-label" text="Mode de Paiement" />
+                  <ComboBox fx:id="modeComboBox" prefWidth="200.0" styleClass="form-field" />
+               </children>
+            </VBox>
+            
+            <!-- Description -->
+            <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label styleClass="field-label" text="Description / Notes" />
+                  <TextArea fx:id="descriptionArea" prefHeight="100.0" styleClass="form-field" wrapText="true" />
+               </children>
+            </VBox>
+            
+            <Separator />
+            
+            <!-- Buttons -->
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+               <children>
+                  <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="cancel-button" text="Annuler" />
+                  <Button fx:id="saveButton" mnemonicParsing="false" styleClass="action-button" text="Enregistrer" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane> 

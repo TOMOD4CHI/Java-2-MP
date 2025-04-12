@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class AutoEcoleService {
-    
+
     private final AutoEcoleRepository autoEcoleRepository;
-    
+
     public AutoEcoleService() {
         this.autoEcoleRepository = new AutoEcoleRepository();
     }
-    
+
     /**
      * Get the auto-école information
      * Since only one auto-école is supposed to exist, this returns the first one found
@@ -28,7 +28,7 @@ public class AutoEcoleService {
             return null;
         }
     }
-    
+
     /**
      * Get the AutoEcole data from the database
      * @return The AutoEcole data
@@ -40,7 +40,7 @@ public class AutoEcoleService {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
      * Get all auto-écoles from the database
      * @return A list of all auto-écoles
@@ -48,7 +48,7 @@ public class AutoEcoleService {
     public List<AutoEcole> findAllAutoEcoles() {
         return autoEcoleRepository.findAll();
     }
-    
+
     /**
      * Save new auto-école to database
      * @param autoEcole The auto-école to save
@@ -63,7 +63,7 @@ public class AutoEcoleService {
             return false;
         }
     }
-    
+
     /**
      * Update an existing auto-école in database
      * @param autoEcole The auto-école to update
@@ -78,7 +78,7 @@ public class AutoEcoleService {
             return false;
         }
     }
-    
+
     /**
      * Delete an auto-école from database by ID
      * @param id The ID of the auto-école to delete

@@ -47,8 +47,19 @@ public class PaymentReceiptGenerator {
      */
     public static String generateSinglePaymentReceipt(Map<String, Object> paymentData) {
         try {
-            // Extract payment data
-            LocalDate paymentDate = (LocalDate) paymentData.get("date");
+            // Extract payment data safely handling different types
+            LocalDate paymentDate;
+            Object dateObj = paymentData.get("date");
+            if (dateObj instanceof LocalDate) {
+                paymentDate = (LocalDate) dateObj;
+            } else if (dateObj instanceof String) {
+                paymentDate = LocalDate.parse((String) dateObj);
+            } else {
+                // Default to today if date can't be parsed
+                paymentDate = LocalDate.now();
+                logger.warn("Payment date couldn't be parsed, using today's date");
+            }
+            
             String candidatName = (String) paymentData.get("candidat");
             String candidatCin = (String) paymentData.get("cin");
             String paymentType = (String) paymentData.get("type");

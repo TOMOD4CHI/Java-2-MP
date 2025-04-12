@@ -49,20 +49,20 @@ public class MainWindow implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Load auto-école information for the footer
         loadAutoEcoleInfo();
-        
+
         // Load the logo
         loadLogo();
-        
+
         // Create logo animation
         createLogoAnimation();
-        
+
         // Subscribe to auto-école update events
         EventBus.subscribe("AUTO_ECOLE_UPDATED", data -> {
             if (data instanceof AutoEcole) {
                 updateFooterInfo((AutoEcole) data);
             }
         });
-        
+
         // We'll set up the stage properties after the scene is fully loaded
         Platform.runLater(this::setupMainWindow);
     }
@@ -101,7 +101,7 @@ public class MainWindow implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Loads auto-école information and displays it in the footer
      */
@@ -109,7 +109,7 @@ public class MainWindow implements Initializable {
         try {
             // Get the auto-école information from the database
             AutoEcole autoEcole = autoEcoleService.getAutoEcole();
-            
+
             if (autoEcole != null) {
                 updateFooterInfo(autoEcole);
             }
@@ -118,7 +118,7 @@ public class MainWindow implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Updates the footer information with the provided auto-école data
      * This method can be called from other controllers when auto-école information changes
@@ -131,7 +131,7 @@ public class MainWindow implements Initializable {
             ecoleAddressLabel.setText(autoEcole.getAdresse());
             ecoleTelLabel.setText("Tél: " + autoEcole.getTelephone());
             ecoleEmailLabel.setText("Email: " + autoEcole.getEmail());
-            
+
             // Also update the logo if it has changed
             if (autoEcole.getLogo() != null && !autoEcole.getLogo().isEmpty()) {
                 try {
@@ -146,7 +146,7 @@ public class MainWindow implements Initializable {
             }
         }
     }
-    
+
     private void loadLogo() {
         try {
             AutoEcole autoEcole = autoEcoleService.getAutoEcole();
@@ -184,7 +184,7 @@ public class MainWindow implements Initializable {
         fadeTransition.setFromValue(0);
         fadeTransition.setToValue(0.75);
         fadeTransition.setInterpolator(Interpolator.EASE_OUT);
-        
+
         // Add subtle scale for a gentle entrance
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(1.0), logoImageView);
         scaleTransition.setFromX(0.95);
@@ -195,6 +195,12 @@ public class MainWindow implements Initializable {
 
         ParallelTransition parallelTransition = new ParallelTransition();
         parallelTransition.getChildren().addAll(scaleTransition, fadeTransition);
+
+        // Load the welcome page after animation completes
+        parallelTransition.setOnFinished(event -> {
+            loadAccueilPage();
+        });
+
         parallelTransition.play();
     }
 
@@ -202,7 +208,7 @@ public class MainWindow implements Initializable {
 
     @FXML public void loadAutoEcoleManagement() {loadViewWithTransition("/fxmls/AutoEcoleManagement.fxml"); }
 
-@FXML public void loadAjouterSalle() { loadViewWithTransition("/fxmls/ajoutersalle.fxml"); }
+    @FXML public void loadAjouterSalle() { loadViewWithTransition("/fxmls/GestionSalles.fxml"); }
     @FXML public void loadAjouterCandidat() { loadViewWithTransition("/fxmls/AjouterCandidat.fxml"); }
     @FXML public void loadModifierCandidat() { loadViewWithTransition("/fxmls/ModifierCandidat.fxml"); }
     @FXML public void loadDocuments() { loadViewWithTransition("/fxmls/Documents.fxml"); }
@@ -212,7 +218,7 @@ public class MainWindow implements Initializable {
     @FXML public void loadExamRegistration() { loadViewWithTransition("/fxmls/ExamRegistration.fxml"); }
     @FXML public void loadExam() { loadViewWithTransition("/fxmls/passExam.fxml"); }
     @FXML public void loadGestionVehicules() { loadViewWithTransition("/fxmls/GestionVehicules.fxml"); }
-    @FXML public void loadDashboardCandidates() { loadViewWithTransition("/fxmls/DashboardCandidates.fxml"); }
+    @FXML public void loadDashboardCandidates() { loadViewWithTransition("/fxmls/AfficherCandidat.fxml"); }
     @FXML public void loadDashboardVehicles() { loadViewWithTransition("/fxmls/DashboardVehicles.fxml"); }
     @FXML public void loadDashboardFinance() { loadViewWithTransition("/fxmls/DashboardFinance.fxml"); }
     @FXML public void loadAfficherCandidat() { loadViewWithTransition("/fxmls/AfficherCandidat.fxml"); }
@@ -227,7 +233,7 @@ public class MainWindow implements Initializable {
     @FXML public void loadNotifications() { loadViewWithTransition("/fxmls/Notifications.fxml"); }
     @FXML public void loadInvoice() { loadViewWithTransition("/fxmls/Invoice.fxml"); }
     @FXML public void loadPaymentHistory() { loadViewWithTransition("/fxmls/PaymentHistory.fxml"); }
-    
+
     /**
      * Handles the logout action when the logout button is clicked
      * Returns the user to the login screen
@@ -238,7 +244,7 @@ public class MainWindow implements Initializable {
             // Load the login screen
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/login.fxml"));
             Parent loginRoot = loader.load();
-            
+
             // Get the current stage
             Stage stage = (Stage) logoutButton.getScene().getWindow();
             Scene scene = new Scene(loginRoot, stage.getWidth(), stage.getHeight());
@@ -264,18 +270,18 @@ public class MainWindow implements Initializable {
                 fadeOut.setOnFinished(event -> {
                     contentArea.getChildren().clear();
                     contentArea.getChildren().add(view);
-                    
+
                     // Apply multiple animations for an engaging entrance
                     FadeTransition fadeIn = new FadeTransition(Duration.millis(300), view);
                     fadeIn.setFromValue(0);
                     fadeIn.setToValue(1);
-                    
+
                     ScaleTransition scaleIn = new ScaleTransition(Duration.millis(300), view);
                     scaleIn.setFromX(0.95);
                     scaleIn.setFromY(0.95);
                     scaleIn.setToX(1.0);
                     scaleIn.setToY(1.0);
-                    
+
                     ParallelTransition parallelTransition = new ParallelTransition();
                     parallelTransition.getChildren().addAll(fadeIn, scaleIn);
                     parallelTransition.play();
@@ -283,18 +289,18 @@ public class MainWindow implements Initializable {
                 fadeOut.play();
             } else {
                 contentArea.getChildren().add(view);
-                
+
                 // Initial load (no existing content to transition from)
                 FadeTransition fadeIn = new FadeTransition(Duration.millis(300), view);
                 fadeIn.setFromValue(0);
                 fadeIn.setToValue(1);
-                
+
                 ScaleTransition scaleIn = new ScaleTransition(Duration.millis(300), view);
                 scaleIn.setFromX(0.95);
                 scaleIn.setFromY(0.95);
                 scaleIn.setToX(1.0);
                 scaleIn.setToY(1.0);
-                
+
                 ParallelTransition parallelTransition = new ParallelTransition();
                 parallelTransition.getChildren().addAll(fadeIn, scaleIn);
                 parallelTransition.play();
@@ -306,19 +312,49 @@ public class MainWindow implements Initializable {
 
     @FXML private ImageView monImageView;
 
-    public void loadMain() {
-        contentArea.getChildren().clear();
-        
-        // Add logo back if it's not already in the contentArea
-        if (!contentArea.getChildren().contains(logoImageView)) {
-            contentArea.getChildren().add(logoImageView);
-            createLogoAnimation();
+    /**
+     * Load the welcome (Accueil) page after animation
+     */
+    private void loadAccueilPage() {
+        try {
+            // Set this controller in the navigator
+            MainWindowNavigator.setMainWindowController(this);
+
+            // Load the welcome page
+            loadViewWithTransition("/fxmls/AccueilPage.fxml");
+        } catch (Exception e) {
+            System.err.println("Error loading welcome page: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-    
+
+    /**
+     * This method gets called when the user clicks the "Return to home" button in the footer
+     * Shows the logo animation first, then loads the welcome page
+     */
+    @FXML
+    public void loadMain() {
+        try {
+            // Clear the content area
+            contentArea.getChildren().clear();
+
+            // Show the logo again
+            contentArea.getChildren().add(logoImageView);
+
+            // Create the logo animation and set it to load the welcome page when finished
+            createLogoAnimation();
+        } catch (Exception e) {
+            System.err.println("Error returning to main screen: " + e.getMessage());
+            e.printStackTrace();
+
+            // If there's an error, still try to load the welcome page
+            loadAccueilPage();
+        }
+    }
+
     public void loadModifierSalle(ActionEvent actionEvent) {
     }
-    
+
     /**
      * Sets the application icon based on the auto-école logo or default icon
      */
@@ -326,7 +362,7 @@ public class MainWindow implements Initializable {
         try {
             // Get the auto-école information from the database
             AutoEcole autoEcole = autoEcoleService.getAutoEcole();
-            
+
             if (autoEcole != null && autoEcole.getLogo() != null && !autoEcole.getLogo().isEmpty()) {
                 File logoFile = new File(autoEcole.getLogo());
                 if (logoFile.exists()) {
@@ -335,7 +371,7 @@ public class MainWindow implements Initializable {
                     return;
                 }
             }
-            
+
             // Use default app icon if no auto-école logo is available
             stage.getIcons().clear();
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));

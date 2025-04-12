@@ -3,16 +3,20 @@ package org.cpi2.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.cpi2.entities.*;
 import org.cpi2.service.CandidatService;
 import org.cpi2.service.ExamenService;
 import org.cpi2.service.InscriptionService;
 import org.cpi2.service.PaiementService;
-import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.PaymentReceiptGenerator;
 
 import java.awt.Desktop;
@@ -170,89 +174,43 @@ public class Paiement implements Initializable {
 
                 editButton.setOnAction(event -> {
                     PaiementData data = getTableView().getItems().get(getIndex());
-                    if(datePicker.getValue() == null && montantField.getText().isEmpty() && descriptionArea.getText().isEmpty()){
-                        showErrorDialog("Veuillez remplir au moine un champ pour la modification");
-                        return;
-                    }
-                    if(candidatComboBox.getValue() != null && !candidatComboBox.getValue().substring(1, candidatComboBox.getValue().indexOf(")")).equals(data.candidat.substring(1, data.candidat.indexOf(")")))){
-                        showErrorDialog("Vous ne pouvez pas modifier le candidat");
-                        return;
-                    }
-                    if(typeComboBox.getValue() != null && !typeComboBox.getValue().equals(data.type)){
-                        showErrorDialog("Vous ne pouvez pas modifier le type de paiement");
-                        return;
-                    }
-                    if(data.type.equals("Examen") && !montantField.getText().equals(data.montant.toString())){
-                        showErrorDialog("Vous ne pouvez pas modifier montant du paiement d'examen");
-                        return;
-                    }
-                    try{
-                    if(data.type.equals("Examen")){
-                        paiementService.update(new PaiementExamen(
-                                StatutPaiement.COMPLETE,
-                                data.getId(),
-                                candidatService.getCandidatByCin(data.getCin()),
-                                montantField.getText().isEmpty() ? data.getMontant() : Double.parseDouble(montantField.getText()),
-                                datePicker.getValue()==null ? data.date : datePicker.getValue(),
-                                modeComboBox.getValue() == null ? ModePaiement.valueOf(data.methode) : ModePaiement.valueOf(modeComboBox.getValue()),
-                                examenService.getPendingExamen(data.getCin()),
-                                descriptionArea.getText().isEmpty() ? data.description : descriptionArea.getText()
-                        ));
-                    }
-                    else{
-                        Inscription inscription = inscriptionService.getActifInscirptionBycin(data.getCin()).get(0);
-                        double reste = paiementService.calculerMontantRestant(inscription.getId());
-                        if(!montantField.getText().isEmpty()) {
-                            if (Double.parseDouble(montantField.getText()) > reste) {
-                                showErrorDialog("Montant supérieur au montant restant (" + reste + ")DT");
-                                return;
-                            }
-                            if (Double.parseDouble(montantField.getText()) < reste && typeComboBox.getValue().equals("Totale")) {
-                                showErrorDialog("Montant inférieur au montant de l'inscription Totale (" + inscription.getPlan().getPrice() + ")DT");
-                                return;
-                            }
-                        }
-                        paiementService.update(new PaiementInscription(
-                                StatutPaiement.COMPLETE,
-                                data.getId(),
-                                candidatService.getCandidatByCin(data.getCin()),
-                                montantField.getText().isEmpty() ? data.getMontant() : Double.parseDouble(montantField.getText()),
-                                datePicker.getValue()==null ? data.date : datePicker.getValue(),
-                                modeComboBox.getValue() == null ? ModePaiement.valueOf(data.methode) : ModePaiement.valueOf(modeComboBox.getValue()),
-                                inscription,
-                                typeComboBox.getValue() == null ? data.type : typeComboBox.getValue(),
-                                descriptionArea.getText().isEmpty() ? data.description : descriptionArea.getText()
-                        ));
-                    }
-                    }catch (Exception e){
-                        showErrorDialog("Erreur lors de la modification du paiement");
+                    
+                    try {
+                        // Create the payment edit view
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PaymentEdit.fxml"));
+                        Parent root = loader.load();
+                        
+                        // Get controller and pass payment details
+                        PaymentEditController controller = loader.getController();
+                        controller.initData(data);
+                        
+                        // Show in new window
+                        Stage stage = new Stage();
+                        stage.setTitle("Modifier le Paiement #" + data.getId());
+                        stage.setScene(new Scene(root));
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.showAndWait();
+                        
+                        // Refresh data after edit window is closed
+                        loadMockData();
+                        updateTotalLabel();
+                    } catch (IOException e) {
                         e.printStackTrace();
-                        return;
+                        showErrorDialog("Impossible d'ouvrir la page de modification: " + e.getMessage());
                     }
-                    showSuccessDialog("Paiement modifié avec succès");
-                    loadMockData();
-                    updateTotalLabel();
                 });
 
                 deleteButton.setOnAction(event -> {
-                    //need to check the dates updates in the inscription :'(
                     PaiementData data = getTableView().getItems().get(getIndex());
-                    if(!data.type.equals("Examen")) {
-                        PaiementInscription paiement = (PaiementInscription) paiementService.getPaiementById(data.getId()).orElseThrow();
-                        paiement.setStatut(StatutPaiement.ANNULEE);
-                        if (paiement.getInscription().isActive()) {
-                            inscriptionService.updatePaymentStatus(paiement.getInscription().getId(), false);
-                            paiementService.cancelPiament(data.getId());
-                        }
-                        else{
-                            showErrorDialog("Impossible de supprimer le paiement d'inscription car l'inscription n'est pas active");
-                            return;
-                        }
-
+                    boolean deleted = paiementService.deletePaiement(data.getId());
+                    
+                    if (deleted) {
+                        showSuccessDialog("Paiement supprimé avec succès");
+                        getTableView().getItems().remove(getIndex());
+                        updateTotalLabel();
+                    } else {
+                        showErrorDialog("Impossible de supprimer le paiement");
                     }
-                    showSuccessDialog("Paiement supprimé avec succès");
-                    getTableView().getItems().remove(getIndex());
-                    updateTotalLabel();
                 });
             }
 
@@ -308,88 +266,78 @@ public class Paiement implements Initializable {
             String description = descriptionArea.getText();
 
             String cin = candidat.substring(1, candidat.indexOf(")"));
-            // Save the payment to the database
-            try{
-            if (!type.equals("Examen")) {
-                if(inscriptionService.haveActifInscription(cin)){
+            
+            try {
+                if (type.equals("Examen")) {
+                    if(!examenService.hasPendingExamens(cin)){
+                        showErrorDialog("Le candidat n'a pas d'examen actif");
+                        return;
+                    }
+                    
+                    Examen examen = examenService.getPendingExamen(cin);
+                    paiementService.enregistrerPaiement(new PaiementExamen(
+                            StatutPaiement.COMPLETE,
+                            null,
+                            candidatService.getCandidatByCin(cin),
+                            montant, 
+                            date, 
+                            ModePaiement.valueOf(mode), 
+                            examen, 
+                            "Payement d'examen du "+examen.getType()
+                    ));
+                    
+                    showSuccessDialog("Paiement d'examen enregistré avec succès");
+                } else {
+                    // For Inscription or Tranche
+                    if(!inscriptionService.haveActifInscription(cin)){
+                        showErrorDialog("Le candidat n'a pas d'inscription active");
+                        return;
+                    }
+                    
                     Inscription inscription = inscriptionService.getActifInscirptionBycin(cin).get(0);
                     double reste = paiementService.calculerMontantRestant(inscription.getId());
-
-                    if (type.equals("Inscription"))
-                        type = "Totale";
-                    else
-                        type = inscription.getPaymentCycle();
-                    if(!Objects.equals(type, inscription.getPaymentCycle())){
-                        showErrorDialog("Type de paiement incorrect vous avez choisit "+inscription.getPaymentCycle()+" lors de l'inscription");
-                        return;
+                    
+                    String paymentType;
+                    if (type.equals("Inscription")) {
+                        paymentType = "Totale";
+                    } else if (type.equals("Tranche")) {
+                        paymentType = inscription.getPaymentCycle();
+                    } else {
+                        paymentType = type;
                     }
-                    if(montant>reste){
-                        if(reste==0){
-                            showErrorDialog("Le candidat a déjà payé la totalité de son inscription");//TODO: add the rest of the message
-                        }
-                        else
-                            showErrorDialog("Montant supérieur au montant restant ("+reste+")DT");//TODO: add the rest of the message
-                        return;
-                    }
-                    if(montant < reste && Objects.equals(type, "Totale")){
-                        showErrorDialog("Montant inférieur au montant de l'inscription ("+inscription.getPlan().getPrice()+")DT");//TODO: add the rest of the message
-                        return;
-                    }
-
-
-                    paiementService.enregistrerPaiement(new PaiementInscription(StatutPaiement.COMPLETE,null,
+                    
+                    paiementService.enregistrerPaiement(new PaiementInscription(
+                            StatutPaiement.COMPLETE,
+                            null,
                             candidatService.getCandidatByCin(cin),
-                            montant, date, ModePaiement.valueOf(mode), inscription, type, description
+                            montant, 
+                            date, 
+                            ModePaiement.valueOf(mode), 
+                            inscription, 
+                            paymentType, 
+                            description
                     ));
-                    if(montant==reste){
-                        inscriptionService.updatePaymentStatus(inscription.getId(),true);
+                    
+                    if(montant >= reste){
+                        inscriptionService.updatePaymentStatus(inscription.getId(), true);
+                        showSuccessDialog("Paiement enregistré avec succès. L'inscription est maintenant payée en totalité.");
+                    } else {
+                        showSuccessDialog("Paiement enregistré avec succès. Il reste " + (reste - montant) + " DT à payer.");
                     }
-
-                    showSuccessDialog("Paiement enregistré avec succès il vous reste "+(reste - montant)+" DT à payer");
                 }
-                else {
-                    showErrorDialog("Le candidat n'a pas d'inscription active");
-                    return;
-                }
-
-            } else {
-                if(!examenService.hasPendingExamens(cin)){
-                    showErrorDialog("Le candidat n'a pas d'examen actif");
-                    return;
-                }
-                Examen examen = examenService.getPendingExamen(cin);
-                if(montant > examen.getFrais()){
-                    showErrorDialog("Montant supérieur au montant de l'examen ("+examen.getFrais()+")DT");
-                    return;
-                }
-                if(montant < examen.getFrais() ){
-                    showErrorDialog("Montant inférieur au montant de l'examen ("+examen.getFrais()+")DT");
-                    return;
-                }
-                paiementService.enregistrerPaiement(new PaiementExamen(StatutPaiement.COMPLETE  ,null,
-                        candidatService.getCandidatByCin(cin),
-                        montant, date, ModePaiement.valueOf(mode), examen, "Payement d'examen du "+examen.getType()
-                ));
-                return;
+                
+                loadMockData();
+                updateTotalLabel();
+                clearPaymentForm();
+                
+            } catch(Exception e) {
+                e.printStackTrace();
+                showErrorDialog("Erreur lors de l'enregistrement du paiement: " + e.getMessage());
             }
-
-
-            loadMockData();
-
-            }catch(Exception e){
-                showErrorDialog("Erreur lors de l'enregistrement du paiement");
-                e.printStackTrace();//for debugging
-                return;
-            }
-
-            updateTotalLabel();
-            showSuccessDialog("Paiement enregistré avec succès");
-            clearPaymentForm();
         } catch (NumberFormatException e) {
             showErrorDialog("Montant invalide");
         }
     }
-
 
     @FXML
     private void handleSearch() {
@@ -483,11 +431,19 @@ public class Paiement implements Initializable {
 
     // Dialog methods
     private void showErrorDialog(String message) {
-        AlertUtil.showError("Error" , message);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void showSuccessDialog(String message) {
-        AlertUtil.showInfo("Success", message);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
     
     /**

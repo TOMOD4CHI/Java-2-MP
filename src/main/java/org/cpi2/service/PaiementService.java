@@ -54,6 +54,10 @@ public class PaiementService {
         return paiementRepository.delete(id);
     }
 
+    public boolean deletePaiement(Long id) {
+        return delete(id);
+    }
+
     public List<Paiement> getAllPaiements() {
         return paiementRepository.findAll().stream().filter(p -> p.getStatut() != StatutPaiement.ANNULEE).toList();
     }

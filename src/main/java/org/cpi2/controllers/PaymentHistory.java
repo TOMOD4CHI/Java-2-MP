@@ -23,6 +23,7 @@ import org.cpi2.service.CandidatService;
 import org.cpi2.service.InscriptionService;
 import org.cpi2.service.PaiementService;
 import org.cpi2.utils.AlertUtil;
+import org.cpi2.controllers.PaymentDetailsController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -217,22 +218,32 @@ public class PaymentHistory implements Initializable {
             @Override
             public TableCell<PaymentEntry, Void> call(TableColumn<PaymentEntry, Void> param) {
                 return new TableCell<PaymentEntry, Void>() {
-                    private final Button viewBtn = new Button("Voir");
-                    private final Button editBtn = new Button("Modifier");
+                    private final Button viewBtn = new Button("Voir détails");
                     {
                         viewBtn.getStyleClass().add("small-button");
-                        editBtn.getStyleClass().add("small-button");
                         
                         viewBtn.setOnAction(event -> {
                             PaymentEntry payment = getTableView().getItems().get(getIndex());
-                            // View payment details
-                            AlertUtil.showInfo("Détails du Paiement", "Détails du paiement #" + payment.getId());
-                        });
-                        
-                        editBtn.setOnAction(event -> {
-                            PaymentEntry payment = getTableView().getItems().get(getIndex());
-                            // Edit payment
-                            AlertUtil.showInfo("Modifier Paiement", "Modifier le paiement #" + payment.getId());
+                            
+                            try {
+                                // Create the payment details view
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PaymentDetails.fxml"));
+                                Parent root = loader.load();
+                                
+                                // Get controller and pass payment details
+                                PaymentDetailsController controller = loader.getController();
+                                controller.initData(payment);
+                                
+                                // Show in new window
+                                Stage stage = new Stage();
+                                stage.setTitle("Détails du Paiement #" + payment.getId());
+                                stage.setScene(new Scene(root));
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                AlertUtil.showError("Erreur", "Impossible d'ouvrir les détails du paiement: " + e.getMessage());
+                            }
                         });
                     }
 
@@ -242,8 +253,7 @@ public class PaymentHistory implements Initializable {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            HBox buttons = new HBox(5, viewBtn, editBtn);
-                            setGraphic(buttons);
+                            setGraphic(viewBtn);
                         }
                     }
                 };

@@ -11,13 +11,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.cpi2.entities.Candidat;
 import org.cpi2.entities.Moniteur;
-import org.cpi2.entities.Salle;
 import org.cpi2.entities.SessionCode;
 import org.cpi2.entities.TypePermis;
 import org.cpi2.entities.TypeSession;
 import org.cpi2.service.CandidatService;
 import org.cpi2.service.MoniteurService;
-import org.cpi2.service.SalleService;
+import org.cpi2.service.PresenceService;
 import org.cpi2.service.SessionService;
 import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.ValidationUtils;
@@ -30,18 +29,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SeanceCode {
-    @FXML private ComboBox<String> candidatCombo;
     @FXML private TextField capfield;
     @FXML private DatePicker datefield;
     @FXML private TextField tempsfield;
     @FXML private TextField moniteurfield;
+    @FXML private ComboBox<String> candidatCombo;
     @FXML private ComboBox<String> salleCombo;
     
     @FXML private Label candidatError;
     @FXML private Label dateError;
     @FXML private Label tempsError;
     @FXML private Label moniteurError;
-    @FXML private Label salleError;
 
     @FXML private TableView<Moniteur> moniteurTableView;
     @FXML private TableColumn<Moniteur, Long> idMoniteurColumn;
@@ -55,11 +53,7 @@ public class SeanceCode {
 
     private final MoniteurService moniteurService = new MoniteurService();
     private final SessionService sessionService = new SessionService();
-    private final CandidatService candidatService = new CandidatService();
-    private final SalleService salleService = new SalleService();
     private Moniteur selectedMoniteur;
-    private Long selectedCandidatId;
-    private Long selectedSalleId;
 
     @FXML
     public void initialize() {
@@ -73,11 +67,9 @@ public class SeanceCode {
                         .collect(Collectors.joining(", "))));  
         
         // Set placeholders for input fields
-        candidatCombo.setPromptText("Sélectionner un candidat");
         capfield.setPromptText("Nombre de places");
         tempsfield.setPromptText("Format: HH:mm");
         moniteurfield.setPromptText("Sélectionnez un moniteur");
-        salleCombo.setPromptText("Sélectionner une salle");
         
         // Setup validation
         setupValidation();
@@ -100,10 +92,17 @@ public class SeanceCode {
         planifierButton.setOnAction(this::handlePlanifier);
         cancelButton.setOnAction(e -> handleCancel());
 
-        // Load data from services
+        // Load moniteurs from service
         loadMoniteurs();
+        
+        // Load candidates from service
         loadCandidats();
+        
+        // Load rooms
         loadSalles();
+        
+        // Preload a default value in capacity field
+        capfield.setText("20");
     }
 
     private void loadMoniteurs() {
@@ -120,46 +119,6 @@ public class SeanceCode {
             e.printStackTrace();
             // Fallback to mock data
             loadMockMoniteurs();
-        }
-    }
-    
-    private void loadCandidats() {
-        try {
-            List<Candidat> candidats = candidatService.getAllCandidats();
-            ObservableList<String> candidatItems = FXCollections.observableArrayList();
-            
-            if (candidats == null || candidats.isEmpty()) {
-                AlertUtil.showWarning("Aucun candidat", "Aucun candidat trouvé dans la base de données.");
-            } else {
-                for (Candidat candidat : candidats) {
-                    candidatItems.add(candidat.getId() + " - " + candidat.getNom() + " " + candidat.getPrenom());
-                }
-                candidatCombo.setItems(candidatItems);
-            }
-        } catch (Exception e) {
-            System.err.println("Erreur lors du chargement des candidats: " + e.getMessage());
-            e.printStackTrace();
-            AlertUtil.showError("Erreur", "Erreur lors du chargement des candidats: " + e.getMessage());
-        }
-    }
-    
-    private void loadSalles() {
-        try {
-            List<Salle> salles = salleService.getAllSalles();
-            ObservableList<String> salleItems = FXCollections.observableArrayList();
-            
-            if (salles == null || salles.isEmpty()) {
-                AlertUtil.showWarning("Aucune salle", "Aucune salle trouvée dans la base de données.");
-            } else {
-                for (Salle salle : salles) {
-                    salleItems.add(salle.getId() + " - " + salle.getNom() + " (" + salle.getNumero() + ")");
-                }
-                salleCombo.setItems(salleItems);
-            }
-        } catch (Exception e) {
-            System.err.println("Erreur lors du chargement des salles: " + e.getMessage());
-            e.printStackTrace();
-            AlertUtil.showError("Erreur", "Erreur lors du chargement des salles: " + e.getMessage());
         }
     }
 
@@ -210,10 +169,6 @@ public class SeanceCode {
         }
 
         try {
-            // Get candidat ID
-            String candidatValue = candidatCombo.getValue();
-            Long candidatId = Long.parseLong(candidatValue.split(" - ")[0]);
-            
             // Parse capacity
             int capacite = Integer.parseInt(capfield.getText());
             
@@ -223,17 +178,13 @@ public class SeanceCode {
             // Parse time
             LocalTime time = LocalTime.parse(tempsfield.getText(), DateTimeFormatter.ofPattern("HH:mm"));
             
-            // Get salle
-            String salleValue = salleCombo.getValue();
-            String salleName = salleValue.split(" - ")[1].split("\\(")[0];
-            
             // Create session code
             SessionCode sessionCode = new SessionCode();
             sessionCode.setDateSession(date);
             sessionCode.setHeureSession(time);
             sessionCode.setMoniteur(selectedMoniteur);
             sessionCode.setCapaciteMax(capacite);
-            sessionCode.setSalle(salleName);
+            sessionCode.setSalle(salleCombo.getValue());
             sessionCode.setTypeSession(TypeSession.CODE);
             
             // Définir un plan valide (par exemple, le plan 1 pour le code)
@@ -244,16 +195,42 @@ public class SeanceCode {
                 sessionCode.setDuree(60);
             }
             
-            // Vérifier si le candidat existe
-            if (!candidatService.getCandidatById(candidatId).isPresent()) {
-                AlertUtil.showError("Erreur", "Le candidat sélectionné n'existe pas dans la base de données.");
-                return;
-            }
-            
             // Save session
             boolean saved = sessionService.saveSessionCode(sessionCode);
             
             if (saved) {
+                // Get the ID of the newly created session
+                List<SessionCode> sessions = sessionService.viewAllSessionCode();
+                SessionCode createdSession = null;
+                
+                // Find the session we just created (the most recent one with matching date and time)
+                for (SessionCode session : sessions) {
+                    if (session.getDateSession().equals(date) && 
+                        session.getHeureSession().equals(time) && 
+                        session.getMoniteur().getId() == selectedMoniteur.getId()) {
+                        createdSession = session;
+                        break;
+                    }
+                }
+                
+                // If we found the session, create a presence record
+                if (createdSession != null) {
+                    // Add presence record for the candidate if one is selected
+                    if (candidatCombo.getValue() != null && !candidatCombo.getValue().isEmpty()) {
+                        try {
+                            // Extract candidate ID from the combo box value (format "id - name")
+                            String candidatValue = candidatCombo.getValue();
+                            long candidatId = Long.parseLong(candidatValue.split(" - ")[0]);
+                            
+                            // Create presence record
+                            PresenceService presenceService = new PresenceService();
+                            presenceService.recordCodePresence(createdSession.getId(), candidatId, false);
+                        } catch (Exception e) {
+                            System.err.println("Erreur lors de la création de la présence: " + e.getMessage());
+                        }
+                    }
+                }
+                
                 AlertUtil.showSuccess("Planification", "Séance de code planifiée avec succès");
                 clearFields();
             } else {
@@ -269,15 +246,11 @@ public class SeanceCode {
     }
 
     private void clearFields() {
-        candidatCombo.setValue(null);
         capfield.clear();
         datefield.setValue(LocalDate.now());
         tempsfield.clear();
         moniteurfield.clear();
-        salleCombo.setValue(null);
         selectedMoniteur = null;
-        selectedCandidatId = null;
-        selectedSalleId = null;
         moniteurTableView.getSelectionModel().clearSelection();
         
         // Masquer les messages d'erreur
@@ -285,11 +258,8 @@ public class SeanceCode {
         dateError.setVisible(false);
         tempsError.setVisible(false);
         moniteurError.setVisible(false);
-        salleError.setVisible(false);
         
         // Supprimer les styles de validation
-        candidatCombo.getStyleClass().remove("error-field");
-        candidatCombo.getStyleClass().remove("valid-field");
         capfield.getStyleClass().remove("error-field");
         capfield.getStyleClass().remove("valid-field");
         datefield.getStyleClass().remove("error-field");
@@ -298,8 +268,6 @@ public class SeanceCode {
         tempsfield.getStyleClass().remove("valid-field");
         moniteurfield.getStyleClass().remove("error-field");
         moniteurfield.getStyleClass().remove("valid-field");
-        salleCombo.getStyleClass().remove("error-field");
-        salleCombo.getStyleClass().remove("valid-field");
     }
 
     @FXML
@@ -314,25 +282,6 @@ public class SeanceCode {
         dateError.setVisible(false);
         tempsError.setVisible(false);
         moniteurError.setVisible(false);
-        salleError.setVisible(false);
-        
-        // Candidat validation
-        candidatCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null) {
-                candidatError.setText("Veuillez sélectionner un candidat");
-                candidatError.setVisible(true);
-                candidatCombo.getStyleClass().remove("valid-field");
-                if (!candidatCombo.getStyleClass().contains("error-field")) {
-                    candidatCombo.getStyleClass().add("error-field");
-                }
-            } else {
-                candidatError.setVisible(false);
-                candidatCombo.getStyleClass().remove("error-field");
-                if (!candidatCombo.getStyleClass().contains("valid-field")) {
-                    candidatCombo.getStyleClass().add("valid-field");
-                }
-            }
-        });
         
         // Capacité validation
         capfield.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -441,36 +390,11 @@ public class SeanceCode {
                 }
             }
         });
-        
-        // Salle validation
-        salleCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null) {
-                salleError.setText("Veuillez sélectionner une salle");
-                salleError.setVisible(true);
-                salleCombo.getStyleClass().remove("valid-field");
-                if (!salleCombo.getStyleClass().contains("error-field")) {
-                    salleCombo.getStyleClass().add("error-field");
-                }
-            } else {
-                salleError.setVisible(false);
-                salleCombo.getStyleClass().remove("error-field");
-                if (!salleCombo.getStyleClass().contains("valid-field")) {
-                    salleCombo.getStyleClass().add("valid-field");
-                }
-            }
-        });
     }
     
     private boolean validateInputs() {
         // Vérifier les entrées manuellement
         boolean hasErrors = false;
-        
-        // Vérifier le candidat
-        if (candidatCombo.getValue() == null) {
-            candidatError.setText("Veuillez sélectionner un candidat");
-            candidatError.setVisible(true);
-            hasErrors = true;
-        }
         
         // Vérifier la capacité
         if (capfield.getText().trim().isEmpty()) {
@@ -525,14 +449,48 @@ public class SeanceCode {
             hasErrors = true;
         }
         
-        // Vérifier la salle
-        if (salleCombo.getValue() == null) {
-            salleError.setText("Veuillez sélectionner une salle");
-            salleError.setVisible(true);
-            hasErrors = true;
-        }
-        
         return !hasErrors;
     }
 
+    private void loadCandidats() {
+        try {
+            // Get candidate service
+            CandidatService candidatService = new CandidatService();
+            List<Candidat> candidats = candidatService.getAllCandidats();
+            
+            // Create observable list for combobox
+            ObservableList<String> candidatItems = FXCollections.observableArrayList();
+            
+            // Populate the list
+            if (candidats != null && !candidats.isEmpty()) {
+                for (Candidat candidat : candidats) {
+                    candidatItems.add(candidat.getId() + " - " + candidat.getNom() + " " + candidat.getPrenom());
+                }
+                candidatCombo.setItems(candidatItems);
+            } else {
+                System.err.println("No candidates found");
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading candidates: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void loadSalles() {
+        try {
+            // For this example, we'll use some sample rooms
+            ObservableList<String> salles = FXCollections.observableArrayList(
+                "Salle 1", "Salle 2", "Salle 3", "Salle 4", "Salle 5"
+            );
+            salleCombo.setItems(salles);
+            
+            // Set default value
+            if (!salles.isEmpty()) {
+                salleCombo.setValue(salles.get(0));
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading salles: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

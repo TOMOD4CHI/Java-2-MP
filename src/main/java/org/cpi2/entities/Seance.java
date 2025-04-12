@@ -3,6 +3,9 @@ package org.cpi2.entities;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Seance {
     private Long id;
@@ -114,11 +117,27 @@ public class Seance {
         return date;
     }
 
+    /**
+     * Get the date as a LocalDate object
+     * @return LocalDate object
+     */
+    public LocalDate getLocalDate() {
+        if (date == null || date.isEmpty()) {
+            return LocalDate.now();
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return LocalDate.parse(date, formatter);
+        } catch (Exception e) {
+            return LocalDate.now();
+        }
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
 
-    public String getTemps() {
+    public String getHeure() {
         return temps;
     }
 
@@ -182,16 +201,44 @@ public class Seance {
         this.quartier = quartier;
     }
 
+    /**
+     * Get a list of candidates associated with this session
+     * This is a simplified version for the welcome page that just creates a list with this session's candidate
+     * @return List of Candidat objects
+     */
+    public List<Candidat> getCandidats() {
+        if (candidatId == null) {
+            return new ArrayList<>();
+        }
+        
+        // Create a dummy candidate with the ID and name
+        Candidat candidat = new Candidat();
+        candidat.setId(candidatId);
+        candidat.setNom(candidatName);
+        
+        return Collections.singletonList(candidat);
+    }
+
     @Override
     public String toString() {
         return "Seance{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
+                ", candidatId=" + candidatId +
                 ", candidatName='" + candidatName + '\'' +
+                ", moniteurId=" + moniteurId +
                 ", moniteurName='" + moniteurName + '\'' +
+                ", vehiculeId=" + vehiculeId +
+                ", vehiculeName='" + vehiculeName + '\'' +
                 ", date='" + date + '\'' +
                 ", temps='" + temps + '\'' +
+                ", kilometrage=" + kilometrage +
                 ", status='" + status + '\'' +
+                ", commentaire='" + commentaire + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", salle='" + salle + '\'' +
+                ", quartier='" + quartier + '\'' +
                 '}';
     }
 }

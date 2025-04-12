@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="650.0" prefWidth="800.0" styleClass="main-background" stylesheets="@../css/payment.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.PaymentDetailsController">
+    <children>
+        <VBox layoutX="14.0" layoutY="14.0" prefHeight="622.0" prefWidth="772.0" spacing="10.0" styleClass="glass-panel" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+                <Label styleClass="section-title" text="Détails du paiement">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                
+                <!-- Payment Details Section -->
+                <GridPane hgap="15.0" vgap="10.0" styleClass="section-box">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label styleClass="field-label" text="ID Paiement:" />
+                        <Label fx:id="idLabel" text="ID" GridPane.columnIndex="1" />
+                        
+                        <Label styleClass="field-label" text="Date:" GridPane.columnIndex="2" />
+                        <Label fx:id="dateLabel" text="Date" GridPane.columnIndex="3" />
+                        
+                        <Label styleClass="field-label" text="Candidat:" GridPane.rowIndex="1" />
+                        <Label fx:id="candidatLabel" text="Candidat" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        
+                        <Label styleClass="field-label" text="CIN:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label fx:id="cinLabel" text="CIN" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        
+                        <Label styleClass="field-label" text="Montant:" GridPane.rowIndex="2" />
+                        <Label fx:id="montantLabel" styleClass="amount-label" text="Montant" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        
+                        <Label styleClass="field-label" text="Type:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label fx:id="typeLabel" text="Type" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </GridPane>
+                
+                <!-- Additional Payment Info -->
+                <HBox spacing="15.0">
+                    <children>
+                        <Label styleClass="field-label" text="Méthode de paiement:" />
+                        <Label fx:id="methodeLabel" text="Méthode" />
+                        
+                        <Label styleClass="field-label" text="Statut:" translateX="20.0" />
+                        <Label fx:id="statutLabel" text="Statut" />
+                    </children>
+                </HBox>
+                
+                <!-- Installment Plan Details Section -->
+                <TitledPane animated="false" text="Détails du plan de paiement" expanded="true" styleClass="titled-pane">
+                    <content>
+                        <VBox spacing="10.0">
+                            <children>
+                                <GridPane hgap="15.0" vgap="10.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Label styleClass="field-label" text="Type de plan:" />
+                                        <Label fx:id="planTypeLabel" text="Plan" GridPane.columnIndex="1" />
+                                        
+                                        <Label styleClass="field-label" text="Montant payé:" GridPane.columnIndex="2" />
+                                        <Label fx:id="totalPaidLabel" text="0.00 DT" GridPane.columnIndex="3" />
+                                        
+                                        <Label styleClass="field-label" text="Montant restant:" GridPane.rowIndex="1" />
+                                        <Label fx:id="remainingLabel" text="0.00 DT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        
+                                        <Label styleClass="field-label" text="Prochain paiement:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <Label fx:id="nextPaymentLabel" text="Date" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                    </children>
+                                </GridPane>
+                                
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                        <Label styleClass="field-label" text="Progression:" />
+                                        <ProgressBar fx:id="paymentProgressBar" prefWidth="600.0" progress="0.0" />
+                                    </children>
+                                </HBox>
+                            </children>
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </padding>
+                        </VBox>
+                    </content>
+                </TitledPane>
+                
+                <!-- Payment History Table Section -->
+                <TitledPane animated="false" text="Historique des paiements" expanded="true" styleClass="titled-pane">
+                    <content>
+                        <TableView fx:id="paymentsHistoryTable" prefHeight="200.0">
+                            <columns>
+                                <TableColumn fx:id="historyDateColumn" prefWidth="150.0" text="Date" />
+                                <TableColumn fx:id="historyMontantColumn" prefWidth="150.0" text="Montant" />
+                                <TableColumn fx:id="historyTypeColumn" prefWidth="150.0" text="Type" />
+                                <TableColumn fx:id="historyMethodeColumn" prefWidth="150.0" text="Méthode" />
+                            </columns>
+                        </TableView>
+                    </content>
+                </TitledPane>
+                
+                <!-- Action Buttons -->
+                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                    <children>
+                        <Button fx:id="printButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" styleClass="action-button" text="Imprimer" />
+                        <Button fx:id="closeButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" styleClass="cancel-button" text="Fermer" />
+                    </children>
+                    <padding>
+                        <Insets top="10.0" />
+                    </padding>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane> 
