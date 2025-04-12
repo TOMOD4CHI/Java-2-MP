@@ -15,15 +15,7 @@ public class EventBus {
     public static void subscribe(String eventType, Consumer<Object> handler) {
         subscribers.computeIfAbsent(eventType, k -> new HashSet<>()).add(handler);
     }
-    
-    public static void unsubscribe(String eventType, Consumer<Object> handler) {
-        if (subscribers.containsKey(eventType)) {
-            subscribers.get(eventType).remove(handler);
-            if (subscribers.get(eventType).isEmpty()) {
-                subscribers.remove(eventType);
-            }
-        }
-    }
+
     
     public static void publish(String eventType, Object data) {
         if (subscribers.containsKey(eventType)) {
