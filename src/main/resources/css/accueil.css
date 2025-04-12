@@ -327,6 +327,7 @@
 }
 
 .dashboard-card-title {
+    -fx-padding: 0;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-text-fill: #718096;

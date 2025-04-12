@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="800.0" styleClass="main-background" stylesheets="@../css/payment.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.PaymentDetailsController">
+<AnchorPane prefHeight="650.0" prefWidth="800.0" fx:id="mypane" styleClass="main-background" stylesheets="@../css/payment.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cpi2.controllers.PaymentDetailsController">
     <children>
         <VBox layoutX="14.0" layoutY="14.0" prefHeight="622.0" prefWidth="772.0" spacing="10.0" styleClass="glass-panel" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
             <padding>

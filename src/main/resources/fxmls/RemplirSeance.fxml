@@ -13,7 +13,7 @@
            stylesheets="@/css/styletab.css"
            prefWidth="1500" prefHeight="800">
 
-    <HBox spacing="20" alignment="center">
+    <HBox spacing="15" alignment="center">
         <padding>
             <Insets top="15" right="15" bottom="15" left="15"/>
         </padding>
@@ -27,7 +27,7 @@
             <Label text="Séances de Code Disponibles" styleClass="form-title"/>
             
             <!-- Date filter section -->
-            <HBox spacing="10" alignment="center_left">
+            <HBox spacing="5" alignment="center_left">
                 <Label text="Filtrer par date:" styleClass="form-label" minWidth="120" prefWidth="120"/>
                 <DatePicker fx:id="dateFilter" styleClass="form-field" minWidth="180" prefWidth="180"/>
                 <Region HBox.hgrow="ALWAYS" minWidth="20"/>

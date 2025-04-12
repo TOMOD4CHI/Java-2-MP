@@ -7,11 +7,15 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.cpi2.controllers.AjouterCandidat"
-      stylesheets="@/css/style.css"
-      alignment="CENTER" spacing="20" styleClass="form-container">
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.AjouterCandidat"
+            stylesheets="@/css/style.css"
+            fitToWidth="true" fitToHeight="true"
+            styleClass="transparent-scroll-pane"
+            VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+<StackPane alignment="CENTER">
+<VBox alignment="CENTER" spacing="20" styleClass="form-container" maxWidth="650" StackPane.alignment="CENTER">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -111,3 +115,5 @@
     </HBox>
 
 </VBox>
+</StackPane>
+</ScrollPane>

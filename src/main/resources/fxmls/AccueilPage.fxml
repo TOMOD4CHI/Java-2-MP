@@ -170,7 +170,7 @@
         
         <HBox styleClass="data-container">
             <!-- Upcoming Sessions -->
-            <VBox styleClass="data-card" prefWidth="550" prefHeight="450" HBox.hgrow="ALWAYS">
+            <VBox styleClass="data-card" prefWidth="550" prefHeight="320" HBox.hgrow="ALWAYS">
                 <Label text="Prochaines Séances" styleClass="data-card-title"/>
                 <TableView fx:id="upcomingSessionsTable" styleClass="data-table" VBox.vgrow="ALWAYS">
                     <columns>
@@ -192,7 +192,7 @@
             </VBox>
             
             <!-- Notifications -->
-            <VBox styleClass="data-card" prefWidth="450" prefHeight="450" HBox.hgrow="ALWAYS">
+            <VBox styleClass="data-card" prefWidth="450" prefHeight="320" HBox.hgrow="ALWAYS">
                 <Label text="Notifications Système" styleClass="data-card-title"/>
                 <ListView fx:id="notificationsListView" styleClass="data-table" VBox.vgrow="ALWAYS">
                     <placeholder>

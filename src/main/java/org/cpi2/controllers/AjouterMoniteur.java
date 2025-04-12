@@ -107,6 +107,7 @@ public class AjouterMoniteur implements Initializable {
 
     public void ajouterAction(ActionEvent event) {
         if (ValidationUtils.hasAnyErrors()) {
+            AlertUtil.showWarning("Validation", "Veuillez corriger les erreurs avant de continuer.");
             return;
         }
         
