@@ -222,7 +222,7 @@ public class ModifierCandidat {
 
     @FXML
     private void confirmAction() {
-        if (!validateInput()) {
+        if (!validateInputSilent()) {
             AlertUtil.showWarning("Validation", "Veuillez corriger les erreurs avant de continuer.");
             return;
         }
@@ -273,6 +273,52 @@ public class ModifierCandidat {
         ValidationUtils.clearValidation(typeComboBox);
     }
 
+    /**
+     * Silent validation for form submission - doesn't update UI error labels
+     */
+    private boolean validateInputSilent() {
+        boolean isValid = true;
+
+        // Validate each field without showing error messages
+        if (!isValidName(nomField.getText())) {
+            isValid = false;
+        }
+
+        if (!isValidName(prenomField.getText())) {
+            isValid = false;
+        }
+
+        if (!isValidCIN(cinField.getText())) {
+            isValid = false;
+        }
+
+        if (!isValidAddress(addressField.getText(), 5)) {
+            isValid = false;
+        }
+
+        if (!isValidPhone(phoneField.getText())) {
+            isValid = false;
+        }
+
+        if (!isValidEmail(emailField.getText())) {
+            isValid = false;
+        }
+        
+        if (!isValidBirthDate(birthDatePicker.getValue())) {
+            isValid = false;
+        }
+
+        if (typeComboBox.getValue() == null) {
+            isValid = false;
+        }
+
+        return isValid;
+    }
+    
+    /**
+     * Interactive validation that updates UI error labels
+     * Only used for direct field validation, not form submission
+     */
     private boolean validateInput() {
         boolean isValid = true;
 
