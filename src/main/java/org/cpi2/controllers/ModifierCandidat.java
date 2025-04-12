@@ -204,12 +204,8 @@ public class ModifierCandidat {
             // Save to database
             candidatService.updateCandidat(candidatToModify);
 
-            // Show success message
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText("Modification réussie");
-            alert.setContentText("Le candidat a été modifié avec succès.");
-            alert.showAndWait();
+
+            AlertUtil.showSuccess("Succès", "Le candidat a été modifié avec succès.");
 
             // Close the window
             ((Stage) nomField.getScene().getWindow()).close();

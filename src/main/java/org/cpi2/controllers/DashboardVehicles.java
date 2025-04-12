@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.cpi2.repository.DatabaseConfig;
+import org.cpi2.utils.AlertUtil;
 
 public class DashboardVehicles implements Initializable {
 
@@ -98,7 +99,7 @@ public class DashboardVehicles implements Initializable {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
+            AlertUtil.showError("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
         }
     }
     
@@ -480,14 +481,7 @@ public class DashboardVehicles implements Initializable {
         
         maintenanceAlertsTable.setItems(alertData);
     }
-    
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
     
     // Inner class for vehicle table entries
     public static class VehicleEntry {

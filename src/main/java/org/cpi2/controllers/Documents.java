@@ -17,16 +17,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.List;
+import org.cpi2.entities.Candidat;
+// Using entity Document with full qualification to avoid conflict with inner Document class
+
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeSet;
-
-import org.cpi2.entities.Candidat;
 import org.cpi2.entities.Dossier;
 import org.cpi2.entities.TypeDocument;
 import org.cpi2.service.CandidatService;
@@ -34,14 +29,20 @@ import org.cpi2.service.DocumentService;
 import org.cpi2.service.DossierService;
 import org.cpi2.service.TypeDocumentService;
 
+import java.io.File;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
 public class Documents {
 
     @FXML private ComboBox<Candidat> candidatComboBox;
     @FXML private TextField nomDocumentField;
     @FXML private ComboBox<String> typeDocumentComboBox;
     @FXML private DatePicker dateAjoutPicker;
-    @FXML private Button browseButton;
     @FXML private Label selectedFileLabel;
+    @FXML private Button browseButton;
     @FXML private Button saveButton;
     @FXML private Button loadButton;
     @FXML private TableView<Document> documentsTableView;
@@ -157,24 +158,8 @@ public class Documents {
                 // Update the candidate's dossier reference
                 selectedCandidat.setDossier(dossier);
                 
-                // Get the type document string from the combo box
-                String typeDocumentStr = typeDocumentComboBox.getValue();
-                
-                // Convert string to TypeDocument enum - handle case mismatch
-                TypeDocument typeDocument = null;
-                for (TypeDocument type : TypeDocument.values()) {
-                    if (type.toString().equalsIgnoreCase(typeDocumentStr)) {
-                        typeDocument = type;
-                        break;
-                    }
-                }
-                
-                if (typeDocument == null) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Type de document invalide: " + typeDocumentStr);
-                    return;
-                }
-                
-                // Create entity document (not the UI document)
+                // Create document from form - use fully qualified name to avoid confusion with inner Document class
+                TypeDocument typeDocument = TypeDocument.valueOf(typeDocumentComboBox.getValue());
                 org.cpi2.entities.Document document = new org.cpi2.entities.Document(
                     typeDocument, 
                     nomDocumentField.getText(), 
@@ -214,79 +199,62 @@ public class Documents {
             return;
         }
         
-        // Clear the current list
         documentsList.clear();
         
-        try {
-            // Fetch the dossier directly from the database
-            Optional<Dossier> dossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
-            
-            if (dossierOpt.isEmpty()) {
-                System.out.println("No dossier found for candidate: " + selectedCandidat.getNom() + " " + selectedCandidat.getPrenom());
-                showAlert(Alert.AlertType.INFORMATION, "Information", 
-                        "Aucun dossier n'a été trouvé pour ce candidat");
-                return;
-            }
-            
-            Dossier dossier = dossierOpt.get();
-            // Update the candidate's dossier reference
-            selectedCandidat.setDossier(dossier);
-            
-            System.out.println("Found dossier with ID: " + dossier.getId() + " for candidate: " + 
-                    selectedCandidat.getNom() + " " + selectedCandidat.getPrenom());
-            
-            // Get the documents from the dossier
-            Map<TypeDocument, TreeSet<org.cpi2.entities.Document>> documentsMap = dossier.getDocuments();
-            
-            if (documentsMap == null || documentsMap.isEmpty()) {
-                System.out.println("No documents found in dossier ID: " + dossier.getId());
-                showAlert(Alert.AlertType.INFORMATION, "Information", 
-                        "Aucun document n'a été trouvé pour ce candidat");
-                return;
-            }
-            
-            System.out.println("Found " + documentsMap.size() + " document types in dossier");
-            
-            // Process each document type manually
-            for (TypeDocument type : documentsMap.keySet()) {
-                TreeSet<org.cpi2.entities.Document> entityDocs = documentsMap.get(type);
-                
-                if (entityDocs != null) {
-                    System.out.println("Document type: " + type + " has " + entityDocs.size() + " documents");
-                    
-                    // Process each entity document
-                    for (org.cpi2.entities.Document entityDoc : entityDocs) {
-                        if (entityDoc != null) {
-                            // Get properties from entity document
-                            String fileName = entityDoc.getNomFichier();
-                            LocalDate uploadDate = null;
-                            
-                            if (entityDoc.getDateUpload() != null) {
-                                uploadDate = entityDoc.getDateUpload().toLocalDate();
-                            } else {
-                                uploadDate = LocalDate.now();
-                            }
-                            
-                            System.out.println("Adding document to table: " + fileName);
-                            
-                            // Create a UI Document (inner class) and add to list
-                            // We need to make sure we use the correct constructor for our inner class
-                            Document uiDoc = new Document(fileName, type.toString(), uploadDate);
-                            documentsList.add(uiDoc);
-                        }
-                    }
-                }
-            }
-            
-            // Update the TableView
-            documentsTableView.setItems(documentsList);
-            System.out.println("Added " + documentsList.size() + " documents to table view");
-            
-        } catch (Exception e) {
-            System.err.println("Error loading documents: " + e.getMessage());
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue lors du chargement des documents");
+        // Fetch the dossier directly from the database
+        Optional<Dossier> dossierOpt = dossierService.getDossierByCandidat(selectedCandidat.getCin());
+        
+        if (dossierOpt.isEmpty()) {
+            System.out.println("No dossier found for candidate: " + selectedCandidat.getNom() + " " + selectedCandidat.getPrenom());
+            showAlert(Alert.AlertType.INFORMATION, "Information", 
+                    "Aucun dossier n'a été trouvé pour ce candidat");
+            return;
         }
+        
+        Dossier dossier = dossierOpt.get();
+        // Update the candidate's dossier reference
+        selectedCandidat.setDossier(dossier);
+        
+        System.out.println("Found dossier with ID: " + dossier.getId() + " for candidate: " + 
+                selectedCandidat.getNom() + " " + selectedCandidat.getPrenom());
+        
+        // Make sure to use the fully qualified name for the entity Document to avoid naming conflicts
+        Map<TypeDocument, TreeSet<org.cpi2.entities.Document>> documents = dossier.getDocuments();
+        
+        if (documents == null || documents.isEmpty()) {
+            System.out.println("No documents found in dossier ID: " + dossier.getId());
+            showAlert(Alert.AlertType.INFORMATION, "Information", 
+                    "Aucun document n'a été trouvé pour ce candidat");
+            return;
+        }
+        
+        System.out.println("Found " + documents.size() + " document types in dossier");
+        
+        // Convert documents from the dossier to our Document model for the TableView
+        documents.forEach((type, docs) -> {
+            System.out.println("Document type: " + type + " has " + docs.size() + " documents");
+            
+            for (org.cpi2.entities.Document entityDoc : docs) {
+                // Extract the properties from the entity Document
+                String nomFichier = entityDoc.getNomFichier();
+                String typeStr = type.toString();
+                LocalDate dateUpload = null;
+                if (entityDoc.getDateUpload() != null) {
+                    dateUpload = entityDoc.getDateUpload().toLocalDate();
+                } else {
+                    dateUpload = LocalDate.now();
+                }
+                
+                System.out.println("Adding to table: " + nomFichier);
+                // Create our UI Document model using the inner Document class
+                Document uiDocument = new Document(nomFichier, typeStr, dateUpload);
+                documentsList.add(uiDocument);
+            }
+        });
+        
+        // Update the TableView
+        documentsTableView.setItems(documentsList);
+        System.out.println("Added " + documentsList.size() + " documents to table view");
     }
 
     private boolean validateForm() {

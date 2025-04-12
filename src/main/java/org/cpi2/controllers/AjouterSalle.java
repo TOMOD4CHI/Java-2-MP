@@ -34,6 +34,9 @@ public class AjouterSalle {
     
     @FXML
     public void initialize() {
+        // S'assurer que la table salle existe dans la base de données
+        org.cpi2.utils.DatabaseSetup.createSalleTable();
+        
         // Set placeholders for input fields
         nomSalleField.setPromptText("Entrez le nom de la salle");
         numeroSalleField.setPromptText("Entrez le numéro de salle");
@@ -104,6 +107,12 @@ public class AjouterSalle {
             int capacite = Integer.parseInt(capaciteField.getText().trim());
             String notes = notesTextArea.getText().trim();
             
+            // Vérifier si une salle avec le même numéro existe déjà
+            if (salleService.getSalleByNumero(numeroSalle).isPresent()) {
+                AlertUtil.showError("Erreur", "Une salle avec le numéro " + numeroSalle + " existe déjà.");
+                return;
+            }
+            
             // Create a new salle
             Salle salle = new Salle();
             salle.setNom(nomSalle);
@@ -115,9 +124,7 @@ public class AjouterSalle {
             boolean success = salleService.addSalle(salle);
             
             if (success) {
-
                 AlertUtil.showSuccess("Succès", "La salle a été ajoutée avec succès!");
-                
                 clearForm();
             } else {
                 AlertUtil.showError("Erreur", "Échec de l'ajout de la salle.");

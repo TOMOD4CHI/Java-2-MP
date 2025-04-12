@@ -86,20 +86,27 @@ public class SeanceService {
                 }
             }
             
-            
-            if (seance.getCandidatId() != null && seance.getId() != null && seance.getType() != null) {
+            // Enregistrer la présence du candidat pour cette séance
+            // L'ID de la séance est maintenant disponible car seanceRepository.save() l'a défini
+            if (seance.getCandidatId() != null && seance.getType() != null) {
                 try {
                     PresenceService presenceService = new PresenceService();
-                    boolean presenceRecorded = presenceService.incrementPresence(
-                            seance.getCandidatId(), 
-                            seance.getType(), 
-                            seance.getId());
                     
-                    if (!presenceRecorded) {
-                        LOGGER.log(Level.WARNING, "Failed to record presence for candidate ID " + seance.getCandidatId());
+                    // Vérifier que l'ID de la séance a bien été généré
+                    if (seance.getId() == null) {
+                        LOGGER.log(Level.WARNING, "Cannot record presence: Seance ID is null after save");
                     } else {
-                        LOGGER.log(Level.INFO, "Recorded presence for candidate ID " + seance.getCandidatId() + 
-                                " in seance type " + seance.getType());
+                        boolean presenceRecorded = presenceService.incrementPresence(
+                                seance.getCandidatId(), 
+                                seance.getType(), 
+                                seance.getId());
+                        
+                        if (!presenceRecorded) {
+                            LOGGER.log(Level.WARNING, "Failed to record presence for candidate ID " + seance.getCandidatId());
+                        } else {
+                            LOGGER.log(Level.INFO, "Recorded presence for candidate ID " + seance.getCandidatId() + 
+                                    " in seance type " + seance.getType());
+                        }
                     }
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error recording candidate presence", e);

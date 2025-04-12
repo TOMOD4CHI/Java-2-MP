@@ -1,5 +1,9 @@
 package org.cpi2.entities;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Seance {
     private Long id;
     private String type;
@@ -16,6 +20,8 @@ public class Seance {
     private String commentaire;
     private Double latitude;
     private Double longitude;
+    private String salle;
+    private String quartier;
 
     public Seance() {
     }
@@ -160,6 +166,22 @@ public class Seance {
         this.longitude = longitude;
     }
 
+    public String getSalle() {
+        return salle;
+    }
+
+    public void setSalle(String salle) {
+        this.salle = salle;
+    }
+
+    public String getQuartier() {
+        return quartier;
+    }
+
+    public void setQuartier(String quartier) {
+        this.quartier = quartier;
+    }
+
     @Override
     public String toString() {
         return "Seance{" +
@@ -173,3 +195,4 @@ public class Seance {
                 '}';
     }
 }
+

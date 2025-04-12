@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cpi2.repository.DatabaseConfig;
+import org.cpi2.utils.AlertUtil;
 
 public class DashboardCandidates implements Initializable {
 
@@ -137,7 +138,7 @@ public class DashboardCandidates implements Initializable {
         
         // Validate dates
         if (filterStartDate != null && filterEndDate != null && filterStartDate.isAfter(filterEndDate)) {
-            showAlert("Erreur de date", "La date de début doit être avant la date de fin");
+            AlertUtil.showError("Erreur de date", "La date de début doit être avant la date de fin");
             return;
         }
         
@@ -206,7 +207,7 @@ public class DashboardCandidates implements Initializable {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
+            AlertUtil.showError("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
         }
     }
     
@@ -512,17 +513,11 @@ public class DashboardCandidates implements Initializable {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur de base de données", "Impossible de charger les données des candidats: " + e.getMessage());
+            AlertUtil.showError("Erreur de base de données", "Impossible de charger les données des candidats: " + e.getMessage());
         }
     }
     
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
     
     // Inner class for candidate table entries
     public static class CandidateEntry {

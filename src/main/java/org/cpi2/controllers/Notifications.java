@@ -13,7 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Callback;
 import org.cpi2.entities.Notification;
 import org.cpi2.service.NotificationService;
-import org.cpi2.utils.AlertHelper;
+import org.cpi2.utils.AlertUtil;
 
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
@@ -500,7 +500,7 @@ public class Notifications implements Initializable {
         if (selectedNotification != null) {
             notificationService.markAsHandled(selectedNotification.getVehiculeId(), selectedNotification.getType());
             refreshNotifications();
-            AlertHelper.showInformation("Succès", "La notification a été marquée comme traitée.");
+            AlertUtil.showInfo("Succès", "La notification a été marquée comme traitée.");
         }
     }
     
@@ -508,7 +508,7 @@ public class Notifications implements Initializable {
     public void handleViewVehicle(ActionEvent event) {
         if (selectedNotification != null) {
             // Navigate to vehicle details page with the selected vehicule id
-            AlertHelper.showInformation("Information", "Fonctionnalité à implémenter: Afficher les détails du véhicule " + 
+            AlertUtil.showInfo("Information", "Fonctionnalité à implémenter: Afficher les détails du véhicule " +
                                        selectedNotification.getVehiculeInfo());
         }
     }
@@ -524,6 +524,6 @@ public class Notifications implements Initializable {
     
     @FXML
     public void handleSettings(ActionEvent event) {
-        AlertHelper.showInformation("Paramètres", "Paramètres de notification - Fonctionnalité à venir");
+        AlertUtil.showInfo("Paramètres", "Paramètres de notification - Fonctionnalité à venir");
     }
 }

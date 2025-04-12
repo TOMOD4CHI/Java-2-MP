@@ -76,6 +76,11 @@
                             <TextField fx:id="longitudeField" editable="false" promptText="Sélectionner sur la carte"
                                        maxWidth="Infinity" styleClass="form-field, readonly-field" GridPane.rowIndex="14" GridPane.columnIndex="1"/>
                             <Label fx:id="longitudeError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
+                            
+                            <Label text="Quartier:" styleClass="form-label" GridPane.rowIndex="16" GridPane.columnIndex="0"/>
+                            <TextField fx:id="quartierField" promptText="Le quartier sera affiché automatiquement" editable="false"
+                                       maxWidth="Infinity" styleClass="form-field, readonly-field" GridPane.rowIndex="16" GridPane.columnIndex="1"/>
+                            <Label fx:id="quartierError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0; -fx-text-fill: red;" visible="false" GridPane.rowIndex="17" GridPane.columnIndex="1"/>
                         </GridPane>
 
                         <HBox spacing="15" alignment="CENTER" styleClass="button-container">

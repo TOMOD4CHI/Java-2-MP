@@ -8,6 +8,7 @@ import org.cpi2.entities.TypeDocument;
 import org.cpi2.service.CandidatService;
 import org.cpi2.service.DocumentService;
 import org.cpi2.service.DossierService;
+import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.ImageViewUtil;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -197,7 +198,7 @@ public class AfficherCandidat {
         } catch (Exception e) {
             System.err.println("Error loading candidates: " + e.getMessage());
             e.printStackTrace();
-            org.cpi2.utils.AlertHelper.showError("Error", "Loading Error", "Failed to load candidates: " + e.getMessage());
+            AlertUtil.showError( "Loading Error", "Failed to load candidates: " + e.getMessage());
         }
     }
     
@@ -438,6 +439,7 @@ public class AfficherCandidat {
             alert.showAndWait();
         }
     }
+
     
     private void addForceReloadButton() {
         // Create a button to force load example documents

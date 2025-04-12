@@ -53,6 +53,18 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 if (rs.getObject("longitude") != null) {
                     seance.setLongitude(rs.getDouble("longitude"));
                 }
+                
+                // Récupérer le lieu et le mapper selon le type de séance
+                String lieu = rs.getString("lieu");
+                if (lieu != null) {
+                    if ("Code".equals(seance.getType())) {
+                        // Pour les séances de code, le lieu est la salle
+                        seance.setSalle(lieu);
+                    } else if ("Conduite".equals(seance.getType())) {
+                        // Pour les séances de conduite, le lieu est le quartier
+                        seance.setQuartier(lieu);
+                    }
+                }
 
                 return Optional.of(seance);
             }
@@ -104,6 +116,18 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 if (rs.getObject("longitude") != null) {
                     seance.setLongitude(rs.getDouble("longitude"));
                 }
+                
+                // Récupérer le lieu et le mapper selon le type de séance
+                String lieu = rs.getString("lieu");
+                if (lieu != null) {
+                    if ("Code".equals(seance.getType())) {
+                        // Pour les séances de code, le lieu est la salle
+                        seance.setSalle(lieu);
+                    } else if ("Conduite".equals(seance.getType())) {
+                        // Pour les séances de conduite, le lieu est le quartier
+                        seance.setQuartier(lieu);
+                    }
+                }
 
                 seances.add(seance);
             }
@@ -115,8 +139,8 @@ public class SeanceRepository extends BaseRepository<Seance> {
 
     public boolean save(Seance seance) {
         String sql = "INSERT INTO seance (type, candidat_id, moniteur_id, vehicule_id, date, heure, duree, " +
-                "kilometrage_debut, statut, commentaire, latitude, longitude) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "kilometrage_debut, statut, commentaire, latitude, longitude, lieu) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -132,19 +156,15 @@ public class SeanceRepository extends BaseRepository<Seance> {
             }
 
             stmt.setString(5, seance.getDate());
-            // Map temps to heure
             stmt.setString(6, seance.getTemps());
-            // Default duree value of 60 minutes
             stmt.setInt(7, 60);
 
-            // Map kilometrage to kilometrage_debut and convert Double to Integer
             if (seance.getKilometrage() != null) {
                 stmt.setInt(8, seance.getKilometrage().intValue());
             } else {
                 stmt.setNull(8, Types.INTEGER);
             }
 
-            // Map status to statut with default "Planifiée"
             stmt.setString(9, seance.getStatus() != null ? seance.getStatus() : "Planifiée");
             stmt.setString(10, seance.getCommentaire());
 
@@ -158,6 +178,23 @@ public class SeanceRepository extends BaseRepository<Seance> {
                 stmt.setDouble(12, seance.getLongitude());
             } else {
                 stmt.setNull(12, Types.DOUBLE);
+            }
+            
+            if ("Code".equals(seance.getType())) {
+                // Pour les séances de code, on utilise la salle
+                stmt.setString(13, seance.getSalle());
+            } else if ("Conduite".equals(seance.getType())) {
+                String quartier = seance.getQuartier();
+                if (quartier == null || quartier.isEmpty()) {
+                    if (seance.getLatitude() != null && seance.getLongitude() != null) {
+                        quartier = "Position: " + seance.getLatitude() + ", " + seance.getLongitude();
+                    } else {
+                        quartier = "Lieu non spécifié";
+                    }
+                }
+                stmt.setString(13, quartier);
+            } else {
+                stmt.setString(13, seance.getSalle());
             }
 
             int affectedRows = stmt.executeUpdate();
@@ -179,7 +216,7 @@ public class SeanceRepository extends BaseRepository<Seance> {
     public boolean update(Seance seance) {
         String sql = "UPDATE seance SET type = ?, candidat_id = ?, moniteur_id = ?, vehicule_id = ?, " +
                 "date = ?, heure = ?, kilometrage_debut = ?, statut = ?, commentaire = ?, " +
-                "latitude = ?, longitude = ? WHERE id = ?";
+                "latitude = ?, longitude = ?, lieu = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -220,8 +257,29 @@ public class SeanceRepository extends BaseRepository<Seance> {
             } else {
                 stmt.setNull(11, Types.DOUBLE);
             }
+            
+            // Utiliser le champ lieu pour stocker la salle ou le quartier selon le type de séance
+            if ("Code".equals(seance.getType())) {
+                // Pour les séances de code, on utilise la salle
+                stmt.setString(12, seance.getSalle());
+            } else if ("Conduite".equals(seance.getType())) {
+                // Pour les séances de conduite, on utilise le quartier
+                String quartier = seance.getQuartier();
+                if (quartier == null || quartier.isEmpty()) {
+                    // Si pas de quartier défini, on utilise les coordonnées comme description
+                    if (seance.getLatitude() != null && seance.getLongitude() != null) {
+                        quartier = "Position: " + seance.getLatitude() + ", " + seance.getLongitude();
+                    } else {
+                        quartier = "Lieu non spécifié";
+                    }
+                }
+                stmt.setString(12, quartier);
+            } else {
+                // Pour les autres types de séances
+                stmt.setString(12, seance.getSalle());
+            }
 
-            stmt.setLong(12, seance.getId());
+            stmt.setLong(13, seance.getId());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

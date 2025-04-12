@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.cpi2.repository.DatabaseConfig;
+import org.cpi2.utils.AlertUtil;
 
 public class DashboardFinance implements Initializable {
 
@@ -131,7 +132,7 @@ public class DashboardFinance implements Initializable {
         
         // Validate dates
         if (filterStartDate != null && filterEndDate != null && filterStartDate.isAfter(filterEndDate)) {
-            showAlert("Erreur de date", "La date de début doit être avant la date de fin");
+            AlertUtil.showError("Erreur de date", "La date de début doit être avant la date de fin");
             return;
         }
         
@@ -161,7 +162,7 @@ public class DashboardFinance implements Initializable {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
+            AlertUtil.showError("Erreur de base de données", "Impossible de charger les données: " + e.getMessage());
         }
     }
     
@@ -621,14 +622,6 @@ public class DashboardFinance implements Initializable {
         }
         
         transactionsTable.setItems(data);
-    }
-    
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
     
     // Inner class for Transaction table

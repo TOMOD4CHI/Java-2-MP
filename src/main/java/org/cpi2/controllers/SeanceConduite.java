@@ -23,6 +23,7 @@ public class SeanceConduite {
     @FXML private WebView mapView;
     @FXML private TextField latitudeField;
     @FXML private TextField longitudeField;
+    @FXML private TextField quartierField;
     @FXML private ComboBox<String> vehiculeCombo;
     @FXML private ComboBox<String> moniteurCombo;
     @FXML private ComboBox<String> candidatCombo;
@@ -38,15 +39,14 @@ public class SeanceConduite {
     @FXML private Label tempsError;
     @FXML private Label latitudeError;
     @FXML private Label longitudeError;
+    @FXML private Label quartierError;
 
     private final SeanceService seanceService = new SeanceService();
 
-    // CSS class for inputs with errors
     private static final String ERROR_STYLE_CLASS = "error-field";
 
     @FXML
     public void initialize() {
-        // Initialize the map
         WebEngine webEngine = mapView.getEngine();
         webEngine.loadContent(getMapHtml());
 
@@ -57,20 +57,16 @@ public class SeanceConduite {
             }
         });
 
-        // Load the combo boxes with data
         loadCandidats();
         loadMoniteurs();
         loadVehicules();
 
-        // Set default date to today
         date.setValue(LocalDate.now());
 
-        // Setup validation
         setupValidation();
     }
 
     private void loadCandidats() {
-        // Charger les candidats depuis la base de données
         org.cpi2.service.CandidatService candidatService = new org.cpi2.service.CandidatService();
         List<Candidat> candidatsList = candidatService.getAllCandidats();
 
@@ -88,17 +84,14 @@ public class SeanceConduite {
     }
 
     private void loadMoniteurs() {
-        // Charger les moniteurs depuis la base de données
         org.cpi2.service.MoniteurService moniteurService = new org.cpi2.service.MoniteurService();
         List<org.cpi2.entities.Moniteur> moniteursList = moniteurService.getAllMoniteurs();
 
         ObservableList<String> moniteurs = FXCollections.observableArrayList();
 
         if (moniteursList.isEmpty()) {
-
-            AlertUtil.showWarning( "Erreur", "Aucun moniteur trouvé dans la base de données.");
+            AlertUtil.showWarning("Erreur", "Aucun moniteur trouvé dans la base de données.");
         } else {
-            // Ajouter les moniteurs à la liste déroulante
             for (org.cpi2.entities.Moniteur moniteur : moniteursList) {
                 moniteurs.add(moniteur.getId() + " - " + moniteur.getNom() + " " + moniteur.getPrenom());
             }
@@ -108,14 +101,13 @@ public class SeanceConduite {
     }
 
     private void loadVehicules() {
-        // Charger les véhicules depuis la base de données
         org.cpi2.service.VehiculeService vehiculeService = new org.cpi2.service.VehiculeService();
         List<org.cpi2.entities.Vehicule> vehiculesList = vehiculeService.getAllVehicules();
 
         ObservableList<String> vehicules = FXCollections.observableArrayList();
 
         if (vehiculesList.isEmpty()) {
-            AlertUtil.showWarning( "Aucun véhicule", "Aucun véhicule trouvé dans la base de données.");
+            AlertUtil.showWarning("Aucun véhicule", "Aucun véhicule trouvé dans la base de données.");
         } else {
             for (org.cpi2.entities.Vehicule vehicule : vehiculesList) {
                 vehicules.add(vehicule.getId() + " - " + vehicule.getMarque() + " " + vehicule.getModele() + " (" + vehicule.getImmatriculation() + ")");
@@ -125,15 +117,17 @@ public class SeanceConduite {
         vehiculeCombo.setItems(vehicules);
     }
 
-    public void updateCoordinates(String lat, String lng) {
+    public void updateCoordinates(String lat, String lng, String address) {
         latitudeField.setText(lat);
         longitudeField.setText(lng);
+        quartierField.setText(address);
 
-        // Clear any error styling and messages when coordinates are updated
         removeErrorStyle(latitudeField);
         removeErrorStyle(longitudeField);
+        removeErrorStyle(quartierField);
         latitudeError.setVisible(false);
         longitudeError.setVisible(false);
+        quartierError.setVisible(false);
     }
 
     private String getMapHtml() {
@@ -146,40 +140,101 @@ public class SeanceConduite {
                 "<body style='margin:0;padding:0;'>" +
                 "   <div id='mapid'></div>" +
                 "   <script>" +
-                "       var map = L.map('mapid').setView([36.8, 10.2], 11);" +  // Centered on Tunisia
+                "       var map = L.map('mapid').setView([36.8, 10.2], 11);" +
                 "       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {" +
                 "           attribution: '&copy; OpenStreetMap contributors'" +
                 "       }).addTo(map);" +
                 "       var marker;" +
+                "       var debounceTimer;" +
+                "       var lastCoords = null;" +
+
+                // Add a geocoding cache to avoid duplicate requests
+                "       var geocodeCache = {};" +
+
                 "       map.on('click', function(e) {" +
                 "           var lat = e.latlng.lat.toFixed(6);" +
                 "           var lng = e.latlng.lng.toFixed(6);" +
+                "           var coordKey = lat + ',' + lng;" +
+
+                // Update marker immediately for responsive UI
                 "           if (marker) { map.removeLayer(marker); }" +
                 "           marker = L.marker([lat, lng]).addTo(map)" +
                 "               .bindPopup('Lieu de séance sélectionné<br>Coordonnées: ' + lat + ', ' + lng)" +
                 "               .openPopup();" +
-                "           window.javaConnector.updateCoordinates(lat, lng);" +
+
+                // Pre-set coordinates immediately, then resolve address asynchronously
+                "           window.javaConnector.updateCoordinates(lat, lng, 'Chargement...');" +
+
+                // Check if we already have this location in cache
+                "           if (geocodeCache[coordKey]) {" +
+                "               window.javaConnector.updateCoordinates(lat, lng, geocodeCache[coordKey]);" +
+                "               return;" +
+                "           }" +
+
+                // Debounce the geocoding request to prevent too many calls
+                "           clearTimeout(debounceTimer);" +
+                "           debounceTimer = setTimeout(function() {" +
+                "               getAddress(lat, lng, coordKey);" +
+                "           }, 300);" +
                 "       });" +
+
+                "       function getAddress(lat, lng, coordKey) {" +
+                "           var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1';" +
+
+                // Add caching headers to help with API rate limits
+                "           var options = {" +
+                "               headers: {" +
+                "                   'Accept-Language': 'fr, en;q=0.8'," +
+                "                   'User-Agent': 'JavaFX Driving School Application'" +
+                "               }" +
+                "           };" +
+
+                "           fetch(url, options)" +
+                "               .then(response => response.json())" +
+                "               .then(data => {" +
+                "                   var address = '';" +
+                "                   if (data.address) {" +
+                "                       if (data.address.road) {" +
+                "                           address = data.address.road;" +
+                "                       } else if (data.address.suburb) {" +
+                "                           address = data.address.suburb;" +
+                "                       } else if (data.address.neighbourhood) {" +
+                "                           address = data.address.neighbourhood;" +
+                "                       } else if (data.address.city_district) {" +
+                "                           address = data.address.city_district;" +
+                "                       } else if (data.address.city) {" +
+                "                           address = data.address.city;" +
+                "                       } else {" +
+                "                           address = data.display_name.split(',')[0];" +
+                "                       }" +
+                "                   } else {" +
+                "                       address = 'Emplacement non identifié';" +
+                "                   }" +
+
+                "                   geocodeCache[coordKey] = address;" +
+                "                   window.javaConnector.updateCoordinates(lat, lng, address);" +
+                "               })" +
+                "               .catch(error => {" +
+                "                   console.error('Erreur lors de la récupération de l\\'adresse:', error);" +
+                "                   window.javaConnector.updateCoordinates(lat, lng, 'Emplacement non identifié');" +
+                "               });" +
+                "       }" +
                 "   </script>" +
                 "</body>" +
                 "</html>";
     }
 
-    // Add error styling to a Control
     private void addErrorStyle(Control control) {
         if (!control.getStyleClass().contains(ERROR_STYLE_CLASS)) {
             control.getStyleClass().add(ERROR_STYLE_CLASS);
         }
     }
 
-    // Remove error styling from a Control
     private void removeErrorStyle(Control control) {
         control.getStyleClass().remove(ERROR_STYLE_CLASS);
     }
 
-    // Reset styling and errors for all form fields
     private void resetAllStyles() {
-        // Remove error styling from all controls
         removeErrorStyle(candidatCombo);
         removeErrorStyle(moniteurCombo);
         removeErrorStyle(vehiculeCombo);
@@ -188,8 +243,8 @@ public class SeanceConduite {
         removeErrorStyle(temps);
         removeErrorStyle(latitudeField);
         removeErrorStyle(longitudeField);
+        removeErrorStyle(quartierField);
 
-        // Hide all error messages
         candidatError.setVisible(false);
         moniteurError.setVisible(false);
         vehiculeError.setVisible(false);
@@ -198,11 +253,11 @@ public class SeanceConduite {
         tempsError.setVisible(false);
         latitudeError.setVisible(false);
         longitudeError.setVisible(false);
+        quartierError.setVisible(false);
     }
 
     @FXML
     private void cancelAction() {
-        // Clear all fields (reset form)
         candidatCombo.setValue(null);
         moniteurCombo.setValue(null);
         vehiculeCombo.setValue(null);
@@ -211,24 +266,20 @@ public class SeanceConduite {
         temps.clear();
         latitudeField.clear();
         longitudeField.clear();
+        quartierField.clear();
 
-        // Reset the map marker
         WebEngine webEngine = mapView.getEngine();
         webEngine.executeScript("if (marker) { map.removeLayer(marker); marker = null; }");
 
-        // Reset all styling and error messages
         resetAllStyles();
     }
 
     @FXML
     private void handleSubmit(ActionEvent event) {
-        // Reset all styles and error messages before validation
         resetAllStyles();
 
-        // Check and validate all fields
         boolean hasErrors = false;
 
-        // Validate candidat
         if (candidatCombo.getValue() == null) {
             candidatError.setText("Veuillez sélectionner un candidat");
             candidatError.setVisible(true);
@@ -236,7 +287,6 @@ public class SeanceConduite {
             hasErrors = true;
         }
 
-        // Validate moniteur
         if (moniteurCombo.getValue() == null) {
             moniteurError.setText("Veuillez sélectionner un moniteur");
             moniteurError.setVisible(true);
@@ -244,7 +294,6 @@ public class SeanceConduite {
             hasErrors = true;
         }
 
-        // Validate véhicule
         if (vehiculeCombo.getValue() == null) {
             vehiculeError.setText("Veuillez sélectionner un véhicule");
             vehiculeError.setVisible(true);
@@ -252,7 +301,6 @@ public class SeanceConduite {
             hasErrors = true;
         }
 
-        // Validate kilométrage
         if (kilometrage.getText().trim().isEmpty()) {
             kilometrageError.setText("Le kilométrage est obligatoire");
             kilometrageError.setVisible(true);
@@ -275,7 +323,6 @@ public class SeanceConduite {
             }
         }
 
-        // Validate date
         if (date.getValue() == null) {
             dateError.setText("La date est obligatoire");
             dateError.setVisible(true);
@@ -288,7 +335,6 @@ public class SeanceConduite {
             hasErrors = true;
         }
 
-        // Validate temps (HH:MM)
         if (temps.getText().trim().isEmpty()) {
             tempsError.setText("L'heure est obligatoire");
             tempsError.setVisible(true);
@@ -304,7 +350,6 @@ public class SeanceConduite {
             }
         }
 
-        // Validate coordinates
         if (latitudeField.getText().trim().isEmpty()) {
             latitudeError.setText("Veuillez sélectionner un lieu sur la carte");
             latitudeError.setVisible(true);
@@ -319,28 +364,30 @@ public class SeanceConduite {
             hasErrors = true;
         }
 
-        // If there are validation errors, stop here
+        if (quartierField.getText().trim().isEmpty()) {
+            quartierError.setText("Le nom de la rue est obligatoire");
+            quartierError.setVisible(true);
+            addErrorStyle(quartierField);
+            hasErrors = true;
+        }
+
         if (hasErrors) {
             return;
         }
 
         try {
-            // Extract IDs from selected values (format: "1 - Name")
             Long candidatId = Long.parseLong(candidatCombo.getValue().split(" - ")[0]);
             Long moniteurId = Long.parseLong(moniteurCombo.getValue().split(" - ")[0]);
             Long vehiculeId = Long.parseLong(vehiculeCombo.getValue().split(" - ")[0]);
 
-            // Validate and parse kilometrage
             double km = Double.parseDouble(kilometrage.getText());
 
-            // Create Seance object
             Seance seance = new Seance();
             seance.setType("Conduite");
             seance.setCandidatId(candidatId);
             seance.setMoniteurId(moniteurId);
             seance.setVehiculeId(vehiculeId);
 
-            // Format date as string (yyyy-MM-dd)
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             seance.setDate(date.getValue().format(formatter));
 
@@ -348,51 +395,49 @@ public class SeanceConduite {
             seance.setKilometrage(km);
             seance.setLatitude(Double.parseDouble(latitudeField.getText()));
             seance.setLongitude(Double.parseDouble(longitudeField.getText()));
+            seance.setQuartier(quartierField.getText().trim());
 
-            // Vérifier si le moniteur existe avant de sauvegarder
             org.cpi2.service.MoniteurService moniteurService = new org.cpi2.service.MoniteurService();
             if (!moniteurService.getMoniteurById(moniteurId).isPresent()) {
-
                 AlertUtil.showError("Erreur",
                         "Le moniteur sélectionné n'existe pas dans la base de données. Veuillez ajouter le moniteur avant de planifier une séance.");
                 return;
             }
 
-            // Vérifier si le candidat existe avant de sauvegarder
             org.cpi2.service.CandidatService candidatService = new org.cpi2.service.CandidatService();
             if (!candidatService.getCandidatById(candidatId).isPresent()) {
-
                 AlertUtil.showError("Erreur",
                         "Le candidat sélectionné n'existe pas dans la base de données. Veuillez ajouter le candidat avant de planifier une séance.");
                 return;
             }
 
-            // Vérifier si le véhicule existe avant de sauvegarder
             if (vehiculeId != null) {
                 org.cpi2.service.VehiculeService vehiculeService = new org.cpi2.service.VehiculeService();
                 if (!vehiculeService.getVehiculeById(vehiculeId).isPresent()) {
-
                     AlertUtil.showError("Erreur",
                             "Le véhicule sélectionné n'existe pas dans la base de données. Veuillez ajouter le véhicule avant de planifier une séance.");
                     return;
                 }
             }
 
-            // Save to database
             boolean success = seanceService.saveSeance(seance);
 
             if (success) {
-                AlertUtil.showSuccess( "Succès",
-                        "La séance de conduite a été planifiée avec succès!");
-                cancelAction(); // Clear the form
+                // Vérifier que l'ID de la séance a été généré, ce qui confirme que la présence a été enregistrée
+                if (seance.getId() != null) {
+                    AlertUtil.showSuccess("Succès",
+                            "La séance de conduite a été planifiée avec succès et la présence du candidat a été enregistrée!");
+                } else {
+                    AlertUtil.showSuccess("Succès partiel",
+                            "La séance de conduite a été planifiée, mais l'enregistrement de présence pourrait ne pas avoir été effectué.");
+                }
+                cancelAction();
             } else {
-
                 AlertUtil.showError("Erreur",
                         "Échec de la planification de la séance de conduite!");
             }
 
         } catch (Exception e) {
-
             AlertUtil.showError("Erreur",
                     "Une erreur s'est produite: " + e.getMessage());
         }
@@ -410,7 +455,6 @@ public class SeanceConduite {
             }
         });
 
-        // Moniteur validation
         moniteurCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) {
                 moniteurError.setText("Veuillez sélectionner un moniteur");
@@ -422,7 +466,6 @@ public class SeanceConduite {
             }
         });
 
-        // Véhicule validation
         vehiculeCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) {
                 vehiculeError.setText("Veuillez sélectionner un véhicule");
@@ -434,7 +477,6 @@ public class SeanceConduite {
             }
         });
 
-        // Kilométrage validation
         kilometrage.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().isEmpty()) {
                 kilometrageError.setText("Le kilométrage est obligatoire");
@@ -459,7 +501,6 @@ public class SeanceConduite {
             }
         });
 
-        // Date validation
         date.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) {
                 dateError.setText("La date est obligatoire");
@@ -475,7 +516,6 @@ public class SeanceConduite {
             }
         });
 
-        // Temps validation
         temps.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().isEmpty()) {
                 tempsError.setText("L'heure est obligatoire");
@@ -494,5 +534,15 @@ public class SeanceConduite {
             }
         });
 
+        quartierField.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.trim().isEmpty()) {
+                quartierError.setText("Le nom de la rue est obligatoire");
+                quartierError.setVisible(true);
+                addErrorStyle(quartierField);
+            } else {
+                quartierError.setVisible(false);
+                removeErrorStyle(quartierField);
+            }
+        });
     }
 }

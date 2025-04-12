@@ -114,13 +114,11 @@ public class ExamRegistration {
     @FXML
     private void verifierEligibiliteAction() {
         enregistrerButton.setDisable(true);
-        // In a real app, this would check candidate eligibility based on completed sessions
         if (nomField.getText().isEmpty() || typeExamenComboBox.getValue() == null) {
             AlertUtil.showError("Erreur", "Veuillez sélectionner un candidat et un type d'examen pour vérifier l'éligibilité.");
             return;
         }
         
-        // Mock check - usually this would check database for eligibility
         boolean eligible = examenService.verifyCandidatEligibilite(typeExamenComboBox.getValue(),cinField.getText()); // For this example, assume eligible
         
         if (eligible) {
@@ -138,8 +136,6 @@ public class ExamRegistration {
     @FXML
     private void enregistrerAction() {
         if (validateForm()) {
-            //l enregistrement dans la  base de donnee
-            //Note every Candidat should have only one examen (Active) at a time
             if(examenService.hasPendingExamens(cinField.getText())){
                 AlertUtil.showError( "Error" ,"Le candidat a déjà un examen en cours.");
                 return;
