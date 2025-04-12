@@ -17,9 +17,11 @@ import java.util.logging.Logger;
 public class MoniteurService {
     private static final Logger LOGGER = Logger.getLogger(MoniteurService.class.getName());
     private final MoniteurRepository moniteurRepository;
+    private final SessionService sessionService;
 
     public MoniteurService() {
         this.moniteurRepository = new MoniteurRepository();
+        this.sessionService = new SessionService();
     }
 
     public List<Moniteur> getAllMoniteurs() {
@@ -172,5 +174,41 @@ public class MoniteurService {
 
     public Moniteur findByCin(String cin) {
         return moniteurRepository.findByCin(cin).orElse(null);
+    }
+
+    public double getSalary(long moniteurId, LocalDate startDate, LocalDate endDate) {
+        Moniteur moniteur = moniteurRepository.findById(moniteurId).orElse(null);
+        if (moniteur == null) {
+            LOGGER.warning("Moniteur not found with ID: " + moniteurId);
+            return 0;
+        }
+        double tarifCode = 0;
+        double tarifConduite = 0;
+        for(TypePermis typePermis : moniteur.getSpecialites()) {
+            if (typePermis == TypePermis.A) {
+                tarifCode = 3.5;
+                tarifConduite = 4;
+            } else if (typePermis == TypePermis.B) {
+                tarifCode = 6;
+                tarifConduite = 8;
+            }
+            else if (typePermis == TypePermis.C) {
+                tarifCode = 15;
+                tarifConduite = 20;
+            }
+        }
+
+        return sessionService.viewAllSessionCode().stream().filter(session -> session.getMoniteur().getId() == moniteurId)
+                .filter(session -> !session.getDateSession().isBefore(startDate) && !session.getDateSession().isAfter(endDate))
+                .count()*tarifCode + sessionService.viewAllSessionConduite().stream().filter(session -> session.getMoniteur().getId() == moniteurId)
+                .filter(session -> !session.getDateSession().isBefore(startDate) && !session.getDateSession().isAfter(endDate))
+                .count()*tarifConduite;
+
+    }
+
+    public double getTotalSalary(LocalDate startDate, LocalDate endDate) {
+        return moniteurRepository.findAll().stream()
+                .mapToDouble(moniteur -> getSalary(moniteur.getId(), startDate, endDate))
+                .sum();
     }
 }

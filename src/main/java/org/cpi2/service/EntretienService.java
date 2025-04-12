@@ -305,4 +305,14 @@ public class EntretienService {
             default -> throw new IllegalArgumentException("Invalid entretien type: " + entretien);
         };
     }
+    public double getTotalCost(LocalDate startDate, LocalDate endDate) {
+        return entretienRepository.findAll().stream()
+                .filter(entretien -> entretien.isDone() &&
+                        entretien.getDateEntretien() != null &&
+                        entretien.getDateEntretien().isAfter(startDate) &&
+                        entretien.getDateEntretien().isBefore(endDate))
+                .mapToDouble(Entretien::getCout)
+                .sum();
+    }
+
 }
