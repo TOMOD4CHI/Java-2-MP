@@ -368,12 +368,9 @@ CREATE TABLE `plan` (
 -- Dumping data for table `plan`
 --
 
-INSERT INTO `plan` VALUES(1, 'Basic Motorcycle Course', 'Fundamental motorcycle training for beginners', 1, 200.00, 2, 10, 10, 1, '2025-03-23 22:54:51');
-INSERT INTO `plan` VALUES(3, 'Basic Car Driving Course', 'Essential car driving skills for new drivers', 2, 350.00, 3, 10, 10, 1, '2025-03-23 22:54:51');
-INSERT INTO `plan` VALUES(7, 'Heavy Truck License Course', 'Complete training for heavy goods vehicle license', 3, 900.00, 4, 10, 10, 1, '2025-03-23 22:54:51');
-INSERT INTO `plan` VALUES(1, 'Basic Motorcycle Course', 'Fundamental motorcycle training for beginners', 1, 200.00, 2, 10, 10, 1, '2025-03-23 22:54:51');
-INSERT INTO `plan` VALUES(3, 'Basic Car Driving Course', 'Essential car driving skills for new drivers', 2, 350.00, 3, 10, 10, 1, '2025-03-23 22:54:51');
-INSERT INTO `plan` VALUES(7, 'Heavy Truck License Course', 'Complete training for heavy goods vehicle license', 3, 900.00, 4, 10, 10, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(1, 'Basic Motorcycle Course', 'Fundamental motorcycle training for beginners', 1, 700.00, 2, 8, 6, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(3, 'Basic Car Driving Course', 'Essential car driving skills for new drivers', 2, 1200.00, 3, 12, 10, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(7, 'Heavy Truck License Course', 'Complete training for heavy goods vehicle license', 3, 1900.00, 4, 14, 8, 1, '2025-03-23 22:54:51');
 
 -- --------------------------------------------------------
 
@@ -641,8 +638,115 @@ CREATE TABLE `vehicule` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `vehicule`
+-- Dumping data 
 --
+
+
+INSERT INTO `candidat` (`id`, `nom`, `prenom`, `cin`, `adresse`, `telephone`, `email`, `date_naissance`, `type_permis`, `created_at`) VALUES
+(22, 'ayoub', 'zneidi', '12345678', 'aerazerazer', '93487161', 'dalmc132@gmail.com', '2007-04-12', NULL, '2025-04-12 21:16:44'),
+(23, 'injeniour', 'zneidi', '87654321', 'aezrazerazera', '12345678', 'aezrear@aeaezr.azer', '2007-04-12', NULL, '2025-04-12 21:33:33'),
+(24, 'Ben Salah', 'Mohamed', '08321456', 'Rue Marseille 15, Tunis', '51234567', 'mohamed.bs@gmail.com', '1998-05-10', 2, '2025-04-13 08:00:00'),
+(25, 'Laabidi', 'Sami', '08765123', 'Avenue Habib Thameur 42, Ariana', '52876543', 'sami.laabidi@yahoo.fr', '2000-03-15', 2, '2025-04-13 08:05:00'),
+(26, 'Trabelsi', 'Amira', '09812345', 'Rue Ibn Khaldoun 87, Sousse', '53987612', 'amira.trabelsi@gmail.com', '1995-07-20', 2, '2025-04-13 08:10:00'),
+(27, 'Abidi', 'Karim', '09123789', 'Rue de Marseille 23, Sfax', '54321765', 'karim.abidi@hotmail.com', '1997-11-05', 1, '2025-04-13 08:15:00'),
+(28, 'Ben Ammar', 'Yasmine', '08651234', 'Avenue Habib Bourguiba 78, Monastir', '55432198', 'yasmine.ba@gmail.com', '1999-09-18', 2, '2025-04-13 08:20:00'),
+(29, 'Chaabane', 'Ahmed', '07896543', 'Rue Ali Bach Hamba 34, Bizerte', '56789012', 'ahmed.chaabane@yahoo.fr', '2001-02-22', 2, '2025-04-13 08:25:00'),
+(30, 'Riahi', 'Nour', '07123654', 'Avenue Mohamed V 56, Nabeul', '57123459', 'nour.riahi@gmail.com', '1996-06-30', 1, '2025-04-13 08:30:00'),
+(31, 'Mejri', 'Bilel', '07896123', 'Rue Lac Leman 12, Marsa', '58765432', 'bilel.mejri@hotmail.com', '1994-12-15', 3, '2025-04-13 08:35:00'),
+(32, 'Saidi', 'Ines', '06543219', 'Avenue Habib Bourguiba 65, Hammamet', '59871234', 'ines.saidi@gmail.com', '2000-08-25', 2, '2025-04-13 08:40:00'),
+(33, 'Boughanmi', 'Malek', '06789123', 'Rue Ibn Sina 43, Gafsa', '50123987', 'malek.boughanmi@yahoo.fr', '1998-01-10', 1, '2025-04-13 08:45:00'),
+(34, 'Chebbi', 'Rania', '05432198', 'Avenue de la République 29, Mahdia', '51234098', 'rania.chebbi@gmail.com', '1999-05-12', 2, '2025-04-13 08:50:00'),
+(35, 'Messaoudi', 'Hamza', '05789456', 'Rue Principale 76, Kairouan', '52345678', 'hamza.messaoudi@hotmail.com', '1997-03-28', 3, '2025-04-13 08:55:00'),
+(36, 'Hammami', 'Sarra', '04567891', 'Avenue Farhat Hached 32, Tozeur', '53456789', 'sarra.hammami@gmail.com', '2001-07-15', 2, '2025-04-13 09:00:00'),
+(37, 'Jebali', 'Tarek', '04123789', 'Rue 7 Novembre 54, Kebili', '54567890', 'tarek.jebali@yahoo.fr', '1995-10-08', 2, '2025-04-13 09:05:00'),
+(38, 'Ben Amor', 'Emna', '03987654', 'Avenue Habib Bourguiba 21, Djerba', '55678901', 'emna.benamor@gmail.com', '1998-04-20', 1, '2025-04-13 09:10:00'),
+(39, 'Belhadj', 'Youssef', '03456789', 'Rue des Orangers 67, Ben Arous', '56789012', 'youssef.belhadj@hotmail.com', '1996-12-03', 3, '2025-04-13 09:15:00'),
+(40, 'Ferchichi', 'Nadia', '02345678', 'Avenue Mohamed V 43, Manouba', '57890123', 'nadia.ferchichi@gmail.com', '2000-02-17', 2, '2025-04-13 09:20:00'),
+(41, 'Oueslati', 'Omar', '02987654', 'Rue Taher Sfar 19, Zaghouan', '58901234', 'omar.oueslati@yahoo.fr', '1995-09-05', 2, '2025-04-13 09:25:00'),
+(42, 'Nasri', 'Asma', '01876543', 'Avenue Ali Belhouane 78, Béja', '59012345', 'asma.nasri@gmail.com', '1997-06-22', 2, '2025-04-13 09:30:00'),
+(43, 'Saadaoui', 'Mehdi', '01234567', 'Rue Ibn Rochd 31, Jendouba', '50123456', 'mehdi.saadaoui@hotmail.com', '1999-11-14', 1, '2025-04-13 09:35:00');
+
+INSERT INTO `dossier` (`id`, `candidat_id`, `statut`, `date_creation`, `notes`, `created_at`) VALUES
+(13, 22, 'En attente', NULL, NULL, '2025-04-12 21:16:44'),
+(14, 23, 'En attente', NULL, NULL, '2025-04-12 21:33:33'),
+(15, 24, 'En cours', '2025-04-13', 'Dossier complet', '2025-04-13 08:00:00'),
+(16, 25, 'En cours', '2025-04-13', 'Manque certificat médical', '2025-04-13 08:05:00'),
+(17, 26, 'Validé', '2025-04-13', 'Prêt pour examen', '2025-04-13 08:10:00'),
+(18, 27, 'En attente', '2025-04-13', 'Dossier incomplet', '2025-04-13 08:15:00'),
+(19, 28, 'En cours', '2025-04-13', NULL, '2025-04-13 08:20:00'),
+(20, 29, 'Validé', '2025-04-13', 'Formation en cours', '2025-04-13 08:25:00'),
+(21, 30, 'En attente', '2025-04-13', 'Attente paiement', '2025-04-13 08:30:00'),
+(22, 31, 'En cours', '2025-04-13', NULL, '2025-04-13 08:35:00'),
+(23, 32, 'Validé', '2025-04-13', 'Dossier complet', '2025-04-13 08:40:00'),
+(24, 33, 'En cours', '2025-04-13', NULL, '2025-04-13 08:45:00'),
+(25, 34, 'En attente', '2025-04-13', 'Manque photo', '2025-04-13 08:50:00'),
+(26, 35, 'Validé', '2025-04-13', NULL, '2025-04-13 08:55:00'),
+(27, 36, 'En cours', '2025-04-13', 'En attente validation', '2025-04-13 09:00:00'),
+(28, 37, 'En attente', '2025-04-13', NULL, '2025-04-13 09:05:00'),
+(29, 38, 'Validé', '2025-04-13', 'Prêt pour examen', '2025-04-13 09:10:00'),
+(30, 39, 'En cours', '2025-04-13', NULL, '2025-04-13 09:15:00'),
+(31, 40, 'En attente', '2025-04-13', 'Manque justificatif de domicile', '2025-04-13 09:20:00'),
+(32, 41, 'Validé', '2025-04-13', NULL, '2025-04-13 09:25:00'),
+(33, 42, 'En cours', '2025-04-13', 'Dossier presque complet', '2025-04-13 09:30:00'),
+(34, 43, 'En attente', '2025-04-13', NULL, '2025-04-13 09:35:00');
+
+
+INSERT INTO `type_document` (`id`, `libelle`, `description`, `obligatoire`, `created_at`) VALUES
+(1, 'CIN', 'Carte d\'identité nationale', 1, '2025-03-23 22:49:32'),
+(2, 'PERMIS_A', 'Permis de conduire d\'un Moto', 0, '2025-03-23 22:49:32'),
+(3, 'CERTIFICAT_MEDICAL', 'Certificat d\'aptitude médicale', 1, '2025-03-23 22:49:32'),
+(4, 'PHOTO', 'Photo d\'identité', 1, '2025-03-23 22:49:32'),
+(5, 'PROOF_OF_RESIDENCE', 'Justificatif de domicile', 1, '2025-03-23 22:49:32'),
+(6, 'AUTRE', 'Autre document', 0, '2025-03-23 22:49:32'),
+(7, 'PERMIS_B', 'Permis de Counduite d\'une Voiture', 1, '2025-03-27 19:33:03'),
+(8, 'PERMIS_C', 'Permis de counduite d\'un Camion', 1, '2025-03-27 19:33:36');
+
+INSERT INTO `document` (`id`, `dossier_id`, `type_document_id`, `nom_fichier`, `chemin_fichier`, `date_upload`) VALUES
+(10, 13, 4, 'ayoub', 'uploads/documents/13/87c75970-c7a6-482f-9833-d6ca8c7cf85f', '2025-04-12 21:17:34'),
+(11, 15, 1, 'cin_mohamed', 'uploads/documents/15/cin_mohamed_24', '2025-04-13 08:00:01'),
+(12, 15, 3, 'certif_medical_mohamed', 'uploads/documents/15/certif_medical_mohamed_24', '2025-04-13 08:00:02'),
+(13, 15, 4, 'photo_mohamed', 'uploads/documents/15/photo_mohamed_24', '2025-04-13 08:00:03'),
+(14, 15, 5, 'justif_domicile_mohamed', 'uploads/documents/15/justif_domicile_mohamed_24', '2025-04-13 08:00:04'),
+(15, 16, 1, 'cin_sami', 'uploads/documents/16/cin_sami_25', '2025-04-13 08:05:01'),
+(16, 16, 4, 'photo_sami', 'uploads/documents/16/photo_sami_25', '2025-04-13 08:05:02'),
+(17, 16, 5, 'justif_domicile_sami', 'uploads/documents/16/justif_domicile_sami_25', '2025-04-13 08:05:03'),
+(18, 17, 1, 'cin_amira', 'uploads/documents/17/cin_amira_26', '2025-04-13 08:10:01'),
+(19, 17, 3, 'certif_medical_amira', 'uploads/documents/17/certif_medical_amira_26', '2025-04-13 08:10:02'),
+(20, 17, 4, 'photo_amira', 'uploads/documents/17/photo_amira_26', '2025-04-13 08:10:03'),
+(21, 17, 5, 'justif_domicile_amira', 'uploads/documents/17/justif_domicile_amira_26', '2025-04-13 08:10:04'),
+(22, 18, 1, 'cin_karim', 'uploads/documents/18/cin_karim_27', '2025-04-13 08:15:01'),
+(23, 19, 1, 'cin_yasmine', 'uploads/documents/19/cin_yasmine_28', '2025-04-13 08:20:01'),
+(24, 19, 3, 'certif_medical_yasmine', 'uploads/documents/19/certif_medical_yasmine_28', '2025-04-13 08:20:02'),
+(25, 19, 4, 'photo_yasmine', 'uploads/documents/19/photo_yasmine_28', '2025-04-13 08:20:03'),
+(26, 20, 1, 'cin_ahmed', 'uploads/documents/20/cin_ahmed_29', '2025-04-13 08:25:01'),
+(27, 20, 3, 'certif_medical_ahmed', 'uploads/documents/20/certif_medical_ahmed_29', '2025-04-13 08:25:02'),
+(28, 20, 4, 'photo_ahmed', 'uploads/documents/20/photo_ahmed_29', '2025-04-13 08:25:03'),
+(29, 20, 5, 'justif_domicile_ahmed', 'uploads/documents/20/justif_domicile_ahmed_29', '2025-04-13 08:25:04');
+
+
+INSERT INTO `inscription` (`id`, `cin`, `plan_id`, `statut`, `statut_paiement`, `cycle_paiement`, `date_inscription`, `date_paiement_suivant`, `created_at`) VALUES
+(13, '12345678', 3, 'En Cours', 'unpaid', 'Mensuel', '2025-04-12', '2025-04-12', '2025-04-12 21:32:31'),
+(14, '87654321', 1, 'En Cours', 'unpaid', 'Mensuel', '2025-04-12', '2025-05-12', '2025-04-12 21:33:33'),
+(15, '08321456', 3, 'En Cours', 'paid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 08:00:05'),
+(16, '08765123', 8, 'En Cours', 'unpaid', 'Trimestriel', '2025-04-13', '2025-07-13', '2025-04-13 08:05:04'),
+(17, '09812345', 3, 'En Cours', 'paid', 'Totale', '2025-04-13', NULL, '2025-04-13 08:10:05'),
+(18, '09123789', 1, 'En attente', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 08:15:02'),
+(19, '08651234', 8, 'En Cours', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 08:20:04'),
+(20, '07896543', 3, 'En Cours', 'paid', 'Totale', '2025-04-13', NULL, '2025-04-13 08:25:05'),
+(21, '07123654', 1, 'En attente', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 08:30:01'),
+(22, '07896123', 7, 'En Cours', 'unpaid', 'Trimestriel', '2025-04-13', '2025-07-13', '2025-04-13 08:35:01'),
+(23, '06543219', 3, 'En Cours', 'paid', 'Totale', '2025-04-13', NULL, '2025-04-13 08:40:01'),
+(24, '06789123', 1, 'En Cours', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 08:45:01'),
+(25, '05432198', 8, 'En attente', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 08:50:01'),
+(26, '05789456', 7, 'En Cours', 'paid', 'Totale', '2025-04-13', NULL, '2025-04-13 08:55:01'),
+(27, '04567891', 3, 'En Cours', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 09:00:01'),
+(28, '04123789', 3, 'En attente', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 09:05:01'),
+(29, '03987654', 1, 'En Cours', 'paid', 'Totale', '2025-04-13', NULL, '2025-04-13 09:10:01'),
+(30, '03456789', 7, 'En Cours', 'unpaid', 'Trimestriel', '2025-04-13', '2025-07-13', '2025-04-13 09:15:01'),
+(31, '02345678', 8, 'En attente', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 09:20:01'),
+(32, '02987654', 3, 'En Cours', 'paid', 'Totale', '2025-04-13', NULL, '2025-04-13 09:25:01'),
+(33, '01876543', 3, 'En Cours', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 09:30:01'),
+(34, '01234567', 1, 'En attente', 'unpaid', 'Mensuel', '2025-04-13', '2025-05-13', '2025-04-13 09:35:01');
 
 
 
