@@ -59,7 +59,7 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Description:" styleClass="form-label" prefWidth="100"/>
                     <TextArea fx:id="descriptionArea" promptText="Description du paiement" styleClass="form-field"
-                              wrapText="true" maxWidth="180" prefHeight="60" HBox.hgrow="ALWAYS"/>
+                              wrapText="true" prefHeight="60" HBox.hgrow="ALWAYS"/>
                 </HBox>
 
                 <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
@@ -112,10 +112,10 @@
                         <TableColumn fx:id="dateColumn" text="Date" prefWidth="100" />
                         <TableColumn fx:id="candidatColumn" text="Candidat" prefWidth="150" />
                         <TableColumn fx:id="typeColumn" text="Type" prefWidth="150" />
-                        <TableColumn fx:id="montantColumn" text="Montant" prefWidth="80" />
+                        <TableColumn fx:id="montantColumn" text="Montant" prefWidth="100" />
                         <TableColumn fx:id="methodeColumn" text="Méthode" prefWidth="100" />
                         <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="100" />
-                        <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="250" />
+                        <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" />
                     </columns>
                 </TableView>
             </ScrollPane>

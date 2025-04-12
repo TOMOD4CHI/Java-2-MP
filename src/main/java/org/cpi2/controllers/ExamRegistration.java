@@ -141,11 +141,8 @@ public class ExamRegistration {
                     Double.parseDouble(fraisField.getText()),
                     candidatService.getCandidatByCin(cinField.getText())
             ));
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("Inscription à l'examen enregistrée avec succès!");
-            alert.showAndWait();
+
+            AlertUtil.showSuccess("Succès", "Inscription à l'examen enregistrée avec succès!");
 
             clearForm();
         }

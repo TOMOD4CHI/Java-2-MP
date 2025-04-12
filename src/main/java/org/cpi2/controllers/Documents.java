@@ -56,7 +56,9 @@ public class Documents {
     private final DocumentService documentService = new DocumentService();
     private ObservableList<Document> documentsList = FXCollections.observableArrayList();
 
-    
+    /**
+     * Initializes the controller.
+     */
     @FXML
     public void initialize() {
         typeDocumentComboBox.getItems().addAll(
@@ -68,14 +70,18 @@ public class Documents {
         loadCandidates();
     }
     
-    
+    /**
+     * Sets up the table columns.
+     */
     private void setupTableColumns() {
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateAjout"));
     }
     
-    
+    /**
+     * Loads candidates into the combo box.
+     */
     private void loadCandidates() {
         List<Candidat> candidats = candidatService.getAllCandidats();
         candidatComboBox.setItems(FXCollections.observableArrayList(candidats));
@@ -94,7 +100,9 @@ public class Documents {
         });
     }
 
-    
+    /**
+     * Opens a file chooser dialog to select a document file.
+     */
     @FXML
     private void browseFile() {
         FileChooser fileChooser = new FileChooser();
@@ -111,7 +119,9 @@ public class Documents {
         }
     }
 
-    
+    /**
+     * Saves the document to the selected candidate's dossier.
+     */
     @FXML
     private void saveDocument() {
         if (!validateForm()) {
@@ -184,7 +194,9 @@ public class Documents {
         }
     }
 
-    
+    /**
+     * Loads documents for the selected candidate.
+     */
     @FXML
     private void loadDocuments() {
         Candidat selectedCandidat = candidatComboBox.getValue();
@@ -244,7 +256,10 @@ public class Documents {
         System.out.println("Added " + documentsList.size() + " documents to table view");
     }
 
-    
+    /**
+     * Validates the form fields.
+     * @return true if all fields are valid, false otherwise
+     */
     private boolean validateForm() {
         if (candidatComboBox.getValue() == null || 
             nomDocumentField.getText().isEmpty() || 
@@ -259,7 +274,9 @@ public class Documents {
         return true;
     }
     
-    
+    /**
+     * Shows an alert dialog.
+     */
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -268,7 +285,9 @@ public class Documents {
         alert.showAndWait();
     }
 
-    
+    /**
+     * Clears the form fields.
+     */
     private void clearForm() {
         candidatComboBox.getSelectionModel().clearSelection();
         nomDocumentField.clear();
@@ -278,7 +297,9 @@ public class Documents {
         selectedFile = null;
     }
     
-    
+    /**
+     * Inner class to represent a document (for TableView)
+     */
     public static class Document {
         private String nom;
         private String type;
@@ -295,4 +316,3 @@ public class Documents {
         public LocalDate getDateAjout() { return dateAjout; }
     }
 }
-
