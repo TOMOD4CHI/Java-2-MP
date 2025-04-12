@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SuiviEntretiens implements Initializable {
-    // FXML components
+
     @FXML private ComboBox<Vehicule> vehiculeComboBox;
     @FXML private Button refreshBtn;
 
@@ -65,9 +65,7 @@ public class SuiviEntretiens implements Initializable {
     private Vehicule selectedVehicule;
     private boolean modeAjout = true;
 
-    /**
-     * Initializes the controller.
-     */
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeData();
@@ -79,27 +77,21 @@ public class SuiviEntretiens implements Initializable {
         updateUIState();
     }
 
-    /**
-     * Initializes the data model.
-     */
+    
     private void initializeData() {
         vehicules = FXCollections.observableArrayList();
         entretiens = FXCollections.observableArrayList();
         loadSampleData();
     }
 
-    /**
-     * Loads sample data for demonstration.
-     */
+    
     private void loadSampleData() {
         for(org.cpi2.entities.Vehicule vehicule: vehiculeService.getAllVehicules()) {
             vehicules.add(new Vehicule(vehicule.getImmatriculation(), vehicule.getMarque() +" "+vehicule.getModele(), vehicule.getKilometrageTotal(),vehicule.getDateDerniereVisiteTechnique()));
         }
     }
 
-    /**
-     * Sets up the vehicle combo box.
-     */
+    
     private void setupVehiculeComboBox() {
         vehiculeComboBox.setItems(vehicules);
         vehiculeComboBox.setCellFactory(param -> new ListCell<Vehicule>() {
@@ -116,9 +108,7 @@ public class SuiviEntretiens implements Initializable {
         vehiculeComboBox.setButtonCell(vehiculeComboBox.getCellFactory().call(null));
     }
 
-    /**
-     * Sets up the table view.
-     */
+    
     private void setupTableView() {
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -129,9 +119,7 @@ public class SuiviEntretiens implements Initializable {
         entretiensTable.setItems(entretiens);
     }
 
-    /**
-     * Sets up the type of maintenance combo box.
-     */
+    
     private void setupTypeEntretienCombo() {
         ObservableList<String> types = FXCollections.observableArrayList(
                 "Vignette",
@@ -144,15 +132,11 @@ public class SuiviEntretiens implements Initializable {
         typeEntretienCombo.setItems(types);
     }
 
-    /**
-     * Sets up the initial button states.
-     */
+    
     private void setupButtonStates() {
     }
 
-    /**
-     * Adds listeners to UI components.
-     */
+    
     private void addListeners() {
         vehiculeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
@@ -175,9 +159,7 @@ public class SuiviEntretiens implements Initializable {
         refreshBtn.setOnAction(e -> refreshData());
     }
 
-    /**
-     * Updates the vehicle information in the UI.
-     */
+    
     private void updateVehiculeInfo(Vehicule vehicule) {
         immatriculationLabel.setText(vehicule.getImmatriculation());
         marqueModeleLabel.setText(vehicule.getMarqueModele());
@@ -185,9 +167,7 @@ public class SuiviEntretiens implements Initializable {
         dernierEntretienLabel.setText(vehicule.getDernierEntretien() != null ? vehicule.getDernierEntretien().toString() : "Aucun entretien");
     }
 
-    /**
-     * Loads maintenance records for the selected vehicle.
-     */
+    
     private void loadEntretiens(Vehicule vehicule) {
         entretiens.clear();
         for(org.cpi2.entities.Entretien entretien: entretienService.getEntretienByVehiculeImm(vehicule.getImmatriculation())) {
@@ -200,15 +180,11 @@ public class SuiviEntretiens implements Initializable {
         totalEntretiensLabel.setText("Total: " + entretiens.size() + " entretiens");
     }
 
-    /**
-     * Updates button states based on selection.
-     */
+    
     private void updateButtonsState(boolean hasSelection) {
     }
 
-    /**
-     * Updates the UI state.
-     */
+    
     private void updateUIState() {
         resetFormFields();
         coutTotalLabel.setText("NA");
@@ -216,9 +192,7 @@ public class SuiviEntretiens implements Initializable {
         statusEntretienLabel.setText("Prêt");
     }
 
-    /**
-     * Resets form fields.
-     */
+    
     private void resetFormFields() {
         dateEntretienPicker.setValue(LocalDate.now());
         typeEntretienCombo.getSelectionModel().clearSelection();
@@ -227,9 +201,7 @@ public class SuiviEntretiens implements Initializable {
         factureField.clear();
     }
 
-    /**
-     * Updates statistics about maintenance.
-     */
+    
     private void updateStatistics() {
         if (entretiens.isEmpty()) {
             return;
@@ -242,9 +214,7 @@ public class SuiviEntretiens implements Initializable {
         nbPlanifiesLabel.setText(String.valueOf(count));
     }
 
-    /**
-     * Refreshes data from the source.
-     */
+    
     private void refreshData() {
         Vehicule selectedVehicule = vehiculeComboBox.getSelectionModel().getSelectedItem();
         if (selectedVehicule != null) {
@@ -253,10 +223,7 @@ public class SuiviEntretiens implements Initializable {
         updateUIState();
     }
 
-    /**
-     * Validates form fields.
-     * @return true if all fields are valid, false otherwise
-     */
+    
     private boolean validateForm() {
         StringBuilder errorMessage = new StringBuilder();
 
@@ -290,9 +257,7 @@ public class SuiviEntretiens implements Initializable {
         return true;
     }
 
-    /**
-     * Handles adding a new maintenance record.
-     */
+    
     @FXML
     public void handleAjouterEntretien(ActionEvent actionEvent) {
         modeAjout = true;
@@ -302,16 +267,12 @@ public class SuiviEntretiens implements Initializable {
         statusEntretienLabel.setText("Ajout d'un nouvel entretien");
     }
 
-    /**
-     * Handles viewing an invoice.
-     */
+    
     @FXML
     public void handleVoirFacture(ActionEvent actionEvent) {
     }
 
-    /**
-     * Handles choosing an invoice file.
-     */
+    
     @FXML
     public void handleChoisirFacture(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
@@ -328,9 +289,7 @@ public class SuiviEntretiens implements Initializable {
         }
     }
 
-    /**
-     * Handles canceling maintenance record editing.
-     */
+    
     @FXML
     public void handleAnnulerEntretien(ActionEvent actionEvent) {
         resetFormFields();
@@ -338,9 +297,7 @@ public class SuiviEntretiens implements Initializable {
         statusEntretienLabel.setText("Opération annulée");
     }
 
-    /**
-     * Handles saving a maintenance record.
-     */
+    
     @FXML
     public void handleEnregistrerEntretien(ActionEvent actionEvent) {
         if (!validateForm()) {
@@ -391,9 +348,7 @@ public class SuiviEntretiens implements Initializable {
         updateVehiculeInfo(Vehicule.from(vehiculeService.getVehiculeByImmatriculation(selectedVehicule.getImmatriculation()).get()));
     }
 
-    /**
-     * Handles deleting a maintenance record.
-     */
+    
     @FXML
     public void handleSupprimerEntretien(ActionEvent actionEvent) {
         Entretien selectedEntretien = entretiensTable.getSelectionModel().getSelectedItem();
@@ -402,9 +357,7 @@ public class SuiviEntretiens implements Initializable {
         }
     }
 
-    /**
-     * Vehicule class for data model.
-     */
+    
     public static class Vehicule {
         private String immatriculation;
         private String marqueModele;
@@ -458,9 +411,7 @@ public class SuiviEntretiens implements Initializable {
         }
     }
 
-    /**
-     * Entretien (Maintenance) class for data model.
-     */
+    
     public static class Entretien {
         private int id;
         private LocalDate date;

@@ -57,7 +57,7 @@ public class SeanceCode {
 
     @FXML
     public void initialize() {
-        // Initialize the table columns
+
         idMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
         prenomMoniteurColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
@@ -65,19 +65,15 @@ public class SeanceCode {
                 new SimpleStringProperty(cellData.getValue().getSpecialites().stream()
                         .map(TypePermis::toString)
                         .collect(Collectors.joining(", "))));  
-        
-        // Set placeholders for input fields
+
         capfield.setPromptText("Nombre de places");
         tempsfield.setPromptText("Format: HH:mm");
         moniteurfield.setPromptText("Sélectionnez un moniteur");
-        
-        // Setup validation
+
         setupValidation();
 
-        // Set default date to today
         datefield.setValue(LocalDate.now());
 
-        // Add listener for table selection
         moniteurTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedMoniteur = newSelection;
@@ -85,23 +81,17 @@ public class SeanceCode {
             }
         });
 
-        // Add click handler for the table
         moniteurTableView.setOnMouseClicked(this::handleTableClick);
 
-        // Set action handlers for buttons
         planifierButton.setOnAction(this::handlePlanifier);
         cancelButton.setOnAction(e -> handleCancel());
 
-        // Load moniteurs from service
         loadMoniteurs();
-        
-        // Load candidates from service
+
         loadCandidats();
-        
-        // Load rooms
+
         loadSalles();
-        
-        // Preload a default value in capacity field
+
         capfield.setText("20");
     }
 
@@ -109,7 +99,7 @@ public class SeanceCode {
         try {
             List<Moniteur> moniteurs = moniteurService.getAllMoniteurs();
             if (moniteurs == null || moniteurs.isEmpty()) {
-                // Fallback to mock data if no moniteurs found
+
                 moniteurs = createMockMoniteurs();
             }
             moniteurTableView.getItems().clear();
@@ -117,7 +107,7 @@ public class SeanceCode {
         } catch (Exception e) {
             System.err.println("Erreur lors du chargement des moniteurs: " + e.getMessage());
             e.printStackTrace();
-            // Fallback to mock data
+
             loadMockMoniteurs();
         }
     }
@@ -163,22 +153,19 @@ public class SeanceCode {
 
     @FXML
     private void handlePlanifier(ActionEvent event) {
-        // Validate inputs
+
         if (!validateInputs()) {
             return;
         }
 
         try {
-            // Parse capacity
+
             int capacite = Integer.parseInt(capfield.getText());
-            
-            // Get date
+
             LocalDate date = datefield.getValue();
-            
-            // Parse time
+
             LocalTime time = LocalTime.parse(tempsfield.getText(), DateTimeFormatter.ofPattern("HH:mm"));
-            
-            // Create session code
+
             SessionCode sessionCode = new SessionCode();
             sessionCode.setDateSession(date);
             sessionCode.setHeureSession(time);
@@ -186,24 +173,20 @@ public class SeanceCode {
             sessionCode.setCapaciteMax(capacite);
             sessionCode.setSalle(salleCombo.getValue());
             sessionCode.setTypeSession(TypeSession.CODE);
-            
-            // Définir un plan valide (par exemple, le plan 1 pour le code)
+
             sessionCode.setPlanId(1);
-            
-            // Définir une durée par défaut si non spécifiée (60 minutes)
+
             if (sessionCode.getDuree() <= 0) {
                 sessionCode.setDuree(60);
             }
-            
-            // Save session
+
             boolean saved = sessionService.saveSessionCode(sessionCode);
             
             if (saved) {
-                // Get the ID of the newly created session
+
                 List<SessionCode> sessions = sessionService.viewAllSessionCode();
                 SessionCode createdSession = null;
-                
-                // Find the session we just created (the most recent one with matching date and time)
+
                 for (SessionCode session : sessions) {
                     if (session.getDateSession().equals(date) && 
                         session.getHeureSession().equals(time) && 
@@ -212,17 +195,15 @@ public class SeanceCode {
                         break;
                     }
                 }
-                
-                // If we found the session, create a presence record
+
                 if (createdSession != null) {
-                    // Add presence record for the candidate if one is selected
+
                     if (candidatCombo.getValue() != null && !candidatCombo.getValue().isEmpty()) {
                         try {
-                            // Extract candidate ID from the combo box value (format "id - name")
+
                             String candidatValue = candidatCombo.getValue();
                             long candidatId = Long.parseLong(candidatValue.split(" - ")[0]);
-                            
-                            // Create presence record
+
                             PresenceService presenceService = new PresenceService();
                             presenceService.recordCodePresence(createdSession.getId(), candidatId, false);
                         } catch (Exception e) {
@@ -252,14 +233,12 @@ public class SeanceCode {
         moniteurfield.clear();
         selectedMoniteur = null;
         moniteurTableView.getSelectionModel().clearSelection();
-        
-        // Masquer les messages d'erreur
+
         candidatError.setVisible(false);
         dateError.setVisible(false);
         tempsError.setVisible(false);
         moniteurError.setVisible(false);
-        
-        // Supprimer les styles de validation
+
         capfield.getStyleClass().remove("error-field");
         capfield.getStyleClass().remove("valid-field");
         datefield.getStyleClass().remove("error-field");
@@ -272,18 +251,17 @@ public class SeanceCode {
 
     @FXML
     private void handleCancel() {
-        // Reset form instead of closing the window
+
         clearFields();
     }
 
     private void setupValidation() {
-        // Réinitialiser les labels d'erreur
+
         candidatError.setVisible(false);
         dateError.setVisible(false);
         tempsError.setVisible(false);
         moniteurError.setVisible(false);
-        
-        // Capacité validation
+
         capfield.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().isEmpty()) {
                 candidatError.setText("La capacité est obligatoire");
@@ -319,8 +297,7 @@ public class SeanceCode {
                 }
             }
         });
-        
-        // Date validation
+
         datefield.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null) {
                 dateError.setText("La date est obligatoire");
@@ -344,8 +321,7 @@ public class SeanceCode {
                 }
             }
         });
-        
-        // Temps validation
+
         tempsfield.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().isEmpty()) {
                 tempsError.setText("L'heure est obligatoire");
@@ -372,8 +348,7 @@ public class SeanceCode {
                 }
             }
         });
-        
-        // Moniteur validation
+
         moniteurfield.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.trim().isEmpty()) {
                 moniteurError.setText("Veuillez sélectionner un moniteur");
@@ -393,10 +368,9 @@ public class SeanceCode {
     }
     
     private boolean validateInputs() {
-        // Vérifier les entrées manuellement
+
         boolean hasErrors = false;
-        
-        // Vérifier la capacité
+
         if (capfield.getText().trim().isEmpty()) {
             candidatError.setText("La capacité est obligatoire");
             candidatError.setVisible(true);
@@ -415,8 +389,7 @@ public class SeanceCode {
                 hasErrors = true;
             }
         }
-        
-        // Vérifier la date
+
         if (datefield.getValue() == null) {
             dateError.setText("La date est obligatoire");
             dateError.setVisible(true);
@@ -426,8 +399,7 @@ public class SeanceCode {
             dateError.setVisible(true);
             hasErrors = true;
         }
-        
-        // Vérifier l'heure
+
         if (tempsfield.getText().trim().isEmpty()) {
             tempsError.setText("L'heure est obligatoire");
             tempsError.setVisible(true);
@@ -441,8 +413,7 @@ public class SeanceCode {
                 hasErrors = true;
             }
         }
-        
-        // Vérifier le moniteur
+
         if (moniteurfield.getText().trim().isEmpty() || selectedMoniteur == null) {
             moniteurError.setText("Veuillez sélectionner un moniteur");
             moniteurError.setVisible(true);
@@ -454,14 +425,12 @@ public class SeanceCode {
 
     private void loadCandidats() {
         try {
-            // Get candidate service
+
             CandidatService candidatService = new CandidatService();
             List<Candidat> candidats = candidatService.getAllCandidats();
-            
-            // Create observable list for combobox
+
             ObservableList<String> candidatItems = FXCollections.observableArrayList();
-            
-            // Populate the list
+
             if (candidats != null && !candidats.isEmpty()) {
                 for (Candidat candidat : candidats) {
                     candidatItems.add(candidat.getId() + " - " + candidat.getNom() + " " + candidat.getPrenom());
@@ -478,13 +447,12 @@ public class SeanceCode {
     
     private void loadSalles() {
         try {
-            // For this example, we'll use some sample rooms
+
             ObservableList<String> salles = FXCollections.observableArrayList(
                 "Salle 1", "Salle 2", "Salle 3", "Salle 4", "Salle 5"
             );
             salleCombo.setItems(salles);
-            
-            // Set default value
+
             if (!salles.isEmpty()) {
                 salleCombo.setValue(salles.get(0));
             }

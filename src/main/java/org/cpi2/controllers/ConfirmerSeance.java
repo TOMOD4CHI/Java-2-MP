@@ -56,7 +56,7 @@ public class ConfirmerSeance implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize filter and combo boxes
+
         statusFilter.getItems().addAll(
             "Toutes les séances",
             "En attente",
@@ -71,28 +71,22 @@ public class ConfirmerSeance implements Initializable {
             "Terminée",
             "Annulée"
         );
-        
-        // Configure table columns
+
         setupTableColumns();
         setupActionsColumn();
-        
-        // Load sample data
+
         loadSampleData();
-        
-        // Disable update button initially
+
         updateButton.setDisable(true);
-        
-        // Add listener to status combo box
+
         statusComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            // Show kilometrage field only when status is "Terminée"
+
             kilometrageBox.setVisible("Terminée".equals(newVal));
             kilometrageBox.setManaged("Terminée".equals(newVal));
-            
-            // Enable update button when a status is selected
+
             updateButton.setDisable(newVal == null);
         });
-        
-        // Add listener to statusFilter
+
         statusFilter.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 filterSeances();
@@ -124,8 +118,7 @@ public class ConfirmerSeance implements Initializable {
         
         statusColumn.setCellValueFactory(cellData -> 
             new SimpleStringProperty(cellData.getValue().getStatus()));
-        
-        // Add color to status column
+
         statusColumn.setCellFactory(column -> new TableCell<SeanceEntry, String>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -161,18 +154,15 @@ public class ConfirmerSeance implements Initializable {
                 }
             }
         });
-        
-        // Setup actions column with view and confirm buttons
+
         setupActionsColumn();
-        
-        // Set up row selection listener
+
         seancesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 showDetails(newSelection);
             }
         });
-        
-        // Set the table items
+
         seancesTable.setItems(seanceData);
     }
     
@@ -211,8 +201,7 @@ public class ConfirmerSeance implements Initializable {
                                 setGraphic(null);
                             } else {
                                 SeanceEntry seance = getTableView().getItems().get(getIndex());
-                                
-                                // Show/hide confirm button based on status
+
                                 confirmBtn.setVisible("En attente".equals(seance.getStatus()));
                                 confirmBtn.setManaged("En attente".equals(seance.getStatus()));
                                 
@@ -227,7 +216,7 @@ public class ConfirmerSeance implements Initializable {
     }
     
     private void loadSampleData() {
-        // Add sample seance data with different statuses
+
         seanceData.addAll(
             new SeanceEntry("25/01/2024", "10:00", 60, "Ahmed Salah", "Karim Mrad", "Peugeot 208", "Centre Ville", "En attente"),
             new SeanceEntry("25/01/2024", "14:30", 60, "Nadia Mejri", "Hichem Ben Ali", "Renault Clio", "Lac 1", "Confirmée"),
@@ -240,8 +229,7 @@ public class ConfirmerSeance implements Initializable {
     
     private void showDetails(SeanceEntry seance) {
         selectedSeance = seance;
-        
-        // Update detail labels
+
         detailDateLabel.setText(seance.getDate());
         detailHeureLabel.setText(seance.getHeure());
         detailDureeLabel.setText(seance.getDuree() + " min");
@@ -250,8 +238,7 @@ public class ConfirmerSeance implements Initializable {
         detailVehiculeLabel.setText(seance.getVehicule());
         detailLieuLabel.setText(seance.getLieu());
         detailStatusLabel.setText(seance.getStatus());
-        
-        // Update status label style
+
         switch (seance.getStatus()) {
             case "En attente":
                 detailStatusLabel.setTextFill(Color.ORANGE);
@@ -268,13 +255,11 @@ public class ConfirmerSeance implements Initializable {
             default:
                 detailStatusLabel.setTextFill(Color.BLACK);
         }
-        
-        // Reset form fields
+
         statusComboBox.setValue(null);
         notesArea.clear();
         kmFinField.clear();
-        
-        // Show details pane
+
         detailPane.setVisible(true);
     }
     
@@ -291,8 +276,8 @@ public class ConfirmerSeance implements Initializable {
     }
     
     private void filterSeances() {
-        // If implementing a real filter, you would query the database or filter the actual data
-        // For this demo, just show a confirmation
+
+
         LocalDate date = filterDate.getValue();
         String status = statusFilter.getValue();
         
@@ -310,10 +295,9 @@ public class ConfirmerSeance implements Initializable {
     
     @FXML
     private void handleClose() {
-        // Hide details pane
+
         detailPane.setVisible(false);
-        
-        // Clear selection
+
         seancesTable.getSelectionModel().clearSelection();
         selectedSeance = null;
     }
@@ -325,22 +309,17 @@ public class ConfirmerSeance implements Initializable {
         }
         
         String newStatus = statusComboBox.getValue();
-        
-        // Validate kilometrage if status is "Terminée"
+
         if ("Terminée".equals(newStatus) && !validateKilometrage()) {
             return;
         }
-        
-        // Update the status of the selected seance
+
         selectedSeance.setStatus(newStatus);
-        
-        // Refresh the table
+
         seancesTable.refresh();
-        
-        // Update the detail status label
+
         detailStatusLabel.setText(newStatus);
-        
-        // Update status color
+
         switch (newStatus) {
             case "Confirmée":
                 detailStatusLabel.setTextFill(Color.GREEN);
@@ -354,12 +333,10 @@ public class ConfirmerSeance implements Initializable {
             default:
                 detailStatusLabel.setTextFill(Color.BLACK);
         }
-        
-        // Show success message
+
         AlertUtil.showInfo( "Statut mis à jour",
                 "Le statut de la séance a été mis à jour avec succès.");
-        
-        // Reset form
+
         statusComboBox.setValue(null);
         notesArea.clear();
         kmFinField.clear();
@@ -389,8 +366,6 @@ public class ConfirmerSeance implements Initializable {
         return true;
     }
 
-    
-    // Inner class for seance data
     public static class SeanceEntry {
         private final String date;
         private final String heure;

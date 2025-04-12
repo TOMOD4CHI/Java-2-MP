@@ -1294,7 +1294,7 @@
     100% { -fx-opacity: 1; -fx-scale-x: 1; -fx-scale-y: 1; }
 }
 
-/* Split pane styling */
+
 .transparent-split-pane > .split-pane-divider {
     -fx-background-color: #e0e0e0;
     -fx-padding: 0 0.5px;

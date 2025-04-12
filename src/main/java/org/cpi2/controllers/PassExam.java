@@ -54,7 +54,7 @@ public class PassExam {
 
     @FXML
     public void initialize() {
-        // Populate ComboBox if not already populated
+
         if (resultatComboBox.getItems().isEmpty()) {
             resultatComboBox.getItems().addAll("Réussi", "Échoué");
         }
@@ -117,7 +117,6 @@ public class PassExam {
         String resultat = resultatComboBox.getValue();
         String commentaire = commentaireArea.getText();
 
-        // Validation
         if (candidatId == null || candidatId.trim().isEmpty() ||
                 examenId == null || examenId.trim().isEmpty() ||
                 resultat == null) {
@@ -149,7 +148,6 @@ public class PassExam {
             return;
         }
 
-        //TODO : if anything further  needed can be added here
         clearFields();
     }
 
@@ -193,7 +191,7 @@ public class PassExam {
         private String candidat;
         private String resultat;
         private String cin;
-        // Constructor
+
         public Exam(String cin,String idExamen, String typeExamen, String dateExamen, String candidat, String resultat) {
             this.cin = cin;
             this.idExamen = idExamen;
@@ -203,7 +201,6 @@ public class PassExam {
             this.resultat = resultat;
         }
 
-        // Getters and setters
         public String getIdExamen() {
             return idExamen;
         }

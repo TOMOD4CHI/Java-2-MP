@@ -37,11 +37,9 @@ public class login  {
     public void initialize() {
         ImageView logoImageView = (ImageView) illustrationContainer.getChildren().get(0);
 
-        // Set initial properties
         logoImageView.setOpacity(0);
         logoImageView.setRotate(-90);
 
-        // Create fade transition
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.5), logoImageView);
         fadeTransition.setFromValue(0);
         fadeTransition.setToValue(1);
@@ -50,13 +48,11 @@ public class login  {
         rotateTransition.setFromAngle(-90);
         rotateTransition.setToAngle(0);
 
-        // Combine transitions
         ParallelTransition parallelTransition = new ParallelTransition();
         parallelTransition.getChildren().addAll(fadeTransition, rotateTransition);
 
-        // Play the animation when the scene is shown
         parallelTransition.play();
-        // Set up input validation listeners
+
         if (usernameField != null) {
             usernameField.textProperty().addListener((observable, oldValue, newValue) -> {
                 validateInput();
@@ -68,8 +64,7 @@ public class login  {
                 validateInput();
             });
         }
-        
-        // Set the app icon after the scene is initialized
+
         if (logoContainer != null) {
             logoContainer.sceneProperty().addListener((observable, oldScene, newScene) -> {
                 if (newScene != null) {
@@ -125,10 +120,8 @@ public class login  {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // Clear previous error message
         actionTarget.setText("");
-        
-        // Validate inputs
+
         if (username.isEmpty()) {
             actionTarget.setText("Le nom d'utilisateur ne peut pas etre vide");
             return;
@@ -144,22 +137,18 @@ public class login  {
             return;
         }
 
-        // Authenticate against database
         if (authService.authenticate(username, password)) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainWindow.fxml"));
                 Parent mainRoot = loader.load();
                 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                
-                // Get current window dimensions to maintain consistency
+
                 double width = stage.getWidth();
                 double height = stage.getHeight();
-                
-                // Set app icon using local resource
+
                 stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
-                
-                // Create new scene with same dimensions
+
                 Scene scene = new Scene(mainRoot, width, height);
                 stage.setTitle("Main Application");
                 stage.setScene(scene);

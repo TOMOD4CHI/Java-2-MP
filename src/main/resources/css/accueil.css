@@ -1,4 +1,4 @@
-/* Dedicated CSS for the AccueilPage */
+
 
 .welcome-container {
     -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(245, 250, 255, 0.95));
@@ -295,7 +295,7 @@
     -fx-scale-y: 1.02;
 }
 
-/* New dashboard card styles */
+
 .dashboard-section {
     -fx-alignment: center;
     -fx-spacing: 24px;

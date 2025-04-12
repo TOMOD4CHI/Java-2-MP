@@ -52,30 +52,25 @@ public class GestionSallesController {
     
     @FXML
     public void initialize() {
-        // Configure table columns
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
         numeroColumn.setCellValueFactory(new PropertyValueFactory<>("numero"));
         capaciteColumn.setCellValueFactory(new PropertyValueFactory<>("capacite"));
         
         setupActionsColumn();
-        
-        // Setup filtered list
+
         filteredSalles = new FilteredList<>(sallesList, p -> true);
         salleTableView.setItems(filteredSalles);
-        
-        // Setup search functionality
+
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredSalles.setPredicate(createPredicate(newValue));
         });
-        
-        // Apply button styling
+
         refreshButton.getStyleClass().setAll("action-button", "small-button");
-        
-        // Setup error labels
+
         setupErrorLabels();
-        
-        // Load initial data
+
         loadSalles();
     }
     
@@ -86,12 +81,11 @@ public class GestionSallesController {
             private final HBox pane = new HBox(5, editButton, deleteButton);
             
             {
-                // Configure buttons with application-wide styles
+
                 editButton.getStyleClass().addAll("primary-button", "small-button");
                 deleteButton.getStyleClass().addAll("secondary-button", "small-button");
                 pane.setAlignment(Pos.CENTER);
-                
-                // Set button actions
+
                 editButton.setOnAction(event -> {
                     Salle salle = getTableView().getItems().get(getIndex());
                     handleEditSalle(salle);
@@ -208,8 +202,7 @@ public class GestionSallesController {
             if (success) {
                 AlertUtil.showSuccess("Succès", "Salle supprimée avec succès");
                 loadSalles();
-                
-                // If we were editing this salle, clear the form
+
                 if (isEditing && currentSalleId != null && currentSalleId.equals(salle.getId())) {
                     clearForm();
                 }
@@ -238,8 +231,7 @@ public class GestionSallesController {
     
     private boolean validateForm() {
         boolean isValid = true;
-        
-        // Validate nom
+
         if (nomField.getText().trim().isEmpty()) {
             nomError.setText("Le nom est obligatoire");
             nomError.setVisible(true);
@@ -251,14 +243,13 @@ public class GestionSallesController {
         } else {
             nomError.setVisible(false);
         }
-        
-        // Validate numero
+
         if (numeroField.getText().trim().isEmpty()) {
             numeroError.setText("Le numéro est obligatoire");
             numeroError.setVisible(true);
             isValid = false;
         } else {
-            // Check if numero is unique (when adding or changing numero)
+
             if (!isEditing || !numeroField.getText().equals(salleService.getSalleById(currentSalleId).map(Salle::getNumero).orElse(""))) {
                 Optional<Salle> existingSalle = salleService.getSalleByNumero(numeroField.getText().trim());
                 if (existingSalle.isPresent()) {
@@ -272,8 +263,7 @@ public class GestionSallesController {
                 numeroError.setVisible(false);
             }
         }
-        
-        // Validate capacite
+
         if (capaciteField.getText().trim().isEmpty()) {
             capaciteError.setText("La capacité est obligatoire");
             capaciteError.setVisible(true);

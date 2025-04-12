@@ -16,7 +16,7 @@
     -fx-text-fill: #2B6CB0;
     padding: 0 0 20px 0;
     -fx-padding: 0 0 20px 0;
-    /* Removed: box-shadow: 0 1px 3px rgba(66, 153, 225, 0.3); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 3, 0, 0, 1);
     text-align: center;
     -fx-alignment: center;
@@ -25,9 +25,9 @@
 }
 
 .form-title:hover {
-    /* Removed: box-shadow: 0 2px 4px rgba(66, 153, 225, 0.4); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.4), 4, 0, 0, 2);
-    /* Removed: transform: scale(1.02); */
+    
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
 }
@@ -41,7 +41,7 @@
     -fx-font-weight: bold;
     color: #2B6CB0;
     -fx-text-fill: #2B6CB0;
-    /* Removed: box-shadow: 0 1px 2px rgba(66, 153, 225, 0.2); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 2, 0, 0, 1);
     padding: 8px 0;
     -fx-padding: 8px 0;
@@ -64,7 +64,7 @@
     -fx-padding: 32px;
     gap: 12px;
     -fx-spacing: 12;
-    /* Removed: box-shadow: 0 6px 14px rgba(66, 153, 225, 0.2); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 14, 0, 0, 6);
     transition-duration: 0.3s;
     -fx-transition-duration: 0.3s;
@@ -95,7 +95,7 @@
     -fx-prompt-text-fill: #a0aec0;
     transition-duration: 0.2s;
     -fx-transition-duration: 0.2s;
-    /* Removed: box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06); */
+    
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 4, 0, 0, 1);
 }
 
@@ -104,7 +104,7 @@
     -fx-border-color: #63b3ed;
     background-color: rgba(255, 255, 255, 0.8);
     -fx-background-color: rgba(255, 255, 255, 0.8);
-    /* Removed: box-shadow: 0 0 5px rgba(66, 153, 225, 0.25); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.25), 5, 0, 0, 0);
 }
 
@@ -121,7 +121,7 @@
     -fx-padding: 10px 16px;
     border-radius: 8px;
     -fx-background-radius: 8px;
-    /* Removed: box-shadow: 0 2px 5px rgba(66, 153, 225, 0.3); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 5, 0, 0, 2);
     cursor: pointer;
     -fx-cursor: hand;
@@ -132,18 +132,18 @@
 .button:hover {
     background-image: linear-gradient(to right, #2B6CB0, #2D3748);
     -fx-background-color: linear-gradient(to right, #2B6CB0, #2D3748);
-    /* Removed: box-shadow: 0 3px 8px rgba(66, 153, 225, 0.45); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.45), 8, 0, 0, 3);
-    /* Removed: transform: scale(1.03); */
+    
     -fx-scale-x: 1.03;
     -fx-scale-y: 1.03;
 }
 
 .button::selection {
-    /* Removed: transform: scale(0.98); */
+    
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
-    /* Removed: box-shadow: 0 1px 3px rgba(66, 153, 225, 0.2); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 3, 0, 0, 1);
 }
 
@@ -160,7 +160,7 @@
     -fx-border-width: 1.5px;
     padding: 5px;
     -fx-padding: 5px;
-    /* Removed: box-shadow: 0 3px 8px rgba(66, 153, 225, 0.2); */
+    
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 8, 0, 0, 3);
 }
 
@@ -192,3 +192,4 @@
     color: white;
     -fx-text-fill: white;
 }
+

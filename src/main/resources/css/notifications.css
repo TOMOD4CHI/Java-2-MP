@@ -1,6 +1,6 @@
-/* Notifications UI Styling */
 
-/* Main Container Styling */
+
+
 .main-container {
     -fx-background-color: #f5f7fa;
     background-color: #f5f7fa;
@@ -8,7 +8,7 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Header Styling */
+
 .header-container {
     -fx-background-color: white;
     background-color: white;
@@ -52,7 +52,7 @@
     border-radius: 12px;
 }
 
-/* Content Card */
+
 .content-card {
     -fx-background-color: white;
     background-color: white;
@@ -61,7 +61,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 4);
 }
 
-/* Search Bar */
+
 .search-bar {
     -fx-background-color: #f8f9fa;
     background-color: #f8f9fa;
@@ -97,7 +97,7 @@
     font-size: 12px;
 }
 
-/* Tab Selector */
+
 .tab-selector {
     -fx-background-color: #f0f2f5;
     background-color: #f0f2f5;
@@ -137,7 +137,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
 }
 
-/* Notification Cards */
+
 .card-list-view {
     -fx-background-color: transparent;
     background-color: transparent;
@@ -237,7 +237,7 @@
     color: #7f8c8d;
 }
 
-/* Priority Labels */
+
 .priority-label {
     -fx-font-size: 11px;
     font-size: 11px;
@@ -270,7 +270,7 @@
     background-color: #2ecc71;
 }
 
-/* Details Card */
+
 .details-card {
     -fx-background-color: white;
     background-color: white;
@@ -318,7 +318,7 @@
     stroke: #e0e0e0;
 }
 
-/* Banner */
+
 .notification-banner {
     -fx-background-color: #f8f9fa;
     background-color: #f8f9fa;
@@ -371,7 +371,7 @@
     color: #7f8c8d;
 }
 
-/* Detail sections */
+
 .detail-section-label {
     -fx-font-size: 12px;
     font-size: 12px;
@@ -435,7 +435,7 @@
     color: #2c3e50;
 }
 
-/* Action Buttons */
+
 .primary-button {
     -fx-background-color: #3498db;
     background-color: #3498db;
@@ -476,7 +476,7 @@
     background-color: #bdc3c7;
 }
 
-/* Footer Styling */
+
 .footer-bar {
     -fx-background-color: white;
     background-color: white;
@@ -508,7 +508,7 @@
     color: #2980b9;
 }
 
-/* Empty Placeholder */
+
 .empty-placeholder {
     -fx-alignment: center;
     text-align: center;
@@ -559,7 +559,7 @@
     background-color: #2980b9;
 }
 
-/* Action Button */
+
 .action-button {
     -fx-background-color: #f0f2f5;
     background-color: #f0f2f5;
@@ -613,3 +613,4 @@
     -fx-alignment: center-left;
     align-items: center;
 }
+

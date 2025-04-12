@@ -1,23 +1,15 @@
 package org.cpi2.controllers;
 
-/**
- * Helper class for navigating between views in the main window
- * This is a utility class for the AccueilPageController to avoid code duplication with MainWindow class
- */
+
 public class MainWindowNavigator {
 
-    // Reference to the main window controller
     private static MainWindow mainWindowController;
 
-    /**
-     * Set the main window controller for navigation
-     * @param controller The MainWindow controller
-     */
+    
     public static void setMainWindowController(MainWindow controller) {
         mainWindowController = controller;
     }
 
-    // Navigation methods that delegate to the MainWindow controller
     
     public static void loadAfficherCandidat() {
         if (mainWindowController != null) {

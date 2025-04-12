@@ -20,27 +20,22 @@ import java.util.Map;
 import org.cpi2.repository.DatabaseConfig;
 import org.cpi2.utils.AlertUtil;
 
-/**
- * Contrôleur pour le tableau de bord des véhicules
- */
+
 public class DashboardVehicles implements Initializable {
 
     @FXML private ComboBox<String> filterCombo;
-    
-    // KPI Labels
+
     @FXML private Label totalVehiclesLabel;
     @FXML private Label availableVehiclesLabel;
     @FXML private Label maintenanceDueLabel;
     @FXML private Label totalKmLabel;
-    
-    // Charts
+
     @FXML private PieChart vehicleUsageChart;
     
     @FXML private BarChart<String, Number> maintenanceHistoryChart;
     @FXML private CategoryAxis maintenanceMonthAxis;
     @FXML private NumberAxis maintenanceCountAxis;
-    
-    // Tables
+
     @FXML private TableView<VehicleEntry> vehiclesTable;
     @FXML private TableColumn<VehicleEntry, Long> vehicleIdColumn;
     @FXML private TableColumn<VehicleEntry, String> vehicleModelColumn;
@@ -61,9 +56,7 @@ public class DashboardVehicles implements Initializable {
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private String currentFilter = "Tous les véhicules";
     
-    /**
-     * Initialise le contrôleur et configure les composants UI
-     */
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         filterCombo.getItems().addAll(
@@ -80,18 +73,14 @@ public class DashboardVehicles implements Initializable {
         loadDashboardData();
     }
     
-    /**
-     * Gère l'action du bouton de filtre
-     */
+    
     @FXML
     private void handleApplyFilter() {
         currentFilter = filterCombo.getValue();
         loadDashboardData();
     }
     
-    /**
-     * Charge toutes les données du tableau de bord
-     */
+    
     private void loadDashboardData() {
         try (Connection conn = DatabaseConfig.getConnection()) {
             loadKPIData(conn);
@@ -105,9 +94,7 @@ public class DashboardVehicles implements Initializable {
         }
     }
     
-    /**
-     * Charge les données des indicateurs clés de performance
-     */
+    
     private void loadKPIData(Connection conn) throws SQLException {
         String totalSql = "SELECT COUNT(*) as total FROM vehicule";
         
@@ -158,9 +145,7 @@ public class DashboardVehicles implements Initializable {
         }
     }
     
-    /**
-     * Charge les données du graphique d'utilisation des véhicules
-     */
+    
     private void loadVehicleUsageChart(Connection conn) throws SQLException {
         String sql = "SELECT statut, COUNT(*) as count FROM vehicule GROUP BY statut";
         
@@ -204,9 +189,7 @@ public class DashboardVehicles implements Initializable {
         vehicleUsageChart.setData(pieChartData);
     }
     
-    /**
-     * Charge les données du graphique d'historique d'entretien
-     */
+    
     private void loadMaintenanceHistoryChart(Connection conn) throws SQLException {
         String sql = "SELECT DATE_FORMAT(date_entretien, '%b') as month, COUNT(*) as count " +
                    "FROM entretien " +
@@ -245,9 +228,7 @@ public class DashboardVehicles implements Initializable {
         maintenanceHistoryChart.getData().add(maintenanceSeries);
     }
     
-    /**
-     * Configure les colonnes du tableau des véhicules
-     */
+    
     private void setupVehicleTableColumns() {
         vehicleIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         vehicleModelColumn.setCellValueFactory(new PropertyValueFactory<>("model"));
@@ -297,9 +278,7 @@ public class DashboardVehicles implements Initializable {
         });
     }
     
-    /**
-     * Configure les colonnes du tableau des alertes d'entretien
-     */
+    
     private void setupAlertTableColumns() {
         alertVehicleColumn.setCellValueFactory(new PropertyValueFactory<>("vehicle"));
         alertTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -366,9 +345,7 @@ public class DashboardVehicles implements Initializable {
         });
     }
     
-    /**
-     * Charge les données du tableau des véhicules
-     */
+    
     private void loadVehiclesTableData(Connection conn) throws SQLException {
         ObservableList<VehicleEntry> vehicleData = FXCollections.observableArrayList();
         
@@ -420,9 +397,7 @@ public class DashboardVehicles implements Initializable {
         vehiclesTable.setItems(vehicleData);
     }
     
-    /**
-     * Charge les données du tableau des alertes d'entretien
-     */
+    
     private void loadMaintenanceAlertsData(Connection conn) throws SQLException {
         ObservableList<MaintenanceAlertEntry> alertData = FXCollections.observableArrayList();
         
@@ -475,9 +450,7 @@ public class DashboardVehicles implements Initializable {
     }
 
     
-    /**
-     * Classe interne pour les entrées du tableau des véhicules
-     */
+    
     public static class VehicleEntry {
         private final Long id;
         private final String model;
@@ -507,9 +480,7 @@ public class DashboardVehicles implements Initializable {
         public String getNextMaintenance() { return nextMaintenance; }
     }
     
-    /**
-     * Classe interne pour les entrées du tableau des alertes d'entretien
-     */
+    
     public static class MaintenanceAlertEntry {
         private final String vehicle;
         private final String type;

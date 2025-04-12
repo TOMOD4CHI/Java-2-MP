@@ -34,8 +34,7 @@ public class ModifierMoniteur {
 
     private final MoniteurService moniteurService = new MoniteurService();
     private Moniteur currentMoniteur;
-    
-    // Validation patterns
+
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
@@ -43,48 +42,41 @@ public class ModifierMoniteur {
 
     @FXML
     public void initialize() {
-        // Initialize the typePermisComboBox with available permit types
+
         typePermisComboBox.getItems().addAll(TypePermis.values());
         typePermisComboBox.setValue(TypePermis.B); // Default value
-        
-        // Setup real-time validation
+
         setupValidation();
     }
 
     private void setupValidation() {
-        // CIN validation
+
         cinField.textProperty().addListener((obs, oldVal, newVal) -> {
             validateField(cinField, cinError, "Le CIN", CIN_PATTERN);
         });
 
-        // Nom validation
         nomField.textProperty().addListener((obs, oldVal, newVal) -> {
             validateField(nomField, nomError, "Le nom", NAME_PATTERN);
         });
 
-        // Prénom validation
         prenomField.textProperty().addListener((obs, oldVal, newVal) -> {
             validateField(prenomField, prenomError, "Le prénom", NAME_PATTERN);
         });
 
-        // Téléphone validation
         telephoneField.textProperty().addListener((obs, oldVal, newVal) -> {
             validateField(telephoneField, telephoneError, "Le numéro de téléphone", PHONE_PATTERN);
         });
 
-        // Email validation
         emailField.textProperty().addListener((obs, oldVal, newVal) -> {
             validateField(emailField, emailError, "L'email", EMAIL_PATTERN);
         });
 
-        // Adresse validation
         adresseField.textProperty().addListener((obs, oldVal, newVal) -> {
             boolean isValid = newVal != null && newVal.trim().length() >= 10;
             updateFieldValidation(adresseField, adresseError, isValid, 
                 isValid ? null : "L'adresse doit contenir au moins 10 caractères");
         });
 
-        // Date validation
         dateEmbaucheField.valueProperty().addListener((obs, oldVal, newVal) -> {
             boolean isValid = newVal != null && !newVal.isAfter(LocalDate.now());
             updateFieldValidation(dateEmbaucheField, dateError, isValid, 
@@ -131,15 +123,14 @@ public class ModifierMoniteur {
 
         currentMoniteur = moniteurService.findByCin(cin);
         if (currentMoniteur != null) {
-            // Fill the fields with existing data
+
             nomField.setText(currentMoniteur.getNom());
             prenomField.setText(currentMoniteur.getPrenom());
             adresseField.setText(currentMoniteur.getAdresse());
             telephoneField.setText(currentMoniteur.getTelephone());
             emailField.setText(currentMoniteur.getEmail());
             dateEmbaucheField.setValue(currentMoniteur.getDateEmbauche());
-            
-            // Set the type permis from the first speciality
+
             if (!currentMoniteur.getSpecialites().isEmpty()) {
                 typePermisComboBox.setValue(currentMoniteur.getSpecialites().iterator().next());
             } else {
@@ -179,7 +170,6 @@ public class ModifierMoniteur {
             return;
         }
 
-        // Get and validate all fields
         String nom = nomField.getText().trim();
         String prenom = prenomField.getText().trim();
         String adresse = adresseField.getText().trim();
@@ -188,7 +178,6 @@ public class ModifierMoniteur {
         LocalDate dateEmbauche = dateEmbaucheField.getValue();
         TypePermis typePermis = typePermisComboBox.getValue();
 
-        // Validate all fields
         boolean isValid = true;
         
         if (!isValidName(nom)) {
@@ -237,20 +226,17 @@ public class ModifierMoniteur {
             return;
         }
 
-        // Update the moniteur information
         currentMoniteur.setNom(nom);
         currentMoniteur.setPrenom(prenom);
         currentMoniteur.setAdresse(adresse);
         currentMoniteur.setTelephone(telephone);
         currentMoniteur.setEmail(email);
         currentMoniteur.setDateEmbauche(dateEmbauche);
-        
-        // Update specialities
+
         Set<TypePermis> specialites = new HashSet<>();
         specialites.add(typePermis);
         currentMoniteur.setSpecialites(specialites);
 
-        // Save the changes
         boolean success = moniteurService.updateMoniteur(currentMoniteur);
 
         if (success) {
@@ -277,8 +263,7 @@ public class ModifierMoniteur {
         dateEmbaucheField.setValue(null);
         typePermisComboBox.setValue(TypePermis.B);
         currentMoniteur = null;
-        
-        // Clear error messages
+
         cinError.setVisible(false);
         nomError.setVisible(false);
         prenomError.setVisible(false);
@@ -287,8 +272,7 @@ public class ModifierMoniteur {
         emailError.setVisible(false);
         dateError.setVisible(false);
         typePermisError.setVisible(false);
-        
-        // Remove visible class from error labels
+
         cinError.getStyleClass().remove("visible");
         nomError.getStyleClass().remove("visible");
         prenomError.getStyleClass().remove("visible");
@@ -297,8 +281,7 @@ public class ModifierMoniteur {
         emailError.getStyleClass().remove("visible");
         dateError.getStyleClass().remove("visible");
         typePermisError.getStyleClass().remove("visible");
-        
-        // Remove validation styles
+
         cinField.getStyleClass().removeAll("field-error", "field-valid");
         nomField.getStyleClass().removeAll("field-error", "field-valid");
         prenomField.getStyleClass().removeAll("field-error", "field-valid");
@@ -308,3 +291,4 @@ public class ModifierMoniteur {
         dateEmbaucheField.getStyleClass().removeAll("field-error", "field-valid");
     }
 }
+

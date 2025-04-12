@@ -42,37 +42,33 @@ public class ExamRegistration {
 
     @FXML
     public void initialize() {
-        // Initialize the exam types
+
         typeExamenComboBox.getItems().addAll(examTypePrices.keySet());
 
         enregistrerButton.setDisable(true);
-        
-        // Set default date to next week
+
         dateExamenPicker.setValue(LocalDate.now().plusWeeks(1));
-        
-        // Default exam fees
+
         typeExamenComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 fraisField.setText(examTypePrices.get(newVal).toString());
             }
         });
-        
-        // Set current date in footer
+
         dateFooterLabel.setText("📅 Date: " + LocalDate.now().toString());
-        
-        // Charger les candidats dans la ComboBox
+
         loadCandidats();
     }
     
     private void loadCandidats() {
-        // Charger les candidats depuis la base de données
+
         List<org.cpi2.entities.Candidat> candidatsList = candidatService.getAllCandidats();
         
         if (candidatsList.isEmpty()) {
 
             AlertUtil.showWarning("Warning", "Aucun candidat n'est disponible dans la base de données. Veuillez ajouter des candidats avant de planifier des examens.");
         } else {
-            // Ajouter les candidats à la liste déroulante
+
             for (org.cpi2.entities.Candidat candidat : candidatsList) {
                 candidatComboBox.getItems().add(candidat.getId() + " - " + candidat.getNom() + " " + candidat.getPrenom());
             }
@@ -89,7 +85,7 @@ public class ExamRegistration {
         }
         
         try {
-            // Extraire l'ID du candidat (format: "1 - Nom Prénom")
+
             Long id = Long.parseLong(selectedCandidat.split(" - ")[0]);
             Optional<Candidat> candidatOpt = candidatService.getCandidatById(id);
             
@@ -98,8 +94,7 @@ public class ExamRegistration {
                 nomField.setText(candidat.getNom());
                 prenomField.setText(candidat.getPrenom());
                 cinField.setText(candidat.getCin());
-                
-                // Reset eligibility message
+
                 eligibiliteLabel.setText("Eligibilité non vérifiée");
                 eligibiliteLabel.getStyleClass().clear();
                 eligibiliteLabel.getStyleClass().add("label");
@@ -199,3 +194,4 @@ public class ExamRegistration {
     }
 
 }
+

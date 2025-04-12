@@ -148,7 +148,6 @@ public class SeanceConduite {
                 "       var debounceTimer;" +
                 "       var lastCoords = null;" +
 
-                // Add a geocoding cache to avoid duplicate requests
                 "       var geocodeCache = {};" +
 
                 "       map.on('click', function(e) {" +
@@ -156,22 +155,18 @@ public class SeanceConduite {
                 "           var lng = e.latlng.lng.toFixed(6);" +
                 "           var coordKey = lat + ',' + lng;" +
 
-                // Update marker immediately for responsive UI
                 "           if (marker) { map.removeLayer(marker); }" +
                 "           marker = L.marker([lat, lng]).addTo(map)" +
                 "               .bindPopup('Lieu de séance sélectionné<br>Coordonnées: ' + lat + ', ' + lng)" +
                 "               .openPopup();" +
 
-                // Pre-set coordinates immediately, then resolve address asynchronously
                 "           window.javaConnector.updateCoordinates(lat, lng, 'Chargement...');" +
 
-                // Check if we already have this location in cache
                 "           if (geocodeCache[coordKey]) {" +
                 "               window.javaConnector.updateCoordinates(lat, lng, geocodeCache[coordKey]);" +
                 "               return;" +
                 "           }" +
 
-                // Debounce the geocoding request to prevent too many calls
                 "           clearTimeout(debounceTimer);" +
                 "           debounceTimer = setTimeout(function() {" +
                 "               getAddress(lat, lng, coordKey);" +
@@ -181,7 +176,6 @@ public class SeanceConduite {
                 "       function getAddress(lat, lng, coordKey) {" +
                 "           var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&zoom=18&addressdetails=1';" +
 
-                // Add caching headers to help with API rate limits
                 "           var options = {" +
                 "               headers: {" +
                 "                   'Accept-Language': 'fr, en;q=0.8'," +
@@ -423,7 +417,7 @@ public class SeanceConduite {
             boolean success = seanceService.saveSeance(seance);
 
             if (success) {
-                // Vérifier que l'ID de la séance a été généré, ce qui confirme que la présence a été enregistrée
+
                 if (seance.getId() != null) {
                     AlertUtil.showSuccess("Succès",
                             "La séance de conduite a été planifiée avec succès et la présence du candidat a été enregistrée!");

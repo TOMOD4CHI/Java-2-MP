@@ -38,8 +38,7 @@ public class AjouterMoniteur implements Initializable {
     public ComboBox<TypePermis> typePermisComboBox;
 
     private final MoniteurService moniteurService = new MoniteurService();
-    
-    // Validation patterns
+
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
@@ -47,11 +46,10 @@ public class AjouterMoniteur implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize the typePermisComboBox with available permit types
+
         typePermisComboBox.getItems().addAll(TypePermis.values());
         typePermisComboBox.setValue(TypePermis.B); // Default value
-        
-        // Set placeholders for input fields
+
         nomField.setPromptText("Entrez le nom");
         prenomField.setPromptText("Entrez le prénom");
         cinField.setPromptText("Entrez le CIN (8 chiffres minimum)");
@@ -64,42 +62,35 @@ public class AjouterMoniteur implements Initializable {
     }
     
     private void setupValidation() {
-        // Validate name field
+
         ValidationUtils.addValidation(nomField, 
             name -> name != null && !name.isEmpty() && NAME_PATTERN.matcher(name).matches(),
             "Le nom ne doit contenir que des lettres et des espaces", 1);
-        
-        // Validate first name field
+
         ValidationUtils.addValidation(prenomField,
             prenom -> prenom != null && !prenom.isEmpty() && NAME_PATTERN.matcher(prenom).matches(),
             "Le prénom ne doit contenir que des lettres et des espaces", 1);
-        
-        // Validate CIN field
+
         ValidationUtils.addValidation(cinField,
             cin -> cin != null && CIN_PATTERN.matcher(cin).matches(),
             "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres", 1);
-        
-        // Validate address field
+
         ValidationUtils.addValidation(adresseField,
             address -> address != null && address.length() >= 10,
             "L'adresse doit contenir au moins 10 caractères", 1);
-        
-        // Validate phone field
+
         ValidationUtils.addValidation(telephoneField,
             phone -> phone != null && PHONE_PATTERN.matcher(phone).matches(),
             "Le numéro de téléphone doit contenir exactement 8 chiffres", 1);
-        
-        // Validate email field
+
         ValidationUtils.addValidation(emailField,
             email -> email != null && EMAIL_PATTERN.matcher(email).matches(),
             "L'adresse email n'est pas valide", 1);
-        
-        // Validate date field
+
         ValidationUtils.addValidation(dateEmbaucheField,
             date -> date != null && !date.isAfter(LocalDate.now()),
             "La date d'embauche ne peut pas être dans le futur", 1);
-        
-        // Validate type permis field
+
         ValidationUtils.addValidation(typePermisComboBox,
             type -> type != null,
             "Veuillez sélectionner un type de permis", 1);
@@ -109,8 +100,7 @@ public class AjouterMoniteur implements Initializable {
         if (ValidationUtils.hasAnyErrors()) {
             return;
         }
-        
-        // Get the values from the form
+
         String nom = nomField.getText().trim();
         String prenom = prenomField.getText().trim();
         String cin = cinField.getText().trim();
@@ -120,7 +110,6 @@ public class AjouterMoniteur implements Initializable {
         LocalDate dateEmbauche = dateEmbaucheField.getValue();
         TypePermis typePermis = typePermisComboBox.getValue();
 
-        // Create a new moniteur
         Moniteur moniteur = new Moniteur();
         moniteur.setNom(nom);
         moniteur.setPrenom(prenom);
@@ -129,19 +118,16 @@ public class AjouterMoniteur implements Initializable {
         moniteur.setTelephone(telephone);
         moniteur.setEmail(email);
         moniteur.setDateEmbauche(dateEmbauche);
-        
-        // Set specialities
+
         Set<TypePermis> specialites = new HashSet<>();
         specialites.add(typePermis);
         moniteur.setSpecialites(specialites);
 
-        // Save the moniteur
         boolean success = moniteurService.addMoniteur(moniteur);
 
         if (success) {
             AlertUtil.showSuccess("Succès", "Le moniteur a été ajouté avec succès!");
-            
-            // Clear the form
+
             clearForm();
         } else {
             AlertUtil.showError("Erreur", "Échec de l'ajout du moniteur.");
@@ -153,7 +139,7 @@ public class AjouterMoniteur implements Initializable {
     }
     
     private void clearForm() {
-        // Clear all fields
+
         nomField.clear();
         prenomField.clear();
         cinField.clear();
@@ -162,8 +148,7 @@ public class AjouterMoniteur implements Initializable {
         emailField.clear();
         dateEmbaucheField.setValue(null);
         typePermisComboBox.setValue(TypePermis.B);
-        
-        // Clear validation styles
+
         ValidationUtils.clearValidation(nomField);
         ValidationUtils.clearValidation(prenomField);
         ValidationUtils.clearValidation(cinField);
@@ -174,3 +159,4 @@ public class AjouterMoniteur implements Initializable {
         ValidationUtils.clearValidation(typePermisComboBox);
     }
 }
+

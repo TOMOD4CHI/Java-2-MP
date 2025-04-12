@@ -50,14 +50,14 @@ public class PaymentEditController implements Initializable {
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
         } catch (Exception e) {
             e.printStackTrace();
-            // Use default app icon if there's an error
+
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Delay execution until the scene is fully initialized
+
         Platform.runLater(() -> {
             if (mypane.getScene() != null && mypane.getScene().getWindow() != null) {
                 Window window = mypane.getScene().getWindow();
@@ -65,18 +65,16 @@ public class PaymentEditController implements Initializable {
                 System.err.println("Scene or Window is null.");
             }
         });
-        // Setup payment modes
+
         modeComboBox.setItems(FXCollections.observableArrayList(
                 Arrays.stream(ModePaiement.values())
                         .map(Enum::name)
                         .toList()
         ));
 
-        // Setup button actions
         saveButton.setOnAction(this::handleSave);
         cancelButton.setOnAction(this::handleCancel);
 
-        // Add listener for amount field validation
         montantField.textProperty().addListener((obs, old, newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 montantField.setText(old);
@@ -86,8 +84,7 @@ public class PaymentEditController implements Initializable {
     
     public void initData(PaiementData data) {
         this.originalData = data;
-        
-        // Set initial values
+
         idLabel.setText(String.valueOf(data.getId()));
         cinLabel.setText(data.getCin());
         candidatLabel.setText(data.getCandidat());
@@ -111,7 +108,7 @@ public class PaymentEditController implements Initializable {
             String description = descriptionArea.getText();
             
             if (originalData.getType().equals("Examen")) {
-                // For exam payments
+
                 paiementService.update(new PaiementExamen(
                         StatutPaiement.COMPLETE,
                         originalData.getId(),
@@ -123,7 +120,7 @@ public class PaymentEditController implements Initializable {
                         description
                 ));
             } else {
-                // For inscription payments
+
                 Inscription inscription = inscriptionService.getActifInscirptionBycin(originalData.getCin()).get(0);
                 
                 paiementService.update(new PaiementInscription(
@@ -137,8 +134,7 @@ public class PaymentEditController implements Initializable {
                         originalData.getType(),
                         description
                 ));
-                
-                // Check if this payment affects the inscription payment status
+
                 try {
                     double reste = paiementService.calculerMontantRestant(inscription.getId());
                     if (reste <= 0) {
@@ -147,7 +143,7 @@ public class PaymentEditController implements Initializable {
                         inscriptionService.updatePaymentStatus(inscription.getId(), false);
                     }
                 } catch (Exception e) {
-                    // Non-critical error, log it but continue
+
                     e.printStackTrace();
                 }
             }
