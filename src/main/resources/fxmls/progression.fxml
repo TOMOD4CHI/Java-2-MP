@@ -189,7 +189,7 @@
                     
                     <VBox spacing="15" styleClass="chart-container-enhanced" HBox.hgrow="ALWAYS">
                         <padding><Insets top="15" right="20" bottom="20" left="20"/></padding>
-                       
+
                         
                         <Label text="Répartition des Séances" styleClass="form-label">
                             <font>
