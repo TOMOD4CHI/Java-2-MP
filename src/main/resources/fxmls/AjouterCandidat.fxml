@@ -7,11 +7,15 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.cpi2.controllers.AjouterCandidat"
-      stylesheets="@/css/style.css"
-      alignment="CENTER" spacing="20" styleClass="form-container">
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.cpi2.controllers.AjouterCandidat"
+            stylesheets="@/css/style.css"
+            fitToWidth="true" fitToHeight="true"
+            styleClass="transparent-scroll-pane"
+            VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+<StackPane alignment="CENTER">
+<VBox alignment="CENTER" spacing="20" styleClass="form-container" maxWidth="650" StackPane.alignment="CENTER">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -82,8 +86,15 @@
             <TextField fx:id="emailField" promptText="Entrer l'email" styleClass="form-field"/>
             <Label fx:id="emailError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
         </VBox>
-        <Label text="Mode de paiement:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="form-label" />
+        
+        <Label text="Date de naissance:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="form-label"/>
         <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <DatePicker fx:id="birthDatePicker" promptText="Choisir la date de naissance" styleClass="form-field" maxWidth="Infinity"/>
+            <Label fx:id="birthDateError" styleClass="error-label" style="-fx-font-size: 10px; -fx-padding: 0;"/>
+        </VBox>
+        
+        <Label text="Mode de paiement:" GridPane.columnIndex="0" GridPane.rowIndex="8" styleClass="form-label" />
+        <VBox spacing="2" styleClass="field-container" GridPane.columnIndex="1" GridPane.rowIndex="8">
             <ComboBox fx:id="modeComboBox" styleClass="form-field" maxWidth="Infinity">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -104,3 +115,5 @@
     </HBox>
 
 </VBox>
+</StackPane>
+</ScrollPane>

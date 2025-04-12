@@ -182,6 +182,16 @@
     -fx-padding: 8px 15px;
 }
 
+.table-view .table-cell {
+    -fx-padding: 6px 10px;
+    -fx-alignment: center-left;
+    -fx-text-overrun: ellipsis;
+}
+
+.table-row-cell {
+    -fx-cell-size: 40px;
+}
+
 .table-view .column-header .label {
     font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;

@@ -20,6 +20,7 @@
             </VBox>
         </HBox>
         
+        <!-- Quick Statistics Cards -->
         <Label text="Aperçu Général" styleClass="section-title"/>
         <HBox styleClass="stats-container">
             <VBox styleClass="stat-card">
@@ -44,6 +45,7 @@
             </VBox>
         </HBox>
         
+        <!-- Dashboard Cards -->
         <Label text="Tableau de Bord" styleClass="section-title"/>
         <HBox styleClass="dashboard-section">
             <VBox styleClass="dashboard-card">
@@ -51,7 +53,7 @@
                     <StackPane styleClass="dashboard-card-icon">
                         <Text text="💰" />
                     </StackPane>
-                    <VBox spacing="18">
+                    <VBox spacing="4">
                         <Label text="Revenus ce mois" styleClass="dashboard-card-title"/>
                         <Text fx:id="monthlyIncomeText" text="---" styleClass="dashboard-card-value positive-value"/>
                         <Label fx:id="incomeComparisonLabel" text="Chargement..." styleClass="dashboard-card-subtitle"/>
@@ -60,13 +62,13 @@
                 <ProgressBar fx:id="incomeProgress" progress="0.75" styleClass="dashboard-card-progress" maxWidth="Infinity"/>
                 <Button text="Voir finances" onAction="#loadDashboardFinance" styleClass="action-button"/>
             </VBox>
-
+            
             <VBox styleClass="dashboard-card">
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <StackPane styleClass="dashboard-card-icon">
                         <Text text="🏁" />
                     </StackPane>
-                    <VBox spacing="18">
+                    <VBox spacing="4">
                         <Label text="Taux de réussite" styleClass="dashboard-card-title"/>
                         <Text fx:id="successRateText" text="---" styleClass="dashboard-card-value neutral-value"/>
                         <Label fx:id="successRateLabel" text="Chargement..." styleClass="dashboard-card-subtitle"/>
@@ -75,13 +77,13 @@
                 <ProgressBar fx:id="successProgress" progress="0.65" styleClass="dashboard-card-progress" maxWidth="Infinity"/>
                 <Button text="Voir statistiques" onAction="#loadAfficherCandidat" styleClass="action-button"/>
             </VBox>
-
+            
             <VBox styleClass="dashboard-card">
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <StackPane styleClass="dashboard-card-icon">
                         <Text text="🚗" />
                     </StackPane>
-                    <VBox spacing="8">
+                    <VBox spacing="4">
                         <Label text="Disponibilité véhicules" styleClass="dashboard-card-title"/>
                         <Text fx:id="vehiclesAvailableText" text="---" styleClass="dashboard-card-value"/>
                         <Label fx:id="vehicleStatusLabel" text="Chargement..." styleClass="dashboard-card-subtitle"/>
@@ -92,6 +94,7 @@
             </VBox>
         </HBox>
         
+        <!-- Main Features Section -->
         <Label text="Fonctionnalités Principales" styleClass="section-title" alignment="CENTER"/>
         
         <GridPane styleClass="features-grid" alignment="CENTER" hgap="28" vgap="28">
@@ -101,7 +104,8 @@
                 <ColumnConstraints percentWidth="33" halignment="CENTER"/>
             </columnConstraints>
             
-            <Button text="Inscription Candidat" onAction="#loadAjouterCandidat" styleClass="feature-button"
+            <!-- Row 1 - Green buttons -->
+            <Button text="Inscription Candidat" onAction="#loadAjouterCandidat" styleClass="feature-button" 
                     GridPane.columnIndex="0" GridPane.rowIndex="0" maxWidth="280" prefWidth="280">
                 <graphic>
                     <Text text="📝" style="-fx-font-size: 22px;"/>
@@ -122,7 +126,8 @@
                 </graphic>
             </Button>
             
-            <Button text="Gérer Véhicules" onAction="#loadGestionVehicules" styleClass="feature-button feature-button-alt"
+            <!-- Row 2 - Blue buttons -->
+            <Button text="Gérer Véhicules" onAction="#loadGestionVehicules" styleClass="feature-button feature-button-alt" 
                     GridPane.columnIndex="0" GridPane.rowIndex="1" maxWidth="280" prefWidth="280">
                 <graphic>
                     <Text text="🚙" style="-fx-font-size: 22px;"/>
@@ -144,6 +149,7 @@
             </Button>
         </GridPane>
         
+        <!-- Chart Section -->
         <Label text="Progression et Performance" styleClass="section-title"/>
         <VBox styleClass="chart-section">
             <VBox styleClass="chart-container">
@@ -159,9 +165,11 @@
             </VBox>
         </VBox>
         
+        <!-- Calendar and Notifications Section -->
         <Label text="Informations en Temps Réel" styleClass="section-title"/>
         
         <HBox styleClass="data-container">
+            <!-- Upcoming Sessions -->
             <VBox styleClass="data-card" prefWidth="550" prefHeight="320" HBox.hgrow="ALWAYS">
                 <Label text="Prochaines Séances" styleClass="data-card-title"/>
                 <TableView fx:id="upcomingSessionsTable" styleClass="data-table" VBox.vgrow="ALWAYS">
@@ -183,6 +191,7 @@
                 </HBox>
             </VBox>
             
+            <!-- Notifications -->
             <VBox styleClass="data-card" prefWidth="450" prefHeight="320" HBox.hgrow="ALWAYS">
                 <Label text="Notifications Système" styleClass="data-card-title"/>
                 <ListView fx:id="notificationsListView" styleClass="data-table" VBox.vgrow="ALWAYS">

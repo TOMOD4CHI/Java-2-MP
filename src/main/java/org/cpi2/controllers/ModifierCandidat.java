@@ -40,6 +40,19 @@ public class ModifierCandidat {
     private boolean isValidAddress(String address, int minLength) {
         return address != null && address.length() >= minLength;
     }
+    
+    private boolean isValidBirthDate(java.time.LocalDate date) {
+        if (date == null) {
+            return false;
+        }
+        
+        java.time.LocalDate today = java.time.LocalDate.now();
+        java.time.LocalDate minDate = today.minusYears(100); // Maximum reasonable age (100 years)
+        java.time.LocalDate maxDate = today.minusYears(16);  // Minimum reasonable age (16 years)
+        
+        // Check if date is not in the future and within reasonable age range
+        return !date.isAfter(today) && !date.isBefore(minDate) && !date.isAfter(maxDate);
+    }
 
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
@@ -47,6 +60,7 @@ public class ModifierCandidat {
     @FXML private TextField addressField;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
+    @FXML private DatePicker birthDatePicker;
 
     @FXML private ComboBox<TypePermis> typeComboBox;
 
@@ -56,6 +70,7 @@ public class ModifierCandidat {
     @FXML private Label addressError;
     @FXML private Label phoneError;
     @FXML private Label emailError;
+    @FXML private Label birthDateError;
     @FXML private Label typeError;
 
     public void initialize() {
@@ -73,6 +88,10 @@ public class ModifierCandidat {
         addressField.setPromptText("Entrez l'adresse complète");
         phoneField.setPromptText("Entrez le numéro (8 chiffres)");
         emailField.setPromptText("exemple@domaine.com");
+        birthDatePicker.setPromptText("Choisir la date de naissance");
+        
+        // Set default value for birth date to 18 years ago
+        birthDatePicker.setValue(java.time.LocalDate.now().minusYears(18));
         
         setupValidation();
     }
@@ -89,6 +108,25 @@ public class ModifierCandidat {
         ValidationUtils.addValidation(prenomField, 
             text -> !text.trim().isEmpty(), 
             "Le prénom est obligatoire", 1);
+        
+        // Date de naissance validation
+        birthDatePicker.valueProperty().addListener((obs, oldValue, newValue) -> {
+            if (!isValidBirthDate(newValue)) {
+                if (newValue == null) {
+                    birthDateError.setText("La date de naissance est obligatoire");
+                } else if (newValue.isAfter(java.time.LocalDate.now())) {
+                    birthDateError.setText("La date ne peut pas être dans le futur");
+                } else if (newValue.isBefore(java.time.LocalDate.now().minusYears(100))) {
+                    birthDateError.setText("L'âge ne peut pas dépasser 100 ans");
+                } else if (newValue.isAfter(java.time.LocalDate.now().minusYears(16))) {
+                    birthDateError.setText("L'âge minimum est de 16 ans");
+                }
+                birthDatePicker.setStyle("-fx-border-color: #e53e3e; -fx-border-width: 2px;");
+            } else {
+                birthDateError.setText("");
+                birthDatePicker.setStyle("-fx-border-color: #38a169; -fx-border-width: 2px;");
+            }
+        });
         ValidationUtils.addValidation(prenomField, 
             this::isValidName, 
             "Le prénom ne doit contenir que des lettres et des espaces", 2);
@@ -155,6 +193,7 @@ public class ModifierCandidat {
         addressField.setText(candidat.getAdresse());
         phoneField.setText(candidat.getTelephone());
         emailField.setText(candidat.getEmail());
+        birthDatePicker.setValue(candidat.getDateNaissance());
         typeComboBox.setValue(candidat.getTypePermis());
     }
 
@@ -165,6 +204,7 @@ public class ModifierCandidat {
         addressField.clear();
         phoneField.clear();
         emailField.clear();
+        birthDatePicker.setValue(java.time.LocalDate.now().minusYears(18));
         if (!typeComboBox.getItems().isEmpty()) {
             typeComboBox.getSelectionModel().selectFirst();
         }
@@ -173,7 +213,7 @@ public class ModifierCandidat {
 
     @FXML
     private void confirmAction() {
-        if (!validateInput()) {
+        if (!validateInputSilent()) {
             AlertUtil.showWarning("Validation", "Veuillez corriger les erreurs avant de continuer.");
             return;
         }
@@ -189,6 +229,7 @@ public class ModifierCandidat {
             candidatToModify.setAdresse(addressField.getText().trim());
             candidatToModify.setTelephone(phoneField.getText().trim());
             candidatToModify.setEmail(emailField.getText().trim());
+            candidatToModify.setDateNaissance(birthDatePicker.getValue());
             candidatToModify.setTypePermis(typeComboBox.getValue());
 
             candidatService.updateCandidat(candidatToModify);
@@ -215,9 +256,56 @@ public class ModifierCandidat {
         ValidationUtils.clearValidation(addressField);
         ValidationUtils.clearValidation(phoneField);
         ValidationUtils.clearValidation(emailField);
+        ValidationUtils.clearValidation(birthDatePicker);
         ValidationUtils.clearValidation(typeComboBox);
     }
 
+    /**
+     * Silent validation for form submission - doesn't update UI error labels
+     */
+    private boolean validateInputSilent() {
+        boolean isValid = true;
+
+        // Validate each field without showing error messages
+        if (!isValidName(nomField.getText())) {
+            isValid = false;
+        }
+
+        if (!isValidName(prenomField.getText())) {
+            isValid = false;
+        }
+
+        if (!isValidCIN(cinField.getText())) {
+            isValid = false;
+        }
+
+        if (!isValidAddress(addressField.getText(), 5)) {
+            isValid = false;
+        }
+
+        if (!isValidPhone(phoneField.getText())) {
+            isValid = false;
+        }
+
+        if (!isValidEmail(emailField.getText())) {
+            isValid = false;
+        }
+        
+        if (!isValidBirthDate(birthDatePicker.getValue())) {
+            isValid = false;
+        }
+
+        if (typeComboBox.getValue() == null) {
+            isValid = false;
+        }
+
+        return isValid;
+    }
+    
+    /**
+     * Interactive validation that updates UI error labels
+     * Only used for direct field validation, not form submission
+     */
     private boolean validateInput() {
         boolean isValid = true;
 
@@ -227,6 +315,7 @@ public class ModifierCandidat {
         addressError.setText("");
         phoneError.setText("");
         emailError.setText("");
+        birthDateError.setText("");
         typeError.setText("");
 
         if (!isValidName(nomField.getText())) {
@@ -256,6 +345,19 @@ public class ModifierCandidat {
 
         if (!isValidEmail(emailField.getText())) {
             emailError.setText("L'email est invalide");
+            isValid = false;
+        }
+        
+        if (!isValidBirthDate(birthDatePicker.getValue())) {
+            if (birthDatePicker.getValue() == null) {
+                birthDateError.setText("La date de naissance est obligatoire");
+            } else if (birthDatePicker.getValue().isAfter(java.time.LocalDate.now())) {
+                birthDateError.setText("La date de naissance ne peut pas être dans le futur");
+            } else if (birthDatePicker.getValue().isBefore(java.time.LocalDate.now().minusYears(100))) {
+                birthDateError.setText("L'âge ne peut pas dépasser 100 ans");
+            } else if (birthDatePicker.getValue().isAfter(java.time.LocalDate.now().minusYears(16))) {
+                birthDateError.setText("L'âge minimum est de 16 ans");
+            }
             isValid = false;
         }
 
