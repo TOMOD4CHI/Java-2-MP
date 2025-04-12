@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Repository class for managing presence records for candidates in sessions
- */
 public class PresenceRepository {
     private static final Logger LOGGER = Logger.getLogger(PresenceRepository.class.getName());
 
@@ -59,13 +56,6 @@ public class PresenceRepository {
     }
 
 
-    /**
-     * Records a candidate's presence in a code session
-     * @param sessionCodeId The ID of the code session
-     * @param candidatId The ID of the candidate
-     * @param present Whether the candidate was present (true) or absent (false)
-     * @return true if the record was created successfully, false otherwise
-     */
     public boolean recordCodePresence(long sessionCodeId, long candidatId, boolean present) {
         String sql = "INSERT INTO presence_code (session_code_id, candidat_id, present) VALUES (?, ?, ?)"
                 + " ON DUPLICATE KEY UPDATE present = ?";
@@ -86,13 +76,6 @@ public class PresenceRepository {
         }
     }
 
-    /**
-     * Records a candidate's presence in a driving session
-     * @param sessionConduiteId The ID of the driving session
-     * @param candidatId The ID of the candidate
-     * @param present Whether the candidate was present (true) or absent (false)
-     * @return true if the record was created successfully, false otherwise
-     */
     public boolean recordConduitePresence(long sessionConduiteId, long candidatId, boolean present) {
         String sql = "INSERT INTO presence_conduite (session_conduite_id, candidat_id, present) VALUES (?, ?, ?)"
                 + " ON DUPLICATE KEY UPDATE present = ?";
@@ -113,15 +96,6 @@ public class PresenceRepository {
         }
     }
 
-    /**
-     * Records a candidate's presence in a seance (generic session)
-     * This method determines the type of session and calls the appropriate method
-     * @param seanceId The ID of the seance
-     * @param candidatId The ID of the candidate
-     * @param seanceType The type of seance ("Code" or "Conduite")
-     * @param present Whether the candidate was present (true) or absent (false)
-     * @return true if the record was created successfully, false otherwise
-     */
     public boolean recordPresenceForSeance(long seanceId, long candidatId, String seanceType, boolean present) {
         if ("Code".equalsIgnoreCase(seanceType)) {
             return recordCodePresence(seanceId, candidatId, present);

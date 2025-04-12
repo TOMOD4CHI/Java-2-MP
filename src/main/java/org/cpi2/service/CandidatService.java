@@ -86,32 +86,6 @@ public class CandidatService {
                 .map(dossier ->IdToCin(dossier.getCandidatId())).toList();
     }
 
-    public List<Candidat> findCandidatsBySubscriptionStatus(String status) {
-        return inscriptionRepository.findAll().stream()
-                .filter(inscription -> inscription.getStatus().equals(status))
-                .map(Inscription::getCin).map(cin -> candidatRepository.findByCin(cin).get())
-                .toList();
-    }
-    public List<Candidat> findCandidatsBySubscription(CoursePlan plan) {
-        return inscriptionRepository.findAll().stream()
-                .filter(inscription -> inscription.getPlan().getId()==(plan.getId()))
-                .map(Inscription::getCin).map(cin -> candidatRepository.findByCin(cin).get())
-                .toList();
-    }
-    public List<Candidat> findCandidatsInscritAfter(Date date) {
-        return inscriptionRepository.findAll().stream().filter(inscription -> inscription.getInscriptioDate().after(date))
-                .map(Inscription::getCin).map(cin -> candidatRepository.findByCin(cin).get())
-                .toList();
-    }
-    public List<Candidat> findCandidatsInscritOn(Date date) {
-        return inscriptionRepository.findAll().stream().filter(inscription -> inscription.getInscriptioDate().equals(date))
-                .map(Inscription::getCin).map(cin -> candidatRepository.findByCin(cin).get())
-                .toList();
-    }
-    public boolean updateDossier(Candidat candidat, Dossier dossier) {
-        candidat.setDossier(dossier);
-        return candidatRepository.update(candidat);
-    }
 
     public Optional<Candidat> findByCin(String cin) {
         return candidatRepository.findByCin(cin);
@@ -135,21 +109,21 @@ public class CandidatService {
         return candidats;
     }
 
-    public void generateInvoice(String cin, String typeFacture, LocalDate dateDebut, 
+    public void generateInvoice(String cin, String typeFacture, LocalDate dateDebut,
                               LocalDate dateFin, double montant, String note) {
         try {
             Candidat candidat = getCandidatByCin(cin);
-            
-            
+
+
             List<Inscription> inscriptions = inscriptionRepository.findByCin(cin);
             Inscription latestInscription = inscriptions.stream()
                 .max(Comparator.comparing(Inscription::getInscriptioDate))
                 .orElseThrow(() -> new DataNotFound("No inscription found for candidate " + cin));
-            
-            
+
+
             CoursePlan coursePlan = latestInscription.getPlan();
-            
-            
+
+
             InvoiceGenerator.generatePDF(
                 candidat,
                 typeFacture,
@@ -158,9 +132,9 @@ public class CandidatService {
                 montant,
                 note
             );
-            
 
-            
+
+
             LOGGER.info("Invoice generated successfully for candidate: " + cin);
         } catch (Exception e) {
             LOGGER.severe("Error generating invoice: " + e.getMessage());
@@ -176,20 +150,5 @@ public class CandidatService {
         }
         return candidats;
     }
-    public List<Candidat> getAllWithActifByPlan(int planId) {
-        List<Candidat> candidats = new ArrayList<>();
-        for (Candidat candidat : candidatRepository.findAll()) {
-            if (inscriptionService.haveActifInscription(candidat.getCin())) {
-                List<Inscription> inscriptions = inscriptionRepository.findByCin(candidat.getCin());
-                for (Inscription inscription : inscriptions) {
-                    if (inscription.getStatus().equalsIgnoreCase("En Cours") && inscription.getPlan().getId() == planId) {
-                        candidats.add(candidat);
-                        break;
-                    }
-                }
-            }
-        }
-        return candidats;
 
-    }
 }

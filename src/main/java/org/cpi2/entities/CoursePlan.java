@@ -1,9 +1,9 @@
 package org.cpi2.entities;
 
 public enum CoursePlan {
-    MOTO_BASIC(1, "Basic Motorcycle Course",200, "Fundamental motorcycle training for beginners", 10, 10),
-    CAR_BASIC(3, "Basic Car Driving Course", 350, "Essential car driving skills for new drivers", 10, 10),
-    TRUCK_HEAVY(7, "Heavy Truck License Course", 900, "Complete training for heavy goods vehicle license", 10, 10);
+    MOTO_BASIC(1, "Basic Motorcycle Course",800, "Fundamental motorcycle training for beginners", 8, 6),
+    CAR_BASIC(3, "Basic Car Driving Course", 1200, "Essential car driving skills for new drivers", 12, 10),
+    TRUCK_HEAVY(7, "Heavy Truck License Course", 1700, "Complete training for heavy goods vehicle license", 14, 8);
 
     private final int id;
     private final String name;

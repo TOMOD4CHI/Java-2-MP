@@ -156,7 +156,7 @@ public class RemplirSeance {
                         }
                         sessionCode.setMoniteur(moniteur);
 
-                        sessionCode.setCapaciteMax(10); // Default capacity
+                        sessionCode.setCapaciteMax(10);
                         sessionCode.setSalle(seance.getSalle() != null ? seance.getSalle() : "Salle non assignée");
                         
                         result.add(sessionCode);
@@ -285,7 +285,7 @@ public class RemplirSeance {
                                     successCount++;
                                 } else {
                                     System.out.println("Simulating success for mock data");
-                                    successCount++; // Mock success for UI testing
+                                    successCount++;
                                 }
                             } catch (Exception e) {
                                 System.out.println("Error assigning candidate ID: " + candidatId);

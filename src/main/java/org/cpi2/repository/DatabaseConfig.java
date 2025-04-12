@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class DatabaseConfig {
-    //Make sure that the db have this name "autoecole"
     private static final String URL = "jdbc:mysql://localhost:3306/autoecole?useSSL=false&serverTimezone=UTC";
     private static final String USER = "root";
     private static final String PASSWORD = "";
@@ -15,7 +14,6 @@ public class DatabaseConfig {
 
     static {
         try {
-            // Register JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

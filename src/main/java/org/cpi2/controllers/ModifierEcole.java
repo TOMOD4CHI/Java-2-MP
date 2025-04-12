@@ -42,7 +42,7 @@ public class ModifierEcole implements Initializable {
     private String logoPath;
     private final AutoEcoleService autoEcoleService = new AutoEcoleService();
     private AutoEcole currentAutoEcole;
-    private AutoEcole originalAutoEcole; // For reset functionality
+    private AutoEcole originalAutoEcole;
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");

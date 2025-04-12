@@ -20,10 +20,6 @@ public class SeanceService {
     private static final Logger LOGGER = Logger.getLogger(SeanceService.class.getName());
     private final SeanceRepository seanceRepository = new SeanceRepository();
 
-    /**
-     * Save a new session to the database
-     * Also updates vehicle kilometrage and tracks candidate presence
-     */
     public boolean saveSeance(Seance seance) {
         
         if (seance.getStatus() == null || seance.getStatus().isEmpty()) {
@@ -109,23 +105,19 @@ public class SeanceService {
                         } else {
                             LOGGER.log(Level.INFO, "Recorded presence for candidate ID " + seance.getCandidatId() + 
                                     " in seance type " + seance.getType());
-                            
-                            // Check if the candidate has completed all required sessions
+
                             try {
-                                // Get the candidate's CIN based on ID
                                 String candidatCin = candidatService.getCandidatById(seance.getCandidatId())
                                     .map(c -> c.getCin())
                                     .orElse(null);
                                 
                                 if (candidatCin != null) {
-                                    // Get active inscription for the candidate
                                     List<Inscription> activeInscriptions = inscriptionService.getActifInscirptionBycin(candidatCin);
                                     
                                     if (!activeInscriptions.isEmpty()) {
                                         Inscription inscription = activeInscriptions.get(0);
                                         CoursePlan plan = inscription.getPlan();
-                                        
-                                        // Get count of code and driving sessions attended
+
                                         int requiredCodeSessions = plan != null ? plan.getGetNbreSeanceCode() : 0;
                                         int requiredDrivingSessions = plan != null ? plan.getNbreSeanceConduite() : 0;
                                         
@@ -135,8 +127,7 @@ public class SeanceService {
                                             seance.getCandidatId(), "code", inscriptionDate);
                                         int drivingSessions = presenceService.getCountInscriptioinPerSession(
                                             seance.getCandidatId(), "conduite", inscriptionDate);
-                                        
-                                        // If reached the required sessions, update inscription status
+
                                         if (codeSessions >= requiredCodeSessions && drivingSessions >= requiredDrivingSessions) {
                                             inscription.setStatus("Terminé");
                                             inscriptionService.updateInscription(inscription);
@@ -191,18 +182,10 @@ public class SeanceService {
         return seanceRepository.findAll();
     }
     
-    /**
-     * Get all sessions (alias for findAllSeances to maintain API consistency)
-     */
     public List<Seance> getAllSeances() {
         return findAllSeances();
     }
     
-    /**
-     * Get upcoming sessions, ordered by date, limited to the specified number
-     * @param limit Maximum number of sessions to return
-     * @return List of upcoming sessions
-     */
     public List<Seance> getUpcomingSeances(int limit) {
         List<Seance> allSeances = findAllSeances();
         LocalDate today = LocalDate.now();
@@ -210,9 +193,7 @@ public class SeanceService {
         return allSeances.stream()
                 .filter(seance -> {
                     try {
-                        // Use the getLocalDate method instead of parsing
                         LocalDate seanceDate = seance.getLocalDate();
-                        // Keep only future sessions
                         return seanceDate.isEqual(today) || seanceDate.isAfter(today);
                     } catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Error getting date for seance ID " + seance.getId(), e);

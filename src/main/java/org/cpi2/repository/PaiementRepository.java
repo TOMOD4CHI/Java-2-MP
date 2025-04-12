@@ -156,15 +156,13 @@ public class PaiementRepository extends BaseRepository<Paiement> {
              """;
 
             try (PreparedStatement stmt = conn.prepareStatement(paiementSql, Statement.RETURN_GENERATED_KEYS)) {
-                // Set common parameters first
                 stmt.setLong(1, paiement.getCandidat().getId());
                 stmt.setDouble(5, paiement.getMontant());
                 stmt.setDate(6, Date.valueOf(paiement.getDatePaiement()));
                 stmt.setString(7, paiement.getModePaiement().name());
                 stmt.setString(8, paiement.getDescription());
                 stmt.setString(9, paiement.getStatut().name());
-                
-                // Set type-specific parameters
+
                 if (paiement instanceof PaiementInscription) {
                     PaiementInscription paiementInscription = (PaiementInscription) paiement;
                     stmt.setLong(2, paiementInscription.getInscription().getId());

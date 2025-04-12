@@ -114,8 +114,8 @@ public class ExamRegistration {
             return;
         }
         
-        boolean eligible = examenService.verifyCandidatEligibilite(typeExamenComboBox.getValue(),cinField.getText()); // For this example, assume eligible
-        
+        boolean eligible = examenService.verifyCandidatEligibilite(typeExamenComboBox.getValue(),cinField.getText());
+
         if (eligible) {
             enregistrerButton.setDisable(false);
             eligibiliteLabel.setText("ELIGIBLE");

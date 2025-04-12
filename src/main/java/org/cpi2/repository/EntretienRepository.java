@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * JDBC Implementation of the EntretienRepository interface
- */
 public class EntretienRepository extends BaseRepository<Entretien> {
     private static final Logger LOGGER = Logger.getLogger(EntretienRepository.class.getName());
 

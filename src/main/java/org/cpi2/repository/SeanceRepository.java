@@ -295,10 +295,6 @@ public class SeanceRepository extends BaseRepository<Seance> {
         }
     }
 
-    /**
-     * Helper method to convert Integer to Double from ResultSet
-     * Used for kilometrage_debut column which is INTEGER in DB but Double in Java model
-     */
     private Double getDoubleFromInt(ResultSet rs, String columnName) throws SQLException {
         int value = rs.getInt(columnName);
         if (rs.wasNull()) {

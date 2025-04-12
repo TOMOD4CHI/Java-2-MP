@@ -29,17 +29,4 @@ public class PlanService {
     public Optional<CoursePlan> getPlanByName(String name) {
         return planRepository.findByName(name);
     }
-
-    public boolean isPlanSuitableForLicenseType(int id, String licenseType) {
-        Optional<CoursePlan> plan = findPlanById(id);
-        return plan.map(coursePlan ->
-                coursePlan.getCategory().getLibelle().equalsIgnoreCase(licenseType)
-        ).orElse(false);
-    }
-
-    public double getTotalTrainingSeacncesByLicenseType(String licenseType) {
-        return getPlansByTypePermis(licenseType).stream()
-                .mapToDouble(CoursePlan::getToatalSeances)
-                .sum();
-    }
 }

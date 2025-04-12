@@ -145,22 +145,6 @@ public class MoniteurService {
         }
     }
 
-    public boolean cancelRendezVous(Moniteur moniteur, LocalDateTime dateTime) {
-        try {
-            if (!moniteur.getEmploiDuTemps().containsKey(dateTime)) {
-                LOGGER.warning("No rendez-vous found for time: " + dateTime);
-                return false;
-            }
-
-            Map<LocalDateTime, RendezVous> emploiDuTemps = moniteur.getEmploiDuTemps();
-            emploiDuTemps.remove(dateTime);
-            moniteur.setEmploiDuTemps(emploiDuTemps);
-            return moniteurRepository.update(moniteur);
-        } catch (Exception e) {
-            LOGGER.severe("Error canceling rendez-vous: " + e.getMessage());
-            return false;
-        }
-    }
 
     public Map<LocalDateTime, RendezVous> getMoniteurSchedule(Moniteur moniteur) {
         return moniteur.getEmploiDuTemps();

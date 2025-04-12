@@ -230,7 +230,7 @@ public class ManageEcole implements Initializable {
             telephoneLabel.setText(currentAutoEcole.getTelephone());
             emailLabel.setText(currentAutoEcole.getEmail());
             directeurLabel.setText(currentAutoEcole.getUsername());
-            passwordLabel.setText("********"); // Hide actual password for security
+            passwordLabel.setText("********");
         }
     }
 

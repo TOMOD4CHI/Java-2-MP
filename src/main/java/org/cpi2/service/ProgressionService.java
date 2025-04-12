@@ -18,10 +18,6 @@ public class ProgressionService {
         this.candidatService = new CandidatService();
     }
     
-    /**
-     * Get all candidates for the combo box
-     * @return Map of candidat ID to display name (nom + prenom)
-     */
     public Map<Long, String> getAllCandidatsForComboBox() {
         Map<Long, String> candidats = new HashMap<>();
         
@@ -34,9 +30,6 @@ public class ProgressionService {
         return candidats;
     }
 
-    /**
-     * Get a candidate's overall progression information
-     */
     public Map<String, Object> getCandidatProgression(long candidatId) {
         Map<String, Object> progressionData = new HashMap<>();
 
@@ -92,9 +85,6 @@ public class ProgressionService {
         return progressionData;
     }
     
-    /**
-     * Get data for the progression charts
-     */
     public Map<String, Object> getProgressionChartData(long candidatId) {
         Map<String, Object> chartData = new HashMap<>();
 
@@ -110,16 +100,10 @@ public class ProgressionService {
         return chartData;
     }
     
-    /**
-     * Get sessions data by time period
-     */
     public Map<String, Integer> getSessionsByPeriod(long candidatId, String period) {
         return progressionRepository.getSessionsByPeriod(candidatId, period);
     }
     
-    /**
-     * Search for a candidate by ID
-     */
     public Optional<Candidat> searchCandidatById(long candidatId) {
         return candidatService.getCandidatById(candidatId);
     }

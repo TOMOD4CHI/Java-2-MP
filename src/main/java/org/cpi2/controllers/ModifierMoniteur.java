@@ -44,7 +44,7 @@ public class ModifierMoniteur {
     public void initialize() {
 
         typePermisComboBox.getItems().addAll(TypePermis.values());
-        typePermisComboBox.setValue(TypePermis.B); // Default value
+        typePermisComboBox.setValue(TypePermis.B);
 
         setupValidation();
     }

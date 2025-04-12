@@ -48,7 +48,7 @@ public class AjouterMoniteur implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         typePermisComboBox.getItems().addAll(TypePermis.values());
-        typePermisComboBox.setValue(TypePermis.B); // Default value
+        typePermisComboBox.setValue(TypePermis.B);
 
         nomField.setPromptText("Entrez le nom");
         prenomField.setPromptText("Entrez le prénom");

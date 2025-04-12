@@ -156,24 +156,6 @@ public class ExamenService {
         }
     }
 
-    public boolean updateExamenResultat(Long examenId, Boolean resultat) {
-        try {
-            Optional<Examen> examenOpt = examenRepository.findById(examenId);
-            if (examenOpt.isEmpty()) {
-                LOGGER.log(Level.WARNING, "Cannot update examen resultat: Examen not found");
-                return false;
-            }
-
-            Examen examen = examenOpt.get();
-            examen.setResultat(resultat);
-
-            return examenRepository.update(examen);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error updating examen resultat", e);
-            return false;
-        }
-    }
-
     public boolean deleteExamen(Long examenId) {
         try {
             if (examenRepository.findById(examenId).isEmpty()) {
@@ -194,12 +176,6 @@ public class ExamenService {
             return List.of();
         }
         return examenRepository.findByCandidatId(candidat.get().getId());
-    }
-
-    public List<Examen> getUpcomingExamens(int days) {
-        LocalDate today = LocalDate.now();
-        LocalDate endDate = today.plusDays(days);
-        return examenRepository.findByDateRange(today, endDate);
     }
 
     public double calculateSuccessRate(TypeExamen typeExamen) {

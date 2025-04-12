@@ -429,12 +429,12 @@ public class DashboardFinance implements Initializable {
             if (rs.next()) {
                 int monitorCount = rs.getInt("total");
                 if (monitorCount > 0) {
-                    double salaireMoyen = 1000.0; // Average salary per monitor in DT
+                    double salaireMoyen = 1000.0;
 
                     double totalSalaires = monitorCount * salaireMoyen;
 
                     int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate) + 1;
-                    double periodRatio = daysInPeriod / 30.0; // Approximate days in a month
+                    double periodRatio = daysInPeriod / 30.0;
                     double salaryForPeriod = totalSalaires * periodRatio;
 
                     totalExpenses += salaryForPeriod;
@@ -451,10 +451,10 @@ public class DashboardFinance implements Initializable {
 
         }
 
-        double loyerMensuel = 1200.0; // Monthly rent
+        double loyerMensuel = 1200.0;
         try {
             int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate) + 1;
-            double periodRatio = daysInPeriod / 30.0; // Approximate days in a month
+            double periodRatio = daysInPeriod / 30.0;
             totalExpenses += (loyerMensuel * periodRatio);
             
             int prevDaysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(prevPeriodStartDate, prevPeriodEndDate) + 1;
@@ -615,8 +615,8 @@ public class DashboardFinance implements Initializable {
             }
 
             String monitorCountSql = "SELECT COUNT(*) as total FROM moniteur";
-            double salaireMoyen = 1000.0; // Average monthly salary per monitor
-            
+            double salaireMoyen = 1000.0;
+
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(monitorCountSql)) {
                 if (rs.next()) {
@@ -626,16 +626,16 @@ public class DashboardFinance implements Initializable {
                         double totalSalaires = monitorCount * salaireMoyen;
 
                         int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate) + 1;
-                        double periodRatio = daysInPeriod / 30.0; // Approximate days in a month
-                        
+                        double periodRatio = daysInPeriod / 30.0;
+
                         expensesCategories.put("Salaires", totalSalaires * periodRatio);
                     }
                 }
             }
 
-            double loyerMensuel = 1200.0; // Monthly rent
+            double loyerMensuel = 1200.0;
             int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate) + 1;
-            double periodRatio = daysInPeriod / 30.0; // Approximate days in a month
+            double periodRatio = daysInPeriod / 30.0;
             expensesCategories.put("Loyer", loyerMensuel * periodRatio);
         }
 
@@ -813,9 +813,9 @@ public class DashboardFinance implements Initializable {
                             double totalRevenue = rs.getDouble("total_revenue");
                             if (totalRevenue > 0) {
 
-                                serviceRevenues.put("Formation", totalRevenue * 0.55);  // 55%
-                                serviceRevenues.put("Conduite", totalRevenue * 0.30);   // 30%
-                                serviceRevenues.put("Examen", totalRevenue * 0.15);     // 15%
+                                serviceRevenues.put("Formation", totalRevenue * 0.55);
+                                serviceRevenues.put("Conduite", totalRevenue * 0.30);
+                                serviceRevenues.put("Examen", totalRevenue * 0.15);
                                 hasData = true;
                             }
                         }
@@ -891,8 +891,8 @@ public class DashboardFinance implements Initializable {
             }
 
             String monitorCountSql = "SELECT COUNT(*) as total FROM moniteur";
-            double salaireMoyen = 1000.0; // Average salary per monitor per month
-            
+            double salaireMoyen = 1000.0;
+
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(monitorCountSql)) {
                 if (rs.next()) {
@@ -929,14 +929,14 @@ public class DashboardFinance implements Initializable {
         Map<String, Integer> monthOrder = new HashMap<>();
         List<String> monthNames = new ArrayList<>();
         
-        for (int i = 3; i >= 0; i--) { // Show last 4 months in order
+        for (int i = 3; i >= 0; i--) {
             LocalDate monthDate = now.minusMonths(i);
             String monthName = monthDate.getMonth().toString().substring(0, 3);
             monthNames.add(monthName);
 
             allMonths.add(monthName);
 
-            monthOrder.put(monthName, 3-i); // 0,1,2,3 order value
+            monthOrder.put(monthName, 3-i);
         }
 
         for (String month : monthNames) {
@@ -945,7 +945,7 @@ public class DashboardFinance implements Initializable {
             double profit = revenue - expenses;
             
             revenueMonthlySeries.getData().add(new XYChart.Data<>(month, revenue));
-            expenseMonthlySeries.getData().add(new XYChart.Data<>(month, -expenses)); // Negate expenses for display
+            expenseMonthlySeries.getData().add(new XYChart.Data<>(month, -expenses));
             profitMonthlySeries.getData().add(new XYChart.Data<>(month, profit));
         }
 
@@ -1078,8 +1078,8 @@ public class DashboardFinance implements Initializable {
                     currentMonth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     "Dépense",
                     "Loyer mensuel",
-                    -1200.0, // Fixed monthly rent
-                    "Complété"
+                    -1200.0,
+                        "Complété"
                 ));
 
                 String monitorSql = "SELECT id, nom, prenom FROM moniteur";
@@ -1094,8 +1094,8 @@ public class DashboardFinance implements Initializable {
                             currentMonth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                             "Dépense",
                             "Salaire - " + prenom + " " + nom,
-                            -1000.0, // Average salary
-                            "Complété"
+                            -1000.0,
+                                "Complété"
                         ));
                     }
                 }

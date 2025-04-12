@@ -80,7 +80,7 @@ public class DashboardCandidates implements Initializable {
         setupTableColumns();
         
         LocalDate now = LocalDate.now();
-        LocalDate firstDay = now.withYear(now.getYear()).withMonth(1).withDayOfMonth(1); // First day of current year
+        LocalDate firstDay = now.withYear(now.getYear()).withMonth(1).withDayOfMonth(1);
         startDate.setValue(firstDay);
         endDate.setValue(now);
         
@@ -175,7 +175,7 @@ public class DashboardCandidates implements Initializable {
                         case "Terminé":
                             statusLabel.setStyle(statusLabel.getStyle() + "-fx-background-color: #E9D8FD; -fx-text-fill: #553C9A; -fx-background-radius: 4px;");
                             break;
-                        default: // En attente
+                        default:
                             statusLabel.setStyle(statusLabel.getStyle() + "-fx-background-color: #FEEBC8; -fx-text-fill: #744210; -fx-background-radius: 4px;");
                             break;
                     }

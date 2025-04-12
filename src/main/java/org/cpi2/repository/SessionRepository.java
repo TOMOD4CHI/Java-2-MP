@@ -425,12 +425,6 @@ public class SessionRepository extends BaseRepository<Session> {
         }
     }
     
-    /**
-     * Affecte un candidat à une séance de code
-     * @param sessionId L'ID de la session code
-     * @param candidatId L'ID du candidat
-     * @return true si l'affectation a réussi, false sinon
-     */
     public boolean affecterCandidatASessionCode(long sessionId, long candidatId) {
         String checkSql = "SELECT capacite_max, nombre_inscrits FROM session_code WHERE id = ?";
         
@@ -472,12 +466,6 @@ public class SessionRepository extends BaseRepository<Session> {
         return false;
     }
     
-    /**
-     * Affecte un candidat à une séance de conduite
-     * @param seanceId L'ID de la séance de conduite
-     * @param candidatId L'ID du candidat
-     * @return true si l'affectation a réussi, false sinon
-     */
     public boolean affecterCandidatASeanceConduite(long seanceId, long candidatId) {
         try (Connection conn = getConnection()) {
             String checkSql = "SELECT id FROM seance WHERE id = ? AND type = 'Conduite'";

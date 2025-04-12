@@ -8,26 +8,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Service class for managing vehicle maintenance records
- */
 public class EntretienService {
 
     private final EntretienRepository entretienRepository;
     private final VehiculeService vehiculeService;
-    /**
-     * Constructor to initialize the EntretienRepository
-     */
     public EntretienService() {
         this.entretienRepository = new EntretienRepository();
         this.vehiculeService = new VehiculeService();
     }
 
-    /**
-     * Get a maintenance record by its ID
-     * @param id The entretien ID
-     * @return The entretien if found, null otherwise
-     */
     public Entretien getEntretienById(int id) {
         return entretienRepository.findById(id);
     }
@@ -35,46 +24,22 @@ public class EntretienService {
     public List<Entretien> getEntretienByVehiculeImm(String imm) {
         return entretienRepository.findByVehiculeImm(imm);
     }
-    /**
-     * Get all maintenance records
-     * @return List of all entretiens
-     */
     public List<Entretien> getAllEntretiens() {
         return entretienRepository.findAll();
     }
 
-    /**
-     * Get all maintenance records for a specific vehicle
-     * @param vehiculeId The vehicle ID
-     * @return List of entretiens for the vehicle
-     */
     public List<Entretien> getEntretiensByVehiculeId(int vehiculeId) {
         return entretienRepository.findByVehiculeId(vehiculeId);
     }
 
-    /**
-     * Get maintenance records by date range
-     * @param startDate Start date of the range
-     * @param endDate End date of the range
-     * @return List of entretiens within the date range
-     */
     public List<Entretien> getEntretiensByDateRange(LocalDate startDate, LocalDate endDate) {
         return entretienRepository.findByDateRange(startDate, endDate);
     }
 
-    /**
-     * Get upcoming maintenance records
-     * @return List of upcoming maintenance records
-     */
     public List<Entretien> getUpcomingMaintenances() {
         return entretienRepository.findUpcomingMaintenance();
     }
 
-    /**
-     * Get maintenance records by type
-     * @param typeEntretien The type of maintenance
-     * @return List of entretiens of the specified type
-     */
     public List<Entretien> getEntretiensByType(String typeEntretien) {
         return entretienRepository.findByType(typeEntretien);
     }
@@ -84,11 +49,6 @@ public class EntretienService {
                 .toList();
     }
 
-    /**
-     * Create a new maintenance record
-     * @param entretien The entretien to create
-     * @return The created entretien with generated ID
-     */
     public boolean createEntretien(Entretien entretien) {
         if (entretien.getCreatedAt() == null) {
             entretien.setCreatedAt(LocalDate.now());
@@ -134,11 +94,6 @@ public class EntretienService {
             return false;
         }
     }
-    /**
-     * Mark a maintenance record as done
-     * @param id The ID of the entretien to mark as done
-     * @return true if marked successfully, false otherwise
-     */
     public boolean markEntretienAsDone(int id) {
         Entretien entretien = entretienRepository.findById(id);
         if (entretien != null) {
@@ -152,11 +107,6 @@ public class EntretienService {
     }
 
 
-    /**
-     * Update an existing maintenance record
-     * @param entretien The entretien to update
-     * @return true if updated successfully, false otherwise
-     */
     public boolean updateEntretien(Entretien entretien) {
         
         Entretien existingEntretien = entretienRepository.findById(entretien.getId());
@@ -171,31 +121,14 @@ public class EntretienService {
         return false;
     }
 
-    /**
-     * Delete a maintenance record by ID
-     * @param id The ID of the entretien to delete
-     * @return true if deleted successfully, false otherwise
-     */
     public boolean deleteEntretien(int id) {
         return entretienRepository.deleteById(id);
     }
 
-    /**
-     * Get overdue maintenance records
-     * @return List of overdue maintenance records
-     */
     public List<Entretien> getOverdueMaintenances() {
         return entretienRepository.findOverdueMaintenance();
     }
 
-    /**
-     * Schedule next maintenance based on current maintenance
-     * @param vehiculeId The vehicle ID
-     * @param typeEntretien The type of maintenance
-     * @param kilometrageActuel The current mileage
-     * @param dateEntretien The date of maintenance
-     * @return The newly created maintenance record for the next maintenance
-     */
     public boolean scheduleNextMaintenance(long vehiculeId, String typeEntretien,
                                              int kilometrageActuel, LocalDate dateEntretien,double cout) {
         LocalDate nextMaintenanceDate;
@@ -247,56 +180,6 @@ public class EntretienService {
         }else {
             return false;
         }
-    }
-
-    /**
-     * Get maintenance statistics for a vehicle
-     * @param vehiculeId The vehicle ID
-     * @return Array containing [count of maintenances, total cost]
-     */
-    public Object[] getMaintenanceStatistics(int vehiculeId) {
-        int count = entretienRepository.countByVehiculeId(vehiculeId);
-        double totalCost = entretienRepository.getTotalCostByVehiculeId(vehiculeId);
-
-        return new Object[]{count, totalCost};
-    }
-
-    /**
-     * Find maintenance records that exceed a cost threshold
-     * @param costThreshold The cost threshold
-     * @return List of entretiens with cost greater than or equal to the threshold
-     */
-    public List<Entretien> getExpensiveMaintenances(double costThreshold) {
-        return entretienRepository.findByCostGreaterThan(costThreshold);
-    }
-
-    /**
-     * Check if a vehicle needs maintenance soon
-     * @param vehiculeId The vehicle ID
-     * @return true if maintenance is needed soon, false otherwise
-     */
-    public boolean isMaintenanceNeededSoon(int vehiculeId) {
-        List<Entretien> maintenances = entretienRepository.findByVehiculeId(vehiculeId);
-
-        LocalDate now = LocalDate.now();
-        LocalDate oneMonthLater = now.plusMonths(1);
-
-        for (Entretien entretien : maintenances) {
-            
-            if (entretien.isMaintenance() &&
-                    entretien.getDateProchainEntretien() != null &&
-                    !entretien.getDateProchainEntretien().isBefore(now) &&
-                    !entretien.getDateProchainEntretien().isAfter(oneMonthLater)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    public List<Entretien> getWaitingEntretiens() {
-        return entretienRepository.findAll().stream()
-                .filter(entretien -> entretien.getDateProchainEntretien() == null && !entretien.isDone())
-                .toList();
     }
     public boolean isMaitenance(String entretien) {
         return switch (entretien) {

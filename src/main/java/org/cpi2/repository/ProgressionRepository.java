@@ -19,9 +19,6 @@ public class ProgressionRepository {
         return DatabaseConfig.getConnection();
     }
 
-    /**
-     * Get candidate inscription details
-     */
     public Optional<Map<String, Object>> getCandidatInscription(long candidatId) {
         String sql = "SELECT i.date_inscription, i.statut, p.heures_code, p.heures_conduite, p.type_permis_id " +
                     "FROM inscription i " +
@@ -52,9 +49,6 @@ public class ProgressionRepository {
         return Optional.empty();
     }
 
-    /**
-     * Count completed code sessions for a candidate
-     */
     public int getCompletedCodeSessions(long candidatId) {
         String sql = "SELECT COUNT(*) FROM presence_code pc " +
                     "JOIN session_code sc ON pc.session_code_id = sc.id " +
@@ -76,9 +70,6 @@ public class ProgressionRepository {
         return 0;
     }
 
-    /**
-     * Count completed driving sessions for a candidate
-     */
     public int getCompletedDrivingSessions(long candidatId) {
         String sql = "SELECT COUNT(*) FROM presence_conduite pc " +
                     "JOIN session_conduite sc ON pc.session_conduite_id = sc.id " +
@@ -100,9 +91,6 @@ public class ProgressionRepository {
         return 0;
     }
 
-    /**
-     * Get monthly code sessions data for visualization
-     */
     public Map<String, Integer> getMonthlyCodeSessions(long candidatId, int monthsCount) {
         Map<String, Integer> monthlyData = new HashMap<>();
         
@@ -134,9 +122,6 @@ public class ProgressionRepository {
         return monthlyData;
     }
 
-    /**
-     * Get monthly driving sessions data for visualization
-     */
     public Map<String, Integer> getMonthlyDrivingSessions(long candidatId, int monthsCount) {
         Map<String, Integer> monthlyData = new HashMap<>();
         
@@ -174,9 +159,6 @@ public class ProgressionRepository {
         return monthNames[month - 1];
     }
 
-    /**
-     * Get candidate's exam performance
-     */
     public Map<String, Object> getExamStatistics(long candidatId) {
         Map<String, Object> examStats = new HashMap<>();
         examStats.put("codeExamPassed", false);
@@ -230,9 +212,6 @@ public class ProgressionRepository {
         return examStats;
     }
 
-    /**
-     * Get sessions by period (week, month, year)
-     */
     public Map<String, Integer> getSessionsByPeriod(long candidatId, String period) {
         Map<String, Integer> sessionsData = new HashMap<>();
         

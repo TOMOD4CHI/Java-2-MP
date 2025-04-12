@@ -84,7 +84,7 @@ public class Progression {
 
             @Override
             public CandidatItem fromString(String string) {
-                return null; // Not needed for combo box
+                return null;
             }
         });
 
@@ -234,10 +234,10 @@ public class Progression {
             Integer value = entry.getValue();
 
             if (key.startsWith("Code-")) {
-                String label = key.substring(5); // Remove 'Code-' prefix
+                String label = key.substring(5);
                 codeSeries.getData().add(new XYChart.Data<>(label, value));
             } else if (key.startsWith("Conduite-")) {
-                String label = key.substring(9); // Remove 'Conduite-' prefix
+                String label = key.substring(9);
                 drivingSeries.getData().add(new XYChart.Data<>(label, value));
             }
         }

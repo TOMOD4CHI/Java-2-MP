@@ -252,10 +252,10 @@ public class Notifications implements Initializable {
     
     private String getTypeIcon(String type) {
         switch (type) {
-            case "ASSURANCE": return "\uD83D\uDCB6"; // 💶 Money
-            case "VIGNETTE": return "\uD83D\uDCCB"; // 📋 Clipboard
-            case "ENTRETIEN": return "\uD83D\uDD27"; // 🔧 Wrench
-            default: return "\uD83D\uDCE8"; // 📨 Letter
+            case "ASSURANCE": return "\uD83D\uDCB6";
+            case "VIGNETTE": return "\uD83D\uDCCB";
+            case "ENTRETIEN": return "\uD83D\uDD27";
+            default: return "\uD83D\uDCE8";
         }
     }
     

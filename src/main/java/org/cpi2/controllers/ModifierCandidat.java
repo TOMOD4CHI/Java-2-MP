@@ -47,8 +47,8 @@ public class ModifierCandidat {
         }
         
         java.time.LocalDate today = java.time.LocalDate.now();
-        java.time.LocalDate minDate = today.minusYears(100); // Maximum reasonable age (100 years)
-        java.time.LocalDate maxDate = today.minusYears(16);  // Minimum reasonable age (16 years)
+        java.time.LocalDate minDate = today.minusYears(100);
+        java.time.LocalDate maxDate = today.minusYears(16);
 
         return !date.isAfter(today) && !date.isBefore(minDate) && !date.isAfter(maxDate);
     }
