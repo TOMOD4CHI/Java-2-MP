@@ -182,7 +182,7 @@ public class AccueilPageController implements Initializable {
                         "LEFT JOIN candidat c ON s.candidat_id = c.id " +
                         "LEFT JOIN moniteur m ON s.moniteur_id = m.id " +
                         "LEFT JOIN vehicule v ON s.vehicule_id = v.id " +
-                        "WHERE s.date >= CURRENT_DATE() " +
+                        "WHERE DATE(s.date) >= CURRENT_DATE " +
                         "ORDER BY s.date, s.heure " +
                         "LIMIT 10";
                 
