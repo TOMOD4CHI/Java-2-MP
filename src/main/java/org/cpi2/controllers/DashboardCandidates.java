@@ -748,3 +748,4 @@ public class DashboardCandidates implements Initializable {
         public String getRegistrationDate() { return registrationDate; }
     }
 }
+

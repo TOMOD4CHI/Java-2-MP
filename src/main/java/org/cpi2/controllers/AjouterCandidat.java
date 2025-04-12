@@ -24,7 +24,6 @@ public class AjouterCandidat {
     private final CandidatService candidatService = new CandidatService();
     private final InscriptionService inscriptionService = new InscriptionService();
 
-    // Validation patterns
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,}$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
@@ -72,8 +71,7 @@ public class AjouterCandidat {
         if (!typeComboBox.getItems().isEmpty()) {
             typeComboBox.getSelectionModel().selectFirst();
         }
-        
-        // Set placeholders for input fields
+
         nomField.setPromptText("Entrez le nom");
         prenomField.setPromptText("Entrez le prénom");
         cinField.setPromptText("Entrez le CIN (8 chiffres minimum)");
@@ -81,11 +79,9 @@ public class AjouterCandidat {
         phoneField.setPromptText("Entrez le numéro (8 chiffres)");
         emailField.setPromptText("exemple@domaine.com");
         birthDatePicker.setPromptText("Choisir une date");
-        
-        // Set default value for birth date to 18 years ago
+
         birthDatePicker.setValue(LocalDate.now().minusYears(18));
-        
-        // Setup real-time validation
+
         setupValidation();
     }
     
@@ -94,57 +90,50 @@ public class AjouterCandidat {
     }
     
     private void setupValidation() {
-        // Nom validation
+
         ValidationUtils.addValidation(nomField, 
             text -> !text.trim().isEmpty(), 
             "Le nom est obligatoire", 1);
         ValidationUtils.addValidation(nomField, 
             this::isValidName, 
             "Le nom ne doit contenir que des lettres et des espaces", 2);
-        
-        // Birth date validation
+
         ValidationUtils.addValidation(birthDatePicker,
             this::isValidBirthDate,
             "La date de naissance ne peut pas être dans le futur", 1);
-            
-        // Prénom validation
+
         ValidationUtils.addValidation(prenomField, 
             text -> !text.trim().isEmpty(), 
             "Le prénom est obligatoire", 1);
         ValidationUtils.addValidation(prenomField, 
             this::isValidName, 
             "Le prénom ne doit contenir que des lettres et des espaces", 2);
-            
-        // CIN validation
+
         ValidationUtils.addValidation(cinField, 
             text -> !text.trim().isEmpty(), 
             "Le CIN est obligatoire", 1);
         ValidationUtils.addValidation(cinField, 
             this::isValidCIN, 
             "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres", 2);
-            
-        // Type permis validation
+
         ValidationUtils.<String>addValidation(typeComboBox,
                 Objects::nonNull,
             "Veuillez sélectionner un type de permis", 1);
-            
-        // Address validation
+
         ValidationUtils.addValidation(addressField, 
             text -> !text.trim().isEmpty(), 
             "L'adresse est obligatoire", 1);
         ValidationUtils.addValidation(addressField,
                 this::isValidAddress,
             "L'adresse doit contenir au moins 10 caractères", 2);
-            
-        // Phone validation
+
         ValidationUtils.addValidation(phoneField, 
             text -> !text.trim().isEmpty(), 
             "Le numéro de téléphone est obligatoire", 1);
         ValidationUtils.addValidation(phoneField, 
             this::isValidPhone, 
             "Le numéro de téléphone doit contenir exactement 8 chiffres", 2);
-            
-        // Email validation (only if not empty)
+
         ValidationUtils.addValidation(emailField, 
             text -> text.trim().isEmpty() || isValidEmail(text), 
             "L'adresse email n'est pas valide", 1);
@@ -152,7 +141,7 @@ public class AjouterCandidat {
 
     @FXML
     private void cancelAction() {
-        // Effacer les champs
+
         nomField.clear();
         prenomField.clear();
         cinField.clear();
@@ -160,8 +149,7 @@ public class AjouterCandidat {
         addressField.clear();
         phoneField.clear();
         emailField.clear();
-        
-        // Effacer les validations
+
         ValidationUtils.clearValidation(nomField);
         ValidationUtils.clearValidation(prenomField);
         ValidationUtils.clearValidation(cinField);
@@ -188,17 +176,14 @@ public class AjouterCandidat {
         String typePermis = typeComboBox.getValue();
         String cycle = modeComboBox.getValue();
 
-
-        // Check required fields
         if (nom.isEmpty() || prenom.isEmpty() || cin.isEmpty() || 
             address.isEmpty() || phone.isEmpty() || typePermis == null ||
             birthDatePicker.getValue() == null) {
-            // This should be caught by the validation, but just in case
+
             AlertUtil.showError("Validation Error", "Merci de remplir tous les champs obligatoires!");
             return;
         }
-        
-        // Check that birth date is not in the future
+
         if (birthDatePicker.getValue() != null && birthDatePicker.getValue().isAfter(LocalDate.now())) {
             AlertUtil.showError("Validation Error", "La date de naissance ne peut pas être dans le futur!");
             return;
@@ -232,7 +217,7 @@ public class AjouterCandidat {
             }
             List<Inscription> activeinscriptions = inscriptionService.getActifInscirptionBycin(cin);
             if (activeinscriptions.isEmpty()) {
-                //can be paired with type of documents rather than type permis for more realistic scenarios
+
                 TypePermis requiredPermis = CoursePlan.requiredTypePermis(CoursePlan.valueOf(typePermis));
                 if(requiredPermis == null ||candidatService.findCandidatsByTypePermis(requiredPermis.name()).contains(cin)){
                     if(inscriptionService.saveInscription(inscription)){
@@ -252,8 +237,9 @@ public class AjouterCandidat {
             }
         } catch (Exception e) {
             AlertUtil.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
-            //for debugging
+
             e.printStackTrace();
         }
     }
 }
+

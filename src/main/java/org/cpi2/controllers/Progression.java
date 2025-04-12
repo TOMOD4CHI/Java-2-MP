@@ -138,7 +138,7 @@ public class Progression {
             String pdfPath = ProgressionReportGenerator.generateProgressionReport(progressionData);
 
             if (pdfPath != null) {
-                // Replace standard Alert with AlertUtil options dialog
+
                 int choice = AlertUtil.showOptionsDialog(
                         "Succès",
                         "Le rapport a été enregistré sous:\n" + pdfPath,
@@ -146,19 +146,19 @@ public class Progression {
                 );
 
                 if (choice == 0) {
-                    // Open file
+
                     File pdfFile = new File(pdfPath);
                     if (pdfFile.exists()) {
                         Desktop.getDesktop().open(pdfFile);
                     }
                 } else if (choice == 1) {
-                    // Open directory
+
                     File pdfDirectory = new File(pdfPath).getParentFile();
                     if (pdfDirectory.exists()) {
                         Desktop.getDesktop().open(pdfDirectory);
                     }
                 }
-                // If choice == 2 (Close) or -1 (dialog closed), do nothing
+
             } else {
                 AlertUtil.showError("Erreur", "Une erreur est survenue lors de la génération du PDF");
             }

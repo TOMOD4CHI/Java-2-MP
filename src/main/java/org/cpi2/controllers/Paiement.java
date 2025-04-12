@@ -41,7 +41,6 @@ public class Paiement implements Initializable {
     private final CandidatService candidatService = new CandidatService();
     private final ExamenService examenService = new ExamenService();
 
-    // Fields from FXML
     @FXML private ComboBox<String> typeComboBox;
     @FXML private ComboBox<String> candidatComboBox;
     @FXML private TextField montantField;
@@ -49,12 +48,10 @@ public class Paiement implements Initializable {
     @FXML private ComboBox<String> modeComboBox;
     @FXML private TextArea descriptionArea;
 
-    // Search fields
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
     @FXML private ComboBox<String> searchCandidatComboBox;
 
-    // Table
     @FXML private TableView<PaiementData> paiementsTable;
     @FXML private TableColumn<PaiementData, LocalDate> dateColumn;
     @FXML private TableColumn<PaiementData, String> candidatColumn;
@@ -64,12 +61,10 @@ public class Paiement implements Initializable {
     @FXML private TableColumn<PaiementData, String> descriptionColumn;
     @FXML private TableColumn<PaiementData, Void> actionsColumn;
 
-    // Labels and buttons
     @FXML private Label totalLabel;
     @FXML private Button printButton;
     @FXML private Button exportButton;
 
-    // Mock data class for table
     public static class PaiementData {
         private long id;
         private LocalDate date;
@@ -120,7 +115,7 @@ public class Paiement implements Initializable {
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
         } catch (Exception e) {
             e.printStackTrace();
-            // Use default app icon if there's an error
+
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
         }
     }
@@ -134,12 +129,11 @@ public class Paiement implements Initializable {
     }
 
     private void setupFormControls() {
-        // Initialize payment type options
+
         typeComboBox.setItems(FXCollections.observableArrayList(
                 "Inscription", "Examen", "Tranche"
         ));
 
-        // Initialize mock candidates
         candidatComboBox.setItems(FXCollections.observableArrayList(
                 candidatService.getAllCandidats().stream()
                         .map(c -> "("+c.getCin()+") : "+c.getNom()+" "+c.getPrenom())
@@ -148,17 +142,14 @@ public class Paiement implements Initializable {
 
         searchCandidatComboBox.setItems(candidatComboBox.getItems());
 
-        // Initialize payment modes
         modeComboBox.setItems(FXCollections.observableArrayList(
                 Arrays.stream(ModePaiement.values())
                         .map(Enum::name)
                         .toList()
         ));
 
-        // Set today's date as default
         datePicker.setValue(LocalDate.now());
 
-        // Add listener for amount field validation
         montantField.textProperty().addListener((obs, old, newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
                 montantField.setText(old);
@@ -167,7 +158,7 @@ public class Paiement implements Initializable {
     }
 
     private void setupTable() {
-        // Configure table columns
+
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         candidatColumn.setCellValueFactory(new PropertyValueFactory<>("candidat"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -175,7 +166,6 @@ public class Paiement implements Initializable {
         methodeColumn.setCellValueFactory(new PropertyValueFactory<>("methode"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-        // Add action buttons to the actions column
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("Modifier");
             private final Button deleteButton = new Button("Supprimer");
@@ -188,15 +178,13 @@ public class Paiement implements Initializable {
                     PaiementData data = getTableView().getItems().get(getIndex());
 
                     try {
-                        // Create the payment edit view
+
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PaymentEdit.fxml"));
                         Parent root = loader.load();
 
-                        // Get controller and pass payment details
                         PaymentEditController controller = loader.getController();
                         controller.initData(data);
 
-                        // Show in new window
                         Stage stage = new Stage();
                         stage.setTitle("Modifier le Paiement #" + data.getId());
                         setApplicationIcon(stage);
@@ -205,7 +193,6 @@ public class Paiement implements Initializable {
                         stage.initModality(Modality.APPLICATION_MODAL);
                         stage.showAndWait();
 
-                        // Refresh data after edit window is closed
                         loadMockData();
                         updateTotalLabel();
                     } catch (IOException e) {
@@ -217,7 +204,6 @@ public class Paiement implements Initializable {
                 deleteButton.setOnAction(event -> {
                     PaiementData data = getTableView().getItems().get(getIndex());
 
-                    // Use AlertUtil for confirmation instead of standard Alert
                     boolean confirmed = AlertUtil.showConfirmation(
                             "Confirmation de suppression",
                             "Êtes-vous sûr de vouloir supprimer ce paiement?"
@@ -250,7 +236,7 @@ public class Paiement implements Initializable {
     }
 
     private void setupListeners() {
-        // Set up button action handlers
+
         printButton.setOnAction(event -> handlePrintReceipt());
         exportButton.setOnAction(event -> handleExportPdf());
     }
@@ -456,7 +442,6 @@ public class Paiement implements Initializable {
         totalLabel.setText(String.format("Total: %.2f DT", total));
     }
 
-    // Dialog methods - replaced with AlertUtil
     private void showErrorDialog(String message) {
         AlertUtil.showError("Erreur", message);
     }
@@ -465,12 +450,10 @@ public class Paiement implements Initializable {
         AlertUtil.showSuccess("Succès", message);
     }
 
-    /**
-     * Handle printing a receipt for the selected payment
-     */
+    
     @FXML
     private void handlePrintReceipt() {
-        // Get selected payment from table
+
         PaiementData selectedPayment = paiementsTable.getSelectionModel().getSelectedItem();
 
         if (selectedPayment == null) {
@@ -479,7 +462,7 @@ public class Paiement implements Initializable {
         }
 
         try {
-            // Convert PaiementData to Map for the receipt generator
+
             Map<String, Object> paymentData = new HashMap<>();
             paymentData.put("date", selectedPayment.getDate());
             paymentData.put("candidat", selectedPayment.getCandidat());
@@ -489,11 +472,10 @@ public class Paiement implements Initializable {
             paymentData.put("methode", selectedPayment.getMethode());
             paymentData.put("description", selectedPayment.getDescription());
 
-            // Generate receipt
             String pdfPath = PaymentReceiptGenerator.generateSinglePaymentReceipt(paymentData);
 
             if (pdfPath != null) {
-                // Show options dialog using AlertUtil
+
                 int choice = AlertUtil.showOptionsDialog(
                         "Reçu généré",
                         "Le reçu a été enregistré sous:\n" + pdfPath,
@@ -502,13 +484,13 @@ public class Paiement implements Initializable {
 
                 try {
                     if (choice == 0) {
-                        // Open the PDF file
+
                         File pdfFile = new File(pdfPath);
                         if (pdfFile.exists()) {
                             Desktop.getDesktop().open(pdfFile);
                         }
                     } else if (choice == 1) {
-                        // Open the directory containing the PDF
+
                         File pdfDirectory = new File(pdfPath).getParentFile();
                         if (pdfDirectory.exists()) {
                             Desktop.getDesktop().open(pdfDirectory);
@@ -526,24 +508,21 @@ public class Paiement implements Initializable {
         }
     }
 
-    /**
-     * Handle exporting a summary of payments to PDF
-     */
+    
     @FXML
     private void handleExportPdf() {
-        // Check if there are payments to export
+
         if (paiementsTable.getItems().isEmpty()) {
             AlertUtil.showError("Export impossible", "Aucun paiement à exporter");
             return;
         }
 
         try {
-            // Get current search parameters
+
             LocalDate startDate = startDatePicker.getValue() != null ? startDatePicker.getValue() : LocalDate.now().minusMonths(1);
             LocalDate endDate = endDatePicker.getValue() != null ? endDatePicker.getValue() : LocalDate.now();
             String candidat = searchCandidatComboBox.getValue();
 
-            // Convert table items to list of maps for the report generator
             List<Map<String, Object>> paymentsData = new ArrayList<>();
 
             for (PaiementData payment : paiementsTable.getItems()) {
@@ -559,11 +538,10 @@ public class Paiement implements Initializable {
                 paymentsData.add(paymentMap);
             }
 
-            // Generate summary report
             String pdfPath = PaymentReceiptGenerator.generatePaymentSummaryReport(paymentsData, startDate, endDate, candidat);
 
             if (pdfPath != null) {
-                // Show options dialog using AlertUtil
+
                 int choice = AlertUtil.showOptionsDialog(
                         "Rapport généré",
                         "Le rapport a été enregistré sous:\n" + pdfPath,
@@ -572,13 +550,13 @@ public class Paiement implements Initializable {
 
                 try {
                     if (choice == 0) {
-                        // Open the PDF file
+
                         File pdfFile = new File(pdfPath);
                         if (pdfFile.exists()) {
                             Desktop.getDesktop().open(pdfFile);
                         }
                     } else if (choice == 1) {
-                        // Open the directory containing the PDF
+
                         File pdfDirectory = new File(pdfPath).getParentFile();
                         if (pdfDirectory.exists()) {
                             Desktop.getDesktop().open(pdfDirectory);
