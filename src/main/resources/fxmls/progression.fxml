@@ -8,7 +8,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.cpi2.controllers.Progression"
-            stylesheets="/css/style2.css"
+            stylesheets="/css/style.css"
             style="-fx-background-color: #f5f5f7;">
 
     <top>
@@ -16,20 +16,20 @@
             <padding><Insets top="20" right="25" bottom="10" left="25"/></padding>
             
             
-            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="dashboard-header">
+            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="form-header">
                 <VBox>
-                    <Label text="Tableau de Bord: Suivi de Progression" styleClass="dashboard-title">
+                    <Label text="Tableau de Bord: Suivi de Progression" styleClass="form-title">
                         <font>
                             <Font name="System Bold" size="18"/>
                         </font>
                     </Label>
                     <Label text="Visualisez et analysez la progression de vos candidats" 
-                           styleClass="dashboard-subtitle" textFill="#666666"/>
+                           styleClass="form-label" textFill="#666666"/>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
                 <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="actions-container">
                     <VBox spacing="8">
-                        <Label text="Sélectionnez un candidat:" styleClass="form-label-bold"/>
+                        <Label text="Sélectionnez un candidat:" styleClass="form-label"/>
                         <ComboBox fx:id="candidatComboBox" prefWidth="280" styleClass="search-field" promptText="Choisir un candidat">
                             <effect>
                                 <javafx.scene.effect.DropShadow color="#00000022" radius="3" spread="0.05"/>
@@ -64,7 +64,7 @@
                     
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <Region styleClass="user-icon" minWidth="22" minHeight="22"/>
-                        <Label text="Informations Candidat" styleClass="card-title">
+                        <Label text="Informations Candidat" styleClass="form-label">
                             <font>
                                 <Font name="System Bold" size="14"/>
                             </font>
@@ -79,19 +79,19 @@
                             <ColumnConstraints hgrow="ALWAYS" minWidth="180"/>
                         </columnConstraints>
                         
-                        <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
                         <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" styleClass="data-field-highlight"/>
                         
-                        <Label text="Prénom:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <Label text="Prénom:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
                         <TextField fx:id="prenomField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" styleClass="data-field-highlight"/>
                         
-                        <Label text="Type Permis:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <Label text="Type Permis:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
                         <TextField fx:id="typePermisField" GridPane.rowIndex="2" GridPane.columnIndex="1" editable="false" styleClass="data-field-highlight"/>
                         
-                        <Label text="Date Inscription:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label-bold"/>
-                        <Label fx:id="dateInscriptionLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="data-field-highlight"/>
+                        <Label text="Date Inscription:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <Label fx:id="dateInscriptionLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-label"/>
                         
-                        <Label text="Statut:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label-bold"/>
+                        <Label text="Statut:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label"/>
                         <Label fx:id="statutLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="data-field-highlight"/>
                     </GridPane>
                 </VBox>
@@ -120,17 +120,17 @@
                             <ColumnConstraints hgrow="ALWAYS" minWidth="80"/>
                         </columnConstraints>
                         
-                        <Label text="Total séances code:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="metric-label-bold"/>
-                        <Label fx:id="totalSeancesCodeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="metric-value-highlight"/>
+                        <Label text="Total séances code:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <Label fx:id="totalSeancesCodeLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-label"/>
                         
-                        <Label text="Séances code complètes:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="metric-label-bold"/>
-                        <Label fx:id="seancesCodeCompletesLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="metric-value-highlight"/>
+                        <Label text="Séances code complètes:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <Label fx:id="seancesCodeCompletesLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-label"/>
                         
-                        <Label text="Total séances conduite:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="metric-label-bold"/>
-                        <Label fx:id="totalSeancesConduiteLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="metric-value-highlight"/>
+                        <Label text="Total séances conduite:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <Label fx:id="totalSeancesConduiteLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-label"/>
                         
-                        <Label text="Séances conduite complètes:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="metric-label-bold"/>
-                        <Label fx:id="seancesConduiteCompletesLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="metric-value-highlight"/>
+                        <Label text="Séances conduite complètes:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label"/>
+                        <Label fx:id="seancesConduiteCompletesLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-label"/>
                     </GridPane>
                 </VBox>
             </HBox>
@@ -147,14 +147,14 @@
                     </effect>
                     
                     <VBox spacing="8">
-                        <Label text="Progression totale:" styleClass="progress-label-large">
+                        <Label text="Progression totale:" styleClass="form-label">
                             <font>
                                 <Font name="System Bold" size="14"/>
                             </font>
                         </Label>
                         <HBox spacing="15" alignment="CENTER_LEFT">
                             <ProgressBar fx:id="progressionTotaleBar" progress="0.6" prefWidth="450" prefHeight="25" styleClass="progress-bar-large"/>
-                            <Label fx:id="progressionPourcentageLabel" text="60.0%" styleClass="progress-percentage-large">
+                            <Label fx:id="progressionPourcentageLabel" text="60.0%" styleClass="form-label">
                                 <font>
                                     <Font name="System Bold" size="16"/>
                                 </font>
@@ -165,7 +165,7 @@
                     <Region HBox.hgrow="ALWAYS"/>
                     
                     <VBox spacing="8" alignment="CENTER_RIGHT">
-                        <Label text="Période d'analyse:" styleClass="form-label-bold"/>
+                        <Label text="Période d'analyse:" styleClass="form-label"/>
                         <ComboBox fx:id="periodeComboBox" prefWidth="180" styleClass="period-combo-box"/>
                     </VBox>
                 </HBox>
@@ -174,14 +174,14 @@
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" styleClass="dashboard-content" style="-fx-background-color: transparent;">
+        <ScrollPane fitToWidth="true" styleClass="form-content" style="-fx-background-color: transparent;">
             <VBox spacing="25">
                 <padding><Insets top="10" right="25" bottom="25" left="25"/></padding>
                 
                 
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Region styleClass="visualization-icon" minWidth="24" minHeight="24"/>
-                    <Label text="Visualisation de la Progression" styleClass="section-title">
+                    <Label text="Visualisation de la Progression" styleClass="form-label">
                         <font>
                             <Font name="System Bold" size="16"/>
                         </font>
@@ -197,14 +197,14 @@
                             <javafx.scene.effect.DropShadow color="#00000022" radius="5" spread="0.05"/>
                         </effect>
                         
-                        <Label text="Répartition des Séances" styleClass="chart-title-large">
+                        <Label text="Répartition des Séances" styleClass="form-label">
                             <font>
                                 <Font name="System Bold" size="14"/>
                             </font>
                         </Label>
                         <Separator/>
                         <PieChart fx:id="progressionPieChart" legendVisible="true" prefHeight="350" 
-                                 styleClass="dashboard-chart-enhanced" animated="true" labelLineLength="20"/>
+                                 styleClass="form-chart-enhanced" animated="true" labelLineLength="20"/>
                     </VBox>
 
                     
@@ -214,14 +214,14 @@
                             <javafx.scene.effect.DropShadow color="#00000022" radius="5" spread="0.05"/>
                         </effect>
                         
-                        <Label text="Séances Planifiées vs Complétées" styleClass="chart-title-large">
+                        <Label text="Séances Planifiées vs Complétées" styleClass="form-title">
                             <font>
                                 <Font name="System Bold" size="14"/>
                             </font>
                         </Label>
                         <Separator/>
                         <BarChart fx:id="progressionBarChart" prefHeight="350" 
-                                 styleClass="dashboard-chart-enhanced" animated="true" barGap="4">
+                                 styleClass="form-chart-enhanced" animated="true" barGap="4">
                             <xAxis>
                                 <CategoryAxis label="Type" styleClass="chart-axis"/>
                             </xAxis>

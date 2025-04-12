@@ -1,11 +1,15 @@
 package org.cpi2.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.cpi2.controllers.Paiement.PaiementData;
 import org.cpi2.entities.*;
 import org.cpi2.service.CandidatService;
@@ -20,6 +24,7 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class PaymentEditController implements Initializable {
+    @FXML private AnchorPane mypane;
     
     @FXML private Label idLabel;
     @FXML private Label cinLabel;
@@ -37,20 +42,40 @@ public class PaymentEditController implements Initializable {
     private final CandidatService candidatService = new CandidatService();
     private final InscriptionService inscriptionService = new InscriptionService();
     private final ExamenService examenService = new ExamenService();
-    
+    private void setApplicationIcon(Stage stage) {
+        try {
+
+
+            stage.getIcons().clear();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Use default app icon if there's an error
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Delay execution until the scene is fully initialized
+        Platform.runLater(() -> {
+            if (mypane.getScene() != null && mypane.getScene().getWindow() != null) {
+                Window window = mypane.getScene().getWindow();
+            } else {
+                System.err.println("Scene or Window is null.");
+            }
+        });
         // Setup payment modes
         modeComboBox.setItems(FXCollections.observableArrayList(
                 Arrays.stream(ModePaiement.values())
                         .map(Enum::name)
                         .toList()
         ));
-        
+
         // Setup button actions
         saveButton.setOnAction(this::handleSave);
         cancelButton.setOnAction(this::handleCancel);
-        
+
         // Add listener for amount field validation
         montantField.textProperty().addListener((obs, old, newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {

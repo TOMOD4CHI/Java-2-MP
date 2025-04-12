@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -112,6 +113,18 @@ public class Paiement implements Initializable {
         public String getMethode() { return methode; }
         public String getDescription() { return description; }
     }
+    private void setApplicationIcon(Stage stage) {
+        try {
+
+
+            stage.getIcons().clear();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Use default app icon if there's an error
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -187,6 +200,8 @@ public class Paiement implements Initializable {
                         // Show in new window
                         Stage stage = new Stage();
                         stage.setTitle("Modifier le Paiement #" + data.getId());
+                        setApplicationIcon(stage);
+
                         stage.setScene(new Scene(root));
                         stage.initModality(Modality.APPLICATION_MODAL);
                         stage.showAndWait();

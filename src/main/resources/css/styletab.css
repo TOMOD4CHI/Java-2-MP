@@ -81,7 +81,6 @@
     -fx-background-color: rgba(236, 240, 241, 0.8);
     -fx-border-color: rgba(200, 200, 200, 0.5);
     -fx-border-width: 0 0 1 0;
-    -fx-padding: 8 12;
 }
 
 .table-view .column-header .label {
@@ -93,7 +92,6 @@
 .table-view .table-cell {
     -fx-text-fill: #34495e;
     -fx-font-size: 14px;
-    -fx-padding: 8 12;
     -fx-alignment: center-left;
 }
 
