@@ -99,26 +99,20 @@ public class PaymentHistory implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Setup date pickers with default values
+
         dateDebutPicker.setValue(LocalDate.now().minusMonths(1));
         dateFinPicker.setValue(LocalDate.now());
 
-        // Setup payment types combo box
         setupTypeComboBox();
 
-        // Setup candidates combo box
         loadCandidates();
 
-        // Setup table columns
         setupTableColumns();
 
-        // Add action buttons to the table
         setupActionColumn();
 
-        // Load data
         loadPaymentData();
 
-        // Load chart data
         updateChartData();
     }
 
@@ -133,7 +127,7 @@ public class PaymentHistory implements Initializable {
     }
 
     private void loadCandidates() {
-        // This would be replaced with actual database call
+
         ObservableList<Candidat> candidats = FXCollections.observableArrayList();
 
         candidats.addAll(candidatService.getAllCandidats());
@@ -177,8 +171,7 @@ public class PaymentHistory implements Initializable {
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         methodeColumn.setCellValueFactory(new PropertyValueFactory<>("methode"));
         statutColumn.setCellValueFactory(new PropertyValueFactory<>("statut"));
-        
-        // Format money values
+
         montantColumn.setCellFactory(col -> new TableCell<PaymentEntry, Double>() {
             @Override
             protected void updateItem(Double montant, boolean empty) {
@@ -190,8 +183,7 @@ public class PaymentHistory implements Initializable {
                 }
             }
         });
-        
-        // Format status with colors
+
         statutColumn.setCellFactory(col -> new TableCell<PaymentEntry, String>() {
             @Override
             protected void updateItem(String statut, boolean empty) {
@@ -226,15 +218,13 @@ public class PaymentHistory implements Initializable {
                             PaymentEntry payment = getTableView().getItems().get(getIndex());
                             
                             try {
-                                // Create the payment details view
+
                                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PaymentDetails.fxml"));
                                 Parent root = loader.load();
-                                
-                                // Get controller and pass payment details
+
                                 PaymentDetailsController controller = loader.getController();
                                 controller.initData(payment);
-                                
-                                // Show in new window
+
                                 Stage stage = new Stage();
                                 stage.setTitle("Détails du Paiement #" + payment.getId());
                                 stage.setScene(new Scene(root));
@@ -284,13 +274,11 @@ public class PaymentHistory implements Initializable {
                     p.getModePaiement().name(),
                     p.getStatut().name().toLowerCase()));
         }
-        
-        // Sample data
+
         paymentsList.addAll(payments);
         
         paymentsTable.setItems(paymentsList);
-        
-        // Update summary
+
         updateSummary();
     }
 
@@ -314,25 +302,21 @@ public class PaymentHistory implements Initializable {
     }
 
     private void updateChartData() {
-        // Clear existing data
+
         typeDistributionChart.getData().clear();
-        
-        // Create data series
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        
-        // Count payments by type (excluding cancelled)
+
         long inscriptions = paymentsList.stream()
                 .filter(p -> (p.getType().equals("Inscription Totale") || p.getType().equals("Tranches d'Inscription") )&& !p.getStatut().equals("annulee"))
                 .count();
         long examens = paymentsList.stream()
                 .filter(p -> p.getType().equals("Examen") && !p.getStatut().equals("annulee"))
                 .count();
-        
-        // Add data to series
+
         series.getData().add(new XYChart.Data<>("Inscription", inscriptions));
         series.getData().add(new XYChart.Data<>("Examen", examens));
-        
-        // Add series to chart
+
         typeDistributionChart.getData().add(series);
     }
 
@@ -355,7 +339,7 @@ public class PaymentHistory implements Initializable {
 
     @FXML
     void handleExportPDF(ActionEvent event) {
-        // This would generate a PDF of the payment history
+
         AlertUtil.showInfo("PDF Généré", "L'historique des paiements a été exporté avec succès en PDF.");
     }
 
@@ -400,7 +384,6 @@ public class PaymentHistory implements Initializable {
         updateChartData();
     }
 
-    // Payment Entry class to hold table data
     public static class PaymentEntry {
         private final long id;
         private final LocalDate date;

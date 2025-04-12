@@ -20,7 +20,6 @@ import java.util.*;
 
 public class RemplirSeance {
 
-    // FXML Components
     @FXML private DatePicker dateFilter;
     @FXML private Button searchBtn;
     @FXML private Button resetBtn;
@@ -44,7 +43,6 @@ public class RemplirSeance {
     @FXML private Button cancelBtn;
     @FXML private Button saveBtn;
 
-    // Data
     private ObservableList<SessionCode> seances;
     private FilteredList<SessionCode> filteredSeances;
     private ObservableList<CandidatWrapper> candidats;
@@ -57,7 +55,6 @@ public class RemplirSeance {
 
     }
 
-    // Wrapper class for Candidat to add checkbox functionality
     public class CandidatWrapper {
         private final Candidat candidat;
         private final SimpleBooleanProperty selected = new SimpleBooleanProperty(false);
@@ -95,7 +92,6 @@ public class RemplirSeance {
         }
     }
 
-    // Real service implementations
     private final org.cpi2.service.SeanceService seanceService = new org.cpi2.service.SeanceService();
     private final org.cpi2.service.CandidatService candidatService = new org.cpi2.service.CandidatService();
     private final org.cpi2.service.SalleService salleService = new org.cpi2.service.SalleService();
@@ -104,29 +100,27 @@ public class RemplirSeance {
         List<SessionCode> result = new ArrayList<>();
         try {
             System.out.println("Fetching all seances from service...");
-            // Convert Seance objects to SessionCode objects
+
             List<Seance> seances = seanceService.findAllSeances();
             System.out.println("Found " + seances.size() + " total sessions");
             
             int codeSessionCount = 0;
             for (Seance seance : seances) {
-                // Only include code sessions that are planned
+
                 if ("Code".equals(seance.getType()) && "Planifiée".equals(seance.getStatus())) {
                     codeSessionCount++;
                     try {
                         SessionCode sessionCode = new SessionCode();
                         sessionCode.setId(seance.getId());
-                        
-                        // Ensure the date is valid
+
                         try {
                             sessionCode.setDateSession(seance.getLocalDate());
                         } catch (Exception e) {
                             System.out.println("Error parsing date for session ID " + seance.getId() + ": " + e.getMessage());
-                            // Default to today if date is invalid
+
                             sessionCode.setDateSession(LocalDate.now());
                         }
-                        
-                        // Parse time
+
                         String timeStr = seance.getHeure();
                         if (timeStr != null && !timeStr.isEmpty()) {
                             try {
@@ -136,15 +130,14 @@ public class RemplirSeance {
                                 sessionCode.setHeureSession(LocalTime.of(hour, minute));
                             } catch (Exception e) {
                                 System.out.println("Error parsing time for session ID " + seance.getId() + ": " + e.getMessage());
-                                // Default to 9 AM if time parsing fails
+
                                 sessionCode.setHeureSession(LocalTime.of(9, 0));
                             }
                         } else {
-                            // Default to 9 AM if time is not specified
+
                             sessionCode.setHeureSession(LocalTime.of(9, 0));
                         }
-                        
-                        // Create moniteur object
+
                         Moniteur moniteur = new Moniteur();
                         moniteur.setId(seance.getMoniteurId());
                         String fullName = seance.getMoniteurName();
@@ -162,8 +155,7 @@ public class RemplirSeance {
                             moniteur.setPrenom("");
                         }
                         sessionCode.setMoniteur(moniteur);
-                        
-                        // Set capacity and salle
+
                         sessionCode.setCapaciteMax(10); // Default capacity
                         sessionCode.setSalle(seance.getSalle() != null ? seance.getSalle() : "Salle non assignée");
                         
@@ -212,8 +204,7 @@ public class RemplirSeance {
     private void saveInscriptions(int seanceId, List<Integer> candidatIds) {
         try {
             Optional<Seance> seanceOpt = seanceService.findSeanceById((long) seanceId);
-            
-            // If mock data or empty data, create a fake seance result
+
             if (!seanceOpt.isPresent() && selectedSeance != null) {
                 System.out.println("Using selected session for room assignment");
                 Seance mockSeance = new Seance();
@@ -234,11 +225,9 @@ public class RemplirSeance {
             
             if (seanceOpt.isPresent()) {
                 Seance seance = seanceOpt.get();
-                
-                // Get available rooms
+
                 List<Salle> salles = salleService.getAllSalles();
-                
-                // If no real rooms, create mock rooms
+
                 if (salles.isEmpty()) {
                     System.out.println("No real rooms found, creating mock rooms");
                     salles = createMockSalles();
@@ -248,8 +237,7 @@ public class RemplirSeance {
                     AlertUtil.showError("Erreur", "Aucune salle disponible pour les inscriptions");
                     return;
                 }
-                
-                // Find the room with enough capacity for all candidates
+
                 Salle selectedSalle = null;
                 for (Salle salle : salles) {
                     if (salle.getCapacite() >= candidatIds.size()) {
@@ -257,8 +245,7 @@ public class RemplirSeance {
                         break;
                     }
                 }
-                
-                // If no room with enough capacity, take the largest one
+
                 if (selectedSalle == null && !salles.isEmpty()) {
                     selectedSalle = salles.stream()
                         .max((s1, s2) -> Integer.compare(s1.getCapacite(), s2.getCapacite()))
@@ -266,19 +253,18 @@ public class RemplirSeance {
                 }
                 
                 if (selectedSalle != null) {
-                    // For display or mock purposes, always show success
+
                     String salleInfo = selectedSalle.getNom() + " - " + selectedSalle.getNumero();
                     
                     try {
-                        // Try to update the seance with the selected room
+
                         seance.setSalle(salleInfo);
                         boolean updateSuccess = seanceService.updateSeance(seance);
                         
                         if (!updateSuccess) {
                             System.out.println("Failed to update original seance with room info, but continuing...");
                         }
-                        
-                        // For each candidate, try to create a new seance record
+
                         boolean allSuccess = true;
                         int successCount = 0;
                         
@@ -306,11 +292,9 @@ public class RemplirSeance {
                                 e.printStackTrace();
                             }
                         }
-                        
-                        // Always show success message for testing purposes
+
                         AlertUtil.showSuccess("Succès", "Les " + candidatIds.size() + " candidats ont été affectés avec succès à la salle " + salleInfo);
-                        
-                        // Reset UI and reload data
+
                         resetSelection();
                         loadData();
                         rechercherSeances();
@@ -318,7 +302,7 @@ public class RemplirSeance {
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.out.println("Error assigning candidates to room: " + e.getMessage());
-                        // Still show success for testing UI
+
                         AlertUtil.showSuccess("Succès", "Les " + candidatIds.size() + " candidats ont été affectés avec succès à la salle " + salleInfo);
                         resetSelection();
                         loadData();
@@ -338,8 +322,7 @@ public class RemplirSeance {
 
     private List<Salle> createMockSalles() {
         List<Salle> mockSalles = new ArrayList<>();
-        
-        // Create 3 mock rooms with different capacities
+
         Salle salle1 = new Salle("Salle A", "101", 5, "Petite salle");
         salle1.setId(1L);
         mockSalles.add(salle1);
@@ -357,24 +340,20 @@ public class RemplirSeance {
 
     @FXML
     public void initialize() {
-        // Initialize observable collections to prevent NullPointerException
+
         candidats = FXCollections.observableArrayList();
-        
-        // Set default date filter to today
+
         dateFilter.setValue(LocalDate.now());
-        
-        // Configure table columns first
+
         setupTableColumns();
-        
-        // Then load data
+
         loadData();
-        
-        // Apply initial date filter
+
         rechercherSeances();
     }
     
     private void setupTableColumns() {
-        // Configure séances table columns
+
         dateColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue() == null || cellData.getValue().getDateSession() == null) {
                 return new SimpleStringProperty("N/A");
@@ -416,8 +395,7 @@ public class RemplirSeance {
                 return new SimpleStringProperty("N/A");
             }
         });
-        
-        // Configure candidats table
+
         selectColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue() == null) {
                 return new SimpleBooleanProperty(false);
@@ -441,10 +419,8 @@ public class RemplirSeance {
             return new SimpleStringProperty(cellData.getValue().getPrenom());
         });
 
-        // Make candidats table editable for checkboxes
         candidatsTable.setEditable(true);
-        
-        // Row selection listener for sessions
+
         seancesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedSeance = newSelection;
@@ -462,24 +438,20 @@ public class RemplirSeance {
     private void loadData() {
         try {
             System.out.println("Loading seances data...");
-            
-            // First try to load with mock data if real data fails
+
             List<SessionCode> sessionsList = getSeances();
-            
-            // If real data is empty, add mock data for testing
+
             if (sessionsList.isEmpty()) {
                 System.out.println("No real sessions found, adding mock data");
                 sessionsList.addAll(createMockSessions());
             }
-            
-            // Initialize collections
+
             seances = FXCollections.observableArrayList(sessionsList);
             filteredSeances = new FilteredList<>(seances, p -> true);
             seancesTable.setItems(filteredSeances);
             
             System.out.println("Loaded " + seances.size() + " sessions");
-            
-            // Disable save button until a session is selected
+
             saveBtn.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -492,14 +464,12 @@ public class RemplirSeance {
         List<SessionCode> mockSessions = new ArrayList<>();
         
         System.out.println("Creating mock sessions for UI testing");
-        
-        // Create 5 mock sessions
+
         for (int i = 1; i <= 5; i++) {
             try {
                 SessionCode session = new SessionCode();
                 session.setId((long) i);
-                
-                // Set dates - 2 for today, 1 for tomorrow, 2 for next week
+
                 if (i <= 2) {
                     session.setDateSession(LocalDate.now());
                 } else if (i == 3) {
@@ -507,18 +477,15 @@ public class RemplirSeance {
                 } else {
                     session.setDateSession(LocalDate.now().plusDays(i + 3));
                 }
-                
-                // Set times
+
                 session.setHeureSession(LocalTime.of(8 + i, 0));
-                
-                // Set moniteur
+
                 Moniteur moniteur = new Moniteur();
                 moniteur.setId((long) i);
                 moniteur.setNom("Moniteur");
                 moniteur.setPrenom(String.valueOf(i));
                 session.setMoniteur(moniteur);
-                
-                // Set capacity and salle
+
                 session.setCapaciteMax(10);
                 session.setSalle("Salle Test " + i);
                 
@@ -537,8 +504,7 @@ public class RemplirSeance {
         try {
             System.out.println("Loading candidates for selected session...");
             List<Candidat> allCandidats = getCandidats();
-            
-            // If no candidates found, use mock data
+
             if (allCandidats.isEmpty()) {
                 System.out.println("No real candidates found, adding mock data");
                 allCandidats = createMockCandidats();
@@ -548,8 +514,7 @@ public class RemplirSeance {
     
             for (Candidat candidat : allCandidats) {
                 CandidatWrapper wrapper = new CandidatWrapper(candidat);
-    
-                // Add selection listener to update count
+
                 wrapper.selectedProperty().addListener((obs, oldVal, newVal) -> {
                     updateSelectedCount();
                 });
@@ -570,8 +535,7 @@ public class RemplirSeance {
     
     private List<Candidat> createMockCandidats() {
         List<Candidat> mockCandidats = new ArrayList<>();
-        
-        // Create 10 mock candidates
+
         for (int i = 1; i <= 10; i++) {
             Candidat candidat = new Candidat();
             candidat.setId((long) i);
@@ -622,10 +586,10 @@ public class RemplirSeance {
         
         try {
             if (selectedDate == null) {
-                // If no date selected, show all sessions
+
                 filteredSeances.setPredicate(seance -> true);
             } else {
-                // Filter sessions by selected date
+
                 filteredSeances.setPredicate(seance -> {
                     if (seance == null || seance.getDateSession() == null) {
                         return false;
@@ -634,8 +598,7 @@ public class RemplirSeance {
                     LocalDate seanceDate = seance.getDateSession();
                     return seanceDate.equals(selectedDate);
                 });
-                
-                // If no results found after filtering, show a message
+
                 if (filteredSeances.isEmpty()) {
                     selectedSessionLabel.setText("Aucune séance trouvée pour cette date");
                 } else {
@@ -685,7 +648,7 @@ public class RemplirSeance {
 
     @FXML
     private void cancel() {
-        // Close the current stage
+
         Stage stage = (Stage) cancelBtn.getScene().getWindow();
         stage.close();
     }
@@ -708,8 +671,7 @@ public class RemplirSeance {
             AlertUtil.showWarning("Attention", "Aucun candidat sélectionné");
             return;
         }
-        
-        // Confirm with user
+
         int seanceId = Math.toIntExact(selectedSeance.getId());
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Confirmation d'inscription");
@@ -720,8 +682,7 @@ public class RemplirSeance {
         Optional<ButtonType> result = confirmation.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             saveInscriptions(seanceId, selectedCandidatIds);
-            
-            // Reset UI
+
             resetSelection();
             loadUpcomingSessions();
         }
@@ -747,10 +708,9 @@ public class RemplirSeance {
 
     private void loadUpcomingSessions() {
         try {
-            // Reload sessions from database
+
             List<SessionCode> sessionsList = getSeances();
-            
-            // If real data is empty, add mock data for testing
+
             if (sessionsList.isEmpty()) {
                 System.out.println("No real sessions found, adding mock data");
                 sessionsList.addAll(createMockSessions());
@@ -759,8 +719,7 @@ public class RemplirSeance {
             seances = FXCollections.observableArrayList(sessionsList);
             filteredSeances = new FilteredList<>(seances, p -> true);
             seancesTable.setItems(filteredSeances);
-            
-            // Apply current filter if set
+
             if (dateFilter.getValue() != null) {
                 rechercherSeances();
             }
@@ -770,3 +729,4 @@ public class RemplirSeance {
         }
     }
 }
+

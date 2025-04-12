@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class GestionVehicule implements Initializable {
-    //TODO: maybe add a button next to each vehicle to make it out of service if clicked
+
 
     @FXML
     private TableView<Vehicule> vehiculesTable;
@@ -189,7 +189,7 @@ public class GestionVehicule implements Initializable {
         if (vehiculeSelected == null) return;
         AlertUtil.showError("Erreur", "Fonctionnalité non implémentée :) ");
         statusLabel.setText("Affichage des détails du véhicule " + vehiculeSelected.getImmatriculation());
-        // TODO: Navigate to details view or open details dialog
+
     }
 
     @FXML
@@ -254,8 +254,7 @@ public class GestionVehicule implements Initializable {
         } catch (NumberFormatException e) {
             vehicule.setKilometrageTotal(0);
         }
-        
-        // Set default values for new vehicles
+
         vehicule.setKilometrageProchainEntretien(vehicule.getKilometrageTotal() + vehiculeService.getNextKilometrageByTypeVehicule(typePermis.getTypeVehicule()));
         vehicule.setDateProchainEntretien(LocalDate.now().plusMonths(6));
         vehicule.setAnnee(dateMiseServicePicker.getValue().getYear());
@@ -274,7 +273,7 @@ public class GestionVehicule implements Initializable {
         try {
             vehicule.setKilometrageTotal(Integer.parseInt(kilometrageField.getText()));
         } catch (NumberFormatException e) {
-            // Keep existing value
+
         }
         
         vehicule.setDateMiseEnService(dateMiseServicePicker.getValue());

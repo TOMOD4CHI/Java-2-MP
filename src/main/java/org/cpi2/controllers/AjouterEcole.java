@@ -40,7 +40,6 @@ public class AjouterEcole implements Initializable {
     private String logoPath;
     private final AutoEcoleService autoEcoleService = new AutoEcoleService();
 
-    // Validation patterns
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final Pattern PHONE_PATTERN = Pattern.compile("^[0-9]{8}$");
     private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-zÀ-ÿ\\s]+$");
@@ -48,7 +47,7 @@ public class AjouterEcole implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Set placeholders for input fields
+
         nomField.setPromptText("Entrez le nom de l'école");
         adresseField.setPromptText("Entrez l'adresse complète");
         telephoneField.setPromptText("Entrez le numéro (8 chiffres)");
@@ -58,28 +57,24 @@ public class AjouterEcole implements Initializable {
     }
 
     private void setupValidation() {
-        // Validate name field
+
         ValidationUtils.addValidation(nomField, 
             name -> name != null && !name.isEmpty() && NAME_PATTERN.matcher(name).matches(),
             "Le nom de l'école ne doit contenir que des lettres et des espaces", 1);
-        
-        // Validate address field
+
         ValidationUtils.addValidation(adresseField,
             address -> address != null && address.length() >= 10,
             "L'adresse doit contenir au moins 10 caractères", 1);
-        
-        // Validate phone field
+
         ValidationUtils.addValidation(telephoneField,
             phone -> phone != null && PHONE_PATTERN.matcher(phone).matches(),
             "Le numéro de téléphone doit contenir exactement 8 chiffres", 1);
-        
-        // Validate email field
+
         ValidationUtils.addValidation(emailField,
             email -> email != null && EMAIL_PATTERN.matcher(email).matches(),
             "L'adresse email n'est pas valide", 1);
     }
 
-    // Handle file upload for the logo
     public void handleLogoUpload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
@@ -89,26 +84,22 @@ public class AjouterEcole implements Initializable {
 
         if (file != null) {
             try {
-                // Create a directory for storing logos if it doesn't exist
+
                 Path logoDir = Paths.get("logos");
                 if (!Files.exists(logoDir)) {
                     Files.createDirectories(logoDir);
                 }
 
-                // Copy the logo file to the logos directory
                 String fileName = System.currentTimeMillis() + "_" + file.getName();
                 Path targetPath = logoDir.resolve(fileName);
                 Files.copy(file.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
-                // Save the path for later use
                 logoPath = targetPath.toString();
 
-                // Display the image with proper styling
                 logoImage = new Image(file.toURI().toString());
                 logoImageView.setImage(logoImage);
                 logoImageView.getStyleClass().add("logo-image");
-                
-                // Apply dropshadow effect
+
                 logoImageView.setEffect(new javafx.scene.effect.DropShadow(10, javafx.scene.paint.Color.color(0, 0, 0, 0.3)));
             } catch (Exception e) {
                 AlertUtil.showError("Erreur", "Impossible de charger l'image: " + e.getMessage());
@@ -116,26 +107,22 @@ public class AjouterEcole implements Initializable {
         }
     }
 
-    // Handle saving the school data
     public void handleAjouterEcole(ActionEvent event) {
-        // Check if there are any validation errors
+
         if (ValidationUtils.hasAnyErrors()) {
             return;
         }
-        
-        // Get the values from the form
+
         String nom = nomField.getText().trim();
         String adresse = adresseField.getText().trim();
         String telephone = telephoneField.getText().trim();
         String email = emailField.getText().trim();
 
-        // Validate required fields
         if (nom.isEmpty() || adresse.isEmpty() || telephone.isEmpty() || email.isEmpty()) {
             AlertUtil.showError("Erreur de validation", "Tous les champs sont obligatoires.");
             return;
         }
 
-        // Create the AutoEcole object
         AutoEcole autoEcole = new AutoEcole();
         autoEcole.setNom(nom);
         autoEcole.setAdresse(adresse);
@@ -143,13 +130,11 @@ public class AjouterEcole implements Initializable {
         autoEcole.setEmail(email);
         autoEcole.setLogo(logoPath);
 
-        // Save the auto école
         boolean success = autoEcoleService.saveAutoEcole(autoEcole);
 
         if (success) {
             AlertUtil.showSuccess("Succès", "L'école a été ajoutée avec succès!");
-            
-            // Clear the form
+
             clearForm();
         } else {
             AlertUtil.showError("Erreur", "Échec de l'ajout de l'école.");
@@ -175,3 +160,4 @@ public class AjouterEcole implements Initializable {
         ValidationUtils.clearValidation(emailField);
     }
 }
+

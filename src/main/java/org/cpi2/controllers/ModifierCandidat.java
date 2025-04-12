@@ -62,10 +62,8 @@ public class ModifierCandidat {
     @FXML private TextField emailField;
     @FXML private DatePicker birthDatePicker;
 
-    //This might be useless since we can't change the type of permit through the candidat itself
     @FXML private ComboBox<TypePermis> typeComboBox;
-    
-    // Error labels
+
     @FXML private Label nomError;
     @FXML private Label prenomError;
     @FXML private Label cinError;
@@ -76,15 +74,14 @@ public class ModifierCandidat {
     @FXML private Label typeError;
 
     public void initialize() {
-        // Clear existing items and initialize type permis options
+
         typeComboBox.getItems().clear();
         typeComboBox.getItems().addAll(TypePermis.values());
-        // Set default selection
+
         if (!typeComboBox.getItems().isEmpty()) {
             typeComboBox.setValue(TypePermis.B);
         }
-        
-        // Set placeholders for input fields
+
         nomField.setPromptText("Entrez le nom");
         prenomField.setPromptText("Entrez le prénom");
         cinField.setPromptText("Entrez le CIN (8 chiffres minimum)");
@@ -100,15 +97,14 @@ public class ModifierCandidat {
     }
     
     private void setupValidation() {
-        // Nom validation
+
         ValidationUtils.addValidation(nomField, 
             text -> !text.trim().isEmpty(), 
             "Le nom est obligatoire", 1);
         ValidationUtils.addValidation(nomField, 
             this::isValidName, 
             "Le nom ne doit contenir que des lettres et des espaces", 2);
-            
-        // Prénom validation
+
         ValidationUtils.addValidation(prenomField, 
             text -> !text.trim().isEmpty(), 
             "Le prénom est obligatoire", 1);
@@ -134,37 +130,32 @@ public class ModifierCandidat {
         ValidationUtils.addValidation(prenomField, 
             this::isValidName, 
             "Le prénom ne doit contenir que des lettres et des espaces", 2);
-            
-        // CIN validation
+
         ValidationUtils.addValidation(cinField, 
             text -> !text.trim().isEmpty(), 
             "Le CIN est obligatoire", 1);
         ValidationUtils.addValidation(cinField, 
             this::isValidCIN, 
             "Le CIN doit contenir au moins 8 chiffres et ne doit contenir que des chiffres", 2);
-            
-        // Type permis validation
+
         ValidationUtils.<TypePermis>addValidation(typeComboBox, 
             value -> value != null, 
             "Le type de permis est obligatoire", 1);
-            
-        // Address validation
+
         ValidationUtils.addValidation(addressField, 
             text -> !text.trim().isEmpty(), 
             "L'adresse est obligatoire", 1);
         ValidationUtils.addValidation(addressField, 
             text -> isValidAddress(text, 5), 
             "L'adresse doit contenir au moins 5 caractères", 2);
-            
-        // Phone validation
+
         ValidationUtils.addValidation(phoneField, 
             text -> !text.trim().isEmpty(), 
             "Le numéro de téléphone est obligatoire", 1);
         ValidationUtils.addValidation(phoneField, 
             this::isValidPhone, 
             "Le numéro doit contenir exactement 8 chiffres", 2);
-            
-        // Email validation
+
         ValidationUtils.addValidation(emailField, 
             text -> !text.trim().isEmpty(), 
             "L'email est obligatoire", 1);
@@ -233,7 +224,6 @@ public class ModifierCandidat {
                 return;
             }
 
-            // Update candidat object
             candidatToModify.setNom(nomField.getText().trim());
             candidatToModify.setPrenom(prenomField.getText().trim());
             candidatToModify.setAdresse(addressField.getText().trim());
@@ -242,13 +232,11 @@ public class ModifierCandidat {
             candidatToModify.setDateNaissance(birthDatePicker.getValue());
             candidatToModify.setTypePermis(typeComboBox.getValue());
 
-            // Save to database
             candidatService.updateCandidat(candidatToModify);
 
 
             AlertUtil.showSuccess("Succès", "Le candidat a été modifié avec succès.");
 
-            // Close the window
             ((Stage) nomField.getScene().getWindow()).close();
 
         } catch (Exception e) {
@@ -258,11 +246,10 @@ public class ModifierCandidat {
 
     @FXML
     private void cancelAction() {
-        // Réinitialiser les champs
+
         clearFields();
         candidatToModify = null;
-        
-        // Effacer les validations
+
         ValidationUtils.clearValidation(nomField);
         ValidationUtils.clearValidation(prenomField);
         ValidationUtils.clearValidation(cinField);
@@ -322,7 +309,6 @@ public class ModifierCandidat {
     private boolean validateInput() {
         boolean isValid = true;
 
-        // Clear previous error messages
         nomError.setText("");
         prenomError.setText("");
         cinError.setText("");
@@ -332,7 +318,6 @@ public class ModifierCandidat {
         birthDateError.setText("");
         typeError.setText("");
 
-        // Validate each field
         if (!isValidName(nomField.getText())) {
             nomError.setText("Le nom est invalide");
             isValid = false;
@@ -384,3 +369,4 @@ public class ModifierCandidat {
         return isValid;
     }
 }
+

@@ -32,7 +32,7 @@
     -fx-opacity: 0.5;
 }
 
-/* Container styling */
+
 .login-container {
     -fx-background-color: transparent;
     -fx-padding: 30px;
@@ -61,7 +61,7 @@
     -fx-padding: 0 0 20 0;
 }
 
-/* Form elements */
+
 .login-form-grid {
     -fx-background-color: transparent;
     -fx-padding: 20px 0;
@@ -126,7 +126,7 @@
     -fx-font-weight: normal;
 }
 
-/* Logo area */
+
 .login-logo-container {
     -fx-background-color: transparent;
     -fx-padding: 20;
@@ -138,7 +138,7 @@
     -fx-background-color: transparent;
 }
 
-/* Illustration container */
+
 .login-illustration-container {
     -fx-opacity: 0.9;
     -fx-background-color: transparent;

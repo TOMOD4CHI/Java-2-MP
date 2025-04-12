@@ -29,40 +29,36 @@ public class AjouterSalle {
     @FXML private Label capaciteError;
     
     private final SalleService salleService = new SalleService();
-    
-    // Validation patterns
+
     private static final Pattern NUMBER_PATTERN = Pattern.compile("^[0-9]+$");
 
     @FXML
     public void initialize() {
-        // Set placeholders for input fields
+
         nomSalleField.setPromptText("Entrez le nom de la salle");
         numeroSalleField.setPromptText("Entrez le numéro de salle");
         capaciteField.setPromptText("Entrez la capacité de la salle");
         notesTextArea.setPromptText("Entrez toute information supplémentaire concernant la salle");
-        
-        // Setup validation
+
         setupValidation();
     }
     
     private void setupValidation() {
-        // Nom de la salle validation
+
         ValidationUtils.addValidation(nomSalleField, 
             text -> !text.trim().isEmpty(), 
             "Le nom de la salle est obligatoire", 1);
         ValidationUtils.addValidation(nomSalleField, 
             text -> text.length() >= 3, 
             "Le nom de la salle doit contenir au moins 3 caractères", 2);
-        
-        // Numéro de salle validation
+
         ValidationUtils.addValidation(numeroSalleField, 
             text -> !text.trim().isEmpty(), 
             "Le numéro de salle est obligatoire", 1);
         ValidationUtils.addValidation(numeroSalleField, 
             text -> NUMBER_PATTERN.matcher(text).matches(), 
             "Le numéro de salle doit contenir uniquement des chiffres", 2);
-        
-        // Capacité validation
+
         ValidationUtils.addValidation(capaciteField, 
             text -> !text.trim().isEmpty(), 
             "La capacité est obligatoire", 1);
@@ -80,7 +76,7 @@ public class AjouterSalle {
     
     @FXML
     public void handleCloseButtonAction(ActionEvent actionEvent) {
-        // Close the current window
+
         Stage stage = (Stage) annulerButton.getScene().getWindow();
         stage.close();
     }
@@ -92,33 +88,30 @@ public class AjouterSalle {
 
     @FXML
     public void handleEnregistrerButtonAction(ActionEvent actionEvent) {
-        // Check if there are any validation errors
+
         if (ValidationUtils.hasAnyErrors()) {
             AlertUtil.showError("Erreur de validation", "Veuillez corriger les erreurs avant d'enregistrer.");
             return;
         }
         
         try {
-            // Get the values from the form
+
             String nomSalle = nomSalleField.getText().trim();
             String numeroSalle = numeroSalleField.getText().trim();
             int capacite = Integer.parseInt(capaciteField.getText().trim());
             String notes = notesTextArea.getText().trim();
-            
-            // Vérifier si une salle avec le même numéro existe déjà
+
             if (salleService.getSalleByNumero(numeroSalle).isPresent()) {
                 AlertUtil.showError("Erreur", "Une salle avec le numéro " + numeroSalle + " existe déjà.");
                 return;
             }
-            
-            // Create a new salle
+
             Salle salle = new Salle();
             salle.setNom(nomSalle);
             salle.setNumero(numeroSalle);
             salle.setCapacite(capacite);
             salle.setNotes(notes);
-            
-            // Save the salle
+
             boolean success = salleService.addSalle(salle);
             
             if (success) {
@@ -145,3 +138,4 @@ public class AjouterSalle {
         ValidationUtils.clearValidation(capaciteField);
     }
 }
+

@@ -45,20 +45,17 @@ public class Invoice implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize date pickers with default values
+
         dateDebutPicker.setValue(LocalDate.now().minusMonths(1));
         dateFinPicker.setValue(LocalDate.now());
 
-        // Load types de facture
         ObservableList<String> typesFacture = FXCollections.observableArrayList(
                 "Facture complète",
                 "Facture d'inscription");
         typeFactureComboBox.setItems(typesFacture);
-        
-        // Load candidate data
+
         loadCandidates();
-        
-        // Add listeners
+
         candidatComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 updateMontantTotal();
@@ -99,7 +96,7 @@ public class Invoice implements Initializable {
     }
     
     private void updateMontantTotal() {
-        // This would be replaced with actual calculation based on database queries
+
         if (candidatComboBox.getValue() != null && typeFactureComboBox.getValue() != null &&
                 dateDebutPicker.getValue() != null && dateFinPicker.getValue() != null) {
             Candidat candidat = candidatComboBox.getValue();
@@ -131,8 +128,6 @@ public class Invoice implements Initializable {
             return;
         }
 
-        
-        // This would load payments from database
         updateMontantTotal();
         AlertUtil.showInfo("Paiements Chargés", "Les paiements du candidat ont été chargés avec succès.");
     }

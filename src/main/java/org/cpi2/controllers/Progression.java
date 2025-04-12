@@ -55,38 +55,32 @@ public class Progression {
 
     @FXML
     public void initialize() {
-        // Initialize the period combo box
+
         periodeComboBox.getItems().addAll("Semaine", "Mois", "Année");
         periodeComboBox.setValue("Mois");
-        
-        // Add listener to period combo box
+
         periodeComboBox.setOnAction(event -> {
             if (currentCandidatId != null) {
                 updateChartsByPeriod(periodeComboBox.getValue());
             }
         });
-        
-        // Set up candidat combo box
+
         setupCandidatComboBox();
-        
-        // Clear fields initially
+
         clearFields();
     }
     
     private void setupCandidatComboBox() {
-        // Load all candidates
+
         candidatsMap = progressionService.getAllCandidatsForComboBox();
         ObservableList<CandidatItem> candidatItems = FXCollections.observableArrayList();
-        
-        // Convert map to list of CandidatItem objects
+
         for (Map.Entry<Long, String> entry : candidatsMap.entrySet()) {
             candidatItems.add(new CandidatItem(entry.getKey(), entry.getValue()));
         }
-        
-        // Set items to combo box
+
         candidatComboBox.setItems(candidatItems);
-        
-        // Set the string converter to display only the name
+
         candidatComboBox.setConverter(new StringConverter<CandidatItem>() {
             @Override
             public String toString(CandidatItem item) {
@@ -98,8 +92,7 @@ public class Progression {
                 return null; // Not needed for combo box
             }
         });
-        
-        // Add listener for selection
+
         candidatComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 currentCandidatId = newVal.getId();
@@ -123,61 +116,55 @@ public class Progression {
 
     @FXML
     private void exportPdfAction() {
-        // Check if a candidate is loaded
+
         if (currentCandidatId == null) {
             AlertUtil.showError("Erreur", "Veuillez d'abord charger les données d'un candidat");
             return;
         }
         
         try {
-            // Collect all candidate progression data
+
             Map<String, Object> progressionData = new HashMap<>();
-            
-            // Basic info
+
             progressionData.put("nom", nomField.getText());
             progressionData.put("prenom", prenomField.getText());
             progressionData.put("typePermis", typePermisField.getText());
             progressionData.put("dateInscription", dateInscriptionLabel.getText());
             progressionData.put("statut", statutLabel.getText());
-            
-            // Session counts
+
             progressionData.put("totalSeancesCode", Integer.parseInt(totalSeancesCodeLabel.getText()));
             progressionData.put("totalSeancesConduite", Integer.parseInt(totalSeancesConduiteLabel.getText()));
             progressionData.put("seancesCodeCompletes", Integer.parseInt(seancesCodeCompletesLabel.getText()));
             progressionData.put("seancesConduiteCompletes", Integer.parseInt(seancesConduiteCompletesLabel.getText()));
-            
-            // Progress calculations
+
             double progressionTotale = progressionTotaleBar.getProgress();
             progressionData.put("progressionTotale", progressionTotale);
-            
-            // Generate the PDF report
+
             String pdfPath = ProgressionReportGenerator.generateProgressionReport(progressionData);
             
             if (pdfPath != null) {
-                // Show success alert with option to open file
+
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Succès");
                 alert.setHeaderText("Rapport de progression généré");
                 alert.setContentText("Le rapport a été enregistré sous:\n" + pdfPath);
-                
-                // Add buttons to open file or directory
+
                 ButtonType openFileButton = new ButtonType("Ouvrir le fichier");
                 ButtonType openDirButton = new ButtonType("Ouvrir le dossier");
                 ButtonType closeButton = ButtonType.CLOSE;
                 
                 alert.getButtonTypes().setAll(openFileButton, openDirButton, closeButton);
-                
-                // Handle user choice
+
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent()) {
                     if (result.get() == openFileButton) {
-                        // Open the PDF file
+
                         File pdfFile = new File(pdfPath);
                         if (pdfFile.exists()) {
                             Desktop.getDesktop().open(pdfFile);
                         }
                     } else if (result.get() == openDirButton) {
-                        // Open the directory containing the PDF
+
                         File pdfDirectory = new File(pdfPath).getParentFile();
                         if (pdfDirectory.exists()) {
                             Desktop.getDesktop().open(pdfDirectory);
@@ -194,15 +181,14 @@ public class Progression {
     }
     
     private void loadCandidatInfo(Long candidatId) {
-        // Get candidate progression data from service
+
         Map<String, Object> progressionData = progressionService.getCandidatProgression(candidatId);
         
         if (progressionData.isEmpty()) {
             AlertUtil.showError("Erreur", "Impossible de charger les données de progression");
             return;
         }
-        
-        // Set fields with data from database
+
         nomField.setText((String) progressionData.get("nom"));
         prenomField.setText((String) progressionData.get("prenom"));
         typePermisField.setText((String) progressionData.get("typePermis"));
@@ -217,13 +203,12 @@ public class Progression {
         double progress = (double) progressionData.get("progressionTotale");
         progressionTotaleBar.setProgress(progress);
         progressionPourcentageLabel.setText(String.format("%.1f%%", progress * 100));
-        
-        // Update charts
+
         updateCharts(candidatId);
     }
 
     private void updateCharts(Long candidatId) {
-        // Update pie chart with real data
+
         int seancesCodeCompletes = Integer.parseInt(seancesCodeCompletesLabel.getText());
         int totalSeancesCode = Integer.parseInt(totalSeancesCodeLabel.getText());
         int seancesCodeRestantes = totalSeancesCode - seancesCodeCompletes;
@@ -239,8 +224,7 @@ public class Progression {
             new PieChart.Data("Séances Conduite Complètes", seancesConduiteCompletes),
             new PieChart.Data("Séances Conduite Restantes", seancesConduiteRestantes)
         );
-        
-        // Update bar chart based on current period selection
+
         updateChartsByPeriod(periodeComboBox.getValue());
     }
     
@@ -256,8 +240,7 @@ public class Progression {
         
         XYChart.Series<String, Number> drivingSeries = new XYChart.Series<>();
         drivingSeries.setName("Conduite");
-        
-        // Fill series with data from the period
+
         for (Map.Entry<String, Integer> entry : periodData.entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
@@ -295,9 +278,7 @@ public class Progression {
         currentCandidatId = null;
     }
     
-    /**
-     * Helper class to represent a candidate item in the combo box
-     */
+    
     private static class CandidatItem {
         private final Long id;
         private final String displayName;
@@ -321,3 +302,4 @@ public class Progression {
         }
     }
 }
+

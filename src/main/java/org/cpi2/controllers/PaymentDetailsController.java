@@ -71,7 +71,6 @@ public class PaymentDetailsController implements Initializable {
             if (mypane.getScene() != null && mypane.getScene().getWindow() != null) {
                 Window window = mypane.getScene().getWindow();
 
-                // Add icon to the window
                 if (window instanceof Stage) {
                     Stage stage = (Stage) window;
                     Image icon = new Image(getClass().getResourceAsStream("/images/logo4.png"));                    stage.getIcons().add(icon);
@@ -84,7 +83,6 @@ public class PaymentDetailsController implements Initializable {
         closeButton.setOnAction(this::handleClose);
         printButton.setOnAction(this::handlePrint);
 
-        // Setup payment history table columns
         setupHistoryTable();
     }
     
@@ -93,8 +91,7 @@ public class PaymentDetailsController implements Initializable {
         historyMontantColumn.setCellValueFactory(new PropertyValueFactory<>("montant"));
         historyTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         historyMethodeColumn.setCellValueFactory(new PropertyValueFactory<>("methode"));
-        
-        // Format money values
+
         historyMontantColumn.setCellFactory(col -> new TableCell<PaymentHistoryEntry, Double>() {
             @Override
             protected void updateItem(Double montant, boolean empty) {
@@ -110,8 +107,7 @@ public class PaymentDetailsController implements Initializable {
     
     public void initData(PaymentEntry payment) {
         this.payment = payment;
-        
-        // Set basic payment details
+
         idLabel.setText(String.valueOf(payment.getId()));
         dateLabel.setText(payment.getDate());
         candidatLabel.setText(payment.getCandidat());
@@ -120,8 +116,7 @@ public class PaymentDetailsController implements Initializable {
         methodeLabel.setText(payment.getMethode());
         statutLabel.setText(payment.getStatut());
         cinLabel.setText(payment.getCin());
-        
-        // Load and display payment plan details if it's an inscription payment
+
         if (payment.getStatut().equalsIgnoreCase("annulee")){
             nextPaymentLabel.setText("N/A");
             remainingLabel.setText("N/A");
@@ -154,7 +149,7 @@ public class PaymentDetailsController implements Initializable {
     
     private void loadInscriptionPaymentDetails() {
         try {
-            // Get the active inscription for this candidate
+
             List<Inscription> inscriptions = inscriptionService.getActifInscirptionBycin(payment.getCin());
             
             if (!inscriptions.isEmpty()) {
@@ -162,18 +157,15 @@ public class PaymentDetailsController implements Initializable {
                 double totalAmount = inscription.getPlan().getPrice();
                 double remainingAmount = paiementService.calculerMontantRestant(inscription.getId());
                 double paidAmount = totalAmount - remainingAmount;
-                
-                // Update labels
+
                 planTypeLabel.setText(inscription.getPlan().getName());
                 totalPaidLabel.setText(String.format("%.2f DT / %.2f DT", paidAmount, totalAmount));
                 remainingLabel.setText(String.format("%.2f DT", remainingAmount));
-                
-                // Update progress bar
+
                 if (paymentProgressBar != null) {
                     paymentProgressBar.setProgress(paidAmount / totalAmount);
                 }
-                
-                // Show next payment date if available
+
                 if (inscription.getnextPaymentDate() != null) {
                     nextPaymentLabel.setText(inscription.getnextPaymentDate().toLocalDate().format(dateFormatter));
                 } else {
@@ -190,7 +182,7 @@ public class PaymentDetailsController implements Initializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Hide payment plan section if an error occurs
+
             if (paymentProgressBar != null) {
                 paymentProgressBar.setVisible(false);
             }
@@ -198,14 +190,13 @@ public class PaymentDetailsController implements Initializable {
     }
     
     private void loadPaymentHistory(String cin) {
-        // Create observable list for payment history
+
         ObservableList<PaymentHistoryEntry> historyData = FXCollections.observableArrayList();
         
         try {
-            // Get all payments for this candidate
+
             List<Paiement> candidatePayments = paiementService.getAllPaiements().stream().filter(p -> p.getCandidat().getCin().equals(cin)).toList();
-            
-            // Convert to table entries
+
             for (Paiement p : candidatePayments) {
                 String type = p.getTypePaiement();
                 if (type == null) {
@@ -219,8 +210,7 @@ public class PaymentDetailsController implements Initializable {
                     p.getModePaiement().name()
                 ));
             }
-            
-            // Set the table data
+
             paymentsHistoryTable.setItems(historyData);
             
         } catch (Exception e) {
@@ -238,10 +228,10 @@ public class PaymentDetailsController implements Initializable {
     @FXML
     private void handlePrint(ActionEvent event) {
         try {
-            // Get the payment
+
             paiementService.getPaiementById(payment.getId()).ifPresent(paiement -> {
                 try {
-                    // Prepare data for receipt
+
                     Map<String, Object> receiptData = new HashMap<>();
                     receiptData.put("id", payment.getId());
                     receiptData.put("date", payment.getDate());
@@ -250,8 +240,7 @@ public class PaymentDetailsController implements Initializable {
                     receiptData.put("montant", payment.getMontant());
                     receiptData.put("type", payment.getType());
                     receiptData.put("methode", payment.getMethode());
-                    
-                    // Add additional payment plan info if available and it's an inscription payment
+
                     if (!payment.getType().equals("Examen")) {
                         List<Inscription> inscriptions = inscriptionService.getActifInscirptionBycin(payment.getCin());
                         if (!inscriptions.isEmpty()) {
@@ -269,8 +258,7 @@ public class PaymentDetailsController implements Initializable {
                                 inscription.getnextPaymentDate().toLocalDate().format(dateFormatter) : "Payé intégralement");
                         }
                     }
-                    
-                    // Generate and open receipt
+
                     String pdfPath = PaymentReceiptGenerator.generateSinglePaymentReceipt(receiptData);
                     if (pdfPath != null) {
                         File pdfFile = new File(pdfPath);
@@ -293,8 +281,7 @@ public class PaymentDetailsController implements Initializable {
             AlertUtil.showError("Erreur d'impression", "Impossible d'imprimer le reçu: " + e.getMessage());
         }
     }
-    
-    // Inner class for payment history table
+
     public static class PaymentHistoryEntry {
         private final String date;
         private final double montant;

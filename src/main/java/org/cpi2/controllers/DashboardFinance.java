@@ -30,8 +30,7 @@ public class DashboardFinance implements Initializable {
     @FXML private ComboBox<String> periodCombo;
     @FXML private DatePicker startDate;
     @FXML private DatePicker endDate;
-    
-    // KPI Labels
+
     @FXML private Label totalRevenueLabel;
     @FXML private Label totalExpensesLabel;
     @FXML private Label netProfitLabel;
@@ -40,8 +39,7 @@ public class DashboardFinance implements Initializable {
     @FXML private Label expensesChangeLabel;
     @FXML private Label profitChangeLabel;
     @FXML private Label studentsChangeLabel;
-    
-    // Charts
+
     @FXML private AreaChart<String, Number> revenueChart;
     @FXML private CategoryAxis revenueDateAxis;
     @FXML private NumberAxis revenueValueAxis;
@@ -55,8 +53,7 @@ public class DashboardFinance implements Initializable {
     @FXML private BarChart<String, Number> monthlyComparisonChart;
     @FXML private CategoryAxis monthAxis;
     @FXML private NumberAxis monthlyValueAxis;
-    
-    // Table
+
     @FXML private TableView<Transaction> transactionsTable;
     @FXML private TableColumn<Transaction, String> transactionDateColumn;
     @FXML private TableColumn<Transaction, String> transactionTypeColumn;
@@ -70,7 +67,7 @@ public class DashboardFinance implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize the period combobox
+
         periodCombo.getItems().addAll(
             "Aujourd'hui",
             "Cette semaine",
@@ -79,8 +76,7 @@ public class DashboardFinance implements Initializable {
             "Cette année"
         );
         periodCombo.getSelectionModel().select("Ce mois-ci");
-        
-        // Initialize date pickers with current month
+
         LocalDate now = LocalDate.now();
         LocalDate firstDay = now.withDayOfMonth(1);
         startDate.setValue(firstDay);
@@ -88,14 +84,11 @@ public class DashboardFinance implements Initializable {
         
         filterStartDate = firstDay;
         filterEndDate = now;
-        
-        // Setup the transactions table columns
+
         setupTransactionsTable();
-        
-        // Initialize empty charts to show immediately
+
         initializeEmptyCharts();
-        
-        // Load data in background thread to prevent UI freezing
+
         Platform.runLater(() -> {
             try {
                 loadChartData();
@@ -104,30 +97,26 @@ public class DashboardFinance implements Initializable {
                 AlertUtil.showError("Erreur de chargement", "Impossible de charger les données: " + e.getMessage());
             }
         });
-        
-        // Add listener to period combo box
+
         periodCombo.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updateDateRange(newVal);
         });
     }
     
     private void initializeEmptyCharts() {
-        // Initialize revenue chart with empty data
+
         XYChart.Series<String, Number> emptySeries = new XYChart.Series<>();
         emptySeries.setName("Chargement...");
         revenueChart.getData().add(emptySeries);
-        
-        // Initialize expenses pie chart with empty data
+
         ObservableList<PieChart.Data> emptyPieData = FXCollections.observableArrayList();
         emptyPieData.add(new PieChart.Data("Chargement...", 1));
         expensesPieChart.setData(emptyPieData);
-        
-        // Initialize service revenue chart with empty data
+
         XYChart.Series<String, Number> emptyServiceSeries = new XYChart.Series<>();
         emptyServiceSeries.setName("Chargement...");
         revenueByServiceChart.getData().add(emptyServiceSeries);
-        
-        // Initialize monthly comparison chart with empty data
+
         XYChart.Series<String, Number> emptyMonthlySeries = new XYChart.Series<>();
         emptyMonthlySeries.setName("Chargement...");
         monthlyComparisonChart.getData().add(emptyMonthlySeries);
@@ -164,11 +153,10 @@ public class DashboardFinance implements Initializable {
     
     @FXML
     private void handleApplyFilter() {
-        // Get values from filters
+
         filterStartDate = startDate.getValue();
         filterEndDate = endDate.getValue();
-        
-        // Validate dates
+
         if (filterStartDate == null || filterEndDate == null) {
             AlertUtil.showError("Erreur de date", "Veuillez sélectionner des dates valides");
             return;
@@ -178,20 +166,18 @@ public class DashboardFinance implements Initializable {
             AlertUtil.showError("Erreur de date", "La date de début doit être avant la date de fin");
             return;
         }
-        
-        // Show loading indicators briefly
+
         totalRevenueLabel.setText("Chargement...");
         totalExpensesLabel.setText("Chargement...");
         netProfitLabel.setText("Chargement...");
         newStudentsLabel.setText("Chargement...");
-        
-        // Apply filter and reload data in background thread
+
         Platform.runLater(() -> {
             try {
                 loadChartData();
             } catch (Exception e) {
                 e.printStackTrace();
-                // If loading fails, ensure we display zeros instead of "Chargement..."
+
                 Platform.runLater(() -> {
                     totalRevenueLabel.setText("0.00 DT");
                     totalExpensesLabel.setText("0.00 DT");
@@ -203,16 +189,15 @@ public class DashboardFinance implements Initializable {
     }
     
     private void loadChartData() {
-        // Create a list to track critical errors - only show warnings for non-critical errors
+
         List<Exception> criticalErrors = new ArrayList<>();
-        
-        // Try to load each component independently with proper error handling
-        // Each method will now handle its own errors internally
+
+
         try {
             loadKPIData();
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback to zero values instead of showing loading
+
             Platform.runLater(() -> {
                 totalRevenueLabel.setText("0.00 DT");
                 totalExpensesLabel.setText("0.00 DT");
@@ -229,7 +214,7 @@ public class DashboardFinance implements Initializable {
             loadRevenueChartData();
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback to empty chart
+
             Platform.runLater(() -> {
                 revenueChart.getData().clear();
                 XYChart.Series<String, Number> emptySeries = new XYChart.Series<>();
@@ -242,7 +227,7 @@ public class DashboardFinance implements Initializable {
             loadExpensesBreakdownData();
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback to empty pie chart
+
             Platform.runLater(() -> {
                 ObservableList<PieChart.Data> emptyData = FXCollections.observableArrayList();
                 emptyData.add(new PieChart.Data("Aucune dépense", 1));
@@ -254,7 +239,7 @@ public class DashboardFinance implements Initializable {
             loadRevenueByServiceData();
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback to empty chart
+
             Platform.runLater(() -> {
                 revenueByServiceChart.getData().clear();
                 XYChart.Series<String, Number> emptySeries = new XYChart.Series<>();
@@ -267,7 +252,7 @@ public class DashboardFinance implements Initializable {
             loadMonthlyComparisonData();
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback to empty chart
+
             Platform.runLater(() -> {
                 monthlyComparisonChart.getData().clear();
                 XYChart.Series<String, Number> emptySeries = new XYChart.Series<>();
@@ -280,13 +265,12 @@ public class DashboardFinance implements Initializable {
             loadTransactionsData();
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback to empty table
+
             Platform.runLater(() -> {
                 transactionsTable.setItems(FXCollections.observableArrayList());
             });
         }
-        
-        // Only show critical errors, not all errors
+
         if (!criticalErrors.isEmpty()) {
             Platform.runLater(() -> {
                 AlertUtil.showError("Erreur", "Erreur critique lors du chargement des données financières.");
@@ -295,21 +279,17 @@ public class DashboardFinance implements Initializable {
     }
     
     private void loadKPIData() {
-        // Create fresh connection for each query to avoid connection closed issues
-        
-        // Total revenue
+
+
         String revenueSql = "SELECT SUM(montant) as total_revenue FROM paiement " +
                            "WHERE date_paiement BETWEEN ? AND ?";
-        
-        // Total expenses (from entretien table for maintenance costs)
+
         String expensesSql = "SELECT SUM(cout) as total_expenses FROM entretien " +
                            "WHERE date_entretien BETWEEN ? AND ?";
-        
-        // New students count
+
         String newStudentsSql = "SELECT COUNT(*) as new_students FROM inscription " +
                               "WHERE date_inscription BETWEEN ? AND ?";
-        
-        // Calculate previous period for comparison
+
         LocalDate prevPeriodEndDate = filterStartDate.minusDays(1);
         int daysBetween = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate);
         LocalDate prevPeriodStartDate = prevPeriodEndDate.minusDays(daysBetween);
@@ -320,10 +300,8 @@ public class DashboardFinance implements Initializable {
         double prevExpenses = 0;
         int newStudents = 0;
         int prevStudents = 0;
-        
-        // Each query gets its own connection to avoid "connection closed" errors
-        
-        // Get current period revenue
+
+
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(revenueSql)) {
             
@@ -337,10 +315,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Continue with zero value
+
         }
-        
-        // Get previous period revenue
+
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(revenueSql)) {
             
@@ -354,10 +331,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Continue with zero value
+
         }
-        
-        // Get current period expenses from database
+
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(expensesSql)) {
             
@@ -371,10 +347,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Continue with zero value
+
         }
-        
-        // Try to get more accurate expenses from service
+
         try {
             EntretienService entretienService = new EntretienService();
             double serviceTotalCost = entretienService.getTotalCost(filterStartDate, filterEndDate);
@@ -384,10 +359,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Continue with current expenses value
+
         }
-        
-        // Get previous period expenses
+
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(expensesSql)) {
             
@@ -401,10 +375,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Continue with zero value
+
         }
-        
-        // Try to get more accurate previous expenses from service
+
         try {
             EntretienService entretienService = new EntretienService();
             double prevServiceCost = entretienService.getTotalCost(prevPeriodStartDate, prevPeriodEndDate);
@@ -414,10 +387,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Continue with current prev expenses value
+
         }
-        
-        // Get new students count
+
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(newStudentsSql)) {
             
@@ -431,10 +403,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Continue with zero value
+
         }
-        
-        // Get previous period students count
+
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(newStudentsSql)) {
             
@@ -448,10 +419,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Continue with zero value
+
         }
-        
-        // Add estimated salary expenses from moniteurs
+
         try (Connection conn = DatabaseConfig.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as total FROM moniteur")) {
@@ -460,19 +430,15 @@ public class DashboardFinance implements Initializable {
                 int monitorCount = rs.getInt("total");
                 if (monitorCount > 0) {
                     double salaireMoyen = 1000.0; // Average salary per monitor in DT
-                    
-                    // Calculate estimated monthly salary costs based on monitors
+
                     double totalSalaires = monitorCount * salaireMoyen;
-                    
-                    // Adjust for period length
+
                     int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate) + 1;
                     double periodRatio = daysInPeriod / 30.0; // Approximate days in a month
                     double salaryForPeriod = totalSalaires * periodRatio;
-                    
-                    // Add to total expenses
+
                     totalExpenses += salaryForPeriod;
-                    
-                    // Do the same for previous period
+
                     int prevDaysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(prevPeriodStartDate, prevPeriodEndDate) + 1;
                     double prevPeriodRatio = prevDaysInPeriod / 30.0;
                     double salaryForPrevPeriod = totalSalaires * prevPeriodRatio;
@@ -482,10 +448,9 @@ public class DashboardFinance implements Initializable {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Continue with current expenses values
+
         }
-        
-        // Add rent expense (fixed monthly cost)
+
         double loyerMensuel = 1200.0; // Monthly rent
         try {
             int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate) + 1;
@@ -497,10 +462,9 @@ public class DashboardFinance implements Initializable {
             prevExpenses += (loyerMensuel * prevPeriodRatio);
         } catch (Exception e) {
             e.printStackTrace();
-            // Continue with current expenses values
+
         }
-        
-        // Calculate net profit based on real data (never mock)
+
         final double finalTotalRevenue = totalRevenue;
         final double finalTotalExpenses = totalExpenses;
         final double finalPrevRevenue = prevRevenue;
@@ -509,20 +473,16 @@ public class DashboardFinance implements Initializable {
         final int finalPrevStudents = prevStudents;
         
         Platform.runLater(() -> {
-            // Set totalRevenueLabel
+
             totalRevenueLabel.setText(String.format("%.2f DT", finalTotalRevenue));
-            
-            // Set totalExpensesLabel (negative to represent expenses)
+
             totalExpensesLabel.setText(String.format("%.2f DT", -finalTotalExpenses));
-            
-            // Set newStudentsLabel - using real data
+
             newStudentsLabel.setText(String.valueOf(finalNewStudents));
-            
-            // Calculate and set net profit - never mock data
+
             double netProfit = finalTotalRevenue - finalTotalExpenses;
             netProfitLabel.setText(String.format("%.2f DT", netProfit));
-            
-            // Calculate and set revenue change percentage
+
             if (finalPrevRevenue > 0) {
                 double revenueChange = ((finalTotalRevenue - finalPrevRevenue) / finalPrevRevenue) * 100;
                 String direction = revenueChange >= 0 ? "+" : "";
@@ -530,19 +490,17 @@ public class DashboardFinance implements Initializable {
             } else {
                 revenueChangeLabel.setText("--% vs période précédente");
             }
-            
-            // Calculate and set expenses change percentage
+
             if (finalPrevExpenses > 0) {
                 double expensesChange = ((finalTotalExpenses - finalPrevExpenses) / finalPrevExpenses) * 100;
-                // For expenses, an increase is bad and a decrease is good
+
                 String direction = expensesChange <= 0 ? "+" : "";
                 String changeText = String.format("%s%.1f%% vs période précédente", direction, Math.abs(expensesChange));
                 expensesChangeLabel.setText(changeText);
             } else {
                 expensesChangeLabel.setText("--% vs période précédente");
             }
-            
-            // Calculate and set profit change percentage
+
             double prevProfit = finalPrevRevenue - finalPrevExpenses;
             if (prevProfit != 0) {
                 double profitChange = ((netProfit - prevProfit) / Math.abs(prevProfit)) * 100;
@@ -551,8 +509,7 @@ public class DashboardFinance implements Initializable {
             } else {
                 profitChangeLabel.setText("--% vs période précédente");
             }
-            
-            // Calculate and set students change percentage
+
             if (finalPrevStudents > 0) {
                 double studentsChange = ((double) (finalNewStudents - finalPrevStudents) / finalPrevStudents) * 100;
                 String direction = studentsChange >= 0 ? "+" : "";
@@ -564,7 +521,7 @@ public class DashboardFinance implements Initializable {
     }
     
     private void loadRevenueChartData() throws SQLException {
-        // Get revenue data by date
+
         String sql = "SELECT DATE_FORMAT(date_paiement, '%d/%m') as date, SUM(montant) as amount " +
                     "FROM paiement WHERE date_paiement BETWEEN ? AND ? " +
                     "GROUP BY DATE_FORMAT(date_paiement, '%d/%m') ORDER BY date_paiement";
@@ -573,7 +530,7 @@ public class DashboardFinance implements Initializable {
         revenueSeries.setName("Revenus");
         
         try (Connection conn = DatabaseConfig.getConnection()) {
-            // Get day-by-day data
+
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
                 pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
@@ -587,8 +544,7 @@ public class DashboardFinance implements Initializable {
                         revenueByDate.put(date, amount);
                     }
                 }
-                
-                // Generate a complete date series for the selected range
+
                 LocalDate current = filterStartDate;
                 while (!current.isAfter(filterEndDate)) {
                     String dateStr = current.format(DateTimeFormatter.ofPattern("dd/MM"));
@@ -597,15 +553,13 @@ public class DashboardFinance implements Initializable {
                     }
                     current = current.plusDays(1);
                 }
-                
-                // Sort dates chronologically and add to series
+
                 revenueByDate.entrySet().stream()
                     .sorted((e1, e2) -> {
-                        // Parse date strings in format dd/MM
+
                         String[] parts1 = e1.getKey().split("/");
                         String[] parts2 = e2.getKey().split("/");
-                        
-                        // Create comparable values (month * 100 + day)
+
                         int val1 = Integer.parseInt(parts1[1]) * 100 + Integer.parseInt(parts1[0]);
                         int val2 = Integer.parseInt(parts2[1]) * 100 + Integer.parseInt(parts2[0]);
                         
@@ -616,8 +570,7 @@ public class DashboardFinance implements Initializable {
                     });
             }
         }
-        
-        // Clear the chart and add the new series
+
         Platform.runLater(() -> {
             revenueChart.getData().clear();
             revenueChart.getData().add(revenueSeries);
@@ -625,7 +578,7 @@ public class DashboardFinance implements Initializable {
     }
     
     private void loadExpensesBreakdownData() throws SQLException {
-        // Map to store expense categories and their amounts
+
         Map<String, Double> expensesCategories = new HashMap<>();
         expensesCategories.put("Salaires", 0.0);
         expensesCategories.put("Loyer", 0.0);
@@ -634,7 +587,7 @@ public class DashboardFinance implements Initializable {
         expensesCategories.put("Autres", 0.0);
         
         try (Connection conn = DatabaseConfig.getConnection()) {
-            // Get expense data from entretien table by category
+
             String maintenanceSql = "SELECT type_entretien, SUM(cout) as total FROM entretien " +
                                   "WHERE date_entretien BETWEEN ? AND ? " +
                                   "GROUP BY type_entretien";
@@ -660,8 +613,7 @@ public class DashboardFinance implements Initializable {
                     }
                 }
             }
-            
-            // Get salary expenses based on active monitors
+
             String monitorCountSql = "SELECT COUNT(*) as total FROM moniteur";
             double salaireMoyen = 1000.0; // Average monthly salary per monitor
             
@@ -670,10 +622,9 @@ public class DashboardFinance implements Initializable {
                 if (rs.next()) {
                     int monitorCount = rs.getInt("total");
                     if (monitorCount > 0) {
-                        // Calculate estimated monthly salary costs
+
                         double totalSalaires = monitorCount * salaireMoyen;
-                        
-                        // Adjust for period length
+
                         int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate) + 1;
                         double periodRatio = daysInPeriod / 30.0; // Approximate days in a month
                         
@@ -681,21 +632,17 @@ public class DashboardFinance implements Initializable {
                     }
                 }
             }
-            
-            // Add rent expense (fixed monthly cost)
+
             double loyerMensuel = 1200.0; // Monthly rent
             int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(filterStartDate, filterEndDate) + 1;
             double periodRatio = daysInPeriod / 30.0; // Approximate days in a month
             expensesCategories.put("Loyer", loyerMensuel * periodRatio);
         }
-        
-        // Remove any zero-value categories
+
         expensesCategories.entrySet().removeIf(entry -> entry.getValue() <= 0);
-        
-        // Calculate total for percentages
+
         double totalExpenses = expensesCategories.values().stream().mapToDouble(Double::doubleValue).sum();
-        
-        // Create pie chart data
+
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         for (Map.Entry<String, Double> entry : expensesCategories.entrySet()) {
             if (entry.getValue() > 0) {
@@ -704,13 +651,11 @@ public class DashboardFinance implements Initializable {
                 pieChartData.add(new PieChart.Data(label, entry.getValue()));
             }
         }
-        
-        // If still no data, add a placeholder
+
         if (pieChartData.isEmpty()) {
             pieChartData.add(new PieChart.Data("Aucune dépense", 1));
         }
-        
-        // Update the chart on JavaFX Application Thread
+
         Platform.runLater(() -> {
             expensesPieChart.setData(pieChartData);
         });
@@ -723,10 +668,9 @@ public class DashboardFinance implements Initializable {
         Map<String, Double> serviceRevenues = new HashMap<>();
         
         try (Connection conn = DatabaseConfig.getConnection()) {
-            // Try multiple approaches to get service revenue data
+
             boolean hasData = false;
-            
-            // Approach 1: Get revenue by plan
+
             String planSql = "SELECT p.libelle as service, SUM(pay.montant) as revenue " +
                            "FROM paiement pay " +
                            "JOIN inscription i ON pay.inscription_id = i.id " +
@@ -749,11 +693,10 @@ public class DashboardFinance implements Initializable {
                     }
                 }
             } catch (SQLException e) {
-                // Continue with next approach if this one fails
+
                 e.printStackTrace();
             }
-            
-            // Approach 2: Get revenue by payment type
+
             if (!hasData) {
                 String typeSql = "SELECT COALESCE(type_paiement, 'Paiement général') as service, " +
                                "SUM(montant) as revenue " +
@@ -776,12 +719,11 @@ public class DashboardFinance implements Initializable {
                         }
                     }
                 } catch (SQLException e) {
-                    // Continue with next approach if this one fails
+
                     e.printStackTrace();
                 }
             }
-            
-            // Approach 3: Infer service from inscription_id or examen_id
+
             if (!hasData) {
                 String inscriptionSql = "SELECT 'Formation' as service, SUM(montant) as revenue " +
                                       "FROM paiement " +
@@ -803,7 +745,7 @@ public class DashboardFinance implements Initializable {
                         }
                     }
                 } catch (SQLException e) {
-                    // Ignore if column doesn't exist
+
                     e.printStackTrace();
                 }
                 
@@ -827,7 +769,7 @@ public class DashboardFinance implements Initializable {
                         }
                     }
                 } catch (SQLException e) {
-                    // Ignore if column doesn't exist
+
                     e.printStackTrace();
                 }
                 
@@ -852,12 +794,11 @@ public class DashboardFinance implements Initializable {
                         }
                     }
                 } catch (SQLException e) {
-                    // Ignore if there's an issue
+
                     e.printStackTrace();
                 }
             }
-            
-            // Approach 4: Get total revenue and distribute
+
             if (!hasData) {
                 String totalSql = "SELECT SUM(montant) as total_revenue " +
                                 "FROM paiement " +
@@ -871,7 +812,7 @@ public class DashboardFinance implements Initializable {
                         if (rs.next()) {
                             double totalRevenue = rs.getDouble("total_revenue");
                             if (totalRevenue > 0) {
-                                // If we only have total revenue, distribute it using typical ratios
+
                                 serviceRevenues.put("Formation", totalRevenue * 0.55);  // 55%
                                 serviceRevenues.put("Conduite", totalRevenue * 0.30);   // 30%
                                 serviceRevenues.put("Examen", totalRevenue * 0.15);     // 15%
@@ -882,8 +823,7 @@ public class DashboardFinance implements Initializable {
                 }
             }
         }
-        
-        // If we have data, sort it by revenue (descending) and add to series
+
         if (!serviceRevenues.isEmpty()) {
             serviceRevenues.entrySet().stream()
                 .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
@@ -891,11 +831,10 @@ public class DashboardFinance implements Initializable {
                     serviceSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
                 });
         } else {
-            // If still no data (unlikely at this point), add placeholder
+
             serviceSeries.getData().add(new XYChart.Data<>("Aucune donnée", 0));
         }
-        
-        // Update the chart on JavaFX Application Thread
+
         Platform.runLater(() -> {
             revenueByServiceChart.getData().clear();
             revenueByServiceChart.getData().add(serviceSeries);
@@ -911,13 +850,12 @@ public class DashboardFinance implements Initializable {
         
         XYChart.Series<String, Number> profitMonthlySeries = new XYChart.Series<>();
         profitMonthlySeries.setName("Profit Net");
-        
-        // Maps to store the monthly data
+
         Map<String, Double> monthlyRevenues = new HashMap<>();
         Map<String, Double> monthlyExpenses = new HashMap<>();
         
         try (Connection conn = DatabaseConfig.getConnection()) {
-            // Get monthly revenue data for the last 4 months
+
             String revenueSql = "SELECT DATE_FORMAT(date_paiement, '%Y-%m') as yearMonth, " +
                               "DATE_FORMAT(date_paiement, '%b') as monthName, " +
                               "SUM(montant) as revenue " +
@@ -934,8 +872,7 @@ public class DashboardFinance implements Initializable {
                     monthlyRevenues.put(monthName, revenue);
                 }
             }
-            
-            // Get monthly expenses data for the last 4 months
+
             String expensesSql = "SELECT DATE_FORMAT(date_entretien, '%Y-%m') as yearMonth, " +
                                "DATE_FORMAT(date_entretien, '%b') as monthName, " +
                                "SUM(cout) as expenses " +
@@ -952,8 +889,7 @@ public class DashboardFinance implements Initializable {
                     monthlyExpenses.put(monthName, expenses);
                 }
             }
-            
-            // Add salary expenses for each month
+
             String monitorCountSql = "SELECT COUNT(*) as total FROM moniteur";
             double salaireMoyen = 1000.0; // Average salary per monitor per month
             
@@ -963,38 +899,32 @@ public class DashboardFinance implements Initializable {
                     int monitorCount = rs.getInt("total");
                     if (monitorCount > 0) {
                         double monthlyMonitorSalaries = monitorCount * salaireMoyen;
-                        
-                        // Add to each month's expenses
+
                         LocalDate now = LocalDate.now();
                         for (int i = 0; i < 4; i++) {
                             LocalDate monthDate = now.minusMonths(i);
                             String monthName = monthDate.getMonth().toString().substring(0, 3);
-                            
-                            // Add salary expenses to existing or create new
+
                             monthlyExpenses.merge(monthName, monthlyMonitorSalaries, Double::sum);
                         }
                     }
                 }
             }
-            
-            // Add rent to each month's expenses
+
             double monthlyRent = 1200.0;
             LocalDate now = LocalDate.now();
             for (int i = 0; i < 4; i++) {
                 LocalDate monthDate = now.minusMonths(i);
                 String monthName = monthDate.getMonth().toString().substring(0, 3);
-                
-                // Add rent to existing or create new
+
                 monthlyExpenses.merge(monthName, monthlyRent, Double::sum);
             }
         }
-        
-        // Get unique months from both maps
+
         Set<String> allMonths = new HashSet<>();
         allMonths.addAll(monthlyRevenues.keySet());
         allMonths.addAll(monthlyExpenses.keySet());
-        
-        // Ensure we have the last 4 months regardless of data
+
         LocalDate now = LocalDate.now();
         Map<String, Integer> monthOrder = new HashMap<>();
         List<String> monthNames = new ArrayList<>();
@@ -1003,15 +933,12 @@ public class DashboardFinance implements Initializable {
             LocalDate monthDate = now.minusMonths(i);
             String monthName = monthDate.getMonth().toString().substring(0, 3);
             monthNames.add(monthName);
-            
-            // Add to month collection if not present
+
             allMonths.add(monthName);
-            
-            // Store month ordering (for sorting)
+
             monthOrder.put(monthName, 3-i); // 0,1,2,3 order value
         }
-        
-        // Process each month in chronological order
+
         for (String month : monthNames) {
             double revenue = monthlyRevenues.getOrDefault(month, 0.0);
             double expenses = monthlyExpenses.getOrDefault(month, 0.0);
@@ -1021,8 +948,7 @@ public class DashboardFinance implements Initializable {
             expenseMonthlySeries.getData().add(new XYChart.Data<>(month, -expenses)); // Negate expenses for display
             profitMonthlySeries.getData().add(new XYChart.Data<>(month, profit));
         }
-        
-        // Update the chart on JavaFX Application Thread
+
         Platform.runLater(() -> {
             monthlyComparisonChart.getData().clear();
             monthlyComparisonChart.getData().addAll(revenueMonthlySeries, expenseMonthlySeries, profitMonthlySeries);
@@ -1030,14 +956,13 @@ public class DashboardFinance implements Initializable {
     }
     
     private void setupTransactionsTable() {
-        // Configure table columns
+
         transactionDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         transactionTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         transactionDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         transactionAmountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         transactionStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        
-        // Format amount column to show currency
+
         transactionAmountColumn.setCellFactory(col -> new TableCell<Transaction, Double>() {
             @Override
             protected void updateItem(Double amount, boolean empty) {
@@ -1046,8 +971,7 @@ public class DashboardFinance implements Initializable {
                     setText(null);
                 } else {
                     setText(String.format("%.2f DT", amount));
-                    
-                    // Add color based on amount (red for negative, green for positive)
+
                     if (amount < 0) {
                         setStyle("-fx-text-fill: #e74c3c;");
                     } else {
@@ -1056,8 +980,7 @@ public class DashboardFinance implements Initializable {
                 }
             }
         });
-        
-        // Format type column with color indicators
+
         transactionTypeColumn.setCellFactory(col -> new TableCell<Transaction, String>() {
             @Override
             protected void updateItem(String type, boolean empty) {
@@ -1083,7 +1006,7 @@ public class DashboardFinance implements Initializable {
         ObservableList<Transaction> data = FXCollections.observableArrayList();
         
         try (Connection conn = DatabaseConfig.getConnection()) {
-            // First get revenue transactions
+
             String revenueSql = "SELECT DATE_FORMAT(p.date_paiement, '%d/%m/%Y') as date, " +
                               "'Revenu' as type, " +
                               "CASE " +
@@ -1099,8 +1022,7 @@ public class DashboardFinance implements Initializable {
                               "WHERE p.date_paiement BETWEEN ? AND ? " +
                               "ORDER BY p.date_paiement DESC " +
                               "LIMIT 20";
-            
-            // Get expense transactions
+
             String expensesSql = "SELECT DATE_FORMAT(e.date_entretien, '%d/%m/%Y') as date, " +
                                "'Dépense' as type, " +
                                "CONCAT(COALESCE(e.type_entretien, 'Entretien'), ' - ', COALESCE(v.marque, ''), ' ', COALESCE(v.modele, ''), IF(v.immatriculation IS NOT NULL, CONCAT(' (', v.immatriculation, ')'), '')) as description, " +
@@ -1111,8 +1033,7 @@ public class DashboardFinance implements Initializable {
                                "WHERE e.date_entretien BETWEEN ? AND ? " +
                                "ORDER BY e.date_entretien DESC " +
                                "LIMIT 20";
-            
-            // Fetch revenue transactions
+
             try (PreparedStatement pstmt = conn.prepareStatement(revenueSql)) {
                 pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
                 pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
@@ -1129,8 +1050,7 @@ public class DashboardFinance implements Initializable {
                     }
                 }
             }
-            
-            // Fetch expense transactions
+
             try (PreparedStatement pstmt = conn.prepareStatement(expensesSql)) {
                 pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
                 pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
@@ -1147,16 +1067,13 @@ public class DashboardFinance implements Initializable {
                     }
                 }
             }
-            
-            // Add fixed expenses (like rent and salaries) if current period includes end of month
+
             LocalDate now = LocalDate.now();
             LocalDate currentMonth = now.withDayOfMonth(now.lengthOfMonth());
-            
-            // Check if end of month is within the filter period
+
             if ((currentMonth.isAfter(filterStartDate) && currentMonth.isBefore(filterEndDate)) 
                     || currentMonth.isEqual(filterStartDate) || currentMonth.isEqual(filterEndDate)) {
-                
-                // Add rent expense at end of month
+
                 data.add(new Transaction(
                     currentMonth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     "Dépense",
@@ -1164,8 +1081,7 @@ public class DashboardFinance implements Initializable {
                     -1200.0, // Fixed monthly rent
                     "Complété"
                 ));
-                
-                // Add salary expenses for monitors
+
                 String monitorSql = "SELECT id, nom, prenom FROM moniteur";
                 try (Statement stmt = conn.createStatement();
                      ResultSet rs = stmt.executeQuery(monitorSql)) {
@@ -1185,9 +1101,8 @@ public class DashboardFinance implements Initializable {
                 }
             }
         }
-        
-        // If no transactions found, don't use mock data - just display an empty table
-        // Sort by date (most recent first)
+
+
         if (!data.isEmpty()) {
             data.sort((t1, t2) -> {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -1195,22 +1110,18 @@ public class DashboardFinance implements Initializable {
                 LocalDate d2 = LocalDate.parse(t2.getDate(), formatter);
                 return d2.compareTo(d1);
             });
-            
-            // Limit to 10 most recent transactions
+
             if (data.size() > 10) {
                 data = FXCollections.observableArrayList(data.subList(0, 10));
             }
         }
-        
-        // Update the table on the JavaFX Application Thread
+
         ObservableList<Transaction> finalData = data;
         Platform.runLater(() -> {
             transactionsTable.setItems(finalData);
         });
     }
-    
-    
-    // Inner class for Transaction table
+
     public static class Transaction {
         private final String date;
         private final String type;

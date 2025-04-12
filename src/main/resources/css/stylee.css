@@ -1,4 +1,4 @@
-/* Base Styles */
+
 .root {
     -fx-background-color: linear-gradient(#E6EFFF 0%, #D1E2FF 100%);
     -fx-font-family: "Poppins", "Segoe UI", sans-serif;
@@ -84,14 +84,14 @@
     -fx-background-color: rgba(255, 255, 255, 0.7);
 }
 
-/* General Container Styling */
+
 .main-container {
     -fx-alignment: top-center;
     -fx-pref-width: 100%;
     -fx-pref-height: 100%;
 }
 
-/* Header Styling */
+
 .header-container {
     -fx-background-color: rgba(255, 255, 255, 0.8);
     -fx-background-radius: 10px;
@@ -107,7 +107,7 @@
     -fx-padding: 5px;
 }
 
-/* ComboBox and Button Styling */
+
 .vehicle-combo, .form-combo, .refresh-button {
     -fx-background-color: rgba(235, 248, 255, 0.7);
     -fx-border-color: #90CDF4;
@@ -141,7 +141,7 @@
     -fx-scale-y: 1.02;
 }
 
-/* TableView Styling */
+
 .maintenance-table {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #BEE3F8;
@@ -157,13 +157,13 @@
     -fx-alignment: center;
 }
 
-/* VBox Styling */
+
 .content-container, .action-container, .form-container {
     -fx-spacing: 10;
     -fx-padding: 10px;
 }
 
-/* Form and Input Styling */
+
 .form-container {
     -fx-background-color: rgba(255, 255, 255, 0.7);
     -fx-border-radius: 10px;
@@ -198,7 +198,7 @@
     -fx-border-color: #4299E1;
 }
 
-/* TitledPane Styling */
+
 .actions-pane, .form-pane, .stats-pane {
     -fx-background-color: rgba(255, 255, 255, 0.7);
     -fx-border-radius: 10px;
@@ -212,7 +212,7 @@
     -fx-padding: 10px;
 }
 
-/* Footer Styling */
+
 .status-bar {
     -fx-background-color: #3182CE;
     -fx-text-fill: white;
@@ -229,7 +229,7 @@
     -fx-font-size: 14px;
 }
 
-/* Stats Grid Styling */
+
 .stats-grid {
     -fx-padding: 10px;
 }
@@ -245,7 +245,7 @@
     -fx-text-fill: #2B6CB0;
 }
 
-/* Icon Styling */
+
 .icon-3d-text {
     -fx-font-family: "FontAwesome", "Material Icons", "Segoe UI", sans-serif;
     -fx-font-size: 16px;
@@ -254,13 +254,13 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.3), 1, 0, 1, 1);
 }
 
-/* Separator Styling */
+
 .separator {
     -fx-background-color: #90CDF4;
     -fx-opacity: 0.5;
 }
 
-/* Return Button Styling */
+
 .return-button,.filter-button {
     -fx-background-color: rgba(190, 227, 248, 0.5);
     -fx-text-fill: #2B6CB0;
@@ -286,7 +286,7 @@
     -fx-scale-x: 1.02;
     -fx-scale-y: 1.02;
 }
-/* Table Styling */
+
 .maintenance-table {
     -fx-background-color: rgba(255, 255, 255, 0.7);
     -fx-border-color: #BEE3F8;
@@ -325,10 +325,11 @@
     -fx-border-color: #3182CE;
 }
 
-/* Table Column Headers Styling */
+
 .maintenance-table .column-header .table-column-header {
     -fx-font-weight: 600;
     -fx-font-size: 16px;
     -fx-text-fill: white;
     -fx-background-color: #3182CE;
     -fx-padding: 10px;}
+

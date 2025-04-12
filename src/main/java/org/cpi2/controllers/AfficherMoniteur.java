@@ -18,17 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-/**
- * The AfficherMoniteur class is responsible for managing the user interface related to displaying
- * and interacting with a list of Moniteur instances in a TableView. The class handles
- * initialization, data loading, and customization of the table columns.
- *
- * The displayed data includes various attributes of Moniteur, such as name, address, CIN,
- * phone number, hire date, and specialties.
- *
- * This class uses JavaFX @FXML annotations to bind UI elements from the FXML file
- * to the corresponding Java fields and methods.
- */
+
 public class AfficherMoniteur {
 
     @FXML
