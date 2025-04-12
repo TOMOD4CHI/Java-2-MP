@@ -15,7 +15,7 @@
         <VBox spacing="15" styleClass="header-container">
             <padding><Insets top="20" right="25" bottom="10" left="25"/></padding>
             
-            <!-- Header with title and search -->
+            
             <HBox spacing="20" alignment="CENTER_LEFT" styleClass="dashboard-header">
                 <VBox>
                     <Label text="Tableau de Bord: Suivi de Progression" styleClass="dashboard-title">
@@ -53,9 +53,9 @@
                 </HBox>
             </HBox>
 
-            <!-- Info cards with candidate information and metrics -->
+            
             <HBox spacing="25" styleClass="info-panel">
-                <!-- Candidate Information Card -->
+                
                 <VBox spacing="12" styleClass="info-card" HBox.hgrow="ALWAYS">
                     <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
                     <effect>
@@ -96,7 +96,7 @@
                     </GridPane>
                 </VBox>
 
-                <!-- Progression Summary Card -->
+                
                 <VBox spacing="12" styleClass="info-card" HBox.hgrow="ALWAYS">
                     <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
                     <effect>
@@ -135,11 +135,11 @@
                 </VBox>
             </HBox>
 
-            <!-- Progress bar and period selection -->
+            
             <VBox spacing="15" styleClass="progress-container">
                 <padding><Insets top="5" right="5" bottom="10" left="5"/></padding>
                 
-                <!-- Overall progress card -->
+                
                 <HBox styleClass="progress-card" alignment="CENTER_LEFT" spacing="20">
                     <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
                     <effect>
@@ -178,7 +178,7 @@
             <VBox spacing="25">
                 <padding><Insets top="10" right="25" bottom="25" left="25"/></padding>
                 
-                <!-- Charts section title -->
+                
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Region styleClass="visualization-icon" minWidth="24" minHeight="24"/>
                     <Label text="Visualisation de la Progression" styleClass="section-title">
@@ -188,9 +188,9 @@
                     </Label>
                 </HBox>
 
-                <!-- Charts container -->
+                
                 <HBox spacing="25" alignment="CENTER">
-                    <!-- Pie Chart Card -->
+                    
                     <VBox spacing="15" styleClass="chart-container-enhanced" HBox.hgrow="ALWAYS">
                         <padding><Insets top="15" right="20" bottom="20" left="20"/></padding>
                         <effect>
@@ -207,7 +207,7 @@
                                  styleClass="dashboard-chart-enhanced" animated="true" labelLineLength="20"/>
                     </VBox>
 
-                    <!-- Bar Chart Card -->
+                    
                     <VBox spacing="15" styleClass="chart-container-enhanced" HBox.hgrow="ALWAYS">
                         <padding><Insets top="15" right="20" bottom="20" left="20"/></padding>
                         <effect>
@@ -232,7 +232,7 @@
                     </VBox>
                 </HBox>
                 
-                <!-- Additional instructions or notes -->
+                
                 <VBox styleClass="info-note" spacing="10">
                     <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
                     <HBox spacing="10" alignment="CENTER_LEFT">

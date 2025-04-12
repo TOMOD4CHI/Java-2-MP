@@ -17,7 +17,7 @@
            stylesheets="@/css/candidate-details.css"
           prefHeight="600.0" prefWidth="1000.0" styleClass="main-background">
     
-    <!-- Simple background -->
+    
     <Rectangle width="1000" height="700" fill="#f0f4fa"/>
     
     <BorderPane styleClass="glass-container">
@@ -54,7 +54,7 @@
     <center>
         <SplitPane dividerPositions="0.3" styleClass="glass-content" VBox.vgrow="ALWAYS">
 
-            <!-- Left Panel: Liste des Candidats -->
+            
             <VBox styleClass="glass-panel" spacing="15">
                 <padding>
                     <Insets top="0" right="15" bottom="15" left="15"/>
@@ -74,23 +74,23 @@
                 <ListView fx:id="candidatListView" VBox.vgrow="ALWAYS" styleClass="glass-list-view"/>
             </VBox>
 
-            <!-- Right Panel: Détails et Documents -->
+            
             <ScrollPane fitToWidth="true" styleClass="glass-scroll-pane">
                 <VBox fx:id="detailsContainer" styleClass="glass-details-panel" spacing="20">
                     <padding>
                         <Insets top="20" right="20" bottom="20" left="20"/>
                     </padding>
 
-                    <!-- Personal Info Card (Profile Style) -->
+                    
                     <VBox styleClass="profile-card" spacing="0">
-                        <!-- Banner Area -->
+                        
                         <StackPane styleClass="profile-banner">
                             <Rectangle  height="80" styleClass="profile-banner-bg"/>
                         </StackPane>
                         
-                        <!-- Profile Section -->
+                        
                         <HBox styleClass="profile-section">
-                            <!-- Avatar with Status -->
+                            
                             <StackPane styleClass="profile-avatar-container">
                                 <Circle radius="40" styleClass="profile-avatar-circle"/>
                                 <ImageView fx:id="candidatPhoto" fitWidth="75" fitHeight="75" preserveRatio="true" styleClass="profile-avatar-image"/>
@@ -100,7 +100,7 @@
                                 </StackPane>
                             </StackPane>
                             
-                            <!-- Username and Tag Area -->
+                            
                             <VBox styleClass="profile-username-container">
                                 <HBox alignment="CENTER_LEFT" spacing="5">
                                     <Label fx:id="nomPrenomLabel" text="Nom et Prenom" styleClass="profile-username"/>
@@ -115,11 +115,11 @@
                             </VBox>
                         </HBox>
                         
-                        <!-- Profile-like info section -->
+                        
                         <VBox styleClass="profile-about-section">
                             <Label text="À PROPOS" styleClass="profile-section-title"/>
                             
-                            <!-- Info rows with text icons -->
+                            
                             <HBox styleClass="profile-info-row">
                                 <Label text="📧" styleClass="profile-info-icon"/>
                                 <Label text="Email:" styleClass="profile-info-label"/>
@@ -145,14 +145,14 @@
                             </HBox>
                         </VBox>
                         
-                        <!-- Activity Status Section -->
+                        
                         <HBox styleClass="profile-activity-section">
                             <Label text="📋" styleClass="profile-activity-icon"/>
                             <Label text="Dossier actif depuis le 15 avril 2025" styleClass="profile-activity-status"/>
                         </HBox>
                     </VBox>
 
-                    <!-- Documents Card -->
+                    
                     <VBox styleClass="glass-card" spacing="15">
                         <padding>
                             <Insets top="20" right="20" bottom="20" left="20"/>
@@ -169,7 +169,7 @@
 
                         <Separator styleClass="glass-separator"/>
 
-                        <!-- CIN Documents -->
+                        
                         <VBox styleClass="glass-document-group">
                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="document-header">
                                 <Label text="🪪" styleClass="document-type-icon"/>
@@ -178,7 +178,7 @@
                             <VBox fx:id="cinDocumentsContainer" spacing="10" styleClass="document-list"/>
                         </VBox>
 
-                        <!-- Permis Documents -->
+                        
                         <VBox styleClass="glass-document-group">
                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="document-header">
                                 <Label text="🚗" styleClass="document-type-icon"/>
@@ -187,7 +187,7 @@
                             <VBox fx:id="permisDocumentsContainer" spacing="10" styleClass="document-list"/>
                         </VBox>
 
-                        <!-- Medical Documents -->
+                        
                         <VBox styleClass="glass-document-group">
                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="document-header">
                                 <Label text="🏥" styleClass="document-type-icon"/>
@@ -196,7 +196,7 @@
                             <VBox fx:id="medicalDocumentsContainer" spacing="10" styleClass="document-list"/>
                         </VBox>
 
-                        <!-- Other Documents -->
+                        
                         <VBox styleClass="glass-document-group">
                             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="document-header">
                                 <Label text="📑" styleClass="document-type-icon"/>
@@ -214,3 +214,4 @@
     </BorderPane>
 
 </StackPane>
+

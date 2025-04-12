@@ -35,46 +35,46 @@
     <center>
         <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
             <VBox spacing="20">
-                <!-- KPI Cards Row -->
+                
                 <HBox alignment="CENTER" spacing="15">
                     <VBox.margin>
                         <Insets bottom="10" top="10" />
                     </VBox.margin>
                     
-                    <!-- Total Vehicles Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label styleClass="card-title" text="Total des Véhicules" />
                         <Label fx:id="totalVehiclesLabel" styleClass="card-value" text="12" />
                     </VBox>
                     
-                    <!-- Available Vehicles Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label styleClass="card-title" text="Véhicules Disponibles" />
                         <Label fx:id="availableVehiclesLabel" styleClass="card-value" text="8" />
                     </VBox>
                     
-                    <!-- Maintenance Due Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label styleClass="card-title" text="Entretiens à Faire" />
                         <Label fx:id="maintenanceDueLabel" styleClass="card-value" text="3" />
                     </VBox>
                     
-                    <!-- Total KM Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label styleClass="card-title" text="Kilométrage Total" />
                         <Label fx:id="totalKmLabel" styleClass="card-value" text="157,340 km" />
                     </VBox>
                 </HBox>
                 
-                <!-- Charts Row 1 -->
+                
                 <HBox alignment="CENTER" spacing="15" VBox.vgrow="ALWAYS">
-                    <!-- Vehicle Usage Chart -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label styleClass="chart-title" text="Utilisation des Véhicules" />
                         <PieChart fx:id="vehicleUsageChart" animated="true" labelsVisible="true" VBox.vgrow="ALWAYS" />
                     </VBox>
                     
-                    <!-- Maintenance History -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label styleClass="chart-title" text="Historique des Entretiens" />
                         <BarChart fx:id="maintenanceHistoryChart" animated="true" legendVisible="false" VBox.vgrow="ALWAYS">
@@ -88,7 +88,7 @@
                     </VBox>
                 </HBox>
                 
-                <!-- Vehicle Table -->
+                
                 <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
                     <Label styleClass="table-title" text="État des Véhicules" />
                     <TableView fx:id="vehiclesTable" styleClass="custom-table-view" VBox.vgrow="ALWAYS">
@@ -104,7 +104,7 @@
                     </TableView>
                 </VBox>
                 
-                <!-- Maintenance Alerts -->
+                
                 <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
                     <Label styleClass="table-title" text="Alertes d'Entretien" />
                     <TableView fx:id="maintenanceAlertsTable" styleClass="custom-table-view" VBox.vgrow="ALWAYS">
@@ -122,3 +122,4 @@
         </ScrollPane>
     </center>
 </BorderPane>
+

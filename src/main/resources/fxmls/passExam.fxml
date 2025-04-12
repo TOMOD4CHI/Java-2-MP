@@ -14,7 +14,7 @@
            prefWidth="1200" prefHeight="700">
 
     <HBox spacing="30" alignment="center">
-        <!-- Left Container - Passer un Examen Form -->
+        
         <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="500" prefWidth="500">
             <Label text="Passer un Examen" styleClass="form-title"/>
             <Separator/>
@@ -48,12 +48,12 @@
             </HBox>
         </VBox>
 
-        <!-- Right Container - Table of Exams -->
+        
         <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" minWidth="600" prefWidth="600">
             <Label text="Examens Disponibles" styleClass="form-title"/>
             <Separator/>
 
-            <!-- Filter Section -->
+            
             <HBox spacing="10" alignment="center_left" minWidth="550" prefWidth="550">
                 <Label text="Filtrer par date:" styleClass="form-label" minWidth="150" prefWidth="150"/>
                 <DatePicker fx:id="dateFilter" styleClass="form-field" minWidth="200" prefWidth="200"/>
@@ -64,7 +64,7 @@
                 <Button fx:id="resetBtn" text="Réinitialiser" onAction="#resetFilters" styleClass="button" minWidth="120" prefWidth="120"/>
             </HBox>
 
-            <!-- Table of Exams -->
+            
             <TableView fx:id="examensTable" VBox.vgrow="ALWAYS" styleClass="table-view" minWidth="550" prefWidth="550">
                 <columns>
                     <TableColumn fx:id="idColumn" text="ID" prefWidth="80"/>
@@ -74,7 +74,7 @@
                 </columns>
             </TableView>
 
-            <!-- Selected Exam Info -->
+            
             <HBox spacing="10" alignment="center_left" minWidth="550" prefWidth="550">
                 <Label text="Examen sélectionné:" styleClass="form-label" minWidth="150" prefWidth="150"/>
                 <Label fx:id="selectedExamLabel" text="Aucun examen sélectionné" styleClass="info-text" minWidth="200" prefWidth="200"/>
@@ -82,3 +82,4 @@
         </VBox>
     </HBox>
 </StackPane>
+

@@ -55,7 +55,7 @@
             </HBox>
             
             <HBox spacing="20" VBox.vgrow="ALWAYS">
-                <!-- Payment List -->
+                
                 <VBox spacing="10" HBox.hgrow="ALWAYS">
                     <Label styleClass="section-title" text="Liste des Paiements" />
                     <TableView fx:id="paymentsTable" prefHeight="400.0" prefWidth="18.0" VBox.vgrow="ALWAYS">
@@ -72,7 +72,7 @@
                     </TableView>
                 </VBox>
                 
-                <!-- Payment Summary -->
+                
                 <VBox prefWidth="300" spacing="10" styleClass="summary-panel">
                     <Label styleClass="section-title" text="Résumé des Paiements" />
                     
@@ -112,3 +112,4 @@
         </VBox>
     </center>
 </BorderPane>
+

@@ -14,7 +14,7 @@
            styleClass="login-screen-root"
            stylesheets="@/css/stylel.css">
 
-    <!-- Background fluid shapes -->
+    
     <Pane>
         <Path styleClass="login-bg-shape1">
             <elements>
@@ -78,12 +78,12 @@
         </Path>
     </Pane>
 
-    <!-- Main container -->
+    
     <BorderPane styleClass="login-container">
         <center>
             <HBox alignment="CENTER" spacing="30">
 
-                <!-- Illustration à gauche -->
+                
                 <VBox alignment="CENTER" styleClass="login-illustration-container">
                     <StackPane fx:id="illustrationContainer" maxWidth="550" maxHeight="400">
                         <ImageView fitWidth="550" preserveRatio="true">
@@ -92,21 +92,21 @@
                     </StackPane>
                 </VBox>
 
-                <!-- Formulaire de connexion carré à droite -->
+                
                 <VBox alignment="CENTER" spacing="10" styleClass="login-panel">
                     <padding><Insets top="20" right="40" bottom="30" left="40"/></padding>
 
-                    <!-- Logo -->
+                    
                     <Pane fx:id="logoContainer" styleClass="login-logo-pane">
                         <ImageView styleClass="login-logo-image" fx:id="logoImageView" fitWidth="200" fitHeight="200">
                             <Image url="@/images/logo1.png"/>
                         </ImageView>
                     </Pane>
 
-                    <!-- Titre -->
+                    
                     <Label styleClass="title-text" alignment="CENTER">SmartRoads</Label>
 
-                    <!-- Formulaire -->
+                    
                     <GridPane alignment="CENTER" styleClass="login-form-grid" maxWidth="300" maxHeight="300">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES"/>

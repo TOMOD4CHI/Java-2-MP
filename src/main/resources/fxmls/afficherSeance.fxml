@@ -31,7 +31,7 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                     </rowConstraints>
 
-                    <!-- First row -->
+                    
                     <Label text="Type de séance:" styleClass="filter-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                     <ComboBox fx:id="typeSessionFilter" promptText="Tous les types" GridPane.columnIndex="1" GridPane.rowIndex="0">
                         <items>
@@ -49,21 +49,21 @@
                             <FXCollections fx:factory="observableArrayList"/>
                         </items>
                     </ComboBox>
-                    <!-- Second row -->
+                    
                     <Label text="Date de début:" styleClass="filter-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                     <DatePicker fx:id="dateDebutFilter" promptText="Date de début" styleClass="glass-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                     <Label text="Date de fin:" styleClass="filter-label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                     <DatePicker fx:id="dateFinFilter" promptText="Date de fin" styleClass="glass-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-                    <!-- Third row - Action buttons -->
+                    
                     <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="2">
                         <Button fx:id="resetFiltersButton" text="Réinitialiser" styleClass="glass-button-secondary" />
                         <Button fx:id="applyFiltersButton" text="Appliquer" styleClass="glass-button" />
                     </HBox>
                 </GridPane>
 
-                <!-- Table Section -->
+                
                 <TableView fx:id="sessionTable" styleClass="glass-table" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="dateSessionColumn" prefWidth="100.0" text="Date" />
@@ -79,7 +79,7 @@
                     </columnResizePolicy>
                 </TableView>
 
-                <!-- Bottom Action Section -->
+                
                 <HBox alignment="CENTER_RIGHT" spacing="10.0">
                     <children>
                         <Button mnemonicParsing="false" styleClass="glass-button" text="Rafraîchir" onAction="#loadSessions" />

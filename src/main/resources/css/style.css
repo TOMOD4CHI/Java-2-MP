@@ -1,6 +1,9 @@
-/* ====== STYLES RACINE ====== */
+@import 'common.css';
+
 .root {
+    background-color: linear-gradient(to bottom right, #f5f7fa 0%, #e6e9f0 100%);
     -fx-background-color: linear-gradient(to bottom right, #f5f7fa 0%, #e6e9f0 100%);
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
@@ -16,7 +19,6 @@
     -fx-padding: 20px;
 }
 
-/* ====== STYLES DE TYPOGRAPHIE ====== */
 .page-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
@@ -85,14 +87,13 @@
     -fx-padding: 0 0 10 0;
 }
 
-/* ====== STYLES DE CONTENEUR ====== */
 .form-container {
     -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.98), rgba(245, 248, 255, 0.98));
     -fx-background-radius: 16px;
     -fx-border-color: rgba(190, 227, 248, 0.7);
     -fx-border-radius: 16px;
     -fx-padding: 32px;
-    -fx-spacing: 12; /* Réduit l'espace entre les inputs */
+    -fx-spacing: 12; 
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.2), 14, 0, 0, 6);
     -fx-transition-duration: 0.3s;
     -fx-max-width: 650px;
@@ -118,7 +119,6 @@
     -fx-stack-pane-alignment: top-left;
 }
 
-/* ====== STYLES D'ÉLÉMENTS DE FORMULAIRE ====== */
 .form-label {
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 14px;
@@ -160,7 +160,7 @@
     -fx-font-size: 14px;
     -fx-min-height: 38px;
     -fx-transition-duration: 0.2s;
-    -fx-position-shape: fixed; /* Position fixe pour les inputs */
+    -fx-position-shape: fixed; 
 }
 
 .text-field:hover {
@@ -198,7 +198,6 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.25), 4, 0, 0, 1);
 }
 
-/* ====== STYLES D'ERREUR ====== */
 .field-error, .error-field {
     -fx-border-color: #e53e3e;
     -fx-border-width: 2px;
@@ -222,9 +221,9 @@
     -fx-transition-duration: 0.2s;
     -fx-padding: 1px 0 0 4px;
     -fx-animation: error-label-fade 0.6s ease-in-out;
-    -fx-view-order: 1; /* Assure que les labels d'erreur sont sous les inputs */
+    -fx-view-order: 1; 
     -fx-translate-y: 2px;
-    -fx-stack-pane-alignment: bottom-left; /* Place les erreurs en bas */
+    -fx-stack-pane-alignment: bottom-left; 
 }
 
 .error-field {
@@ -256,7 +255,9 @@
     -fx-padding: 2px 0 0 0;
     -fx-opacity: 0.95;
     -fx-animation: error-label-fade 0.6s ease-in-out;
-    -fx-view-order: 1; /* Assure que les messages d'erreur sont sous les inputs */
+    -fx-view-order: 1; 
+    -fx-translate-y: 2px;
+    -fx-stack-pane-alignment: bottom-left; 
 }
 
 .field-error {
@@ -265,7 +266,6 @@
     -fx-background-color: rgba(254, 215, 215, 0.3);
 }
 
-/* ====== STYLES DE BOUTON ====== */
 .button {
     -fx-background-color: linear-gradient(to bottom, rgba(49, 130, 206, 0.8), rgba(44, 122, 196, 0.9));
     -fx-text-fill: white;
@@ -472,7 +472,6 @@
     -fx-scale-y: 0.98;
 }
 
-/* ====== STYLES DE TABLEAU ====== */
 .custom-table-view {
     -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(252, 253, 255, 0.8));
     -fx-background-radius: 10px;
@@ -517,7 +516,7 @@
 }
 
 .custom-table-view .table-row-cell:hover {
-    -fx-background-color: linear-gradient(to right, rgba(190, 227, 248, 0.5), rgba(200, 232, 252, 0.5));
+    -fx-background-color: linear-gradient(to right, rgba(190, 227, 248, 0.5), rgba(200, 232, 250, 0.5));
     -fx-scale-y: 1.03;
     -fx-cursor: hand;
 }
@@ -572,7 +571,6 @@
     -fx-font-weight: bold;
 }
 
-/* ====== STYLES DE MENU ====== */
 .context-menu {
     -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(250, 252, 255, 0.95));
     -fx-border-color: #BEE3F8;
@@ -612,7 +610,6 @@
     -fx-border-color: #63B3ED;
 }
 
-/* ====== STYLES DE PANNEAU DE DÉFILEMENT ====== */
 .transparent-scroll-pane {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -674,7 +671,6 @@
     -fx-pref-height: 1px;
 }
 
-/* ====== STYLES DE LOGO ====== */
 .logo-image {
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.45), 11, 0, 0, 3);
     -fx-background-radius: 12px;
@@ -746,7 +742,6 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.18), 4, 0, 0, 2);
 }
 
-/* ====== STYLES DE CARTE D'INFORMATION ====== */
 .info-card {
     -fx-background-color: linear-gradient(to bottom, rgba(235, 248, 255, 0.6), rgba(240, 250, 255, 0.7));
     -fx-background-radius: 15px;
@@ -819,7 +814,6 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.18), 3, 0, 0, 1);
 }
 
-/* ====== STYLES D'AFFICHAGE D'ÉCOLE ====== */
 .school-display-card {
     -fx-background-color: linear-gradient(to bottom right, rgba(255, 255, 255, 0.85), rgba(252, 253, 255, 0.9));
     -fx-background-radius: 20px;
@@ -852,7 +846,6 @@
     -fx-effect: dropshadow(gaussian, rgba(66, 153, 225, 0.18), 5, 0, 0, 2);
 }
 
-/* ====== STYLES D'AUTO ÉCOLE ====== */
 .auto-ecole-info, .auto-ecole-edit {
     -fx-background-color: linear-gradient(to bottom right, rgba(240, 247, 255, 0.7), rgba(245, 250, 255, 0.75));
     -fx-background-radius: 12px;
@@ -883,7 +876,6 @@
     -fx-spacing: 15;
 }
 
-/* ====== STYLES DE PAIEMENT ====== */
 .payment-container {
     -fx-background-color: linear-gradient(to bottom right, #ffffff, #f7faff);
     -fx-background-radius: 20px;
@@ -939,7 +931,6 @@
     -fx-effect: dropshadow(gaussian, rgba(72, 187, 120, 0.35), 8, 0, 0, 2);
 }
 
-/* ====== STYLES DE TABLEAU DE BORD ====== */
 .dashboard-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
@@ -1025,7 +1016,6 @@
     -fx-font-weight: bold;
 }
 
-/* ====== STYLES DE GRAPHIQUE ====== */
 .chart {
     -fx-padding: 10;
     -fx-background-color: transparent;
@@ -1081,7 +1071,6 @@
 .default-color0.chart-series-area-line { -fx-stroke: #3498db; }
 .default-color0.chart-series-area-fill { -fx-fill: linear-gradient(to bottom, #3498db33, #3498db11); }
 
-/* ====== STYLES DE PIED DE PAGE ====== */
 .footer {
     -fx-background-color: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(250, 252, 255, 0.75));
     -fx-background-radius: 12px 12px 0 0;
@@ -1105,7 +1094,6 @@
     -fx-text-fill: #4A5568;
 }
 
-/* ====== STYLES D'ICÔNE ====== */
 .icon-3d-text {
     -fx-font-family: "FontAwesome", "Material Icons", "Segoe UI", sans-serif;
     -fx-font-size: 16px;
@@ -1130,7 +1118,6 @@
     -fx-graphic-text-gap: 10;
 }
 
-/* ====== STYLES DE LISTE DÉROULANTE ====== */
 .combo-box {
     -fx-min-height: 40px;
     -fx-background-color: linear-gradient(to bottom, rgba(235, 248, 255, 0.6), rgba(240, 250, 255, 0.7));
@@ -1214,7 +1201,6 @@
     -fx-padding: 15px;
 }
 
-/* ====== STYLES D'ÉLÉMENT DE MENU ====== */
 .menu {
     -fx-font-size: 14px;
     -fx-background-color: transparent;
@@ -1245,7 +1231,6 @@
     -fx-transition-duration: 0.2s;
 }
 
-
 .menu-item:focused, .menu-item:hover {
     -fx-background-color: linear-gradient(to right, rgba(43, 108, 176, 0.7), rgba(40, 100, 170, 0.75));
     -fx-background-radius: 8px;
@@ -1274,7 +1259,6 @@
     -fx-scale-y: 1.05;
 }
 
-/* ====== ANIMATIONS KEYFRAMES ====== */
 @keyframes form-entry {
     0% { -fx-opacity: 0; -fx-translate-y: 20; }
     100% { -fx-opacity: 1; -fx-translate-y: 0; }
