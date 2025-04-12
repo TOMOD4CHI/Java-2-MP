@@ -358,7 +358,6 @@ public class AlertUtil {
         timeline.getKeyFrames().add(kf);
         timeline.play();
     }
-
     public static int showOptionsDialog(String title, String content, String... options) {
         final int[] result = {-1};
 
