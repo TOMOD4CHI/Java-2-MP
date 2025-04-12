@@ -53,7 +53,7 @@
                     <StackPane styleClass="dashboard-card-icon">
                         <Text text="💰" />
                     </StackPane>
-                    <VBox spacing="4">
+                    <VBox spacing="17">
                         <Label text="Revenus ce mois" styleClass="dashboard-card-title"/>
                         <Text fx:id="monthlyIncomeText" text="---" styleClass="dashboard-card-value positive-value"/>
                         <Label fx:id="incomeComparisonLabel" text="Chargement..." styleClass="dashboard-card-subtitle"/>
@@ -68,7 +68,7 @@
                     <StackPane styleClass="dashboard-card-icon">
                         <Text text="🏁" />
                     </StackPane>
-                    <VBox spacing="4">
+                    <VBox spacing="17">
                         <Label text="Taux de réussite" styleClass="dashboard-card-title"/>
                         <Text fx:id="successRateText" text="---" styleClass="dashboard-card-value neutral-value"/>
                         <Label fx:id="successRateLabel" text="Chargement..." styleClass="dashboard-card-subtitle"/>
