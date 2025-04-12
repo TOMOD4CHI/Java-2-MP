@@ -301,3 +301,4 @@ public class GestionSallesController {
             String.valueOf(salle.getCapacite()).contains(lowerCaseSearchText);
     }
 } 
+

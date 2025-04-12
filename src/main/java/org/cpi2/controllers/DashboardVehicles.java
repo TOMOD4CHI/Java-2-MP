@@ -504,3 +504,4 @@ public class DashboardVehicles implements Initializable {
         public String getPriority() { return priority; }
     }
 }
+

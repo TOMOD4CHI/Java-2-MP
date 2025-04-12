@@ -100,3 +100,4 @@ public class AfficherMoniteur {
         moniteurTable.setItems(moniteursList);
     }
 }
+
