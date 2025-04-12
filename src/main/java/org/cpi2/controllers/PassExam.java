@@ -58,11 +58,13 @@ public class PassExam {
         if (resultatComboBox.getItems().isEmpty()) {
             resultatComboBox.getItems().addAll("Réussi", "Échoué");
         }
+        setupTableView();
 
-        addListeners();
+
         
         loadExamens();
-        setupTableView();
+        addListeners();
+
     }
     public void loadExamens() {
         examensList = FXCollections.observableArrayList();
@@ -75,13 +77,18 @@ public class PassExam {
                     examen.getCandidat().getNom() + " " + examen.getCandidat().getPrenom(),
                     examen.getResultat() != null ? examen.getResultat().toString() : "En Cours"
             ));
-
+        }
+        if (!examensList.isEmpty()) {
+            examensTable.setItems(examensList);
+            examensTable.getSortOrder().add(dateColumn);
+            dateColumn.setSortType(TableColumn.SortType.DESCENDING);
+            examensTable.sort();
         }
     }
     private void setupTableView() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("idExamen"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("typeExamen"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateExamen"));
         candidatColumn.setCellValueFactory(new PropertyValueFactory<>("candidat"));
     }
 
@@ -142,7 +149,7 @@ public class PassExam {
             return;
         }
 
-        //TODO : if anything further  needed can ba added here
+        //TODO : if anything further  needed can be added here
         clearFields();
     }
 

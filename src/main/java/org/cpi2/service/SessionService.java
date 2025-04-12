@@ -3,15 +3,18 @@ package org.cpi2.service;
 
 import org.cpi2.entities.SessionCode;
 import org.cpi2.entities.SessionConduite;
+import org.cpi2.repository.PresenceRepository;
 import org.cpi2.repository.SessionRepository;
 
 import java.util.List;
 
 public class SessionService {
     private final SessionRepository sessionRepo;
+    private final PresenceRepository presenceRepo;
     
     public SessionService() {
         this.sessionRepo = new SessionRepository();
+        this.presenceRepo = new PresenceRepository();
     }
     
     public boolean saveSessionConduite(SessionConduite session) {
@@ -66,6 +69,9 @@ public class SessionService {
     }
     public List<SessionConduite> viewSessionConduiteByMoniteur(long moniteurId) {
         return sessionRepo.findAllConduiteSessionsByMoniteur(moniteurId);
+    }
+    public int getPresenceCount(long sessionId) {
+        return presenceRepo.getAllPresencesCode().stream().filter(presence -> presence.getSessionId() == sessionId).toList().size();
     }
     public List<SessionCode> viewSessionCodeByMoniteur(long moniteurId) {
         return sessionRepo.findAllCodeSessionsByMoniteur(moniteurId);

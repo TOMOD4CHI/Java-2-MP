@@ -1,6 +1,8 @@
 package org.cpi2.controllers;
 
 import javafx.fxml.FXML;
+import org.cpi2.entities.Examen;
+import org.cpi2.entities.TypeExamen;
 import org.cpi2.utils.AlertUtil;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -42,6 +44,8 @@ public class ExamRegistration {
     public void initialize() {
         // Initialize the exam types
         typeExamenComboBox.getItems().addAll(examTypePrices.keySet());
+
+        enregistrerButton.setDisable(true);
         
         // Set default date to next week
         dateExamenPicker.setValue(LocalDate.now().plusWeeks(1));
@@ -109,6 +113,7 @@ public class ExamRegistration {
     
     @FXML
     private void verifierEligibiliteAction() {
+        enregistrerButton.setDisable(true);
         // In a real app, this would check candidate eligibility based on completed sessions
         if (nomField.getText().isEmpty() || typeExamenComboBox.getValue() == null) {
             AlertUtil.showError("Erreur", "Veuillez sélectionner un candidat et un type d'examen pour vérifier l'éligibilité.");
@@ -116,9 +121,10 @@ public class ExamRegistration {
         }
         
         // Mock check - usually this would check database for eligibility
-        boolean eligible = true; // For this example, assume eligible
+        boolean eligible = examenService.verifyCandidatEligibilite(typeExamenComboBox.getValue(),cinField.getText()); // For this example, assume eligible
         
         if (eligible) {
+            enregistrerButton.setDisable(false);
             eligibiliteLabel.setText("ELIGIBLE");
             eligibiliteLabel.getStyleClass().clear();
             eligibiliteLabel.getStyleClass().addAll("label", "status-eligible");
@@ -138,7 +144,12 @@ public class ExamRegistration {
                 AlertUtil.showError( "Error" ,"Le candidat a déjà un examen en cours.");
                 return;
             }
-
+            examenService.createExamen(new Examen(
+                    TypeExamen.valueOf(typeExamenComboBox.getValue().toUpperCase()),
+                    dateExamenPicker.getValue(),
+                    Double.parseDouble(fraisField.getText()),
+                    candidatService.getCandidatByCin(cinField.getText())
+            ));
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Succès");
             alert.setHeaderText(null);
@@ -147,6 +158,7 @@ public class ExamRegistration {
 
             clearForm();
         }
+        enregistrerButton.setDisable(true);
     }
     
     @FXML

@@ -1,6 +1,7 @@
 package org.cpi2.entities;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class Inscription {
     private int id;
@@ -74,11 +75,11 @@ public class Inscription {
         this.status = status;
     }
 
-    public java.util.Date getnextPaymentDate() {
+    public Date getnextPaymentDate() {
         return nextPaymentDate;
     }
 
-    public void setnextPaymentDate(java.util.Date nextPaymentDate) {
+    public void setnextPaymentDate(Date nextPaymentDate) {
         this.nextPaymentDate = nextPaymentDate;
     }
 

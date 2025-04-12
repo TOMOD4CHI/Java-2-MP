@@ -25,7 +25,7 @@ public class CandidatService {
         this.candidatRepository = new CandidatRepository();
         this.inscriptionRepository = new InscriptionRepository();
         this.dossierService = new DossierService(this);
-        this.inscriptionService = new InscriptionService();
+        this.inscriptionService = new InscriptionService(this);
     }
 
     public CandidatService(DossierService dossierService) {
@@ -34,6 +34,7 @@ public class CandidatService {
         this.dossierService = dossierService;
         this.inscriptionService = new InscriptionService();
     }
+
     public CandidatService(InscriptionService inscriptionService){
         this.candidatRepository = new CandidatRepository();
         this.inscriptionRepository = new InscriptionRepository();
@@ -165,5 +166,30 @@ public class CandidatService {
             LOGGER.severe("Error generating invoice: " + e.getMessage());
             throw new RuntimeException("Error generating invoice", e);
         }
+    }
+    public List<Candidat> getAllWithActifInscription() {
+        List<Candidat> candidats = new ArrayList<>();
+        for (Candidat candidat : candidatRepository.findAll()) {
+            if (inscriptionService.haveActifInscription(candidat.getCin())) {
+                candidats.add(candidat);
+            }
+        }
+        return candidats;
+    }
+    public List<Candidat> getAllWithActifByPlan(int planId) {
+        List<Candidat> candidats = new ArrayList<>();
+        for (Candidat candidat : candidatRepository.findAll()) {
+            if (inscriptionService.haveActifInscription(candidat.getCin())) {
+                List<Inscription> inscriptions = inscriptionRepository.findByCin(candidat.getCin());
+                for (Inscription inscription : inscriptions) {
+                    if (inscription.getStatus().equalsIgnoreCase("En Cours") && inscription.getPlan().getId() == planId) {
+                        candidats.add(candidat);
+                        break;
+                    }
+                }
+            }
+        }
+        return candidats;
+
     }
 }

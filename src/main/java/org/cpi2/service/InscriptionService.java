@@ -72,7 +72,7 @@ public class InscriptionService {
         if (!Objects.equals(inscription.getPaymentCycle(), "Totale")) {
             if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
                 Date nextPaymentDate = calculateNextPaymentDate(inscription.getnextPaymentDate()==null ? java.sql.Date.valueOf(LocalDate.now()):inscription.getnextPaymentDate(), inscription.getPaymentCycle());
-                inscription.setnextPaymentDate(nextPaymentDate);
+                inscription.setnextPaymentDate((java.sql.Date) nextPaymentDate);
             } else if (inscription.isPaymentStatus() ) {
                 inscription.setnextPaymentDate(null);
             }
@@ -181,5 +181,15 @@ public class InscriptionService {
                 lowerCycle.equals("monthly") ||
                 lowerCycle.equals("quarterly") ||
                 lowerCycle.equals("annually");
+    }
+    public boolean isInscriptionCodeDone(int id){
+        Inscription inscription = getInscriptionById(id).orElse(null);
+        if(inscription == null) return false;
+        return inscription.getPlan().getGetNbreSeanceCode() == presenceService.getCountPresence(candidatService.CinToId(inscription.getCin()), "code", inscription.getInscriptioDate());
+    }
+    public boolean isInscriptionConduiteDone(int id){
+        Inscription inscription = getInscriptionById(id).orElse(null);
+        if(inscription == null) return false;
+        return inscription.getPlan().getNbreSeanceConduite() == presenceService.getCountPresence(candidatService.CinToId(inscription.getCin()), "conduite", inscription.getInscriptioDate());
     }
 }

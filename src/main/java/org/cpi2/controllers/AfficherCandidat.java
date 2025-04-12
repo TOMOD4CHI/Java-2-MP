@@ -425,7 +425,7 @@ public class AfficherCandidat {
             // Write and open the preview
             Files.write(tempFile, html.toString().getBytes());
             System.out.println("Created preview file at: " + tempFile.toString());
-            Desktop.getDesktop().browse(tempFile.toURI());
+            Desktop.getDesktop().browse(tempFile.toUri());
             
         } catch (Exception e) {
             System.err.println("Error opening document: " + e.getMessage());
