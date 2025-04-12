@@ -44,11 +44,7 @@
                         </Button>
                     </VBox>
                     <VBox alignment="BOTTOM_CENTER">
-                        <Button text="Exporter PDF" onAction="#exportPdfAction" styleClass="export-button" prefHeight="38">
-                            <graphic>
-                                <Region styleClass="pdf-icon" minWidth="16" minHeight="16"/>
-                            </graphic>
-                        </Button>
+
                     </VBox>
                 </HBox>
             </HBox>
@@ -193,9 +189,7 @@
                     
                     <VBox spacing="15" styleClass="chart-container-enhanced" HBox.hgrow="ALWAYS">
                         <padding><Insets top="15" right="20" bottom="20" left="20"/></padding>
-                        <effect>
-                            <javafx.scene.effect.DropShadow color="#00000022" radius="5" spread="0.05"/>
-                        </effect>
+                       
                         
                         <Label text="Répartition des Séances" styleClass="form-label">
                             <font>
