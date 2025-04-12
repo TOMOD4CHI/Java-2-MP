@@ -95,54 +95,54 @@
         </HBox>
         
         <!-- Main Features Section -->
-        <Label text="Fonctionnalités Principales" styleClass="section-title"/>
+        <Label text="Fonctionnalités Principales" styleClass="section-title" alignment="CENTER"/>
         
-        <GridPane styleClass="features-grid">
+        <GridPane styleClass="features-grid" alignment="CENTER" hgap="28" vgap="28">
             <columnConstraints>
-                <ColumnConstraints percentWidth="33"/>
-                <ColumnConstraints percentWidth="33"/>
-                <ColumnConstraints percentWidth="33"/>
+                <ColumnConstraints percentWidth="33" halignment="CENTER"/>
+                <ColumnConstraints percentWidth="33" halignment="CENTER"/>
+                <ColumnConstraints percentWidth="33" halignment="CENTER"/>
             </columnConstraints>
             
-            <!-- Row 1 -->
+            <!-- Row 1 - Green buttons -->
             <Button text="Inscription Candidat" onAction="#loadAjouterCandidat" styleClass="feature-button" 
-                    GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    GridPane.columnIndex="0" GridPane.rowIndex="0" maxWidth="280" prefWidth="280">
                 <graphic>
                     <Text text="📝" style="-fx-font-size: 22px;"/>
                 </graphic>
             </Button>
             
             <Button text="Planifier une Séance" onAction="#loadSessionConduite" styleClass="feature-button" 
-                    GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="280" prefWidth="280">
                 <graphic>
                     <Text text="🚗" style="-fx-font-size: 22px;"/>
                 </graphic>
             </Button>
             
             <Button text="Enregistrer Paiement" onAction="#loadPayment" styleClass="feature-button" 
-                    GridPane.columnIndex="2" GridPane.rowIndex="0">
+                    GridPane.columnIndex="2" GridPane.rowIndex="0" maxWidth="280" prefWidth="280">
                 <graphic>
                     <Text text="💰" style="-fx-font-size: 22px;"/>
                 </graphic>
             </Button>
             
-            <!-- Row 2 -->
+            <!-- Row 2 - Blue buttons -->
             <Button text="Gérer Véhicules" onAction="#loadGestionVehicules" styleClass="feature-button feature-button-alt" 
-                    GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    GridPane.columnIndex="0" GridPane.rowIndex="1" maxWidth="280" prefWidth="280">
                 <graphic>
                     <Text text="🚙" style="-fx-font-size: 22px;"/>
                 </graphic>
             </Button>
             
             <Button text="Inscription Examen" onAction="#loadExamRegistration" styleClass="feature-button feature-button-alt" 
-                    GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    GridPane.columnIndex="1" GridPane.rowIndex="1" maxWidth="280" prefWidth="280">
                 <graphic>
                     <Text text="📅" style="-fx-font-size: 22px;"/>
                 </graphic>
             </Button>
             
             <Button text="Tableau de Bord" onAction="#loadDashboardFinance" styleClass="feature-button feature-button-alt" 
-                    GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    GridPane.columnIndex="2" GridPane.rowIndex="1" maxWidth="280" prefWidth="280">
                 <graphic>
                     <Text text="📊" style="-fx-font-size: 22px;"/>
                 </graphic>

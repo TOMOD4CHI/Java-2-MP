@@ -83,8 +83,7 @@ public class InscriptionService {
         if (!Objects.equals(inscription.getPaymentCycle(), "Totale")) {
             if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
                 Date nextPaymentDate = calculateNextPaymentDate(inscription.getnextPaymentDate()==null ? java.sql.Date.valueOf(LocalDate.now()):inscription.getnextPaymentDate(), inscription.getPaymentCycle());
-                java.sql.Date sqlNextPaymentDate = new java.sql.Date(nextPaymentDate.getTime());
-                inscription.setnextPaymentDate(sqlNextPaymentDate);
+                inscription.setnextPaymentDate((java.sql.Date) nextPaymentDate);
             } else if (inscription.isPaymentStatus() ) {
                 inscription.setnextPaymentDate(null);
             }

@@ -69,7 +69,7 @@
                     </Menu>
                     <Menu text="📊 Tableau de Bord" styleClass="menu-item-with-icon">
                         <MenuItem text="💹 Financier" onAction="#loadDashboardFinance"/>
-                        <MenuItem text="👥 Candidats" onAction="#loadAfficherCandidat"/>
+                        <MenuItem text="👥 Candidats" onAction="#loadDashboardCandidates"/>
                         <MenuItem text="🚙 Véhicules" onAction="#loadDashboardVehicles"/>
                     </Menu>
                 </MenuBar>

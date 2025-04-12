@@ -335,12 +335,16 @@
 .dashboard-card-value {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2D3748;
+    -fx-alignment: center-left;
+    -fx-padding: 2px 0;
+    -fx-min-width: 120px;
 }
 
 .dashboard-card-subtitle {
     -fx-font-size: 13px;
-    -fx-text-fill: #4A5568;
+    -fx-font-style: italic;
+    -fx-text-fill: #718096;
+    -fx-alignment: center-left;
 }
 
 .dashboard-card-progress {
