@@ -1,5 +1,6 @@
 package org.cpi2.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -7,7 +8,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.cpi2.controllers.PaymentHistory.PaymentEntry;
 import org.cpi2.entities.Inscription;
 import org.cpi2.entities.Paiement;
@@ -29,7 +33,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class PaymentDetailsController implements Initializable {
-
+    @FXML private AnchorPane mypane;
     @FXML private Label idLabel;
     @FXML private Label dateLabel;
     @FXML private Label candidatLabel;
@@ -59,12 +63,27 @@ public class PaymentDetailsController implements Initializable {
     private final CandidatService candidatService = new CandidatService();
     private final InscriptionService inscriptionService = new InscriptionService();
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Platform.runLater(() -> {
+            if (mypane.getScene() != null && mypane.getScene().getWindow() != null) {
+                Window window = mypane.getScene().getWindow();
+
+                // Add icon to the window
+                if (window instanceof Stage) {
+                    Stage stage = (Stage) window;
+                    Image icon = new Image(getClass().getResourceAsStream("/images/logo4.png"));                    stage.getIcons().add(icon);
+                }
+            } else {
+                System.err.println("Scene or Window is null.");
+            }
+        });
+
         closeButton.setOnAction(this::handleClose);
         printButton.setOnAction(this::handlePrint);
-        
+
         // Setup payment history table columns
         setupHistoryTable();
     }

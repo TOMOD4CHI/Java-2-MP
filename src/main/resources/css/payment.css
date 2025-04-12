@@ -146,13 +146,11 @@
 .table-view .column-header-background {
     -fx-background-color: linear-gradient(to right, rgba(49, 130, 206, 0.7), rgba(79, 209, 197, 0.7));
     -fx-background-radius: 8px 8px 0 0;
-    -fx-padding: 5px 0;
 }
 
 .table-view .column-header, .table-view .filler {
     -fx-background-color: transparent;
     -fx-border-width: 0;
-    -fx-padding: 8px 15px;
 }
 
 .table-view .column-header .label {
@@ -164,7 +162,6 @@
 
 .table-view .table-row-cell {
     -fx-border-color: transparent;
-    -fx-padding: 5 0 5 0;
 }
 
 .table-view .table-row-cell:odd {
