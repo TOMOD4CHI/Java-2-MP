@@ -198,9 +198,7 @@ public class DashboardVehicles implements Initializable {
         }
         
         if (pieChartData.isEmpty()) {
-            pieChartData.add(new PieChart.Data("Conduite", 65));
-            pieChartData.add(new PieChart.Data("Entretien", 15));
-            pieChartData.add(new PieChart.Data("Inactif", 20));
+            pieChartData.add(new PieChart.Data("Aucun véhicule", 1));
         }
         
         vehicleUsageChart.setData(pieChartData);
@@ -235,12 +233,12 @@ public class DashboardVehicles implements Initializable {
                 maintenanceSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
             }
         } else {
-            maintenanceSeries.getData().add(new XYChart.Data<>("Jan", 4));
-            maintenanceSeries.getData().add(new XYChart.Data<>("Fév", 3));
-            maintenanceSeries.getData().add(new XYChart.Data<>("Mar", 5));
-            maintenanceSeries.getData().add(new XYChart.Data<>("Avr", 2));
-            maintenanceSeries.getData().add(new XYChart.Data<>("Mai", 6));
-            maintenanceSeries.getData().add(new XYChart.Data<>("Juin", 3));
+            LocalDate now = LocalDate.now();
+            for (int i = 5; i >= 0; i--) {
+                LocalDate monthDate = now.minusMonths(i);
+                String monthName = monthDate.getMonth().toString().substring(0, 3);
+                maintenanceSeries.getData().add(new XYChart.Data<>(monthName, 0));
+            }
         }
         
         maintenanceHistoryChart.getData().clear();

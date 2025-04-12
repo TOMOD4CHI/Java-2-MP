@@ -6,19 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="so many good things again my boys">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AccueilPageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/AccueilPageController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardCandidates.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardCandidates.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardFinance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardFinance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardVehicles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/DashboardVehicles.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/CandidatService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/CandidatService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/ExamenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/ExamenService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/InscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/InscriptionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/service/PaiementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/service/PaiementService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/css/accueil.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/css/accueil.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/AccueilPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/AccueilPage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/DashboardCandidates.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/DashboardCandidates.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/MainWindow.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/PaymentHistory.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/PaymentHistory.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -286,13 +286,15 @@ public class DashboardCandidates implements Initializable {
      * Charge les données du graphique d'inscription
      */
     private void loadRegistrationChartData(Connection conn) throws SQLException {
-        // Get registration data by date
-        String sql = "SELECT DATE_FORMAT(created_at, '%d/%m') as date, COUNT(*) as count " +
-                     "FROM candidat WHERE created_at BETWEEN ? AND ? " +
-                     "GROUP BY DATE_FORMAT(created_at, '%d/%m') ORDER BY created_at";
-        
         XYChart.Series<String, Number> registrationSeries = new XYChart.Series<>();
         registrationSeries.setName("Inscriptions");
+        
+        String sql = "SELECT DATE_FORMAT(date_inscription, '%d/%m') as date, COUNT(*) as count " +
+                    "FROM inscription WHERE date_inscription BETWEEN ? AND ? " +
+                    "GROUP BY DATE_FORMAT(date_inscription, '%d/%m') " +
+                    "ORDER BY date_inscription";
+        
+        Map<String, Integer> registrationByDate = new HashMap<>();
         
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
@@ -302,14 +304,18 @@ public class DashboardCandidates implements Initializable {
                 while (rs.next()) {
                     String date = rs.getString("date");
                     int count = rs.getInt("count");
-                    registrationSeries.getData().add(new XYChart.Data<>(date, count));
+                    registrationByDate.put(date, count);
                 }
             }
         }
         
-        // If no data, add some placeholder data
-        if (registrationSeries.getData().isEmpty()) {
-            registrationSeries.getData().add(new XYChart.Data<>("01/01", 0));
+        if (!registrationByDate.isEmpty()) {
+            for (Map.Entry<String, Integer> entry : registrationByDate.entrySet()) {
+                registrationSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+            }
+        } else {
+            // Provide empty data rather than mock data
+            registrationSeries.getData().add(new XYChart.Data<>(filterStartDate.format(DateTimeFormatter.ofPattern("dd/MM")), 0));
         }
         
         registrationChart.getData().clear();
@@ -320,45 +326,52 @@ public class DashboardCandidates implements Initializable {
      * Charge les données du graphique de distribution d'âge
      */
     private void loadAgeDistributionChartData(Connection conn) throws SQLException {
-        String sql = "SELECT " +
-                     "CASE " +
-                     "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 18 AND 20 THEN '18-20 ans' " +
-                     "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 21 AND 25 THEN '21-25 ans' " +
-                     "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 26 AND 30 THEN '26-30 ans' " +
-                     "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) > 30 THEN '31+ ans' " +
-                     "  ELSE 'Inconnu' " +
-                     "END as age_group, " +
-                     "COUNT(*) as count " +
-                     "FROM candidat " +
-                     "WHERE date_naissance IS NOT NULL " +
-                     "GROUP BY age_group";
+        Map<String, Integer> ageGroups = new HashMap<>();
+        ageGroups.put("18-20 ans", 0);
+        ageGroups.put("21-25 ans", 0);
+        ageGroups.put("26-30 ans", 0);
+        ageGroups.put("31-40 ans", 0);
+        ageGroups.put("41+ ans", 0);
         
-        Map<String, Integer> ageDistribution = new HashMap<>();
-        ageDistribution.put("18-20 ans", 0);
-        ageDistribution.put("21-25 ans", 0);
-        ageDistribution.put("26-30 ans", 0);
-        ageDistribution.put("31+ ans", 0);
+        String sql = "SELECT " +
+                   "CASE " +
+                   "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 18 AND 20 THEN '18-20 ans' " +
+                   "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 21 AND 25 THEN '21-25 ans' " +
+                   "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 26 AND 30 THEN '26-30 ans' " +
+                   "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 31 AND 40 THEN '31-40 ans' " +
+                   "  WHEN TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) > 40 THEN '41+ ans' " +
+                   "  ELSE NULL " +
+                   "END as age_group, " +
+                   "COUNT(*) as count " +
+                   "FROM candidat " +
+                   "WHERE date_naissance IS NOT NULL " +
+                   "GROUP BY age_group " +
+                   "HAVING age_group IS NOT NULL";
         
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 String ageGroup = rs.getString("age_group");
                 int count = rs.getInt("count");
-                ageDistribution.put(ageGroup, count);
+                if (ageGroup != null) {
+                    ageGroups.put(ageGroup, count);
+                }
             }
         }
         
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-        for (Map.Entry<String, Integer> entry : ageDistribution.entrySet()) {
+        boolean hasData = false;
+        
+        for (Map.Entry<String, Integer> entry : ageGroups.entrySet()) {
             if (entry.getValue() > 0) {
                 pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+                hasData = true;
             }
         }
         
-        // If no data, add placeholder data
-        if (pieChartData.isEmpty()) {
-            pieChartData.add(new PieChart.Data("18-20 ans", 1));
-            pieChartData.add(new PieChart.Data("21-25 ans", 1));
+        if (!hasData) {
+            // Instead of mock data with fake distribution, show a "No data" entry
+            pieChartData.add(new PieChart.Data("Aucune donnée", 1));
         }
         
         ageDistributionChart.setData(pieChartData);
@@ -368,65 +381,101 @@ public class DashboardCandidates implements Initializable {
      * Charge les données du graphique de présence
      */
     private void loadAttendanceChartData(Connection conn) throws SQLException {
-        // Get attendance data for different session types
-        // Code sessions attendance
-        String codeAttendanceSql = "SELECT AVG(pc.present) * 100 as attendance_rate " +
-                                 "FROM presence_code pc " +
-                                 "JOIN session_code sc ON pc.session_code_id = sc.id " +
-                                 "WHERE sc.date_session BETWEEN ? AND ?";
+        // The session_candidat table doesn't exist, use presence_code and presence_conduite tables instead
+        Map<String, Integer> attendanceData = new HashMap<>();
+        attendanceData.put("Code", 0);
+        attendanceData.put("Conduite", 0);
         
-        // Driving sessions attendance
-        String driveAttendanceSql = "SELECT AVG(pc.present) * 100 as attendance_rate " +
-                                  "FROM presence_conduite pc " +
-                                  "JOIN session_conduite sc ON pc.session_conduite_id = sc.id " +
-                                  "WHERE sc.date_session BETWEEN ? AND ?";
+        // Get presence rates for code sessions
+        String codeSql = "SELECT " +
+                        "COUNT(*) as total, " +
+                        "SUM(present) as present_count " +
+                        "FROM presence_code " +
+                        "JOIN session_code ON presence_code.session_code_id = session_code.id " +
+                        "WHERE session_code.date_session BETWEEN ? AND ?";
         
-        // Initialize data points
-        Map<String, Double> attendanceRates = new HashMap<>();
-        attendanceRates.put("Code", 0.0);
-        attendanceRates.put("Conduite", 0.0);
-        attendanceRates.put("Révision", 0.0);
-        attendanceRates.put("Examen", 0.0);
-        
-        // Get code attendance
-        try (PreparedStatement pstmt = conn.prepareStatement(codeAttendanceSql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(codeSql)) {
             pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
             pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
             
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    double rate = rs.getDouble("attendance_rate");
-                    if (!rs.wasNull()) {
-                        attendanceRates.put("Code", rate);
+                    int total = rs.getInt("total");
+                    int presentCount = rs.getInt("present_count");
+                    
+                    if (total > 0) {
+                        double rate = ((double) presentCount / total) * 100;
+                        attendanceData.put("Code", (int) rate);
                     }
                 }
             }
+        } catch (SQLException e) {
+            // Table might be empty, continue with default values
+            System.out.println("Warning: Could not get code attendance data: " + e.getMessage());
         }
         
-        // Get driving attendance
-        try (PreparedStatement pstmt = conn.prepareStatement(driveAttendanceSql)) {
+        // Get presence rates for driving sessions
+        String conduiteSql = "SELECT " +
+                            "COUNT(*) as total, " +
+                            "SUM(present) as present_count " +
+                            "FROM presence_conduite " +
+                            "JOIN session_conduite ON presence_conduite.session_conduite_id = session_conduite.id " +
+                            "WHERE session_conduite.date_session BETWEEN ? AND ?";
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(conduiteSql)) {
             pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
             pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
             
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    double rate = rs.getDouble("attendance_rate");
-                    if (!rs.wasNull()) {
-                        attendanceRates.put("Conduite", rate);
+                    int total = rs.getInt("total");
+                    int presentCount = rs.getInt("present_count");
+                    
+                    if (total > 0) {
+                        double rate = ((double) presentCount / total) * 100;
+                        attendanceData.put("Conduite", (int) rate);
                     }
                 }
             }
+        } catch (SQLException e) {
+            // Table might be empty, continue with default values
+            System.out.println("Warning: Could not get driving attendance data: " + e.getMessage());
         }
         
-        // For revision and exam, we'll use placeholder data for now
-        // In a real implementation, you would query the appropriate tables
-        attendanceRates.put("Révision", 78.0);
-        attendanceRates.put("Examen", 95.0);
+        // Alternative - use seances for attendance data for driving
+        if (attendanceData.get("Conduite") == 0) {
+            String seanceSql = "SELECT " +
+                             "COUNT(*) as total, " +
+                             "COUNT(CASE WHEN statut = 'Complétée' THEN 1 END) as present_count " +
+                             "FROM seance " +
+                             "WHERE date BETWEEN ? AND ? " +
+                             "AND type = 'Conduite'";
+            
+            try (PreparedStatement pstmt = conn.prepareStatement(seanceSql)) {
+                pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
+                pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
+                
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        int total = rs.getInt("total");
+                        int presentCount = rs.getInt("present_count");
+                        
+                        if (total > 0) {
+                            double rate = ((double) presentCount / total) * 100;
+                            attendanceData.put("Conduite", (int) rate);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                // Table might not have the right status values, continue with default values
+                System.out.println("Warning: Could not get driving attendance data from seance: " + e.getMessage());
+            }
+        }
         
         XYChart.Series<String, Number> attendanceSeries = new XYChart.Series<>();
-        attendanceSeries.setName("Taux de Présence");
+        attendanceSeries.setName("Taux de présence (%)");
         
-        for (Map.Entry<String, Double> entry : attendanceRates.entrySet()) {
+        for (Map.Entry<String, Integer> entry : attendanceData.entrySet()) {
             attendanceSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
         }
         
@@ -438,48 +487,70 @@ public class DashboardCandidates implements Initializable {
      * Charge les données du graphique des résultats d'examen
      */
     private void loadExamResultsChartData(Connection conn) throws SQLException {
-        // Get exam results data
-        String examSql = "SELECT type.libelle as exam_type, " +
-                       "SUM(CASE WHEN e.resultat = 1 THEN 1 ELSE 0 END) as pass_count, " +
-                       "SUM(CASE WHEN e.resultat = 0 THEN 1 ELSE 0 END) as fail_count " +
-                       "FROM examen e " +
-                       "JOIN type_examen type ON e.type_examen_id = type.id " +
-                       "WHERE e.date_examen BETWEEN ? AND ? " +
-                       "GROUP BY type.libelle";
-        
         Map<String, Integer> passData = new HashMap<>();
-        Map<String, Integer> failData = new HashMap<>();
+        passData.put("Code", 0);
+        passData.put("Conduite", 0);
         
-        try (PreparedStatement pstmt = conn.prepareStatement(examSql)) {
+        Map<String, Integer> failData = new HashMap<>();
+        failData.put("Code", 0);
+        failData.put("Conduite", 0);
+        
+        // Get exam pass/fail data for code
+        String codeSql = "SELECT " +
+                       "COUNT(CASE WHEN e.resultat = 1 THEN 1 END) as pass_count, " +
+                       "COUNT(CASE WHEN e.resultat = 0 THEN 1 END) as fail_count " +
+                       "FROM examen e " +
+                       "JOIN type_examen te ON e.type_examen_id = te.id " +
+                       "WHERE e.date_examen BETWEEN ? AND ? " +
+                       "AND te.libelle = 'Code'";
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(codeSql)) {
             pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
             pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
             
             try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    String examType = rs.getString("exam_type");
+                if (rs.next()) {
                     int passCount = rs.getInt("pass_count");
                     int failCount = rs.getInt("fail_count");
                     
-                    passData.put(examType, passCount);
-                    failData.put(examType, failCount);
+                    passData.put("Code", passCount);
+                    failData.put("Code", failCount);
                 }
             }
         }
         
-        // If no data, add placeholder data
-        if (passData.isEmpty()) {
-            passData.put("Code", 38);
-            passData.put("Conduite", 24);
-            failData.put("Code", 12);
-            failData.put("Conduite", 6);
+        // Get exam pass/fail data for driving
+        String drivingSql = "SELECT " +
+                          "COUNT(CASE WHEN e.resultat = 1 THEN 1 END) as pass_count, " +
+                          "COUNT(CASE WHEN e.resultat = 0 THEN 1 END) as fail_count " +
+                          "FROM examen e " +
+                          "JOIN type_examen te ON e.type_examen_id = te.id " +
+                          "WHERE e.date_examen BETWEEN ? AND ? " +
+                          "AND te.libelle = 'Conduite'";
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(drivingSql)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(filterStartDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(filterEndDate));
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int passCount = rs.getInt("pass_count");
+                    int failCount = rs.getInt("fail_count");
+                    
+                    passData.put("Conduite", passCount);
+                    failData.put("Conduite", failCount);
+                }
+            }
         }
         
+        // Create series for pass/fail data
         XYChart.Series<String, Number> passSeries = new XYChart.Series<>();
         passSeries.setName("Réussite");
         
         XYChart.Series<String, Number> failSeries = new XYChart.Series<>();
         failSeries.setName("Échec");
         
+        // Populate series
         for (String examType : passData.keySet()) {
             passSeries.getData().add(new XYChart.Data<>(examType, passData.get(examType)));
             failSeries.getData().add(new XYChart.Data<>(examType, failData.get(examType)));
