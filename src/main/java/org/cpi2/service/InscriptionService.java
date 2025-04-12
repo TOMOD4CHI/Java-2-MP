@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 public class InscriptionService {
     private final InscriptionRepository inscriptionRepository;
     private final PlanRepository planRepository;
+    private final PresenceService presenceService = new PresenceService();
+    private final CandidatService candidatService;
+
+
     //causes circular dependencies in invoice.java
 
     //private final PaiementService paiementService;
@@ -20,11 +24,18 @@ public class InscriptionService {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
         //this.paiementService = new PaiementService(this);
+        this.candidatService = new CandidatService();
     }
     public InscriptionService(PaiementService paiementService) {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
         //this.paiementService = paiementService;
+        this.candidatService = new CandidatService();
+    }
+    public InscriptionService(CandidatService candidatService) {
+        this.inscriptionRepository = new InscriptionRepository();
+        this.planRepository = new PlanRepository();
+        this.candidatService = candidatService;
     }
 
     public Optional<Inscription> getInscriptionById(Integer id) {
@@ -185,11 +196,11 @@ public class InscriptionService {
     public boolean isInscriptionCodeDone(int id){
         Inscription inscription = getInscriptionById(id).orElse(null);
         if(inscription == null) return false;
-        return inscription.getPlan().getGetNbreSeanceCode() == presenceService.getCountPresence(candidatService.CinToId(inscription.getCin()), "code", inscription.getInscriptioDate());
+        return inscription.getPlan().getGetNbreSeanceCode() == presenceService.getCountInscriptioinPerSession(candidatService.CinToId(inscription.getCin()), "code", inscription.getInscriptioDate());
     }
     public boolean isInscriptionConduiteDone(int id){
         Inscription inscription = getInscriptionById(id).orElse(null);
         if(inscription == null) return false;
-        return inscription.getPlan().getNbreSeanceConduite() == presenceService.getCountPresence(candidatService.CinToId(inscription.getCin()), "conduite", inscription.getInscriptioDate());
+        return inscription.getPlan().getNbreSeanceConduite() == presenceService.getCountInscriptioinPerSession(candidatService.CinToId(inscription.getCin()), "conduite", inscription.getInscriptioDate());
     }
 }

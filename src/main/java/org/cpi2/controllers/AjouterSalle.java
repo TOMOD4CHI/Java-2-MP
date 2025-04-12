@@ -1,3 +1,4 @@
+
 package org.cpi2.controllers;
 
 import javafx.event.ActionEvent;
@@ -31,7 +32,7 @@ public class AjouterSalle {
     
     // Validation patterns
     private static final Pattern NUMBER_PATTERN = Pattern.compile("^[0-9]+$");
-    
+
     @FXML
     public void initialize() {
         // S'assurer que la table salle existe dans la base de données
@@ -146,5 +147,4 @@ public class AjouterSalle {
         ValidationUtils.clearValidation(numeroSalleField);
         ValidationUtils.clearValidation(capaciteField);
     }
-
 }

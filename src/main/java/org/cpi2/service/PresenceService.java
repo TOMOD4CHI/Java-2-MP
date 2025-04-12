@@ -74,7 +74,8 @@ public class PresenceService {
         // Mark the candidate as present (true)
         return recordPresenceForSeance(seanceId, candidatId, seanceType, true);
     }
-    public int getCountPresence(long candidatId, String seanceType, Date date) {
+
+    public int getCountInscriptioinPerSession(long candidatId, String seanceType, Date date) {
         if(seanceType == null || seanceType.isEmpty()) {
             LOGGER.log(Level.WARNING, "Seance type is null or empty");
             return 0;
