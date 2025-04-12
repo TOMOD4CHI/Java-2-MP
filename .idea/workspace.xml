@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="so many" />
+    <list default="true" id="55e2a7be-d739-45e7-ba83-1d20bcef4f8c" name="Changes" comment="so many">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoecole.sql" beforeDir="false" afterPath="$PROJECT_DIR$/autoecole.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Documents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Documents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/GestionSallesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/GestionSallesController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Paiement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Paiement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Progression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/Progression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/RemplirSeance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/cpi2/controllers/RemplirSeance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxmls/Paiement.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxmls/Paiement.fxml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -54,7 +63,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "Application.Unnamed.executor": "Run",
     "Maven.Java-2-MP [clean].executor": "Run",
     "Maven.Java-2-MP [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor": "Run",
@@ -112,7 +121,7 @@
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.cpi2.Main" />
       <module name="Java-2-MP" />
-      <option name="VM_PARAMETERS" value="--module-path &quot;C:\javafx-sdk-17.0.14\lib&quot; --add-modules javafx.controls,javafx.fxml,javafx.web" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\semia\Downloads\Compressed\tara9\javafx-sdk-23.0.2\lib&quot; --add-modules javafx.controls,javafx.fxml,javafx.web" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

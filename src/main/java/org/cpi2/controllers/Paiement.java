@@ -18,6 +18,7 @@ import org.cpi2.service.CandidatService;
 import org.cpi2.service.ExamenService;
 import org.cpi2.service.InscriptionService;
 import org.cpi2.service.PaiementService;
+import org.cpi2.utils.AlertUtil;
 import org.cpi2.utils.PaymentReceiptGenerator;
 
 import java.awt.Desktop;
@@ -115,8 +116,6 @@ public class Paiement implements Initializable {
     }
     private void setApplicationIcon(Stage stage) {
         try {
-
-
             stage.getIcons().clear();
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/app_icon.png")));
         } catch (Exception e) {
@@ -187,16 +186,16 @@ public class Paiement implements Initializable {
 
                 editButton.setOnAction(event -> {
                     PaiementData data = getTableView().getItems().get(getIndex());
-                    
+
                     try {
                         // Create the payment edit view
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PaymentEdit.fxml"));
                         Parent root = loader.load();
-                        
+
                         // Get controller and pass payment details
                         PaymentEditController controller = loader.getController();
                         controller.initData(data);
-                        
+
                         // Show in new window
                         Stage stage = new Stage();
                         stage.setTitle("Modifier le Paiement #" + data.getId());
@@ -205,7 +204,7 @@ public class Paiement implements Initializable {
                         stage.setScene(new Scene(root));
                         stage.initModality(Modality.APPLICATION_MODAL);
                         stage.showAndWait();
-                        
+
                         // Refresh data after edit window is closed
                         loadMockData();
                         updateTotalLabel();
@@ -217,13 +216,22 @@ public class Paiement implements Initializable {
 
                 deleteButton.setOnAction(event -> {
                     PaiementData data = getTableView().getItems().get(getIndex());
-                    boolean deleted = paiementService.cancelPiament(data.getId());
-                    if (deleted) {
-                        showSuccessDialog("Paiement supprimé avec succès");
-                        getTableView().getItems().remove(getIndex());
-                        updateTotalLabel();
-                    } else {
-                        showErrorDialog("Impossible de supprimer le paiement");
+
+                    // Use AlertUtil for confirmation instead of standard Alert
+                    boolean confirmed = AlertUtil.showConfirmation(
+                            "Confirmation de suppression",
+                            "Êtes-vous sûr de vouloir supprimer ce paiement?"
+                    );
+
+                    if (confirmed) {
+                        boolean deleted = paiementService.cancelPiament(data.getId());
+                        if (deleted) {
+                            AlertUtil.showSuccess("Suppression réussie", "Paiement supprimé avec succès");
+                            getTableView().getItems().remove(getIndex());
+                            updateTotalLabel();
+                        } else {
+                            AlertUtil.showError("Erreur de suppression", "Impossible de supprimer le paiement");
+                        }
                     }
                 });
             }
@@ -281,38 +289,38 @@ public class Paiement implements Initializable {
             String description = descriptionArea.getText();
 
             String cin = candidat.substring(1, candidat.indexOf(")"));
-            
+
             try {
                 if (type.equals("Examen")) {
                     if(!examenService.hasPendingExamens(cin)){
-                        showErrorDialog("Le candidat n'a pas d'examen actif");
+                        AlertUtil.showError("Erreur", "Le candidat n'a pas d'examen actif");
                         return;
                     }
-                    
+
                     Examen examen = examenService.getPendingExamen(cin);
                     paiementService.enregistrerPaiement(new PaiementExamen(
                             StatutPaiement.COMPLETE,
                             null,
                             candidatService.getCandidatByCin(cin),
-                            montant, 
-                            date, 
-                            ModePaiement.valueOf(mode), 
-                            examen, 
+                            montant,
+                            date,
+                            ModePaiement.valueOf(mode),
+                            examen,
                             "Payement d'examen du "+examen.getType()
                     ));
-                    
-                    showSuccessDialog("Paiement d'examen enregistré avec succès");
+
+                    AlertUtil.showSuccess("Succès", "Paiement d'examen enregistré avec succès");
                 } else {
                     if(!inscriptionService.haveActifInscription(cin)){
-                        showErrorDialog("Le candidat n'a pas d'inscription active");
+                        AlertUtil.showError("Erreur", "Le candidat n'a pas d'inscription active");
                         return;
                     }
-                    
+
                     Inscription inscription = inscriptionService.getActifInscirptionBycin(cin).get(0);
                     double reste = paiementService.calculerMontantRestant(inscription.getId());
 
                     if (montant > reste) {
-                        showErrorDialog("Le montant ne peut pas dépasser le montant restant à payer "+reste+" DT");
+                        AlertUtil.showError("Erreur de montant", "Le montant ne peut pas dépasser le montant restant à payer "+reste+" DT");
                         return;
                     }
 
@@ -324,37 +332,37 @@ public class Paiement implements Initializable {
                     } else {
                         paymentType = type;
                     }
-                    
+
                     paiementService.enregistrerPaiement(new PaiementInscription(
                             StatutPaiement.COMPLETE,
                             null,
                             candidatService.getCandidatByCin(cin),
-                            montant, 
-                            date, 
-                            ModePaiement.valueOf(mode), 
-                            inscription, 
-                            paymentType, 
+                            montant,
+                            date,
+                            ModePaiement.valueOf(mode),
+                            inscription,
+                            paymentType,
                             description
                     ));
-                    
+
                     if(montant == reste){
                         inscriptionService.updatePaymentStatus(inscription.getId(), true);
-                        showSuccessDialog("Paiement enregistré avec succès. L'inscription est maintenant payée en totalité.");
+                        AlertUtil.showSuccess("Succès", "Paiement enregistré avec succès. L'inscription est maintenant payée en totalité.");
                     } else {
-                        showSuccessDialog("Paiement enregistré avec succès. Il reste " + (reste - montant) + " DT à payer.");
+                        AlertUtil.showSuccess("Succès", "Paiement enregistré avec succès. Il reste " + (reste - montant) + " DT à payer.");
                     }
                 }
-                
+
                 loadMockData();
                 updateTotalLabel();
                 clearPaymentForm();
-                
+
             } catch(Exception e) {
                 e.printStackTrace();
-                showErrorDialog("Erreur lors de l'enregistrement du paiement: " + e.getMessage());
+                AlertUtil.showError("Erreur d'enregistrement", "Erreur lors de l'enregistrement du paiement: " + e.getMessage());
             }
         } catch (NumberFormatException e) {
-            showErrorDialog("Montant invalide");
+            AlertUtil.showError("Erreur de format", "Montant invalide");
         }
     }
 
@@ -376,8 +384,8 @@ public class Paiement implements Initializable {
                     )));
             return;
         }
-        if (startDate.isAfter(endDate)) {
-            showErrorDialog("La date de début ne peut pas être après la date de fin");
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            AlertUtil.showError("Erreur de date", "La date de début ne peut pas être après la date de fin");
             return;
         }
         System.out.println(searchCandidatComboBox.getValue());
@@ -410,23 +418,23 @@ public class Paiement implements Initializable {
 
     private boolean validatePaymentForm() {
         if (typeComboBox.getValue() == null) {
-            showErrorDialog("Veuillez sélectionner le type de paiement");
+            AlertUtil.showError("Validation", "Veuillez sélectionner le type de paiement");
             return false;
         }
         if (candidatComboBox.getValue() == null) {
-            showErrorDialog("Veuillez sélectionner un candidat");
+            AlertUtil.showError("Validation", "Veuillez sélectionner un candidat");
             return false;
         }
         if (montantField.getText().isEmpty()) {
-            showErrorDialog("Veuillez saisir le montant");
+            AlertUtil.showError("Validation", "Veuillez saisir le montant");
             return false;
         }
         if (datePicker.getValue() == null) {
-            showErrorDialog("Veuillez sélectionner une date");
+            AlertUtil.showError("Validation", "Veuillez sélectionner une date");
             return false;
         }
         if (modeComboBox.getValue() == null) {
-            showErrorDialog("Veuillez sélectionner le mode de paiement");
+            AlertUtil.showError("Validation", "Veuillez sélectionner le mode de paiement");
             return false;
         }
         return true;
@@ -448,23 +456,15 @@ public class Paiement implements Initializable {
         totalLabel.setText(String.format("Total: %.2f DT", total));
     }
 
-    // Dialog methods
+    // Dialog methods - replaced with AlertUtil
     private void showErrorDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Erreur");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertUtil.showError("Erreur", message);
     }
 
     private void showSuccessDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Succès");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertUtil.showSuccess("Succès", message);
     }
-    
+
     /**
      * Handle printing a receipt for the selected payment
      */
@@ -472,12 +472,12 @@ public class Paiement implements Initializable {
     private void handlePrintReceipt() {
         // Get selected payment from table
         PaiementData selectedPayment = paiementsTable.getSelectionModel().getSelectedItem();
-        
+
         if (selectedPayment == null) {
-            showErrorDialog("Veuillez sélectionner un paiement à imprimer");
+            AlertUtil.showError("Erreur", "Veuillez sélectionner un paiement à imprimer");
             return;
         }
-        
+
         try {
             // Convert PaiementData to Map for the receipt generator
             Map<String, Object> paymentData = new HashMap<>();
@@ -488,50 +488,44 @@ public class Paiement implements Initializable {
             paymentData.put("montant", selectedPayment.getMontant());
             paymentData.put("methode", selectedPayment.getMethode());
             paymentData.put("description", selectedPayment.getDescription());
-            
+
             // Generate receipt
             String pdfPath = PaymentReceiptGenerator.generateSinglePaymentReceipt(paymentData);
-            
+
             if (pdfPath != null) {
-                // Show success alert with option to open file
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("Reçu généré");
-                alert.setContentText("Le reçu a été enregistré sous:\n" + pdfPath);
-                
-                // Add buttons to open file or directory
-                ButtonType openFileButton = new ButtonType("Ouvrir le fichier");
-                ButtonType openDirButton = new ButtonType("Ouvrir le dossier");
-                ButtonType closeButton = ButtonType.CLOSE;
-                
-                alert.getButtonTypes().setAll(openFileButton, openDirButton, closeButton);
-                
-                // Handle user choice
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent()) {
-                    if (result.get() == openFileButton) {
+                // Show options dialog using AlertUtil
+                int choice = AlertUtil.showOptionsDialog(
+                        "Reçu généré",
+                        "Le reçu a été enregistré sous:\n" + pdfPath,
+                        "Ouvrir le fichier", "Ouvrir le dossier", "Fermer"
+                );
+
+                try {
+                    if (choice == 0) {
                         // Open the PDF file
                         File pdfFile = new File(pdfPath);
                         if (pdfFile.exists()) {
                             Desktop.getDesktop().open(pdfFile);
                         }
-                    } else if (result.get() == openDirButton) {
+                    } else if (choice == 1) {
                         // Open the directory containing the PDF
                         File pdfDirectory = new File(pdfPath).getParentFile();
                         if (pdfDirectory.exists()) {
                             Desktop.getDesktop().open(pdfDirectory);
                         }
                     }
+                } catch (IOException e) {
+                    AlertUtil.showError("Erreur d'ouverture", "Impossible d'ouvrir le fichier: " + e.getMessage());
                 }
             } else {
-                showErrorDialog("Une erreur est survenue lors de la génération du reçu");
+                AlertUtil.showError("Erreur de génération", "Une erreur est survenue lors de la génération du reçu");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showErrorDialog("Une erreur est survenue: " + e.getMessage());
+            AlertUtil.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
         }
     }
-    
+
     /**
      * Handle exporting a summary of payments to PDF
      */
@@ -539,19 +533,19 @@ public class Paiement implements Initializable {
     private void handleExportPdf() {
         // Check if there are payments to export
         if (paiementsTable.getItems().isEmpty()) {
-            showErrorDialog("Aucun paiement à exporter");
+            AlertUtil.showError("Export impossible", "Aucun paiement à exporter");
             return;
         }
-        
+
         try {
             // Get current search parameters
             LocalDate startDate = startDatePicker.getValue() != null ? startDatePicker.getValue() : LocalDate.now().minusMonths(1);
             LocalDate endDate = endDatePicker.getValue() != null ? endDatePicker.getValue() : LocalDate.now();
             String candidat = searchCandidatComboBox.getValue();
-            
+
             // Convert table items to list of maps for the report generator
             List<Map<String, Object>> paymentsData = new ArrayList<>();
-            
+
             for (PaiementData payment : paiementsTable.getItems()) {
                 Map<String, Object> paymentMap = new HashMap<>();
                 paymentMap.put("date", payment.getDate());
@@ -561,50 +555,44 @@ public class Paiement implements Initializable {
                 paymentMap.put("montant", payment.getMontant());
                 paymentMap.put("methode", payment.getMethode());
                 paymentMap.put("description", payment.getDescription());
-                
+
                 paymentsData.add(paymentMap);
             }
-            
+
             // Generate summary report
             String pdfPath = PaymentReceiptGenerator.generatePaymentSummaryReport(paymentsData, startDate, endDate, candidat);
-            
+
             if (pdfPath != null) {
-                // Show success alert with option to open file
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("Rapport généré");
-                alert.setContentText("Le rapport a été enregistré sous:\n" + pdfPath);
-                
-                // Add buttons to open file or directory
-                ButtonType openFileButton = new ButtonType("Ouvrir le fichier");
-                ButtonType openDirButton = new ButtonType("Ouvrir le dossier");
-                ButtonType closeButton = ButtonType.CLOSE;
-                
-                alert.getButtonTypes().setAll(openFileButton, openDirButton, closeButton);
-                
-                // Handle user choice
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent()) {
-                    if (result.get() == openFileButton) {
+                // Show options dialog using AlertUtil
+                int choice = AlertUtil.showOptionsDialog(
+                        "Rapport généré",
+                        "Le rapport a été enregistré sous:\n" + pdfPath,
+                        "Ouvrir le fichier", "Ouvrir le dossier", "Fermer"
+                );
+
+                try {
+                    if (choice == 0) {
                         // Open the PDF file
                         File pdfFile = new File(pdfPath);
                         if (pdfFile.exists()) {
                             Desktop.getDesktop().open(pdfFile);
                         }
-                    } else if (result.get() == openDirButton) {
+                    } else if (choice == 1) {
                         // Open the directory containing the PDF
                         File pdfDirectory = new File(pdfPath).getParentFile();
                         if (pdfDirectory.exists()) {
                             Desktop.getDesktop().open(pdfDirectory);
                         }
                     }
+                } catch (IOException e) {
+                    AlertUtil.showError("Erreur d'ouverture", "Impossible d'ouvrir le fichier: " + e.getMessage());
                 }
             } else {
-                showErrorDialog("Une erreur est survenue lors de la génération du rapport");
+                AlertUtil.showError("Erreur de génération", "Une erreur est survenue lors de la génération du rapport");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showErrorDialog("Une erreur est survenue: " + e.getMessage());
+            AlertUtil.showError("Erreur", "Une erreur est survenue: " + e.getMessage());
         }
     }
 }

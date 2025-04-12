@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2025 at 05:31 PM
+-- Generation Time: Apr 12, 2025 at 02:19 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -43,8 +43,7 @@ CREATE TABLE `auto_ecole` (
 -- Dumping data for table `auto_ecole`
 --
 
-INSERT INTO `auto_ecole` (`id`, `nom`, `adresse`, `logo_path`, `telephone`, `email`, `username`, `password`, `created_at`) VALUES
-    (1, 'Auto École Exemplaire', 'Avenue des Conducteurs 123, Ville', 'logos/default_logo.png', '12345678', 'contact@autoecole.com', 'user', 'pass', '2025-03-22 13:11:27');
+INSERT INTO `auto_ecole` VALUES(1, 'Auto École Exemplaire', 'Avenue des Conducteurs 123, Ville', 'logos/default_logo.png', '12345678', 'contact@autoecole.com', 'aaaa', 'aaaa', '2025-03-22 13:11:27');
 
 -- --------------------------------------------------------
 
@@ -69,9 +68,10 @@ CREATE TABLE `candidat` (
 -- Dumping data for table `candidat`
 --
 
-INSERT INTO `candidat` (`id`, `nom`, `prenom`, `cin`, `adresse`, `telephone`, `email`, `date_naissance`, `type_permis`, `created_at`) VALUES
-                                                                                                                                          (13, 'test', 'ben test', '78787878', 'fsdfsdfsdf', '45784521', 'fsfsfd@dfd.df', '2025-03-27', NULL, '2025-03-27 19:26:08'),
-                                                                                                                                          (14, 'aezrazer', 'aezrazer', '12345678', 'azerazerazeraz', '12345678', 'aerazer@azerazer', '2025-04-10', NULL, '2025-04-10 14:57:22');
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -92,8 +92,12 @@ CREATE TABLE `document` (
 -- Dumping data for table `document`
 --
 
-INSERT INTO `document` (`id`, `dossier_id`, `type_document_id`, `nom_fichier`, `chemin_fichier`, `date_upload`) VALUES
-    (4, 4, 2, 'Goated Panel.jpg', 'uploads/documents/4/8428d5ed-4405-4517-941e-e7f2bdc8bf4b.jpg', '2025-03-27 19:43:22');
+
+
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -114,9 +118,10 @@ CREATE TABLE `dossier` (
 -- Dumping data for table `dossier`
 --
 
-INSERT INTO `dossier` (`id`, `candidat_id`, `statut`, `date_creation`, `notes`, `created_at`) VALUES
-                                                                                                  (4, 13, 'En attente', NULL, NULL, '2025-03-27 19:26:08'),
-                                                                                                  (5, 14, 'En attente', NULL, NULL, '2025-04-10 14:57:22');
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -131,13 +136,30 @@ CREATE TABLE `entretien` (
                              `type_entretien` varchar(100) NOT NULL,
                              `description` text DEFAULT NULL,
                              `cout` decimal(10,2) NOT NULL,
-                             `entretien_suivant` date NOT NULL,
+                             `entretien_suivant` date DEFAULT NULL,
                              `maintenance` int(1) NOT NULL DEFAULT 0,
                              `kilometrage` int(11) NOT NULL,
                              `facture_path` varchar(255) DEFAULT NULL,
-                             `statut` varchar(50) DEFAULT 'Planifié',
+                             `statut` varchar(1) NOT NULL DEFAULT '1',
                              `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `entretien`
+--
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -157,6 +179,13 @@ CREATE TABLE `examen` (
                           `commentaire` text DEFAULT NULL,
                           `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `examen`
+--
+
+
+
 
 -- --------------------------------------------------------
 
@@ -180,9 +209,10 @@ CREATE TABLE `inscription` (
 -- Dumping data for table `inscription`
 --
 
-INSERT INTO `inscription` (`id`, `cin`, `plan_id`, `statut`, `statut_paiement`, `cycle_paiement`, `date_inscription`, `date_paiement_suivant`, `created_at`) VALUES
-                                                                                                                                                                 (6, '78787878', 3, 'En Cours', 'paid', 'Totale', '2025-03-27', '2025-04-27', '2025-03-27 19:58:07'),
-                                                                                                                                                                 (7, '12345678', 1, 'En Cours', 'unpaid', 'Mensuel', '2025-04-10', '2025-05-10', '2025-04-10 14:57:22');
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -209,8 +239,7 @@ CREATE TABLE `moniteur` (
 -- Dumping data for table `moniteur`
 --
 
-INSERT INTO `moniteur` (`id`, `nom`, `prenom`, `cin`, `adresse`, `telephone`, `email`, `date_naissance`, `date_embauche`, `salaire`, `statut`, `created_at`) VALUES
-    (1, 'ayoub', 'zneidi', '123456789', 'rue iben khaldoun', '93487161', 'dalmc132@gmail.com', NULL, '2024-04-18', NULL, 'Actif', '2025-04-09 23:03:01');
+
 
 -- --------------------------------------------------------
 
@@ -230,8 +259,7 @@ CREATE TABLE `moniteur_specialite` (
 -- Dumping data for table `moniteur_specialite`
 --
 
-INSERT INTO `moniteur_specialite` (`id`, `moniteur_id`, `type_permis_id`, `date_obtention`, `created_at`) VALUES
-    (1, 1, 2, NULL, '2025-04-09 23:03:01');
+
 
 -- --------------------------------------------------------
 
@@ -248,7 +276,7 @@ CREATE TABLE `paiement` (
                             `montant` decimal(10,2) NOT NULL,
                             `date_paiement` date NOT NULL,
                             `mode_paiement` varchar(50) DEFAULT 'Espèces',
-                            `reference` varchar(100) DEFAULT NULL,
+                            `statut` varchar(100) DEFAULT 'COMPLETE',
                             `notes` text DEFAULT NULL,
                             `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -257,8 +285,12 @@ CREATE TABLE `paiement` (
 -- Dumping data for table `paiement`
 --
 
-INSERT INTO `paiement` (`id`, `id_candidat`, `inscription_id`, `id_examen`, `type_paiement`, `montant`, `date_paiement`, `mode_paiement`, `reference`, `notes`, `created_at`) VALUES
-    (2, 13, 6, NULL, 'Totale', 349.99, '2025-04-03', 'CARTE_BANCAIRE', NULL, 'Test', '2025-04-03 20:18:14');
+
+
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -283,10 +315,9 @@ CREATE TABLE `plan` (
 -- Dumping data for table `plan`
 --
 
-INSERT INTO `plan` (`id`, `libelle`, `description`, `type_permis_id`, `prix`, `duree`, `heures_code`, `heures_conduite`, `actif`, `created_at`) VALUES
-                                                                                                                                                    (1, 'Basic Motorcycle Course', 'Fundamental motorcycle training for beginners', 1, 199.99, 2, 10, 10, 1, '2025-03-23 22:54:51'),
-                                                                                                                                                    (3, 'Basic Car Driving Course', 'Essential car driving skills for new drivers', 2, 349.99, 3, 10, 10, 1, '2025-03-23 22:54:51'),
-                                                                                                                                                    (7, 'Heavy Truck License Course', 'Complete training for heavy goods vehicle license', 3, 899.99, 4, 10, 10, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(1, 'Basic Motorcycle Course', 'Fundamental motorcycle training for beginners', 1, 200.00, 2, 10, 10, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(3, 'Basic Car Driving Course', 'Essential car driving skills for new drivers', 2, 350.00, 3, 10, 10, 1, '2025-03-23 22:54:51');
+INSERT INTO `plan` VALUES(7, 'Heavy Truck License Course', 'Complete training for heavy goods vehicle license', 3, 900.00, 4, 10, 10, 1, '2025-03-23 22:54:51');
 
 -- --------------------------------------------------------
 
@@ -301,6 +332,14 @@ CREATE TABLE `presence_code` (
                                  `present` tinyint(1) DEFAULT 0,
                                  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `presence_code`
+--
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -339,6 +378,21 @@ CREATE TABLE `rendez_vous` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `salle`
+--
+
+CREATE TABLE `salle` (
+                         `id` int(11) NOT NULL,
+                         `nom` varchar(100) NOT NULL,
+                         `numero` varchar(20) NOT NULL,
+                         `capacite` int(11) NOT NULL DEFAULT 20,
+                         `notes` text DEFAULT NULL,
+                         `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `seance`
 --
 
@@ -361,19 +415,6 @@ CREATE TABLE `seance` (
                           `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `seance`
---
-
-INSERT INTO `seance` (`id`, `date`, `heure`, `duree`, `type`, `lieu`, `moniteur_id`, `candidat_id`, `vehicule_id`, `statut`, `commentaire`, `kilometrage_debut`, `kilometrage_fin`, `latitude`, `longitude`, `created_at`) VALUES
-                                                                                                                                                                                                                               (1, '2025-04-10', '12:13:00', 60, 'Conduite', NULL, 1, 13, 2, 'Planifiée', NULL, 123, NULL, 36.797189, 10.17952, '2025-04-09 23:03:32'),
-                                                                                                                                                                                                                               (2, '2025-04-10', '12:13:00', 60, 'Conduite', NULL, 1, 13, 2, 'Planifiée', NULL, 123, NULL, 36.79609, 10.104675, '2025-04-10 00:32:01'),
-                                                                                                                                                                                                                               (3, '2025-04-10', '12:13:00', 60, 'Conduite', NULL, 1, 13, 2, 'Planifiée', NULL, 100, NULL, 36.797189, 10.182953, '2025-04-10 11:22:43'),
-                                                                                                                                                                                                                               (4, '2025-04-10', '00:00:00', 60, 'Conduite', NULL, 1, 13, 2, 'Planifiée', NULL, 100, NULL, 36.861493, 10.37796, '2025-04-10 11:23:19'),
-                                                                                                                                                                                                                               (5, '2025-04-10', '12:13:00', 60, 'Conduite', NULL, 1, 13, 2, 'Planifiée', NULL, 50, NULL, 36.812583, 10.139694, '2025-04-10 11:24:00'),
-                                                                                                                                                                                                                               (6, '2025-04-10', '14:14:00', 60, 'Conduite', NULL, 1, 13, 2, 'Planifiée', NULL, 0, NULL, 36.748238, 10.023651, '2025-04-10 11:25:15'),
-                                                                                                                                                                                                                               (7, '2025-04-10', '12:45:00', 60, 'Conduite', NULL, 1, 13, 2, 'Planifiée', NULL, 12, NULL, 36.748788, 10.041504, '2025-04-10 11:25:50');
-
 -- --------------------------------------------------------
 
 --
@@ -392,7 +433,6 @@ CREATE TABLE `session_code` (
                                 `nombre_inscrits` int(11) DEFAULT 0,
                                 `statut` varchar(20) NOT NULL DEFAULT 'Planifiée',
                                 `notes` text DEFAULT NULL,
-                                `prix` decimal(10,2) DEFAULT NULL,
                                 `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -400,8 +440,8 @@ CREATE TABLE `session_code` (
 -- Dumping data for table `session_code`
 --
 
-INSERT INTO `session_code` (`id`, `plan_id`, `date_session`, `heure_debut`, `heure_fin`, `moniteur_id`, `salle`, `capacite_max`, `nombre_inscrits`, `statut`, `notes`, `prix`, `created_at`) VALUES
-    (4, 1, '2025-04-09', '12:13:00', '13:13:00', 1, NULL, 1, 0, 'PLANIFIEE', NULL, NULL, '2025-04-10 01:58:05');
+
+
 
 -- --------------------------------------------------------
 
@@ -444,15 +484,14 @@ CREATE TABLE `type_document` (
 -- Dumping data for table `type_document`
 --
 
-INSERT INTO `type_document` (`id`, `libelle`, `description`, `obligatoire`, `created_at`) VALUES
-                                                                                              (1, 'CIN', 'Carte d\'identité nationale', 1, '2025-03-23 22:49:32'),
-(2, 'PERMIS_A', 'Permis de conduire d\'un Moto', 0, '2025-03-23 22:49:32'),
-                                                                                              (3, 'CERTIFICAT_MEDICAL', 'Certificat d\'aptitude médicale', 1, '2025-03-23 22:49:32'),
-(4, 'PHOTO', 'Photo d\'identité', 1, '2025-03-23 22:49:32'),
-                                                                                              (5, 'PROOF_OF_RESIDENCE', 'Justificatif de domicile', 1, '2025-03-23 22:49:32'),
-                                                                                              (6, 'AUTRE', 'Autre document', 0, '2025-03-23 22:49:32'),
-                                                                                              (7, 'PERMIS_B', 'Permis de Counduite d\'une Voiture', 1, '2025-03-27 19:33:03'),
-(8, 'PERMIS_C', 'Permis de counduite d\'un Camion', 1, '2025-03-27 19:33:36');
+INSERT INTO `type_document` VALUES(1, 'CIN', 'Carte d\'identité nationale', 1, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(2, 'PERMIS_A', 'Permis de conduire d\'un Moto', 0, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(3, 'CERTIFICAT_MEDICAL', 'Certificat d\'aptitude médicale', 1, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(4, 'PHOTO', 'Photo d\'identité', 1, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(5, 'PROOF_OF_RESIDENCE', 'Justificatif de domicile', 1, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(6, 'AUTRE', 'Autre document', 0, '2025-03-23 22:49:32');
+INSERT INTO `type_document` VALUES(7, 'PERMIS_B', 'Permis de Counduite d\'une Voiture', 1, '2025-03-27 19:33:03');
+INSERT INTO `type_document` VALUES(8, 'PERMIS_C', 'Permis de counduite d\'un Camion', 1, '2025-03-27 19:33:36');
 
 -- --------------------------------------------------------
 
@@ -472,11 +511,8 @@ CREATE TABLE `type_examen` (
 -- Dumping data for table `type_examen`
 --
 
-INSERT INTO `type_examen` (`id`, `libelle`, `description`, `cout`, `created_at`) VALUES
-                                                                                     (1, 'Code', 'Examen du code de la route', 100.00, '2025-03-22 13:11:28'),
-                                                                                     (2, 'Circuit', 'Examen de conduite en circuit fermé', 150.00, '2025-03-22 13:11:28'),
-                                                                                     (3, 'Créneaux', 'Examen des manœuvres de stationnement', 100.00, '2025-03-22 13:11:28'),
-                                                                                     (4, 'Conduite', 'Examen de conduite en circulation', 200.00, '2025-03-22 13:11:28');
+INSERT INTO `type_examen` VALUES(1, 'Code', 'Examen du code de la route', 100.00, '2025-03-22 13:11:28');
+INSERT INTO `type_examen` VALUES(2, 'Conduite', 'Examen de conduite en circulation', 200.00, '2025-03-22 13:11:28');
 
 -- --------------------------------------------------------
 
@@ -497,10 +533,9 @@ CREATE TABLE `type_permis` (
 -- Dumping data for table `type_permis`
 --
 
-INSERT INTO `type_permis` (`id`, `code`, `libelle`, `description`, `age_minimum`, `created_at`) VALUES
-                                                                                                    (1, 'A', 'Moto', 'Permis pour conduire une moto', 18, '2025-03-22 13:11:28'),
-                                                                                                    (2, 'B', 'Voiture', 'Permis pour conduire une voiture', 18, '2025-03-22 13:11:28'),
-                                                                                                    (3, 'C', 'Camion', 'Permis pour conduire un camion', 21, '2025-03-22 13:11:28');
+INSERT INTO `type_permis` VALUES(1, 'A', 'Moto', 'Permis pour conduire une moto', 18, '2025-03-22 13:11:28');
+INSERT INTO `type_permis` VALUES(2, 'B', 'Voiture', 'Permis pour conduire une voiture', 18, '2025-03-22 13:11:28');
+INSERT INTO `type_permis` VALUES(3, 'C', 'Camion', 'Permis pour conduire un camion', 21, '2025-03-22 13:11:28');
 
 -- --------------------------------------------------------
 
@@ -517,7 +552,7 @@ CREATE TABLE `vehicule` (
                             `annee` int(11) DEFAULT NULL,
                             `date_mise_service` date NOT NULL,
                             `kilometrage_total` int(11) NOT NULL DEFAULT 0,
-                            `kilometrage_prochain_entretien` int(11) NOT NULL,
+                            `kilometrage_prochain_entretien` int(11) DEFAULT NULL,
                             `date_prochain_entretien` date DEFAULT NULL,
                             `date_derniere_visite_technique` date DEFAULT NULL,
                             `date_prochaine_visite_technique` date DEFAULT NULL,
@@ -530,27 +565,8 @@ CREATE TABLE `vehicule` (
 -- Dumping data for table `vehicule`
 --
 
-INSERT INTO `vehicule` (`id`, `immatriculation`, `type_permis_id`, `marque`, `modele`, `annee`, `date_mise_service`, `kilometrage_total`, `kilometrage_prochain_entretien`, `date_prochain_entretien`, `date_derniere_visite_technique`, `date_prochaine_visite_technique`, `date_expiration_assurance`, `statut`, `created_at`) VALUES
-    (2, '4564655', 2, 'TOYOTA', 'Supra', NULL, '2025-04-02', 628, 0, NULL, NULL, NULL, NULL, 'Disponible', '2025-04-04 23:29:43');
 
--- Script pour créer la table salle
-CREATE TABLE IF NOT EXISTS `salle` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `nom` varchar(100) NOT NULL,
-    `numero` varchar(20) NOT NULL,
-    `capacite` int(11) NOT NULL DEFAULT 20,
-    `notes` text DEFAULT NULL,
-    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `numero` (`numero`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Insérer quelques salles par défaut
-INSERT INTO `salle` (`nom`, `numero`, `capacite`, `notes`) VALUES
-('Salle de Code A', 'A101', 25, 'Salle principale pour les cours de code'),
-('Salle de Code B', 'B102', 20, 'Salle secondaire pour les cours de code'),
-('Salle de Théorie', 'C103', 30, 'Salle pour les cours théoriques'),
-('Salle d examen', 'D104', 15, 'Salle réservée aux examens');
 --
 -- Indexes for dumped tables
 --
@@ -667,6 +683,13 @@ ALTER TABLE `rendez_vous`
   ADD KEY `session_conduite_id` (`session_conduite_id`);
 
 --
+-- Indexes for table `salle`
+--
+ALTER TABLE `salle`
+    ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `numero` (`numero`);
+
+--
 -- Indexes for table `seance`
 --
 ALTER TABLE `seance`
@@ -736,37 +759,37 @@ ALTER TABLE `auto_ecole`
 -- AUTO_INCREMENT for table `candidat`
 --
 ALTER TABLE `candidat`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `dossier`
 --
 ALTER TABLE `dossier`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `entretien`
 --
 ALTER TABLE `entretien`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `examen`
 --
 ALTER TABLE `examen`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `inscription`
 --
 ALTER TABLE `inscription`
-    MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+    MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `moniteur`
@@ -784,7 +807,7 @@ ALTER TABLE `moniteur_specialite`
 -- AUTO_INCREMENT for table `paiement`
 --
 ALTER TABLE `paiement`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `plan`
@@ -796,13 +819,13 @@ ALTER TABLE `plan`
 -- AUTO_INCREMENT for table `presence_code`
 --
 ALTER TABLE `presence_code`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `presence_conduite`
 --
 ALTER TABLE `presence_conduite`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rendez_vous`
@@ -811,16 +834,22 @@ ALTER TABLE `rendez_vous`
     MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `salle`
+--
+ALTER TABLE `salle`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `seance`
 --
 ALTER TABLE `seance`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `session_code`
 --
 ALTER TABLE `session_code`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `session_conduite`
@@ -938,7 +967,6 @@ ALTER TABLE `rendez_vous`
   ADD CONSTRAINT `rendez_vous_ibfk_2` FOREIGN KEY (`session_code_id`) REFERENCES `session_code` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `rendez_vous_ibfk_3` FOREIGN KEY (`session_conduite_id`) REFERENCES `session_conduite` (`id`) ON DELETE SET NULL;
 
---
 -- Constraints for table `seance`
 --
 ALTER TABLE `seance`

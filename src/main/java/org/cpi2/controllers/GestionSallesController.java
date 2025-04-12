@@ -195,20 +195,19 @@ public class GestionSallesController {
         
         saveButton.setText("Mettre à jour");
     }
-    
+
     private void handleDeleteSalle(Salle salle) {
-        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmation.setTitle("Confirmation de suppression");
-        confirmation.setHeaderText("Supprimer la salle");
-        confirmation.setContentText("Êtes-vous sûr de vouloir supprimer la salle " + salle.getNom() + " (" + salle.getNumero() + ") ?");
-        
-        Optional<ButtonType> result = confirmation.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        boolean confirmed = AlertUtil.showConfirmation(
+                "Confirmation de suppression",
+                "Êtes-vous sûr de vouloir supprimer la salle " + salle.getNom() + " (" + salle.getNumero() + ") ?"
+        );
+
+        if (confirmed) {
             boolean success = salleService.deleteSalle(salle.getId());
             if (success) {
                 AlertUtil.showSuccess("Succès", "Salle supprimée avec succès");
                 loadSalles();
-                
+
                 // If we were editing this salle, clear the form
                 if (isEditing && currentSalleId != null && currentSalleId.equals(salle.getId())) {
                     clearForm();
@@ -218,7 +217,7 @@ public class GestionSallesController {
             }
         }
     }
-    
+
     private void clearForm() {
         formTitle.setText("Ajouter une Salle");
         isEditing = false;
