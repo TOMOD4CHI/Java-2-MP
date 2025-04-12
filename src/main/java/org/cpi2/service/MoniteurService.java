@@ -32,7 +32,6 @@ public class MoniteurService {
 
     public boolean addMoniteur(Moniteur moniteur) {
         try {
-            // Validate required fields
             if (moniteur.getNom() == null || moniteur.getNom().isEmpty() ||
                 moniteur.getPrenom() == null || moniteur.getPrenom().isEmpty() ||
                 moniteur.getCin() == null || moniteur.getCin().isEmpty() ||
@@ -45,7 +44,6 @@ public class MoniteurService {
                 return false;
             }
 
-            // Check if CIN already exists
             if (moniteurRepository.findByCin(moniteur.getCin()).isPresent()) {
                 LOGGER.warning("CIN already exists: " + moniteur.getCin());
                 return false;
@@ -60,7 +58,6 @@ public class MoniteurService {
 
     public boolean updateMoniteur(Moniteur moniteur) {
         try {
-            // Validate required fields
             if (moniteur.getNom() == null || moniteur.getNom().isEmpty() ||
                 moniteur.getPrenom() == null || moniteur.getPrenom().isEmpty() ||
                 moniteur.getCin() == null || moniteur.getCin().isEmpty() ||
@@ -73,7 +70,6 @@ public class MoniteurService {
                 return false;
             }
 
-            // Check if CIN exists for another moniteur
             Optional<Moniteur> existingMoniteur = moniteurRepository.findByCin(moniteur.getCin());
             if (existingMoniteur.isPresent() && !existingMoniteur.get().getId().equals(moniteur.getId())) {
                 LOGGER.warning("CIN already exists for another moniteur: " + moniteur.getCin());

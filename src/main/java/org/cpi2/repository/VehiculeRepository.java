@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// Vehicule Repository
 public class VehiculeRepository extends BaseRepository<Vehicule> {
     private final TypePermisRepository typePermisRepository;
     private static final Logger LOGGER = Logger.getLogger(VehiculeRepository.class.getName());
@@ -216,7 +215,7 @@ public class VehiculeRepository extends BaseRepository<Vehicule> {
             stmt.setString(1, vehicule.getImmatriculation());
             stmt.setString(2, vehicule.getMarque());
             stmt.setString(3, vehicule.getModele());
-            stmt.setInt(4, typePermisId);  // Use the ID we retrieved earlier
+            stmt.setInt(4, typePermisId);
             stmt.setDate(5, Date.valueOf(vehicule.getDateMiseEnService()));
             stmt.setInt(6, vehicule.getKilometrageTotal());
             stmt.setInt(7, vehicule.getKilometrageProchainEntretien());

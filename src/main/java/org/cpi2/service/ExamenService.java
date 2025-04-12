@@ -49,44 +49,107 @@ public class ExamenService {
         return examenRepository.findByDateRange(startDate, endDate);
     }
 
+    public List<Examen> getExamensAfter(LocalDate date) {
+        return examenRepository.findAll().stream()
+                .filter(examen -> examen.getDate().isAfter(date))
+                .toList();
+    }
+
     public List<Examen> getExamensByResultat(Boolean resultat) {
         return examenRepository.findByResultat(resultat);
     }
 
+    public boolean verifyCandidatEligibilite(String ExamenType,String cin) {
+        Optional<Candidat> candidatOpt = candidatService.findByCin(cin);
+        if (candidatOpt.isEmpty()) {
+            LOGGER.log(Level.WARNING, "Candidat not found with CIN: " + cin);
+            return false;
+        }
+        Candidat candidat = candidatOpt.get();
+        Inscription inscription = inscriptionService.getActifInscirptionBycin(cin).get(0);
+        if (inscription == null) {
+            LOGGER.log(Level.WARNING, "Candidat has no active inscription");
+            return false;
+        }
+        
+        if (ExamenType.equalsIgnoreCase("code")) {
+            if (inscriptionService.isInscriptionCodeDone(inscription.getId())) {
+                LOGGER.log(Level.INFO, "Candidat has completed all code sessions");
+            } else {
+                LOGGER.log(Level.WARNING, "Candidat has not completed all code sessions");
+                return false;
+            }
+            if (getExamensAfter(inscription.getInscriptioDate().toLocalDate()).stream().filter(examen -> examen.getTypeExamen().name().equalsIgnoreCase("code")).anyMatch(
+                    examen -> examen.getResultat() && examen.getDate().isAfter(inscription.getInscriptioDate().toLocalDate()))) {
+                LOGGER.log(Level.WARNING, "Candidat have finished this exam already");
+                return false;}
+            } else {
+                if (inscriptionService.isInscriptionConduiteDone(inscription.getId())) {
+                    LOGGER.log(Level.INFO, "Candidat has completed all conduite sessions");
+                } else {
+                    LOGGER.log(Level.WARNING, "Candidat has not completed all conduite sessions");
+                    return false;
+                }
+            if (getExamensAfter(inscription.getInscriptioDate().toLocalDate()).stream().filter(examen -> examen.getTypeExamen().name().equalsIgnoreCase("conduite")).anyMatch(
+                    examen -> examen.getResultat() && examen.getDate().isAfter(inscription.getInscriptioDate().toLocalDate()))) {
+                LOGGER.log(Level.WARNING, "Candidat have finished this exam already");
+                return false;}
+            }
+
+            return true;
+        }
+
+
     public boolean createExamen(Examen examen) {
-        //need to check if the candidat complete all his sessions before proceeding
-        //so need to check the number of session static in the course plan
-        //using the inscription just check for an active inscription (meaning the candidat is still taking lessons)
+        
+        
+        
 
         Candidat candidat = examen.getCandidat();
         if (candidat == null) {
             LOGGER.log(Level.WARNING, "Cannot create examen: Candidat is required");
             return false;
         }
-
-        boolean candidatEligibility = inscriptionService.getInscriptionsByCin(candidat.getCin()).stream()
-                .anyMatch(Inscription::isActive);
-        if (!candidatEligibility) {
-            try {
-                return examenRepository.save(examen);
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Error creating examen", e);
-                return false;
-            }
-        }
-        else {
-            LOGGER.log(Level.WARNING, "Cannot create examen: Candidat did not complete all sessions");
+        try {
+            return examenRepository.save(examen);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error creating examen", e);
             return false;
         }
     }
 
+    public boolean hasSucceded(Inscription inscription) {
+        List<Examen> examens = getExamensByCandidat(inscription.getCin());
+        boolean hasSuccededCode = false;
+        boolean hasSuccededConduite = false;
+        for (Examen examen : examens) {
+            if (examen.getResultat() != null && examen.getResultat() && examen.getDate().isAfter(inscription.getInscriptioDate().toLocalDate())) {
+                if(examen.getTypeExamen().name().equalsIgnoreCase("code")) {
+                    hasSuccededCode = true;
+                } else if (examen.getTypeExamen().name().equalsIgnoreCase("conduite")) {
+                    hasSuccededConduite = true;
+                }
+            }
+        }
+        return hasSuccededCode && hasSuccededConduite;
+    }
     public boolean updateExamen(Examen examen) {
         try {
             if (examenRepository.findById(examen.getId()).isEmpty()) {
                 LOGGER.log(Level.WARNING, "Cannot update examen: Examen not found");
                 return false;
             }
-            return examenRepository.update(examen);
+            if(examenRepository.update(examen)){
+                Inscription inscription = inscriptionService.getActifInscirptionBycin(examen.getCandidat().getCin()).get(0);
+                if(hasSucceded(inscription)){
+                    inscription.setStatus("Terminé");
+                    inscriptionService.updateInscription(inscription);
+                    LOGGER.log(Level.INFO, "Candidat has succeded in all exams and finished his course");
+                }
+                return true;
+            }
+            LOGGER.log(Level.WARNING, "Cannot update examen: Error updating examen");
+            return false;
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error updating examen", e);
             return false;

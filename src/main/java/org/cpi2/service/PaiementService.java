@@ -121,5 +121,4 @@ public class PaiementService {
     }
 
 
-    //Still many other other methods to implement based on the needs of the application
 }

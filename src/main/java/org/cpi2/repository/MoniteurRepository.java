@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// Monitor Repository
 public class MoniteurRepository{
     private static final Logger LOGGER = Logger.getLogger(MoniteurRepository.class.getName());
 
@@ -135,14 +134,12 @@ public class MoniteurRepository{
                 return false;
             }
 
-            // Delete existing specialites
             String deleteSql = "DELETE FROM moniteur_specialite WHERE moniteur_id = ?";
             try (PreparedStatement deleteStmt = conn.prepareStatement(deleteSql)) {
                 deleteStmt.setLong(1, moniteur.getId());
                 deleteStmt.executeUpdate();
             }
 
-            // Save new specialites
             return saveSpecialites(conn, moniteur);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating moniteur", e);
@@ -186,15 +183,13 @@ public class MoniteurRepository{
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             for (TypePermis specialite : moniteur.getSpecialites()) {
                 stmt.setLong(1, moniteur.getId());
-                
-                // Map TypePermis enum to database IDs based on the code value
+
                 int typePermisId;
                 switch(specialite) {
-                    case A: typePermisId = 1; break;  // Moto
-                    case B: typePermisId = 2; break;  // Voiture
-                    case C: typePermisId = 3; break;  // Camion
+                    case A: typePermisId = 1; break;
+                    case B: typePermisId = 2; break;
+                    case C: typePermisId = 3; break;
                     default:
-                        // For other types, default to B (Voiture) as it's the most common
                         typePermisId = 2;
                         LOGGER.log(Level.WARNING, "TypePermis " + specialite + " not found in database, defaulting to B (Voiture)");
                         break;

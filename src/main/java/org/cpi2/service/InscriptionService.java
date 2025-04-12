@@ -12,19 +12,30 @@ import java.util.stream.Collectors;
 public class InscriptionService {
     private final InscriptionRepository inscriptionRepository;
     private final PlanRepository planRepository;
-    //causes circular dependencies in invoice.java
+    private final PresenceService presenceService = new PresenceService();
+    private final CandidatService candidatService;
 
-    //private final PaiementService paiementService;
+
+    
+
+    
 
     public InscriptionService() {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
-        //this.paiementService = new PaiementService(this);
+        
+        this.candidatService = new CandidatService();
     }
     public InscriptionService(PaiementService paiementService) {
         this.inscriptionRepository = new InscriptionRepository();
         this.planRepository = new PlanRepository();
-        //this.paiementService = paiementService;
+        
+        this.candidatService = new CandidatService();
+    }
+    public InscriptionService(CandidatService candidatService) {
+        this.inscriptionRepository = new InscriptionRepository();
+        this.planRepository = new PlanRepository();
+        this.candidatService = candidatService;
     }
 
     public Optional<Inscription> getInscriptionById(Integer id) {
@@ -72,7 +83,7 @@ public class InscriptionService {
         if (!Objects.equals(inscription.getPaymentCycle(), "Totale")) {
             if (!inscription.isPaymentStatus() && inscription.getPaymentCycle() != null) {
                 Date nextPaymentDate = calculateNextPaymentDate(inscription.getnextPaymentDate()==null ? java.sql.Date.valueOf(LocalDate.now()):inscription.getnextPaymentDate(), inscription.getPaymentCycle());
-                inscription.setnextPaymentDate(nextPaymentDate);
+                inscription.setnextPaymentDate((java.sql.Date) nextPaymentDate);
             } else if (inscription.isPaymentStatus() ) {
                 inscription.setnextPaymentDate(null);
             }
@@ -116,7 +127,7 @@ public class InscriptionService {
                 calendar.add(Calendar.MONTH, 3);
                 break;
             default:
-                calendar.add(Calendar.MONTH, 1); // Default to monthly
+                calendar.add(Calendar.MONTH, 1); 
         }
 
         return calendar.getTime();
@@ -181,5 +192,15 @@ public class InscriptionService {
                 lowerCycle.equals("monthly") ||
                 lowerCycle.equals("quarterly") ||
                 lowerCycle.equals("annually");
+    }
+    public boolean isInscriptionCodeDone(int id){
+        Inscription inscription = getInscriptionById(id).orElse(null);
+        if(inscription == null) return false;
+        return inscription.getPlan().getGetNbreSeanceCode() == presenceService.getCountInscriptioinPerSession(candidatService.CinToId(inscription.getCin()), "code", inscription.getInscriptioDate());
+    }
+    public boolean isInscriptionConduiteDone(int id){
+        Inscription inscription = getInscriptionById(id).orElse(null);
+        if(inscription == null) return false;
+        return inscription.getPlan().getNbreSeanceConduite() == presenceService.getCountInscriptioinPerSession(candidatService.CinToId(inscription.getCin()), "conduite", inscription.getInscriptioDate());
     }
 }

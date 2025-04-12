@@ -39,8 +39,7 @@ public class ProgressionService {
      */
     public Map<String, Object> getCandidatProgression(long candidatId) {
         Map<String, Object> progressionData = new HashMap<>();
-        
-        // Get candidate info
+
         Optional<Candidat> candidatOpt = candidatService.getCandidatById(candidatId);
         if (candidatOpt.isEmpty()) {
             return progressionData;
@@ -49,8 +48,7 @@ public class ProgressionService {
         Candidat candidat = candidatOpt.get();
         progressionData.put("nom", candidat.getNom());
         progressionData.put("prenom", candidat.getPrenom());
-        
-        // Get inscription details
+
         Optional<Map<String, Object>> inscriptionDataOpt = progressionRepository.getCandidatInscription(candidatId);
         if (inscriptionDataOpt.isEmpty()) {
             return progressionData;
@@ -64,28 +62,24 @@ public class ProgressionService {
         int totalSeancesCode = (int) inscriptionData.get("heuresCode");
         int totalSeancesConduite = (int) inscriptionData.get("heuresConduite");
         int typePermisId = (int) inscriptionData.get("typePermisId");
-        
-        // Get completed sessions
+
         int seancesCodeCompletes = progressionRepository.getCompletedCodeSessions(candidatId);
         int seancesConduiteCompletes = progressionRepository.getCompletedDrivingSessions(candidatId);
-        
-        // Calculate overall progress
+
         double progressionTotale = 0.0;
         if ((totalSeancesCode + totalSeancesConduite) > 0) {
             progressionTotale = (double) (seancesCodeCompletes + seancesConduiteCompletes) / 
                                (totalSeancesCode + totalSeancesConduite);
         }
-        
-        // Map type_permis_id to TypePermis enum
+
         String typePermis;
         switch (typePermisId) {
-            case 1: typePermis = "A"; break;  // Moto
-            case 2: typePermis = "B"; break;  // Voiture
-            case 3: typePermis = "C"; break;  // Camion
-            default: typePermis = "B"; break; // Default to B if not found
+            case 1: typePermis = "A"; break;
+            case 2: typePermis = "B"; break;
+            case 3: typePermis = "C"; break;
+            default: typePermis = "B"; break;
         }
-        
-        // Build full response
+
         progressionData.put("typePermis", typePermis);
         progressionData.put("dateInscription", dateFormat.format(dateInscription));
         progressionData.put("statut", statut);
@@ -103,15 +97,13 @@ public class ProgressionService {
      */
     public Map<String, Object> getProgressionChartData(long candidatId) {
         Map<String, Object> chartData = new HashMap<>();
-        
-        // Get monthly statistics for the bar chart
+
         Map<String, Integer> monthlyCodeData = progressionRepository.getMonthlyCodeSessions(candidatId, 6);
         Map<String, Integer> monthlyDrivingData = progressionRepository.getMonthlyDrivingSessions(candidatId, 6);
         
         chartData.put("monthlyCode", monthlyCodeData);
         chartData.put("monthlyDriving", monthlyDrivingData);
-        
-        // Get exam statistics
+
         Map<String, Object> examStats = progressionRepository.getExamStatistics(candidatId);
         chartData.put("examStats", examStats);
         

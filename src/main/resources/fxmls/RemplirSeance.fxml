@@ -27,7 +27,7 @@
                 <Button fx:id="resetBtn" text="Réinitialiser" onAction="#resetFilters" styleClass="button" minWidth="120" prefWidth="120"/>
             </HBox>
 
-            <!-- Table des séances de code -->
+            
             <TableView fx:id="seancesTable" VBox.vgrow="ALWAYS" styleClass="table-view" minWidth="500" prefWidth="500">
                 <columns>
                     <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
@@ -37,18 +37,18 @@
                 </columns>
             </TableView>
 
-            <!-- Selected Session Info -->
+            
             <HBox spacing="10" alignment="center_left" minWidth="700" prefWidth="700">
                 <Label text="Séance sélectionnée:" styleClass="form-label" minWidth="150" prefWidth="150"/>
                 <Label fx:id="selectedSessionLabel" text="Aucune séance sélectionnée" styleClass="info-text" minWidth="200" prefWidth="200"/>
             </HBox>
         </VBox>
 
-        <!-- Right Container - Candidats -->
+        
         <VBox spacing="15" alignment="center" styleClass="form-container" HBox.hgrow="ALWAYS" maxWidth="400" prefWidth="400">
             <Label text="Candidats disponibles" styleClass="form-title"/>
 
-            <!-- Candidates Table -->
+            
             <TableView fx:id="candidatsTable" VBox.vgrow="ALWAYS" styleClass="table-view" minWidth="350" prefWidth="350">
                 <columns>
                     <TableColumn fx:id="selectColumn" text="Sélectionner" prefWidth="100"/>
@@ -57,7 +57,7 @@
                 </columns>
             </TableView>
 
-            <!-- Selected Candidates Info -->
+            
             <HBox spacing="10" alignment="center_left" minWidth="350" prefWidth="350">
                 <Label text="Candidats sélectionnés:" styleClass="form-label" minWidth="150" prefWidth="150"/>
                 <Label fx:id="selectedCountLabel" text="0" styleClass="info-text" minWidth="50" prefWidth="50"/>
@@ -66,7 +66,7 @@
                 <Button fx:id="deselectAllBtn" text="Désélectionner tout" onAction="#deselectAllCandidats" styleClass="button" minWidth="120" prefWidth="120"/>
             </HBox>
 
-            <!-- Bottom Button Bar -->
+            
             <HBox spacing="15" alignment="center">
                 <Button fx:id="cancelBtn" text="Annuler" onAction="#cancel" styleClass="button" minWidth="120" prefWidth="120"/>
                 <Button fx:id="saveBtn" text="Inscrire les candidats" onAction="#registerCandidates" styleClass="button" minWidth="150" prefWidth="150"/>

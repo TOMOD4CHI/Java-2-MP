@@ -27,16 +27,14 @@ public class AuthenticationService {
      */
     public boolean authenticate(String username, String password) {
         try {
-            // Get the auto-école information from the database
             AutoEcole autoEcole = autoEcoleRepository.findFirst();
             
             if (autoEcole == null) {
                 LOGGER.log(Level.WARNING, "No auto-école found in database for authentication");
                 return false;
             }
-            
-            // Check if the username and password match
-            return username.equals(autoEcole.getUsername()) && 
+
+            return username.equals(autoEcole.getUsername()) &&
                    password.equals(autoEcole.getPassword());
             
         } catch (SQLException e) {

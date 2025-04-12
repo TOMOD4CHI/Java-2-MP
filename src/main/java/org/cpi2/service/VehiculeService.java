@@ -29,7 +29,6 @@ public class VehiculeService {
             return false;
         }
 
-        // Check if vehicle with same registration already exists
         if (vehiculeRepository.findByImmatriculation(vehicule.getImmatriculation()).isPresent()) {
             LOGGER.log(Level.WARNING, "Vehicle with registration " + vehicule.getImmatriculation() + " already exists");
             return false;
@@ -101,7 +100,6 @@ public class VehiculeService {
         try {
             Optional<Vehicule> existingVehicule = vehiculeRepository.findByImmatriculation(old.getImmatriculation());
 
-            // Check if the immatriculation is unique (if changed)
             if (!existingVehicule.get().getImmatriculation().equals(vehicule.getImmatriculation())) {
                 Optional<Vehicule> byImmatriculation = vehiculeRepository.findByImmatriculation(vehicule.getImmatriculation());
                 if (byImmatriculation.isPresent() && byImmatriculation.get().getId() != vehicule.getId()) {
@@ -123,7 +121,6 @@ public class VehiculeService {
      */
     public boolean supprimerVehicule(int id) {
         try {
-            // Check if vehicle exists
             if (vehiculeRepository.findById((long) id).isEmpty()) {
                 LOGGER.log(Level.WARNING, "Vehicle with ID " + id + " not found");
                 return false;
@@ -148,7 +145,6 @@ public class VehiculeService {
         }
 
         try {
-            // Check if vehicle exists
             Optional<Vehicule> vehicule = vehiculeRepository.findById((long) vehiculeId);
             if (vehicule.isEmpty()) {
                 LOGGER.log(Level.WARNING, "Vehicle with ID " + vehiculeId + " not found");
@@ -159,7 +155,6 @@ public class VehiculeService {
             boolean savedEntretien = vehiculeRepository.saveEntretien((long)vehiculeId,entretien);
             
             if (savedEntretien != false) {
-                // Update vehicle maintenance information
                 Vehicule updatedVehicule = vehicule.get();
                 updatedVehicule.setKilometrageTotal(entretien.getKilometrageActuel());
                 updatedVehicule.setKilometrageProchainEntretien(entretien.getKilometrageActuel() + 10000);
@@ -336,7 +331,7 @@ public class VehiculeService {
         } else if (typeVehicule.equalsIgnoreCase("Moto")) {
             return 5000;
         } else {
-            return 10000; // Default value for unknown vehicle types
+            return 10000;
         }
     }
 }

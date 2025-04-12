@@ -66,8 +66,8 @@ public class DossierService {
         return dossierRepository.save(dossier, candidatId);
     }
 
-    //this method could be used when modifying the type of a document and
-    //in case it exists in the dossier, it should can be overwritten
+    
+    
     public boolean containsType(Dossier dossier,TypeDocument type) {
         return dossier.getDocuments().containsKey(type);
     }
@@ -162,7 +162,7 @@ public class DossierService {
     public boolean candidatPossedeUnDossier(Long candidatId) {
         return dossierRepository.findByCandidatId(candidatId).isPresent();
     }
-    //The commented methods below may concern the vehicule management part of the application
+    
     /*
     public boolean verifierExpirationDocuments(Long dossierId) {
         List<Document> documents = documentService.getDocumentsByDossierId(dossierId);
@@ -205,7 +205,7 @@ public class DossierService {
         Map<TypeDocument, TreeSet<Document>> documents = dossierOpt.get().getDocuments();
         List<String> typesObligatoires = List.of("CIN", "PERMIS", "CERTIFICAT_MEDICAL");
 
-        // Vérifier documents obligatoires
+        
         rapport.append("Documents obligatoires:\n");
         for (String type : typesObligatoires) {
             rapport.append("- ").append(type).append(": ");
@@ -216,7 +216,7 @@ public class DossierService {
             }
         }
     /*
-        // Vérifier documents expirés
+        
         rapport.append("\nDocuments expirés:\n");
         for (Map.Entry<String, TreeSet<Document>> entry : documents.entrySet()) {
             for (Document doc : entry.getValue()) {

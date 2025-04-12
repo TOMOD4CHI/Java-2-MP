@@ -58,7 +58,6 @@ public class PlanRepository extends BaseRepository<CoursePlan> {
         }
     }
 
-    //These methods belong to the service layer
     public List<CoursePlan> findByTypePermis(String category) {
         List<CoursePlan> matchingPlans = new ArrayList<>();
 

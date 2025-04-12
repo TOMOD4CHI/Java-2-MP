@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 
-// Session Repository
 public class SessionRepository extends BaseRepository<Session> {
 
     public List<SessionCode> findAllCodeSessions() {
@@ -181,7 +180,6 @@ public class SessionRepository extends BaseRepository<Session> {
             if (moniteur.isPresent()) {
                 while (rs.next()) {
                     try {
-                        // Utiliser la nouvelle méthode de mapping pour les séances de conduite
                         SessionConduite session = new SessionConduite();
                         session.setId(rs.getLong("id"));
                         session.setDateSession(rs.getDate("date").toLocalDate());
@@ -189,24 +187,21 @@ public class SessionRepository extends BaseRepository<Session> {
                         session.setDuree(rs.getInt("duree"));
                         session.setMoniteur(moniteur.get());
                         session.setTypeSession(TypeSession.CONDUITE);
-                        
-                        // Récupérer le véhicule
+
                         Vehicule vehicule = new Vehicule();
                         vehicule.setId((int) rs.getLong("vehicule_id"));
                         vehicule.setImmatriculation(rs.getString("immatriculation"));
                         vehicule.setMarque(rs.getString("marque"));
                         vehicule.setModele(rs.getString("modele"));
                         session.setVehicule(vehicule);
-                        
-                        // Définir le statut
+
                         String statutStr = rs.getString("statut");
                         try {
                             session.setStatut(StatutSession.valueOf(statutStr.toUpperCase()));
                         } catch (Exception e) {
                             session.setStatut(StatutSession.PLANIFIEE);
                         }
-                        
-                        // Définir le point de rencontre
+
                         String lieu = rs.getString("lieu");
                         if (lieu != null && !lieu.isEmpty()) {
                             session.setPointRencontre(lieu);
@@ -219,8 +214,7 @@ public class SessionRepository extends BaseRepository<Session> {
                                 session.setPointRencontre("Non défini");
                             }
                         }
-                        
-                        // Définir les kilomètres parcourus
+
                         Integer kmDebut = rs.getInt("kilometrage_debut");
                         if (!rs.wasNull()) {
                             session.setKilometresParcourus(kmDebut);
@@ -255,13 +249,11 @@ public class SessionRepository extends BaseRepository<Session> {
                 planId,
                 capaciteMax
         );
-        
-        // Définir le prix à partir du plan si disponible
+
         if (rs.getObject("plan_prix") != null) {
             session.setPrix(rs.getDouble("plan_prix"));
         }
-        
-        // Ajouter un log pour vérifier que la session est correctement créée
+
         LOGGER.info("Session code créée avec succès: ID=" + rs.getLong("id") + ", Date=" + session.getDateSession());
         
         return session;
@@ -284,17 +276,13 @@ public class SessionRepository extends BaseRepository<Session> {
         try {
             LocalTime heureDebut = rs.getTime("heure_debut").toLocalTime();
             LocalTime heureFin = rs.getTime("heure_fin").toLocalTime();
-            
-            // Calculer la durée en minutes entre l'heure de début et l'heure de fin
+
             long dureeMinutes = java.time.Duration.between(heureDebut, heureFin).toMinutes();
-            
-            // Récupérer le plan_id
+
             long planId = rs.getLong("plan_id");
-            
-            // Récupérer le point de rencontre
+
             Location location = getPointRencontre(rs);
-            
-            // Utiliser le constructeur approprié de SessionConduite avec tous les paramètres nécessaires
+
             SessionConduite session = new SessionConduite(
                     planId,
                     rs.getDate("date_session").toLocalDate(),
@@ -304,22 +292,18 @@ public class SessionRepository extends BaseRepository<Session> {
                     vehicule,
                     location
             );
-            
-            // Si le point de rencontre n'a pas été défini par le constructeur (location était null)
+
             if (session.getPointRencontre() == null || session.getPointRencontre().equals("Non défini")) {
-                // Récupérer le point de rencontre depuis la colonne texte si disponible
                 String pointRencontre = rs.getString("point_rencontre");
                 if (pointRencontre != null && !pointRencontre.isEmpty()) {
                     session.setPointRencontre(pointRencontre);
                 }
             }
-            
-            // Définir le prix
+
             if (session.getPrix() == null && rs.getObject("prix") != null) {
                 session.setPrix(rs.getDouble("prix"));
             }
-            
-            // Ajouter un log pour vérifier que la session est correctement créée
+
             LOGGER.info("Session conduite créée avec succès: ID=" + rs.getLong("id") + ", Date=" + session.getDateSession());
             
             return session;
@@ -349,8 +333,7 @@ public class SessionRepository extends BaseRepository<Session> {
             session.setId(rs.getLong("id"));
             session.setStatut(StatutSession.valueOf(rs.getString("statut")));
             session.setKilometresParcourus(rs.getInt("kilometres_parcourus"));
-            
-            // Ajouter un log pour vérifier que la session est correctement créée
+
             LOGGER.info("Session conduite créée: ID=" + session.getId() + ", Date=" + session.getDateSession() + ", Moniteur=" + session.getMoniteur().getNom());
             
             return session;
@@ -375,13 +358,11 @@ public class SessionRepository extends BaseRepository<Session> {
             vehicule.setImmatriculation(rs.getString("immatriculation"));
             vehicule.setMarque(rs.getString("marque"));
             vehicule.setModele(rs.getString("modele"));
-            
-            // Convertir les données de la table seance en SessionConduite
+
             LocalDate dateSession = rs.getDate("date").toLocalDate();
             LocalTime heureSession = rs.getTime("heure").toLocalTime();
             long dureeMinutes = rs.getInt("duree");
-            
-            // Créer une nouvelle session de conduite
+
             SessionConduite session = new SessionConduite();
             session.setId(rs.getLong("id"));
             session.setDateSession(dateSession);
@@ -390,22 +371,18 @@ public class SessionRepository extends BaseRepository<Session> {
             session.setMoniteur(moniteur);
             session.setVehicule(vehicule);
             session.setTypeSession(TypeSession.CONDUITE);
-            
-            // Définir le statut
+
             String statutStr = rs.getString("statut");
             try {
                 session.setStatut(StatutSession.valueOf(statutStr.toUpperCase()));
             } catch (Exception e) {
-                // Par défaut, utiliser PLANIFIEE si le statut ne correspond pas à l'enum
                 session.setStatut(StatutSession.PLANIFIEE);
             }
-            
-            // Définir le point de rencontre si disponible
+
             String lieu = rs.getString("lieu");
             if (lieu != null && !lieu.isEmpty()) {
                 session.setPointRencontre(lieu);
             } else {
-                // Essayer d'utiliser les coordonnées si disponibles
                 Double lat = rs.getDouble("latitude");
                 Double lon = rs.getDouble("longitude");
                 if (!rs.wasNull() && lat != null && lon != null) {
@@ -414,8 +391,7 @@ public class SessionRepository extends BaseRepository<Session> {
                     session.setPointRencontre("Non défini");
                 }
             }
-            
-            // Définir les kilomètres parcourus
+
             Integer kmDebut = rs.getInt("kilometrage_debut");
             Integer kmFin = rs.getInt("kilometrage_fin");
             if (!rs.wasNull() && kmDebut != null && kmFin != null) {
@@ -437,8 +413,7 @@ public class SessionRepository extends BaseRepository<Session> {
         try {
             double lat = rs.getDouble("point_rencontre_lat");
             double lon = rs.getDouble("point_rencontre_lon");
-            
-            // Vérifier si les valeurs sont nulles (0.0 si getDouble() est appelé sur NULL)
+
             if (rs.wasNull() || (lat == 0.0 && lon == 0.0)) {
                 return null;
             }
@@ -457,7 +432,6 @@ public class SessionRepository extends BaseRepository<Session> {
      * @return true si l'affectation a réussi, false sinon
      */
     public boolean affecterCandidatASessionCode(long sessionId, long candidatId) {
-        // Vérifier d'abord si la session existe et a de la place
         String checkSql = "SELECT capacite_max, nombre_inscrits FROM session_code WHERE id = ?";
         
         try (Connection conn = getConnection();
@@ -474,15 +448,13 @@ public class SessionRepository extends BaseRepository<Session> {
                     LOGGER.warning("La session code est complète, capacité maximale atteinte");
                     return false;
                 }
-                
-                // Insérer dans la table presence_code
+
                 String insertSql = "INSERT INTO presence_code (session_code_id, candidat_id, present) VALUES (?, ?, false)";
                 try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
                     insertStmt.setLong(1, sessionId);
                     insertStmt.setLong(2, candidatId);
                     insertStmt.executeUpdate();
-                    
-                    // Mettre à jour le nombre d'inscrits
+
                     String updateSql = "UPDATE session_code SET nombre_inscrits = nombre_inscrits + 1 WHERE id = ?";
                     try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
                         updateStmt.setLong(1, sessionId);
@@ -508,7 +480,6 @@ public class SessionRepository extends BaseRepository<Session> {
      */
     public boolean affecterCandidatASeanceConduite(long seanceId, long candidatId) {
         try (Connection conn = getConnection()) {
-            // Vérifier d'abord si la séance existe
             String checkSql = "SELECT id FROM seance WHERE id = ? AND type = 'Conduite'";
             try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
                 checkStmt.setLong(1, seanceId);
@@ -519,8 +490,7 @@ public class SessionRepository extends BaseRepository<Session> {
                     return false;
                 }
             }
-            
-            // Mettre à jour le candidat_id dans la table seance
+
             String updateSql = "UPDATE seance SET candidat_id = ? WHERE id = ?";
             try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
                 updateStmt.setLong(1, candidatId);
@@ -528,7 +498,6 @@ public class SessionRepository extends BaseRepository<Session> {
                 int rowsAffected = updateStmt.executeUpdate();
                 
                 if (rowsAffected > 0) {
-                    // Ajouter également une entrée dans la table presence_conduite
                     String insertSql = "INSERT INTO presence_conduite (session_conduite_id, candidat_id, present) VALUES (?, ?, false)";
                     try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
                         insertStmt.setLong(1, seanceId);
@@ -554,7 +523,6 @@ public class SessionRepository extends BaseRepository<Session> {
         """;
 
         try (Connection conn = getConnection()) {
-            // Vérification des données avant insertion
             if (session.getMoniteur() == null || session.getMoniteur().getId() == null) {
                 LOGGER.severe("Impossible d'enregistrer la session code: moniteur non défini ou sans ID");
                 return false;
@@ -569,16 +537,13 @@ public class SessionRepository extends BaseRepository<Session> {
                 LOGGER.severe("Impossible d'enregistrer la session code: heure non définie");
                 return false;
             }
-            
-            // Vérifier que le planId est valide (doit exister dans la table plan)
+
             long planId = session.getPlanId();
             if (planId <= 0) {
-                // Si aucun plan n'est spécifié, utiliser le plan par défaut (ID 1)
                 planId = 1;
                 session.setPlanId(planId);
             }
-            
-            // Vérifier que le plan existe dans la base de données
+
             String checkPlanSql = "SELECT id FROM plan WHERE id = ?";
             try (PreparedStatement checkStmt = conn.prepareStatement(checkPlanSql)) {
                 checkStmt.setLong(1, planId);
@@ -588,14 +553,12 @@ public class SessionRepository extends BaseRepository<Session> {
                     return false;
                 }
             }
-            
-            // Préparer l'insertion
+
             try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setLong(1, planId);
                 stmt.setDate(2, Date.valueOf(session.getDateSession()));
                 stmt.setTime(3, Time.valueOf(session.getHeureSession()));
-                
-                // Calcul de l'heure de fin à partir de l'heure de début et de la durée
+
                 LocalTime heureFin = session.getHeureSession().plus(Duration.ofMinutes(session.getDuree()));
                 stmt.setTime(4, Time.valueOf(heureFin));
                 
@@ -636,7 +599,6 @@ public class SessionRepository extends BaseRepository<Session> {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            // Vérification des données avant insertion
             if (session.getMoniteur() == null || session.getMoniteur().getId() == null) {
                 LOGGER.severe("Impossible d'enregistrer la session conduite: moniteur non défini ou sans ID");
                 return false;
@@ -664,21 +626,17 @@ public class SessionRepository extends BaseRepository<Session> {
                        ", moniteur=" + session.getMoniteur().getId() + 
                        ", véhicule=" + session.getVehicule().getId());
 
-            // Paramètres pour la table seance
             stmt.setDate(1, Date.valueOf(session.getDateSession()));
             stmt.setTime(2, Time.valueOf(session.getHeureSession()));
             stmt.setInt(3, (int) session.getDuree());
             stmt.setLong(4, session.getMoniteur().getId());
-            
-            // Rechercher un candidat disponible si aucun n'est spécifié
+
             long candidatId = 0;
             try {
-                // Vérifier si un candidat est déjà associé à la session
                 if (session.getCandidats() != null && !session.getCandidats().isEmpty()) {
                     candidatId = session.getCandidats().get(0).getId();
                 }
-                
-                // Si aucun candidat n'est associé, trouver un candidat disponible
+
                 if (candidatId <= 0) {
                     String checkSql = "SELECT id FROM candidat LIMIT 1";
                     try (PreparedStatement checkStmt = conn.prepareStatement(checkSql);
@@ -686,7 +644,6 @@ public class SessionRepository extends BaseRepository<Session> {
                         if (rs.next()) {
                             candidatId = rs.getLong("id");
                         } else {
-                            // Si aucun candidat n'existe, utiliser un ID par défaut
                             candidatId = 1L;
                         }
                     }
@@ -696,24 +653,22 @@ public class SessionRepository extends BaseRepository<Session> {
                 LOGGER.info("Utilisation du candidat avec ID=" + candidatId + " pour la séance de conduite");
             } catch (Exception e) {
                 LOGGER.warning("Impossible de définir un candidat: " + e.getMessage());
-                stmt.setLong(5, 1L); // Utiliser l'ID 1 par défaut
+                stmt.setLong(5, 1L);
             }
             
             stmt.setLong(6, session.getVehicule().getId());
-            
-            // Gestion du point de rencontre
+
             String pointRencontre = session.getPointRencontre();
             if (pointRencontre != null && !pointRencontre.equals("Non défini")) {
                 stmt.setString(7, pointRencontre);
-                
-                // Essayer de parser les coordonnées au format "lat,lon" pour les champs latitude/longitude
+
                 try {
                     String[] coords = pointRencontre.split(",");
                     if (coords.length == 2) {
                         double lat = Double.parseDouble(coords[0]);
                         double lon = Double.parseDouble(coords[1]);
-                        stmt.setDouble(11, lat); // latitude
-                        stmt.setDouble(12, lon); // longitude
+                        stmt.setDouble(11, lat);
+                        stmt.setDouble(12, lon);
                         LOGGER.info("Coordonnées du point de rencontre enregistrées: lat=" + lat + ", lon=" + lon);
                     } else {
                         stmt.setNull(11, Types.DOUBLE);
@@ -728,18 +683,15 @@ public class SessionRepository extends BaseRepository<Session> {
                 stmt.setNull(11, Types.DOUBLE);
                 stmt.setNull(12, Types.DOUBLE);
             }
-            
-            // Statut de la séance
+
             stmt.setString(8, session.getStatut().name());
-            
-            // Commentaire (peut être null)
-            stmt.setString(9, ""); // Commentaire vide par défaut
-            
-            // Kilométrage
+
+            stmt.setString(9, "");
+
             if (session.getKilometresParcourus() != null && session.getKilometresParcourus() > 0) {
                 stmt.setInt(10, session.getKilometresParcourus());
             } else {
-                stmt.setInt(10, 0); // Kilométrage par défaut
+                stmt.setInt(10, 0);
             }
 
             LOGGER.info("Exécution de la requête SQL d'insertion pour la session conduite");
@@ -813,29 +765,25 @@ public class SessionRepository extends BaseRepository<Session> {
             stmt.setInt(3, (int) session.getDuree());
             stmt.setLong(4, session.getMoniteur().getId());
             stmt.setLong(5, session.getVehicule().getId());
-            
-            // Traitement du point de rencontre
+
             String pointRencontre = session.getPointRencontre();
             if (pointRencontre != null && !pointRencontre.equals("Non défini")) {
                 stmt.setString(6, pointRencontre);
                 
                 try {
-                    // Essayer de parser les coordonnées au format "lat,lon"
                     String[] coords = pointRencontre.split(",");
                     if (coords.length == 2) {
                         double lat = Double.parseDouble(coords[0]);
                         double lon = Double.parseDouble(coords[1]);
-                        stmt.setDouble(10, lat); // latitude
-                        stmt.setDouble(11, lon); // longitude
+                        stmt.setDouble(10, lat);
+                        stmt.setDouble(11, lon);
                         LOGGER.info("Coordonnées du point de rencontre mises à jour: lat=" + lat + ", lon=" + lon);
                     } else {
-                        // Si le format n'est pas correct, enregistrer comme NULL
                         stmt.setNull(10, Types.DOUBLE);
                         stmt.setNull(11, Types.DOUBLE);
                         LOGGER.warning("Format de coordonnées incorrect: " + pointRencontre);
                     }
                 } catch (NumberFormatException e) {
-                    // Si la conversion échoue, enregistrer comme NULL
                     stmt.setNull(10, Types.DOUBLE);
                     stmt.setNull(11, Types.DOUBLE);
                     LOGGER.warning("Impossible de parser les coordonnées: " + pointRencontre + ", erreur: " + e.getMessage());
@@ -848,7 +796,7 @@ public class SessionRepository extends BaseRepository<Session> {
             }
 
             stmt.setString(7, session.getStatut().name());
-            stmt.setString(8, ""); // Commentaire vide par défaut
+            stmt.setString(8, "");
             stmt.setInt(9, session.getKilometresParcourus());
             stmt.setLong(12, session.getId());
 

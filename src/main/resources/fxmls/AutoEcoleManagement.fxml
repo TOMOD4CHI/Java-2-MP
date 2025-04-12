@@ -29,7 +29,7 @@
                     <Insets top="5" right="30" bottom="20" left="30"/>
                 </padding>
                 
-                <!-- Auto-école info section -->
+                
                 <HBox spacing="30" alignment="CENTER">
                     <VBox fx:id="infoContainer" spacing="18" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auto-ecole-info">
                         <Label text="Informations de l'Auto-École" styleClass="section-title"/>
@@ -64,7 +64,7 @@
                         </HBox>
                     </VBox>
 
-                    <!-- Édition inline form -->
+                    
                     <VBox fx:id="editContainer" spacing="15" visible="false" managed="false" alignment="CENTER"  styleClass="auto-ecole-edit">
                         <Label text="Modifier les informations" styleClass="section-title"/>
 

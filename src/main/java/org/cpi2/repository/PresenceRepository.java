@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +18,46 @@ public class PresenceRepository {
     private Connection getConnection() throws SQLException {
         return DatabaseConfig.getConnection();
     }
+
+    public List<Presence> getAllPresencesCode() {
+        String sql = "SELECT * FROM presence_code";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            List<Presence> presences = new ArrayList<>();
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                long sessionId = rs.getLong("session_code_id");
+                long candidatId = rs.getLong("candidat_id");
+                presences.add(new Presence(id, sessionId, candidatId));
+            }
+            return presences;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching all presences", e);
+            return null;
+        }
+    }
+    public List<Presence> getAllPresencesConduite() {
+        String sql = "SELECT * FROM presence_conduite";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            List<Presence> presences = new ArrayList<>();
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                long sessionId = rs.getLong("session_code_id");
+                long candidatId = rs.getLong("candidat_id");
+                presences.add(new Presence(id, sessionId, candidatId));
+            }
+            return presences;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error fetching all presences", e);
+            return null;
+        }
+    }
+
 
     /**
      * Records a candidate's presence in a code session
@@ -88,6 +130,26 @@ public class PresenceRepository {
         } else {
             LOGGER.log(Level.WARNING, "Unknown seance type: " + seanceType);
             return false;
+        }
+    }
+    public class Presence{
+        long id;
+        long sessionId;
+        long candidatId;
+
+        public Presence(long id, long sessionId, long candidatId) {
+            this.id = id;
+            this.sessionId = sessionId;
+            this.candidatId = candidatId;
+        }
+        public long getId() {
+            return id;
+        }
+        public long getSessionId() {
+            return sessionId;
+        }
+        public long getCandidatId() {
+            return candidatId;
         }
     }
 }

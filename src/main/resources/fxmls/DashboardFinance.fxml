@@ -30,34 +30,34 @@
     <center>
         <ScrollPane fitToWidth="true" styleClass="transparent-scroll-pane">
             <VBox spacing="20">
-                <!-- KPI Cards Row -->
+                
                 <HBox spacing="15" alignment="CENTER">
                     <VBox.margin>
                         <Insets top="10" bottom="10"/>
                     </VBox.margin>
                     
-                    <!-- Revenue Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label text="Revenus Totaux" styleClass="card-title"/>
                         <Label fx:id="totalRevenueLabel" text="12,450 DT" styleClass="card-value"/>
                         <Label fx:id="revenueChangeLabel" text="+15% vs période précédente" styleClass="change-positive"/>
                     </VBox>
                     
-                    <!-- Expenses Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label text="Dépenses Totales" styleClass="card-title"/>
                         <Label fx:id="totalExpensesLabel" text="8,230 DT" styleClass="card-value"/>
                         <Label fx:id="expensesChangeLabel" text="+5% vs période précédente" styleClass="change-negative"/>
                     </VBox>
                     
-                    <!-- Profit Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label text="Profit Net" styleClass="card-title"/>
                         <Label fx:id="netProfitLabel" text="4,220 DT" styleClass="card-value"/>
                         <Label fx:id="profitChangeLabel" text="+25% vs période précédente" styleClass="change-positive"/>
                     </VBox>
                     
-                    <!-- Students Card -->
+                    
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
                         <Label text="Nouveaux Candidats" styleClass="card-title"/>
                         <Label fx:id="newStudentsLabel" text="24" styleClass="card-value"/>
@@ -65,9 +65,9 @@
                     </VBox>
                 </HBox>
                 
-                <!-- Charts Row 1 -->
+                
                 <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
-                    <!-- Revenue Chart -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label text="Évolution des Revenus" styleClass="chart-title"/>
                         <AreaChart fx:id="revenueChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
@@ -80,16 +80,16 @@
                         </AreaChart>
                     </VBox>
                     
-                    <!-- Expense Breakdown -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label text="Répartition des Dépenses" styleClass="chart-title"/>
                         <PieChart fx:id="expensesPieChart" animated="true" labelsVisible="true" VBox.vgrow="ALWAYS"/>
                     </VBox>
                 </HBox>
                 
-                <!-- Charts Row 2 -->
+                
                 <HBox spacing="15" alignment="CENTER" VBox.vgrow="ALWAYS">
-                    <!-- Revenue by Service -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label text="Revenus par Service" styleClass="chart-title"/>
                         <BarChart fx:id="revenueByServiceChart" legendVisible="false" animated="true" VBox.vgrow="ALWAYS">
@@ -102,7 +102,7 @@
                         </BarChart>
                     </VBox>
                     
-                    <!-- Monthly Comparison -->
+                    
                     <VBox styleClass="chart-container" HBox.hgrow="ALWAYS">
                         <Label text="Comparaison Mensuelle" styleClass="chart-title"/>
                         <BarChart fx:id="monthlyComparisonChart" animated="true" VBox.vgrow="ALWAYS">
@@ -116,7 +116,7 @@
                     </VBox>
                 </HBox>
                 
-                <!-- Recent Transactions Table -->
+                
                 <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
                     <Label text="Transactions Récentes" styleClass="table-title"/>
                     <TableView fx:id="transactionsTable" VBox.vgrow="ALWAYS" styleClass="custom-table-view">

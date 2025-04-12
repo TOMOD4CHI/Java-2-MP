@@ -16,7 +16,6 @@ public class EntretienRepository extends BaseRepository<Entretien> {
     private static final Logger LOGGER = Logger.getLogger(EntretienRepository.class.getName());
 
     public EntretienRepository() {
-        // Empty constructor since we're using BaseRepository's getConnection()
     }
 
     public Entretien findById(int id) {

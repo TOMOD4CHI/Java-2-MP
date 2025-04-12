@@ -1,7 +1,10 @@
 package org.cpi2.controllers;
 
 import javafx.fxml.FXML;
- import org.cpi2.utils.AlertUtil;
+import org.cpi2.entities.Examen;
+import org.cpi2.entities.TypeExamen;
+import org.cpi2.utils.AlertUtil;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -41,6 +44,8 @@ public class ExamRegistration {
     public void initialize() {
         // Initialize the exam types
         typeExamenComboBox.getItems().addAll(examTypePrices.keySet());
+
+        enregistrerButton.setDisable(true);
         
         // Set default date to next week
         dateExamenPicker.setValue(LocalDate.now().plusWeeks(1));
@@ -108,16 +113,16 @@ public class ExamRegistration {
     
     @FXML
     private void verifierEligibiliteAction() {
-        // In a real app, this would check candidate eligibility based on completed sessions
+        enregistrerButton.setDisable(true);
         if (nomField.getText().isEmpty() || typeExamenComboBox.getValue() == null) {
             AlertUtil.showError("Erreur", "Veuillez sélectionner un candidat et un type d'examen pour vérifier l'éligibilité.");
             return;
         }
         
-        // Mock check - usually this would check database for eligibility
-        boolean eligible = true; // For this example, assume eligible
+        boolean eligible = examenService.verifyCandidatEligibilite(typeExamenComboBox.getValue(),cinField.getText()); // For this example, assume eligible
         
         if (eligible) {
+            enregistrerButton.setDisable(false);
             eligibiliteLabel.setText("ELIGIBLE");
             eligibiliteLabel.getStyleClass().clear();
             eligibiliteLabel.getStyleClass().addAll("label", "status-eligible");
@@ -131,17 +136,25 @@ public class ExamRegistration {
     @FXML
     private void enregistrerAction() {
         if (validateForm()) {
-            //l enregistrement dans la  base de donnee
-            //Note every Candidat should have only one examen (Active) at a time
             if(examenService.hasPendingExamens(cinField.getText())){
                 AlertUtil.showError( "Error" ,"Le candidat a déjà un examen en cours.");
                 return;
             }
-
-            AlertUtil.showSuccess("Succès", "Inscription à l'examen enregistrée avec succès!");
+            examenService.createExamen(new Examen(
+                    TypeExamen.valueOf(typeExamenComboBox.getValue().toUpperCase()),
+                    dateExamenPicker.getValue(),
+                    Double.parseDouble(fraisField.getText()),
+                    candidatService.getCandidatByCin(cinField.getText())
+            ));
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setHeaderText(null);
+            alert.setContentText("Inscription à l'examen enregistrée avec succès!");
+            alert.showAndWait();
 
             clearForm();
         }
+        enregistrerButton.setDisable(true);
     }
     
     @FXML
