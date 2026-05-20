@@ -7,7 +7,7 @@ Desktop application for managing a driving school: candidates, instructors, vehi
 - JavaFX 17 (FXML UI)
 - Maven
 - MySQL (JDBC)
-- iText 7 (PDF invoices/receipts)
+- iText 8.0.5 (PDF invoices/receipts)
 
 ## Project Structure
 - src/main/java/org/cpi2
@@ -35,5 +35,6 @@ Desktop application for managing a driving school: candidates, instructors, vehi
 2. Create a database named `autoecole` and import `autoecole.sql`.
 3. Update connection settings in `src/main/java/org/cpi2/repository/DatabaseConfig.java` if needed.
 4. Build the project:
-   - `mvn test` or `mvn package`
+   - `mvn test` (runs tests only)
+   - `mvn package` (builds the jar)
 5. Run the application by launching `org.cpi2.Main` from your IDE (JavaFX application).
